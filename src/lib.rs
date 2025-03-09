@@ -39,9 +39,15 @@ pub enum Validation {
 pub enum ValidationErr {
     Required,
     Bool,
+    Obj,
     Eq(bool),
     Ne(bool),
-    Obj,
+}
+
+#[derive(Debug, PartialEq, Clone)]
+pub enum ValidationResErr {
+    Arr(Vec<ValidationErr>),
+    Obj(HashMap<String, ValidationResErr>),
 }
 
 #[derive(Debug, PartialEq, Clone)]
@@ -54,38 +60,63 @@ pub enum Value {
     Obj(HashMap<String, Value>),
 }
 
-fn validate(validation: &Validation, value: &Value) -> Vec<ValidationErr> {
+fn validate(validation: &Validation, value: &Value) -> ValidationResErr {
     match validation {
         Validation::Bool(v) => match value {
             Value::Bool(value) => {
+                let mut base = vec![];
                 if let Some(eq_v) = v.eq {
                     if value != &eq_v {
-                        return vec![ValidationErr::Eq(eq_v)];
+                        base.push(ValidationErr::Eq(eq_v));
                     }
                 }
-                vec![]
+                ValidationResErr::Arr(base)
             }
             Value::None => {
+                let mut base = vec![];
                 if v.required {
-                    vec![ValidationErr::Required]
-                } else {
-                    vec![]
+                    base.push(ValidationErr::Bool);
+                    base.push(ValidationErr::Required);
+                    if let Some(eq_v) = v.eq {
+                        base.push(ValidationErr::Eq(eq_v));
+                    }
                 }
+                ValidationResErr::Arr(base)
             }
-            _ => vec![ValidationErr::Bool],
+            _ => {
+                let mut base = vec![ValidationErr::Bool];
+                if let Some(eq_v) = v.eq {
+                    base.push(ValidationErr::Eq(eq_v));
+                }
+                ValidationResErr::Arr(base)
+            }
         },
         Validation::Obj(v) => match value {
             Value::Obj(value) => {
-                return vec![];
-            }
+                return ValidationResErr::Obj(
+                    v.validation
+                        .clone()
+                        .into_iter()
+                        .map(|(k, v)| (String::from(k.clone()), validate(&v, value.get(k.clone()).unwrap_or(&Value::None))))
+                        .collect()
+                )
+            },
             Value::None => {
                 if v.required {
-                    vec![ValidationErr::Required]
+                    ValidationResErr::Obj(v.validation
+                    .clone()
+                    .into_iter()
+                    .map(|(k, v)| (String::from(k.clone()), validate(&v, &Value::None)))
+                    .collect())
                 } else {
-                    vec![]
+                    ValidationResErr::Obj(HashMap::new())
                 }
             }
-            _ => vec![ValidationErr::Obj],
+            _ =>   ValidationResErr::Obj(v.validation
+                .clone()
+                .into_iter()
+                .map(|(k, v)| (String::from(k.clone()), validate(&v, &Value::None)))
+                .collect()),
         },
     }
 }
@@ -95,73 +126,114 @@ mod test {
     use super::*;
 
     #[test]
-    fn test_bool_value_ok() {
-        assert_eq!(validate(&Validation::Bool(BoolValidation::default()), &Value::Bool(false)), []);
-        assert_eq!(validate(&Validation::Bool(BoolValidation::default()), &Value::Bool(true)), []);
+    fn test_bool_default() {
+        assert_eq!(
+            validate(&Validation::Bool(BoolValidation::default()), &Value::Bool(false)),
+            ValidationResErr::Arr(vec![])
+        );
+        assert_eq!(
+            validate(&Validation::Bool(BoolValidation::default()), &Value::Bool(true)),
+            ValidationResErr::Arr(vec![])
+        );
+        assert_eq!(
+            validate(&Validation::Bool(BoolValidation::default()), &Value::None),
+            ValidationResErr::Arr(vec![])
+        );
+        assert_eq!(
+            validate(&Validation::Bool(BoolValidation::default()), &Value::Num(Some(1), Some(1), Some(1.0))),
+            ValidationResErr::Arr(vec![ValidationErr::Bool])
+        );
     }
 
     #[test]
-    fn test_bool_required_ok() {
-        assert_eq!(validate(&Validation::Bool(BoolValidation::default().required()), &Value::Bool(false)), []);
-        assert_eq!(validate(&Validation::Bool(BoolValidation::default().required()), &Value::Bool(true)), []);
+    fn test_bool_required() {
+        assert_eq!(
+            validate(&Validation::Bool(BoolValidation::default().required()), &Value::Bool(false)),
+            ValidationResErr::Arr(vec![])
+        );
+        assert_eq!(
+            validate(&Validation::Bool(BoolValidation::default().required()), &Value::Bool(true)),
+            ValidationResErr::Arr(vec![])
+        );
+        assert_eq!(
+            validate(&Validation::Bool(BoolValidation::default().required()), &Value::None),
+            ValidationResErr::Arr(vec![ValidationErr::Bool, ValidationErr::Required])
+        );
+        assert_eq!(
+            validate(&Validation::Bool(BoolValidation::default().required()), &Value::Num(Some(1), Some(1), Some(1.0))),
+            ValidationResErr::Arr(vec![ValidationErr::Bool])
+        );
     }
 
     #[test]
-    fn test_bool_eq_ok() {
-        assert_eq!(validate(&Validation::Bool(BoolValidation::default().required().eq(false)), &Value::Bool(false)), []);
-        assert_eq!(validate(&Validation::Bool(BoolValidation::default().required().eq(true)), &Value::Bool(true)), []);
+    fn test_bool_eq() {
+        assert_eq!(
+            validate(&Validation::Bool(BoolValidation::default().eq(false)), &Value::Bool(false)),
+            ValidationResErr::Arr(vec![])
+        );
+        assert_eq!(
+            validate(&Validation::Bool(BoolValidation::default().eq(false)), &Value::Bool(true)),
+            ValidationResErr::Arr(vec![ValidationErr::Eq(false)])
+        );
+        assert_eq!(
+            validate(&Validation::Bool(BoolValidation::default().eq(false)), &Value::None),
+            ValidationResErr::Arr(vec![])
+        );
+        assert_eq!(
+            validate(&Validation::Bool(BoolValidation::default().eq(false)), &Value::Num(Some(1), Some(1), Some(1.0))),
+            ValidationResErr::Arr(vec![ValidationErr::Bool, ValidationErr::Eq(false)])
+        );
     }
 
     #[test]
-    fn test_lib() {
-        assert_eq!(validate(&Validation::Bool(BoolValidation::default().required().eq(false)), &Value::Bool(true)), [ValidationErr::Eq(false)]);
-        assert_eq!(validate(&Validation::Bool(BoolValidation::default().required().eq(true)), &Value::Bool(false)), [ValidationErr::Eq(true)]);
-
-        assert_eq!(validate(&Validation::Bool(BoolValidation::default()), &Value::None), []);
-        assert_eq!(validate(&Validation::Bool(BoolValidation::default().required()), &Value::None), [ValidationErr::Required]);
-
-        assert_eq!(validate(&Validation::Bool(BoolValidation::default()), &Value::Num(Some(1), Some(1), Some(1.0))), [ValidationErr::Bool]);
-        assert_eq!(validate(&Validation::Bool(BoolValidation::default().required()), &Value::Num(Some(1), Some(1), Some(1.0))), [ValidationErr::Bool]);
+    fn test_bool_required_eq() {
+        assert_eq!(
+            validate(&Validation::Bool(BoolValidation::default().required().eq(false)), &Value::Bool(false)),
+            ValidationResErr::Arr(vec![])
+        );
+        assert_eq!(
+            validate(&Validation::Bool(BoolValidation::default().required().eq(false)), &Value::Bool(true)),
+            ValidationResErr::Arr(vec![ValidationErr::Eq(false)])
+        );
+        assert_eq!(
+            validate(&Validation::Bool(BoolValidation::default().required().eq(false)), &Value::None),
+            ValidationResErr::Arr(vec![ValidationErr::Bool, ValidationErr::Required, ValidationErr::Eq(false)])
+        );
+        assert_eq!(
+            validate(&Validation::Bool(BoolValidation::default().required().eq(false)), &Value::Num(Some(1), Some(1), Some(1.0))),
+            ValidationResErr::Arr(vec![ValidationErr::Bool, ValidationErr::Eq(false)])
+        );
     }
 
     #[test]
     fn test_obj() {
         assert_eq!(
             validate(
-                &Validation::Obj(ObjValidation {
-                    validation: HashMap::from(
-                        [
-                            ("is", Validation::Bool(BoolValidation::default().required().eq(false)))
-                        ]
-                    ),
+                &Validation::Obj(
+                    ObjValidation {
+                    validation: HashMap::from([
+                        ("is", Validation::Bool(BoolValidation::default().required().eq(false))),
+                    ]),
                     required: false
                 }),
-                &Value::Obj(
-                    HashMap::from(
-                        [
-                            (String::from("is"), Value::Bool(false))
-                        ]
-                    ),
-                
-                )
+                &Value::Obj(HashMap::from([(String::from("is"), Value::Bool(false))]),)
             ),
-            []
+            ValidationResErr::Obj(HashMap::from([(String::from("is"), ValidationResErr::Arr(vec![]))]))
         );
-
-
         assert_eq!(
             validate(
-                &Validation::Obj(ObjValidation {
-                    validation: HashMap::from(
-                        [
-                            ("is", Validation::Bool(BoolValidation::default().required().eq(false)))
-                        ]
-                    ),
+                &Validation::Obj(
+                    ObjValidation {
+                    validation: HashMap::from([
+                        ("is", Validation::Bool(BoolValidation::default().required().eq(false))),
+                    ]),
                     required: false
                 }),
                 &Value::Bool(false)
             ),
-            [ValidationErr::Obj]
+            ValidationResErr::Obj(HashMap::from([
+                (String::from("is"), ValidationResErr::Arr(vec![ValidationErr::Bool, ValidationErr::Required, ValidationErr::Eq(false)]))
+            ]))
         );
     }
 }
