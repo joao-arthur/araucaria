@@ -2,15 +2,15 @@ use std::collections::HashMap;
 
 #[derive(Debug, PartialEq, Clone)]
 pub struct BoolValidation {
-    required: bool,
-    eq: Option<bool>,
-    ne: Option<bool>,
+    pub required: bool,
+    pub eq: Option<bool>,
+    pub ne: Option<bool>,
 }
 
 #[derive(Debug, PartialEq, Clone)]
 pub struct ObjValidation {
-    validation: HashMap<&'static str, Validation>,
-    required: bool,
+    pub validation: HashMap<&'static str, Validation>,
+    pub required: bool,
 }
 
 impl Default for BoolValidation {
@@ -60,7 +60,7 @@ pub enum Value {
     Obj(HashMap<String, Value>),
 }
 
-fn validate(validation: &Validation, value: &Value) -> ValidationResErr {
+pub fn validate(validation: &Validation, value: &Value) -> ValidationResErr {
     match validation {
         Validation::Bool(v) => match value {
             Value::Bool(value) => {
@@ -123,6 +123,8 @@ fn validate(validation: &Validation, value: &Value) -> ValidationResErr {
 
 #[cfg(test)]
 mod test {
+    use std::hash::Hash;
+
     use super::*;
 
     #[test]
@@ -220,6 +222,38 @@ mod test {
             ),
             ValidationResErr::Obj(HashMap::from([(String::from("is"), ValidationResErr::Arr(vec![]))]))
         );
+
+        assert_eq!(
+            validate(
+                &Validation::Obj(
+                    ObjValidation {
+                    validation: HashMap::from([
+                        ("is", Validation::Bool(BoolValidation::default().required().eq(false))),
+                    ]),
+                    required: false
+                }),
+                &Value::None
+            ),
+            ValidationResErr::Obj(HashMap::new()),
+        );
+        assert_eq!(
+            validate(
+                &Validation::Obj(
+                    ObjValidation {
+                    validation: HashMap::from([
+                        ("is", Validation::Bool(BoolValidation::default().required().eq(false))),
+                    ]),
+                    required: true
+                }),
+                &Value::None
+            ),
+            ValidationResErr::Obj(HashMap::from([(String::from("is"), ValidationResErr::Arr(vec![ValidationErr::Bool, ValidationErr::Required, ValidationErr::Eq(false)]))])),
+        );
+
+
+
+
+
         assert_eq!(
             validate(
                 &Validation::Obj(
