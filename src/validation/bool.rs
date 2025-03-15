@@ -16,7 +16,36 @@ impl BoolValidation {
         BoolValidation { required: true, eq: self.eq, ne: self.ne }
     }
 
-    pub fn eq(&self, eq: bool) -> Self {
-        BoolValidation { required: self.required, eq: Some(eq), ne: self.ne }
+    pub fn eq(&self, value: bool) -> Self {
+        BoolValidation { required: self.required, eq: Some(value), ne: self.ne }
+    }
+
+    pub fn ne(&self, value: bool) -> Self {
+        BoolValidation { required: self.required, eq: self.eq, ne: Some(value) }
+    }
+}
+
+#[cfg(test)]
+mod test {
+    use super::*;
+
+    #[test]
+    fn test_bool_validation() {
+        assert_eq!(
+            BoolValidation::default(),
+            BoolValidation { required: false, eq: None, ne: None }
+        );
+        assert_eq!(
+            BoolValidation::default().required(),
+            BoolValidation { required: true, eq: None, ne: None }
+        );
+        assert_eq!(
+            BoolValidation::default().required().eq(false),
+            BoolValidation { required: true, eq: Some(false), ne: None }
+        );
+        assert_eq!(
+            BoolValidation::default().required().ne(true),
+            BoolValidation { required: true, eq: None, ne: Some(true) }
+        );
     }
 }

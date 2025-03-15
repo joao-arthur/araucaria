@@ -1,126 +1,113 @@
 use crate::{
-    error::{ValidationErr, ValidationErrWrapper},
+    error::{Err, ErrWrapper},
     validation::bool::BoolValidation,
     value::Value,
 };
 
-pub fn validate_bool(validation: &BoolValidation, value: &Value) -> ValidationErrWrapper {
+pub fn validate_bool(validation: &BoolValidation, value: &Value) -> Option<ErrWrapper> {
+    let mut base = vec![];
     match value {
         Value::Bool(value) => {
             let mut base = vec![];
             if let Some(eq_v) = validation.eq {
                 if value != &eq_v {
-                    base.push(ValidationErr::Eq(eq_v));
+                    base.push(Err::Eq(eq_v));
                 }
             }
-            ValidationErrWrapper::Arr(base)
         }
         Value::None => {
-            let mut base = vec![];
             if validation.required {
-                base.push(ValidationErr::Bool);
-                base.push(ValidationErr::Required);
+                base.push(Err::Bool);
+                base.push(Err::Required);
                 if let Some(eq_v) = validation.eq {
-                    base.push(ValidationErr::Eq(eq_v));
+                    base.push(Err::Eq(eq_v));
                 }
             }
-            ValidationErrWrapper::Arr(base)
         }
         _ => {
-            let mut base = vec![ValidationErr::Bool];
+            let mut base = vec![Err::Bool];
             if let Some(eq_v) = validation.eq {
-                base.push(ValidationErr::Eq(eq_v));
+                base.push(Err::Eq(eq_v));
             }
-            ValidationErrWrapper::Arr(base)
         }
+    }
+    if !base.is_empty() {
+        Some(ErrWrapper::Arr(base))
+    } else {
+        None
     }
 }
 
 #[cfg(test)]
 mod test {
+    use std::collections::HashMap;
+
     use super::*;
 
     #[test]
-    fn test_validate_bool_default() {
-        assert_eq!(
-            validate_bool(&BoolValidation::default(), &Value::Bool(false)),
-            ValidationErrWrapper::Arr(vec![])
-        );
-        assert_eq!(
-            validate_bool(&BoolValidation::default(), &Value::Bool(true)),
-            ValidationErrWrapper::Arr(vec![])
-        );
-        assert_eq!(
-            validate_bool(&BoolValidation::default(), &Value::None),
-            ValidationErrWrapper::Arr(vec![])
-        );
-        assert_eq!(
-            validate_bool(&BoolValidation::default(), &Value::NumU(1)),
-            ValidationErrWrapper::Arr(vec![ValidationErr::Bool])
-        );
+    fn test_validate_bool_default_ok() {
+        let v = BoolValidation::default();
+        assert_eq!(validate_bool(&v, &Value::Bool(false)), None);
+        assert_eq!(validate_bool(&v, &Value::Bool(true)), None);
+        assert_eq!(validate_bool(&v, &Value::None), None);
     }
 
     #[test]
-    fn test_validate_bool_required() {
-        assert_eq!(
-            validate_bool(&BoolValidation::default().required(), &Value::Bool(false)),
-            ValidationErrWrapper::Arr(vec![])
-        );
-        assert_eq!(
-            validate_bool(&BoolValidation::default().required(), &Value::Bool(true)),
-            ValidationErrWrapper::Arr(vec![])
-        );
-        assert_eq!(
-            validate_bool(&BoolValidation::default().required(), &Value::None),
-            ValidationErrWrapper::Arr(vec![ValidationErr::Bool, ValidationErr::Required])
-        );
-        assert_eq!(
-            validate_bool(&BoolValidation::default().required(), &Value::NumU(1)),
-            ValidationErrWrapper::Arr(vec![ValidationErr::Bool])
-        );
+    fn test_validate_bool_required_ok() {
+        let v = BoolValidation::default().required();
+        assert_eq!(validate_bool(&v, &Value::Bool(false)), None);
+        assert_eq!(validate_bool(&v, &Value::Bool(true)), None);
     }
 
     #[test]
-    fn test_validate_bool_eq() {
-        assert_eq!(
-            validate_bool(&BoolValidation::default().eq(false), &Value::Bool(false)),
-            ValidationErrWrapper::Arr(vec![])
-        );
-        assert_eq!(
-            validate_bool(&BoolValidation::default().eq(false), &Value::Bool(true)),
-            ValidationErrWrapper::Arr(vec![ValidationErr::Eq(false)])
-        );
-        assert_eq!(
-            validate_bool(&BoolValidation::default().eq(false), &Value::None),
-            ValidationErrWrapper::Arr(vec![])
-        );
-        assert_eq!(
-            validate_bool(&BoolValidation::default().eq(false), &Value::NumU(1)),
-            ValidationErrWrapper::Arr(vec![ValidationErr::Bool, ValidationErr::Eq(false)])
-        );
+    fn test_validate_bool_eq_ok() {
+        let v = BoolValidation::default().eq(false);
+        assert_eq!(validate_bool(&v, &Value::Bool(false)), None);
+        assert_eq!(validate_bool(&v, &Value::None), None);
     }
 
     #[test]
-    fn test_validate_bool_required_eq() {
-        assert_eq!(
-            validate_bool(&BoolValidation::default().required().eq(false), &Value::Bool(false)),
-            ValidationErrWrapper::Arr(vec![])
-        );
-        assert_eq!(
-            validate_bool(&BoolValidation::default().required().eq(false), &Value::Bool(true)),
-            ValidationErrWrapper::Arr(vec![ValidationErr::Eq(false)])
-        );
-        assert_eq!(
-            validate_bool(&BoolValidation::default().required().eq(false), &Value::None),
-            ValidationErrWrapper::Arr(vec![
-                ValidationErr::Bool,
-                ValidationErr::Required,
-                ValidationErr::Eq(false)
-            ])
-        );
-        assert_eq!(
-            validate_bool(&BoolValidation::default().required().eq(false), &Value::NumU(1)),
-            ValidationErrWrapper::Arr(vec![ValidationErr::Bool, ValidationErr::Eq(false)])
-        );
+    fn test_validate_bool_required_eq_ok() {
+        let v = BoolValidation::default().required().eq(false);
+        assert_eq!(validate_bool(&v, &Value::Bool(false)), None);
+    }
+
+    #[test]
+    fn test_validate_bool_default_err() {
+        let v = BoolValidation::default();
+        assert_eq!(validate_bool(&v, &Value::NumU(1)), Some(ErrWrapper::Arr(vec![Err::Bool])));
+        assert_eq!(validate_bool(&v, &Value::NumI(1)), Some(ErrWrapper::Arr(vec![Err::Bool])));
+        assert_eq!(validate_bool(&v, &Value::NumF(1.0)), Some(ErrWrapper::Arr(vec![Err::Bool])));
+        assert_eq!(validate_bool(&v, &Value::Str(String::from("hello"))), Some(ErrWrapper::Arr(vec![Err::Bool])));
+        assert_eq!(validate_bool(&v, &Value::Arr(vec![Value::Bool(false)])), Some(ErrWrapper::Arr(vec![Err::Bool])));
+        assert_eq!(validate_bool(&v, &Value::Obj(HashMap::from([(String::from("is"), Value::Bool(false))]))), Some(ErrWrapper::Arr(vec![Err::Bool])));
+    }
+
+    #[test]
+    fn test_validate_bool_required_err() {
+        let v = BoolValidation::default().required();
+        assert_eq!(validate_bool(&v, &Value::None), Some(ErrWrapper::Arr(vec![Err::Bool, Err::Required])));
+        assert_eq!(validate_bool(&v, &Value::NumU(1)), Some(ErrWrapper::Arr(vec![Err::Bool])));
+    }
+
+    #[test]
+    fn test_validate_bool_eq_err() {
+        let v = BoolValidation::default().eq(false);
+        assert_eq!(validate_bool(&v, &Value::Bool(true)), Some(ErrWrapper::Arr(vec![Err::Eq(false)])));
+        assert_eq!(validate_bool(&v, &Value::NumU(1)), Some(ErrWrapper::Arr(vec![Err::Bool, Err::Eq(false)])));
+    }
+
+    #[test]
+    fn test_validate_bool_required_eq_err() {
+        let v = BoolValidation::default().required().eq(false);
+        assert_eq!(validate_bool(&v, &Value::Bool(true)), Some(ErrWrapper::Arr(vec![Err::Eq(false)])));
+        assert_eq!(validate_bool(&v, &Value::None), Some(ErrWrapper::Arr(vec![Err::Bool, Err::Required, Err::Eq(false)])));
+        assert_eq!(validate_bool(&v, &Value::NumU(1)), Some(ErrWrapper::Arr(vec![Err::Bool, Err::Eq(false)])));
+        assert_eq!(validate_bool(&v, &Value::NumU(1)), Some(ErrWrapper::Arr(vec![Err::Bool, Err::Eq(false)])));
+        assert_eq!(validate_bool(&v, &Value::NumI(1)), Some(ErrWrapper::Arr(vec![Err::Bool, Err::Eq(false)])));
+        assert_eq!(validate_bool(&v, &Value::NumF(1.0)), Some(ErrWrapper::Arr(vec![Err::Bool, Err::Eq(false)])));
+        assert_eq!(validate_bool(&v, &Value::Str(String::from("hello"))), Some(ErrWrapper::Arr(vec![Err::Bool, Err::Eq(false)])));
+        assert_eq!(validate_bool(&v, &Value::Arr(vec![Value::Bool(false)])), Some(ErrWrapper::Arr(vec![Err::Bool, Err::Eq(false)])));
+        assert_eq!(validate_bool(&v, &Value::Obj(HashMap::from([(String::from("is"), Value::Bool(false))]))), Some(ErrWrapper::Arr(vec![Err::Bool, Err::Eq(false)])));
     }
 }

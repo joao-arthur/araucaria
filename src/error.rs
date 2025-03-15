@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 
 #[derive(Debug, PartialEq, Clone)]
-pub enum ValidationErr {
+pub enum Err {
     Required,
     Bool,
     Obj,
@@ -10,7 +10,7 @@ pub enum ValidationErr {
 }
 
 #[derive(Debug, PartialEq, Clone)]
-pub enum ValidationErrWrapper {
-    Arr(Vec<ValidationErr>),
-    Obj(HashMap<String, ValidationErrWrapper>),
+pub enum ErrWrapper {
+    Arr(Vec<Err>),
+    Obj(HashMap<String, ErrWrapper>),
 }
