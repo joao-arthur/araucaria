@@ -13,6 +13,11 @@ pub fn validate_bool(validation: &BoolValidation, value: &Value) -> Option<ErrWr
                     base.push(Err::Eq(eq_v));
                 }
             }
+            if let Some(ne_v) = validation.ne {
+                if bool_value == &ne_v {
+                    base.push(Err::Ne(ne_v));
+                }
+            }
         }
         Value::None => {
             if validation.required {
@@ -21,12 +26,18 @@ pub fn validate_bool(validation: &BoolValidation, value: &Value) -> Option<ErrWr
                 if let Some(eq_v) = validation.eq {
                     base.push(Err::Eq(eq_v));
                 }
+                if let Some(ne_v) = validation.ne {
+                    base.push(Err::Ne(ne_v));
+                }
             }
         }
         _ => {
             base.push(Err::Bool);
             if let Some(eq_v) = validation.eq {
                 base.push(Err::Eq(eq_v));
+            }
+            if let Some(ne_v) = validation.ne {
+                base.push(Err::Ne(ne_v));
             }
         }
     }
@@ -68,9 +79,22 @@ mod test {
     }
 
     #[test]
+    fn test_validate_bool_ne_ok() {
+        let v = BoolValidation::default().ne(false);
+        assert_eq!(validate_bool(&v, &Value::Bool(true)), None);
+        assert_eq!(validate_bool(&v, &Value::None), None);
+    }
+
+    #[test]
     fn test_validate_bool_required_eq_ok() {
         let v = BoolValidation::default().required().eq(false);
         assert_eq!(validate_bool(&v, &Value::Bool(false)), None);
+    }
+
+    #[test]
+    fn test_validate_bool_required_ne_ok() {
+        let v = BoolValidation::default().required().ne(false);
+        assert_eq!(validate_bool(&v, &Value::Bool(true)), None);
     }
 
     #[test]
@@ -99,13 +123,17 @@ mod test {
     }
 
     #[test]
+    fn test_validate_bool_ne_err() {
+        let v = BoolValidation::default().ne(false);
+        assert_eq!(validate_bool(&v, &Value::Bool(false)), ErrWrap::arr([Err::Ne(false)]));
+        assert_eq!(validate_bool(&v, &num_u_stub()), ErrWrap::arr([Err::Bool, Err::Ne(false)]));
+    }
+
+    #[test]
     fn test_validate_bool_required_eq_err() {
         let v = BoolValidation::default().required().eq(false);
         assert_eq!(validate_bool(&v, &Value::Bool(true)), ErrWrap::arr([Err::Eq(false)]));
-        assert_eq!(
-            validate_bool(&v, &Value::None),
-            ErrWrap::arr([Err::Bool, Err::Required, Err::Eq(false)])
-        );
+        assert_eq!(validate_bool(&v, &Value::None), ErrWrap::arr([Err::Bool, Err::Required, Err::Eq(false)]));
         assert_eq!(validate_bool(&v, &num_u_stub()), ErrWrap::arr([Err::Bool, Err::Eq(false)]));
         assert_eq!(validate_bool(&v, &num_u_stub()), ErrWrap::arr([Err::Bool, Err::Eq(false)]));
         assert_eq!(validate_bool(&v, &num_i_stub()), ErrWrap::arr([Err::Bool, Err::Eq(false)]));
