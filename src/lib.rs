@@ -11,45 +11,57 @@ pub mod validate;
 pub mod validation;
 pub mod value;
 
-/*
+
 pub fn validate(validation: &Validation, value: &Value) -> Option<ErrWrap> {
     match validation {
         Validation::Bool(v) => validate_bool(v, value),
         Validation::Obj(v) => match value {
             Value::Obj(value) => {
-                return Some(ErrWrap::Obj(
-                    v.validation
-                        .clone()
-                        .into_iter()
-                        .map(|(k, v)| {
-                            (
-                                String::from(k.clone()),
-                                validate(&v, value.get(k.clone()).unwrap_or(&Value::None)),
-                            )
-                        })
-                        .collect(),
-                ))
+                let result: HashMap<String, ErrWrap> = v.validation
+                    .clone()
+                    .into_iter()
+                    .map(|(k, v)| (String::from(k.clone()), validate(&v, value.get(k.clone()).unwrap_or(&Value::None))))
+                    .filter(|(k, v)| v.is_some())
+                    .map(|(k, v)| (k, v.unwrap()))
+                    .collect();
+                    if result.is_empty() {
+                        None
+                    } else {
+                        Some(ErrWrap::Obj(result))
+                    }
             }
             Value::None => {
                 if v.required {
-                    Some(ErrWrap::Obj(
-                        v.validation
+                    let result: HashMap<String, ErrWrap> = v.validation
                             .clone()
                             .into_iter()
                             .map(|(k, v)| (String::from(k.clone()), validate(&v, &Value::None)))
-                            .collect(),
-                    ))
+                            .filter(|(k, v)| v.is_some())
+                            .map(|(k, v)| (k, v.unwrap()))
+                            .collect();
+                    if result.is_empty() {
+                        None
+                    } else {
+                        Some(ErrWrap::Obj(result))
+                    }
                 } else {
                     None
                 }
             }
-            _ => Some(ErrWrap::Obj(
-                v.validation
+            _ => {
+                let result: HashMap<String, ErrWrap> = v.validation
                     .clone()
                     .into_iter()
                     .map(|(k, v)| (String::from(k.clone()), validate(&v, &Value::None)))
-                    .collect()),
-            ),
+                    .filter(|(k, v)| v.is_some())
+                    .map(|(k, v)| (k, v.unwrap()))
+                    .collect();
+                if result.is_empty() {
+                    None
+                } else {
+                    Some(ErrWrap::Obj(result))
+                }
+            }
         },
     }
 }
@@ -65,6 +77,7 @@ mod test {
         assert_eq!(validate(&Validation::Bool(BoolValidation::default()), &Value::Bool(false)), None);
         assert_eq!(validate(&Validation::Bool(BoolValidation::default().required()), &Value::Bool(false)), None);
         assert_eq!(validate(&Validation::Bool(BoolValidation::default().eq(false)), &Value::Bool(false)), None);
+        assert_eq!(validate(&Validation::Bool(BoolValidation::default().ne(false)), &Value::Bool(true)), None);
         assert_eq!(validate(&Validation::Bool(BoolValidation::default().required().eq(false)), &Value::Bool(false)), None);
     }
 
@@ -140,4 +153,4 @@ mod test {
         );
     }
 }
- */
+ 
