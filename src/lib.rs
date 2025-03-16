@@ -11,7 +11,6 @@ pub mod validate;
 pub mod validation;
 pub mod value;
 
-
 pub fn validate(validation: &Validation, value: &Value) -> Option<ErrWrap> {
     match validation {
         Validation::Bool(v) => validate_bool(v, value),
