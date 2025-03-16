@@ -1,12 +1,18 @@
 use std::collections::HashMap;
 
+use crate::value::Value;
+
 #[derive(Debug, PartialEq, Clone)]
 pub enum Err {
     Required,
     Bool,
     Obj,
-    Eq(bool),
-    Ne(bool),
+    Eq(Value),
+    Ne(Value),
+    Gt(Value),
+    Lt(Value),
+    Ge(Value),
+    Le(Value),
 }
 
 #[derive(Debug, PartialEq, Clone)]
