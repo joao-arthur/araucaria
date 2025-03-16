@@ -1,5 +1,8 @@
 use std::collections::HashMap;
 
+#[cfg(test)]
+pub mod stub;
+
 #[derive(Debug, PartialEq, Clone)]
 pub enum Value {
     None,
