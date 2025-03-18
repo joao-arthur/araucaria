@@ -27,22 +27,18 @@ pub fn validate(validation: &Validation, value: &Value) -> Option<ErrWrap> {
                 }
             }
             Value::None => {
-                if v.required {
-                    let result: HashMap<String, ErrWrap> = v
-                        .validation
-                        .clone()
-                        .into_iter()
-                        .map(|(k, v)| (String::from(k.clone()), validate(&v, &Value::None)))
-                        .filter(|(k, v)| v.is_some())
-                        .map(|(k, v)| (k, v.unwrap()))
-                        .collect();
-                    if result.is_empty() {
-                        None
-                    } else {
-                        Some(ErrWrap::Obj(result))
-                    }
-                } else {
+                let result: HashMap<String, ErrWrap> = v
+                    .validation
+                    .clone()
+                    .into_iter()
+                    .map(|(k, v)| (String::from(k.clone()), validate(&v, &Value::None)))
+                    .filter(|(k, v)| v.is_some())
+                    .map(|(k, v)| (k, v.unwrap()))
+                    .collect();
+                if result.is_empty() {
                     None
+                } else {
+                    Some(ErrWrap::Obj(result))
                 }
             }
             _ => {
@@ -92,44 +88,16 @@ mod test {
             ),
             None
         );
-        assert_eq!(
-            validate(
-                &Validation::Obj(ObjValidation { validation: HashMap::from([("is",Validation::Bool(BoolValidation::default().required().eq(false)))]), required: false}),
-                &Value::None
-            ),
-            None
-        );
-        assert_eq!(
-            validate(
-                &Validation::Obj(ObjValidation { validation: HashMap::from([("is", Validation::Bool(BoolValidation::default().required().eq(false)))]), required: true}),
-                &Value::None
-            ),
-            Some(ErrWrap::Obj(HashMap::from([(String::from("is"), ErrWrap::Arr(vec![Err::Bool, Err::Required, Err::Eq(Value::Bool(false))]))])))
-        );
-        assert_eq!(
-            validate(
-                &Validation::Obj(ObjValidation { validation: HashMap::from([("is",Validation::Bool(BoolValidation::default().required().eq(false)) )]), required: false }),
-                &Value::Bool(false)
-            ),
-            Some(ErrWrap::Obj(HashMap::from([(String::from("is"), ErrWrap::Arr(vec![Err::Bool, Err::Required, Err::Eq(Value::Bool(false))]))])))
-        );
     }
 
     #[test]
     fn test_obj_err() {
         assert_eq!(
             validate(
-                &Validation::Obj(ObjValidation { validation: HashMap::from([("is", Validation::Bool(BoolValidation::default().required().eq(false)))]), required: false}),
-                &Value::Obj(HashMap::from([(String::from("is"), Value::Bool(false))]))
-            ),
-            None
-        );
-        assert_eq!(
-            validate(
                 &Validation::Obj(ObjValidation { validation: HashMap::from([("is",Validation::Bool(BoolValidation::default().required().eq(false)))]), required: false}),
                 &Value::None
             ),
-            None
+            Some(ErrWrap::Obj(HashMap::from([(String::from("is"), ErrWrap::Arr(vec![Err::Bool, Err::Required, Err::Eq(Value::Bool(false))]))])))
         );
         assert_eq!(
             validate(
