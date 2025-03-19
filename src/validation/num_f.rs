@@ -1,0 +1,215 @@
+#[derive(Debug, PartialEq, Clone)]
+pub struct NumFValidation {
+    pub required: bool,
+    pub eq: Option<f64>,
+    pub ne: Option<f64>,
+    pub gt: Option<f64>,
+    pub lt: Option<f64>,
+    pub ge: Option<f64>,
+    pub le: Option<f64>,
+}
+
+impl Default for NumFValidation {
+    fn default() -> Self {
+        NumFValidation {
+            required: false,
+            eq: None,
+            ne: None,
+            gt: None,
+            lt: None,
+            ge: None,
+            le: None,
+        }
+    }
+}
+
+impl NumFValidation {
+    pub fn required(self) -> Self {
+        NumFValidation {
+            required: true,
+            eq: self.eq,
+            ne: self.ne,
+            gt: self.gt,
+            lt: self.lt,
+            ge: self.ge,
+            le: self.le,
+        }
+    }
+
+    pub fn eq(self, value: f64) -> Self {
+        NumFValidation {
+            required: self.required,
+            eq: Some(value),
+            ne: self.ne,
+            gt: self.gt,
+            lt: self.lt,
+            ge: self.ge,
+            le: self.le,
+        }
+    }
+
+    pub fn ne(self, value: f64) -> Self {
+        NumFValidation {
+            required: self.required,
+            eq: self.eq,
+            ne: Some(value),
+            gt: self.gt,
+            lt: self.lt,
+            ge: self.ge,
+            le: self.le,
+        }
+    }
+
+    pub fn gt(self, value: f64) -> Self {
+        NumFValidation {
+            required: self.required,
+            eq: self.eq,
+            ne: self.ne,
+            gt: Some(value),
+            lt: self.lt,
+            ge: self.ge,
+            le: self.le,
+        }
+    }
+
+    pub fn lt(self, value: f64) -> Self {
+        NumFValidation {
+            required: self.required,
+            eq: self.eq,
+            ne: self.ne,
+            gt: self.gt,
+            lt: Some(value),
+            ge: self.ge,
+            le: self.le,
+        }
+    }
+
+    pub fn ge(self, value: f64) -> Self {
+        NumFValidation {
+            required: self.required,
+            eq: self.eq,
+            ne: self.ne,
+            gt: self.gt,
+            lt: self.lt,
+            ge: Some(value),
+            le: self.le,
+        }
+    }
+
+    pub fn le(self, value: f64) -> Self {
+        NumFValidation {
+            required: self.required,
+            eq: self.eq,
+            ne: self.ne,
+            gt: self.gt,
+            lt: self.lt,
+            ge: self.ge,
+            le: Some(value),
+        }
+    }
+}
+
+#[cfg(test)]
+mod test {
+    use super::*;
+
+    #[test]
+    fn test_num_u_validation() {
+        assert_eq!(
+            NumFValidation::default(),
+            NumFValidation {
+                required: false,
+                eq: None,
+                ne: None,
+                gt: None,
+                lt: None,
+                ge: None,
+                le: None,
+            }
+        );
+        assert_eq!(
+            NumFValidation::default().required(),
+            NumFValidation {
+                required: true,
+                eq: None,
+                ne: None,
+                gt: None,
+                lt: None,
+                ge: None,
+                le: None,
+            }
+        );
+        assert_eq!(
+            NumFValidation::default().required().eq(-1.5),
+            NumFValidation {
+                required: true,
+                eq: Some(-1.5),
+                ne: None,
+                gt: None,
+                lt: None,
+                ge: None,
+                le: None,
+            }
+        );
+        assert_eq!(
+            NumFValidation::default().required().eq(-1.5).ne(-2.5),
+            NumFValidation {
+                required: true,
+                eq: Some(-1.5),
+                ne: Some(-2.5),
+                gt: None,
+                lt: None,
+                ge: None,
+                le: None,
+            }
+        );
+        assert_eq!(
+            NumFValidation::default().required().eq(-1.5).ne(-2.5).gt(-3.5),
+            NumFValidation {
+                required: true,
+                eq: Some(-1.5),
+                ne: Some(-2.5),
+                gt: Some(-3.5),
+                lt: None,
+                ge: None,
+                le: None,
+            }
+        );
+        assert_eq!(
+            NumFValidation::default().required().eq(-1.5).ne(-2.5).gt(-3.5).lt(-4.5),
+            NumFValidation {
+                required: true,
+                eq: Some(-1.5),
+                ne: Some(-2.5),
+                gt: Some(-3.5),
+                lt: Some(-4.5),
+                ge: None,
+                le: None,
+            }
+        );
+        assert_eq!(
+            NumFValidation::default().required().eq(-1.5).ne(-2.5).gt(-3.5).lt(-4.5).ge(-5.5),
+            NumFValidation {
+                required: true,
+                eq: Some(-1.5),
+                ne: Some(-2.5),
+                gt: Some(-3.5),
+                lt: Some(-4.5),
+                ge: Some(-5.5),
+                le: None,
+            }
+        );
+        assert_eq!(
+            NumFValidation::default().required().eq(-1.5).ne(-2.5).gt(-3.5).lt(-4.5).ge(-5.5).le(-6.5),
+            NumFValidation {
+                required: true,
+                eq: Some(-1.5),
+                ne: Some(-2.5),
+                gt: Some(-3.5),
+                lt: Some(-4.5),
+                ge: Some(-5.5),
+                le: Some(-6.5),
+            }
+        );
+    }
+}
