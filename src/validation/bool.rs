@@ -12,15 +12,15 @@ impl Default for BoolValidation {
 }
 
 impl BoolValidation {
-    pub fn required(&self) -> Self {
+    pub fn required(self) -> Self {
         BoolValidation { required: true, eq: self.eq, ne: self.ne }
     }
 
-    pub fn eq(&self, value: bool) -> Self {
+    pub fn eq(self, value: bool) -> Self {
         BoolValidation { required: self.required, eq: Some(value), ne: self.ne }
     }
 
-    pub fn ne(&self, value: bool) -> Self {
+    pub fn ne(self, value: bool) -> Self {
         BoolValidation { required: self.required, eq: self.eq, ne: Some(value) }
     }
 }
@@ -44,8 +44,8 @@ mod test {
             BoolValidation { required: true, eq: Some(false), ne: None }
         );
         assert_eq!(
-            BoolValidation::default().required().ne(true),
-            BoolValidation { required: true, eq: None, ne: Some(true) }
+            BoolValidation::default().required().eq(false).ne(true),
+            BoolValidation { required: true, eq: Some(false), ne: Some(true) }
         );
     }
 }

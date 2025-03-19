@@ -135,7 +135,6 @@ mod test {
         assert_eq!(validate_bool(&v, &Value::Bool(true)), ErrWrap::arr([Err::Eq(Value::Bool(false))]));
         assert_eq!(validate_bool(&v, &Value::None), ErrWrap::arr([Err::Bool, Err::Required, Err::Eq(Value::Bool(false))]));
         assert_eq!(validate_bool(&v, &num_u_stub()), ErrWrap::arr([Err::Bool, Err::Eq(Value::Bool(false))]));
-        assert_eq!(validate_bool(&v, &num_u_stub()), ErrWrap::arr([Err::Bool, Err::Eq(Value::Bool(false))]));
         assert_eq!(validate_bool(&v, &num_i_stub()), ErrWrap::arr([Err::Bool, Err::Eq(Value::Bool(false))]));
         assert_eq!(validate_bool(&v, &num_f_stub()), ErrWrap::arr([Err::Bool, Err::Eq(Value::Bool(false))]));
         assert_eq!(validate_bool(&v, &str_stub()), ErrWrap::arr([Err::Bool, Err::Eq(Value::Bool(false))]));

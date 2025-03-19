@@ -1,15 +1,25 @@
 use std::collections::HashMap;
 
+use num_f::validate_num_f;
+use num_i::validate_num_i;
+use num_u::validate_num_u;
+
 use crate::error::{Err, ErrWrap};
 use crate::validate::bool::validate_bool;
 use crate::validation::Validation;
 use crate::value::Value;
 
 pub mod bool;
+pub mod num_u;
+pub mod num_i;
+pub mod num_f;
 
 pub fn validate(validation: &Validation, value: &Value) -> Option<ErrWrap> {
     match validation {
         Validation::Bool(v) => validate_bool(v, value),
+        Validation::NumU(v) => validate_num_u(v, value),
+        Validation::NumI(v) => validate_num_i(v, value),
+        Validation::NumF(v) => validate_num_f(v, value),
         Validation::Obj(v) => match value {
             Value::Obj(value) => {
                 let result: HashMap<String, ErrWrap> = v
@@ -57,6 +67,7 @@ pub fn validate(validation: &Validation, value: &Value) -> Option<ErrWrap> {
                 }
             }
         },
+        _ => None
     }
 }
 
