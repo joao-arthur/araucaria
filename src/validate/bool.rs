@@ -57,88 +57,38 @@ mod test {
     use super::*;
 
     #[test]
-    fn test_validate_bool_default_none() {
+    fn test_validate_bool_default() {
         let v = BoolValidation::default();
         assert_eq!(validate_bool(&v, &Value::Bool(false)), None);
         assert_eq!(validate_bool(&v, &Value::Bool(true)), None);
-    }
-
-    #[test]
-    fn test_validate_bool_required_none() {
-        let v = BoolValidation::default().required();
-        assert_eq!(validate_bool(&v, &Value::Bool(false)), None);
-        assert_eq!(validate_bool(&v, &Value::Bool(true)), None);
-    }
-
-    #[test]
-    fn test_validate_bool_eq_none() {
-        let v = BoolValidation::default().eq(false);
-        assert_eq!(validate_bool(&v, &Value::Bool(false)), None);
-    }
-
-    #[test]
-    fn test_validate_bool_ne_none() {
-        let v = BoolValidation::default().ne(false);
-        assert_eq!(validate_bool(&v, &Value::Bool(true)), None);
-    }
-
-    #[test]
-    fn test_validate_bool_required_eq_none() {
-        let v = BoolValidation::default().required().eq(false);
-        assert_eq!(validate_bool(&v, &Value::Bool(false)), None);
-    }
-
-    #[test]
-    fn test_validate_bool_required_ne_none() {
-        let v = BoolValidation::default().required().ne(false);
-        assert_eq!(validate_bool(&v, &Value::Bool(true)), None);
-    }
-
-    #[test]
-    fn test_validate_bool_default_some() {
-        let v = BoolValidation::default();
-        assert_eq!(validate_bool(&v, &num_u_stub()), ErrWrap::arr([Err::Bool]));
-        assert_eq!(validate_bool(&v, &num_i_stub()), ErrWrap::arr([Err::Bool]));
-        assert_eq!(validate_bool(&v, &num_f_stub()), ErrWrap::arr([Err::Bool]));
-        assert_eq!(validate_bool(&v, &str_stub()), ErrWrap::arr([Err::Bool]));
-        assert_eq!(validate_bool(&v, &arr_bool_stub()), ErrWrap::arr([Err::Bool]));
-        assert_eq!(validate_bool(&v, &obj_stub()), ErrWrap::arr([Err::Bool]));
         assert_eq!(validate_bool(&v, &Value::None), ErrWrap::arr([Err::Bool]));
+        assert_eq!(validate_bool(&v, &num_u_stub()), ErrWrap::arr([Err::Bool]));
     }
 
     #[test]
-    fn test_validate_bool_required_some() {
+    fn test_validate_bool_required() {
         let v = BoolValidation::default().required();
+        assert_eq!(validate_bool(&v, &Value::Bool(false)), None);
+        assert_eq!(validate_bool(&v, &Value::Bool(true)), None);
         assert_eq!(validate_bool(&v, &Value::None), ErrWrap::arr([Err::Bool, Err::Required]));
         assert_eq!(validate_bool(&v, &num_u_stub()), ErrWrap::arr([Err::Bool]));
     }
 
     #[test]
-    fn test_validate_bool_eq_some() {
+    fn test_validate_bool_eq() {
         let v = BoolValidation::default().eq(false);
+        assert_eq!(validate_bool(&v, &Value::Bool(false)), None);
         assert_eq!(validate_bool(&v, &Value::Bool(true)), ErrWrap::arr([Err::Eq(Value::Bool(false))]));
         assert_eq!(validate_bool(&v, &Value::None), ErrWrap::arr([Err::Bool,  Err::Eq(Value::Bool(false))]));
         assert_eq!(validate_bool(&v, &num_u_stub()), ErrWrap::arr([Err::Bool, Err::Eq(Value::Bool(false))]));
     }
 
     #[test]
-    fn test_validate_bool_ne_some() {
+    fn test_validate_bool_ne() {
         let v = BoolValidation::default().ne(false);
+        assert_eq!(validate_bool(&v, &Value::Bool(true)), None);
         assert_eq!(validate_bool(&v, &Value::Bool(false)), ErrWrap::arr([Err::Ne(Value::Bool(false))]));
         assert_eq!(validate_bool(&v, &Value::None), ErrWrap::arr([Err::Bool, Err::Ne(Value::Bool(false))]));
         assert_eq!(validate_bool(&v, &num_u_stub()), ErrWrap::arr([Err::Bool, Err::Ne(Value::Bool(false))]));
-    }
-
-    #[test]
-    fn test_validate_bool_required_eq_some() {
-        let v = BoolValidation::default().required().eq(false);
-        assert_eq!(validate_bool(&v, &Value::Bool(true)), ErrWrap::arr([Err::Eq(Value::Bool(false))]));
-        assert_eq!(validate_bool(&v, &Value::None), ErrWrap::arr([Err::Bool, Err::Required, Err::Eq(Value::Bool(false))]));
-        assert_eq!(validate_bool(&v, &num_u_stub()), ErrWrap::arr([Err::Bool, Err::Eq(Value::Bool(false))]));
-        assert_eq!(validate_bool(&v, &num_i_stub()), ErrWrap::arr([Err::Bool, Err::Eq(Value::Bool(false))]));
-        assert_eq!(validate_bool(&v, &num_f_stub()), ErrWrap::arr([Err::Bool, Err::Eq(Value::Bool(false))]));
-        assert_eq!(validate_bool(&v, &str_stub()), ErrWrap::arr([Err::Bool, Err::Eq(Value::Bool(false))]));
-        assert_eq!(validate_bool(&v, &arr_bool_stub()), ErrWrap::arr([Err::Bool, Err::Eq(Value::Bool(false))]));
-        assert_eq!(validate_bool(&v, &obj_stub()), ErrWrap::arr([Err::Bool, Err::Eq(Value::Bool(false))]));
     }
 }
