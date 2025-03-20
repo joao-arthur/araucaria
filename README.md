@@ -1,1 +1,3 @@
-# rs_validation
+# Araucaria
+
+Rust validation lib.
