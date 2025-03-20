@@ -1,5 +1,5 @@
 [package]
-name = "rs_validation"
+name = "araucaria"
 version = "1.0.0"
 edition = "2021"
 
@@ -8,7 +8,3 @@ license = "AGPL-3.0"
 [lib]
 crate-type = ["rlib"]
 bench = false
-
-[dependencies]
-email_address = "0.2.9"
-regex = "1.11.1"
