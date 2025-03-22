@@ -9,7 +9,6 @@ pub enum Err {
     NumU,
     NumI,
     NumF,
-    Obj,
     Eq(Value),
     Ne(Value),
     Gt(Value),
