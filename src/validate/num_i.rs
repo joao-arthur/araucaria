@@ -1,5 +1,7 @@
 use crate::{
-    error::{Err, ErrWrap}, validation::num_i::NumIValidation, value::Value
+    error::{Err, ErrWrap},
+    validation::num_i::NumIValidation,
+    value::Value,
 };
 
 pub fn validate_num_i(validation: &NumIValidation, value: &Value) -> Option<ErrWrap> {
@@ -90,11 +92,10 @@ pub fn validate_num_i(validation: &NumIValidation, value: &Value) -> Option<ErrW
     }
 }
 
-
 #[cfg(test)]
 mod test {
     use crate::value::stub::{
-        arr_bool_stub, bool_stub, num_f_stub, num_u_stub, num_i_stub, obj_stub, str_stub
+        arr_bool_stub, bool_stub, num_f_stub, num_u_stub, num_i_stub, obj_stub, str_stub,
     };
 
     use super::*;

@@ -10,9 +10,9 @@ use crate::validation::Validation;
 use crate::value::Value;
 
 pub mod bool;
-pub mod num_u;
-pub mod num_i;
 pub mod num_f;
+pub mod num_i;
+pub mod num_u;
 
 pub fn validate(validation: &Validation, value: &Value) -> Option<ErrWrap> {
     match validation {

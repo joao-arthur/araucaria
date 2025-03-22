@@ -200,7 +200,14 @@ mod test {
             }
         );
         assert_eq!(
-            NumFValidation::default().required().eq(-1.5).ne(-2.5).gt(-3.5).lt(-4.5).ge(-5.5).le(-6.5),
+            NumFValidation::default()
+                .required()
+                .eq(-1.5)
+                .ne(-2.5)
+                .gt(-3.5)
+                .lt(-4.5)
+                .ge(-5.5)
+                .le(-6.5),
             NumFValidation {
                 required: true,
                 eq: Some(-1.5),

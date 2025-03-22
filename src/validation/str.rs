@@ -31,10 +31,7 @@ mod test {
 
     #[test]
     fn test_str_validation() {
-        assert_eq!(
-            StrValidation::default(),
-            StrValidation { required: false, eq: None, ne: None }
-        );
+        assert_eq!(StrValidation::default(), StrValidation { required: false, eq: None, ne: None });
         assert_eq!(
             StrValidation::default().required(),
             StrValidation { required: true, eq: None, ne: None }
@@ -45,7 +42,11 @@ mod test {
         );
         assert_eq!(
             StrValidation::default().required().eq(String::from("Avalon")).ne(String::from("Mu")),
-            StrValidation { required: true, eq: Some(String::from("Avalon")), ne: Some(String::from("Mu")) }
+            StrValidation {
+                required: true,
+                eq: Some(String::from("Avalon")),
+                ne: Some(String::from("Mu"))
+            }
         );
     }
 }
