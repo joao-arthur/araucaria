@@ -6,6 +6,7 @@ use crate::value::Value;
 pub enum Err {
     Required,
     Bool,
+    Str,
     NumU,
     NumI,
     NumF,
