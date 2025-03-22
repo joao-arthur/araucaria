@@ -28,8 +28,8 @@ impl ErrWrap {
         Some(ErrWrap::Arr(value.to_vec()))
     }
 
-    pub fn obj(value: HashMap<String, ErrWrap>) -> Option<ErrWrap> {
-        Some(ErrWrap::Obj(value))
+    pub fn obj<const N: usize>(value: [(String, ErrWrap); N]) -> Option<ErrWrap> {
+        Some(ErrWrap::Obj(HashMap::from(value)))
     }
 }
 
@@ -47,7 +47,7 @@ mod test {
     #[test]
     fn test_obj() {
         assert_eq!(
-            ErrWrap::obj(HashMap::from([(String::from("is"), ErrWrap::Arr(vec![Err::Required]))])),
+            ErrWrap::obj([(String::from("is"), ErrWrap::Arr(vec![Err::Required]))]),
             Some(ErrWrap::Obj(HashMap::from([(
                 String::from("is"),
                 ErrWrap::Arr(vec![Err::Required])
