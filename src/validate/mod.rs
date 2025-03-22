@@ -3,6 +3,7 @@ use std::collections::HashMap;
 use num_f::validate_num_f;
 use num_i::validate_num_i;
 use num_u::validate_num_u;
+use str::validate_str;
 
 use crate::error::{Err, ErrWrap};
 use crate::validate::bool::validate_bool;
@@ -13,10 +14,12 @@ pub mod bool;
 pub mod num_f;
 pub mod num_i;
 pub mod num_u;
+pub mod str;
 
 pub fn validate(validation: &Validation, value: &Value) -> Option<ErrWrap> {
     match validation {
         Validation::Bool(v) => validate_bool(v, value),
+        Validation::Str(v) => validate_str(v, value),
         Validation::NumU(v) => validate_num_u(v, value),
         Validation::NumI(v) => validate_num_i(v, value),
         Validation::NumF(v) => validate_num_f(v, value),
