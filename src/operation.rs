@@ -271,25 +271,67 @@ mod test {
     #[test]
     fn test_compare_bool_some() {
         let value = Value::Bool(true);
-        assert_eq!(compare(&value, &Operation::Eq(Value::Bool(false))), Some(Err::Eq(Value::Bool(false))));
-        assert_eq!(compare(&value, &Operation::Ne(Value::Bool(true))), Some(Err::Ne(Value::Bool(true))));
+        assert_eq!(
+            compare(&value, &Operation::Eq(Value::Bool(false))),
+            Some(Err::Eq(Value::Bool(false)))
+        );
+        assert_eq!(
+            compare(&value, &Operation::Ne(Value::Bool(true))),
+            Some(Err::Ne(Value::Bool(true)))
+        );
     }
 
     #[test]
     fn test_compare_bool_other_types() {
-        assert_eq!(compare(&num_u_stub(), &Operation::Eq(Value::Bool(true))), Some(Err::Eq(Value::Bool(true))));
-        assert_eq!(compare(&num_i_stub(), &Operation::Eq(Value::Bool(true))), Some(Err::Eq(Value::Bool(true))));
-        assert_eq!(compare(&num_f_stub(), &Operation::Eq(Value::Bool(true))), Some(Err::Eq(Value::Bool(true))));
-        assert_eq!(compare(&str_stub(), &Operation::Eq(Value::Bool(true))), Some(Err::Eq(Value::Bool(true))));
-        assert_eq!(compare(&arr_bool_stub(), &Operation::Eq(Value::Bool(true))), Some(Err::Eq(Value::Bool(true))));
-        assert_eq!(compare(&arr_str_stub(), &Operation::Eq(Value::Bool(true))), Some(Err::Eq(Value::Bool(true))));
+        assert_eq!(
+            compare(&num_u_stub(), &Operation::Eq(Value::Bool(true))),
+            Some(Err::Eq(Value::Bool(true)))
+        );
+        assert_eq!(
+            compare(&num_i_stub(), &Operation::Eq(Value::Bool(true))),
+            Some(Err::Eq(Value::Bool(true)))
+        );
+        assert_eq!(
+            compare(&num_f_stub(), &Operation::Eq(Value::Bool(true))),
+            Some(Err::Eq(Value::Bool(true)))
+        );
+        assert_eq!(
+            compare(&str_stub(), &Operation::Eq(Value::Bool(true))),
+            Some(Err::Eq(Value::Bool(true)))
+        );
+        assert_eq!(
+            compare(&arr_bool_stub(), &Operation::Eq(Value::Bool(true))),
+            Some(Err::Eq(Value::Bool(true)))
+        );
+        assert_eq!(
+            compare(&arr_str_stub(), &Operation::Eq(Value::Bool(true))),
+            Some(Err::Eq(Value::Bool(true)))
+        );
 
-        assert_eq!(compare(&num_u_stub(), &Operation::Ne(Value::Bool(true))), Some(Err::Ne(Value::Bool(true))));
-        assert_eq!(compare(&num_i_stub(), &Operation::Ne(Value::Bool(true))), Some(Err::Ne(Value::Bool(true))));
-        assert_eq!(compare(&num_f_stub(), &Operation::Ne(Value::Bool(true))), Some(Err::Ne(Value::Bool(true))));
-        assert_eq!(compare(&str_stub(), &Operation::Ne(Value::Bool(true))), Some(Err::Ne(Value::Bool(true))));
-        assert_eq!(compare(&arr_bool_stub(), &Operation::Ne(Value::Bool(true))), Some(Err::Ne(Value::Bool(true))));
-        assert_eq!(compare(&arr_str_stub(), &Operation::Ne(Value::Bool(true))), Some(Err::Ne(Value::Bool(true))));
+        assert_eq!(
+            compare(&num_u_stub(), &Operation::Ne(Value::Bool(true))),
+            Some(Err::Ne(Value::Bool(true)))
+        );
+        assert_eq!(
+            compare(&num_i_stub(), &Operation::Ne(Value::Bool(true))),
+            Some(Err::Ne(Value::Bool(true)))
+        );
+        assert_eq!(
+            compare(&num_f_stub(), &Operation::Ne(Value::Bool(true))),
+            Some(Err::Ne(Value::Bool(true)))
+        );
+        assert_eq!(
+            compare(&str_stub(), &Operation::Ne(Value::Bool(true))),
+            Some(Err::Ne(Value::Bool(true)))
+        );
+        assert_eq!(
+            compare(&arr_bool_stub(), &Operation::Ne(Value::Bool(true))),
+            Some(Err::Ne(Value::Bool(true)))
+        );
+        assert_eq!(
+            compare(&arr_str_stub(), &Operation::Ne(Value::Bool(true))),
+            Some(Err::Ne(Value::Bool(true)))
+        );
     }
 
     #[test]
@@ -306,57 +348,183 @@ mod test {
     #[test]
     fn test_compare_num_u_some() {
         let value = Value::NumU(42);
-        assert_eq!(compare(&value, &Operation::Eq(Value::NumU(22))), Some(Err::Eq(Value::NumU(22))));
-        assert_eq!(compare(&value, &Operation::Ne(Value::NumU(42))), Some(Err::Ne(Value::NumU(42))));
-        assert_eq!(compare(&value, &Operation::Gt(Value::NumU(42))), Some(Err::Gt(Value::NumU(42))));
-        assert_eq!(compare(&value, &Operation::Lt(Value::NumU(42))), Some(Err::Lt(Value::NumU(42))));
-        assert_eq!(compare(&value, &Operation::Ge(Value::NumU(43))), Some(Err::Ge(Value::NumU(43))));
-        assert_eq!(compare(&value, &Operation::Le(Value::NumU(41))), Some(Err::Le(Value::NumU(41))));
+        assert_eq!(
+            compare(&value, &Operation::Eq(Value::NumU(22))),
+            Some(Err::Eq(Value::NumU(22)))
+        );
+        assert_eq!(
+            compare(&value, &Operation::Ne(Value::NumU(42))),
+            Some(Err::Ne(Value::NumU(42)))
+        );
+        assert_eq!(
+            compare(&value, &Operation::Gt(Value::NumU(42))),
+            Some(Err::Gt(Value::NumU(42)))
+        );
+        assert_eq!(
+            compare(&value, &Operation::Lt(Value::NumU(42))),
+            Some(Err::Lt(Value::NumU(42)))
+        );
+        assert_eq!(
+            compare(&value, &Operation::Ge(Value::NumU(43))),
+            Some(Err::Ge(Value::NumU(43)))
+        );
+        assert_eq!(
+            compare(&value, &Operation::Le(Value::NumU(41))),
+            Some(Err::Le(Value::NumU(41)))
+        );
     }
 
     #[test]
     fn test_compare_num_u_other_types() {
-        assert_eq!(compare(&bool_stub(), &Operation::Eq(Value::NumU(5))), Some(Err::Eq(Value::NumU(5))));
-        assert_eq!(compare(&num_i_stub(), &Operation::Eq(Value::NumU(5))), Some(Err::Eq(Value::NumU(5))));
-        assert_eq!(compare(&num_f_stub(), &Operation::Eq(Value::NumU(5))), Some(Err::Eq(Value::NumU(5))));
-        assert_eq!(compare(&str_stub(), &Operation::Eq(Value::NumU(5))), Some(Err::Eq(Value::NumU(5))));
-        assert_eq!(compare(&arr_bool_stub(), &Operation::Eq(Value::NumU(5))), Some(Err::Eq(Value::NumU(5))));
-        assert_eq!(compare(&arr_str_stub(), &Operation::Eq(Value::NumU(5))), Some(Err::Eq(Value::NumU(5))));
+        assert_eq!(
+            compare(&bool_stub(), &Operation::Eq(Value::NumU(5))),
+            Some(Err::Eq(Value::NumU(5)))
+        );
+        assert_eq!(
+            compare(&num_i_stub(), &Operation::Eq(Value::NumU(5))),
+            Some(Err::Eq(Value::NumU(5)))
+        );
+        assert_eq!(
+            compare(&num_f_stub(), &Operation::Eq(Value::NumU(5))),
+            Some(Err::Eq(Value::NumU(5)))
+        );
+        assert_eq!(
+            compare(&str_stub(), &Operation::Eq(Value::NumU(5))),
+            Some(Err::Eq(Value::NumU(5)))
+        );
+        assert_eq!(
+            compare(&arr_bool_stub(), &Operation::Eq(Value::NumU(5))),
+            Some(Err::Eq(Value::NumU(5)))
+        );
+        assert_eq!(
+            compare(&arr_str_stub(), &Operation::Eq(Value::NumU(5))),
+            Some(Err::Eq(Value::NumU(5)))
+        );
 
-        assert_eq!(compare(&bool_stub(), &Operation::Ne(Value::NumU(5))), Some(Err::Ne(Value::NumU(5))));
-        assert_eq!(compare(&num_i_stub(), &Operation::Ne(Value::NumU(5))), Some(Err::Ne(Value::NumU(5))));
-        assert_eq!(compare(&num_f_stub(), &Operation::Ne(Value::NumU(5))), Some(Err::Ne(Value::NumU(5))));
-        assert_eq!(compare(&str_stub(), &Operation::Ne(Value::NumU(5))), Some(Err::Ne(Value::NumU(5))));
-        assert_eq!(compare(&arr_bool_stub(), &Operation::Ne(Value::NumU(5))), Some(Err::Ne(Value::NumU(5))));
-        assert_eq!(compare(&arr_str_stub(), &Operation::Ne(Value::NumU(5))), Some(Err::Ne(Value::NumU(5))));
+        assert_eq!(
+            compare(&bool_stub(), &Operation::Ne(Value::NumU(5))),
+            Some(Err::Ne(Value::NumU(5)))
+        );
+        assert_eq!(
+            compare(&num_i_stub(), &Operation::Ne(Value::NumU(5))),
+            Some(Err::Ne(Value::NumU(5)))
+        );
+        assert_eq!(
+            compare(&num_f_stub(), &Operation::Ne(Value::NumU(5))),
+            Some(Err::Ne(Value::NumU(5)))
+        );
+        assert_eq!(
+            compare(&str_stub(), &Operation::Ne(Value::NumU(5))),
+            Some(Err::Ne(Value::NumU(5)))
+        );
+        assert_eq!(
+            compare(&arr_bool_stub(), &Operation::Ne(Value::NumU(5))),
+            Some(Err::Ne(Value::NumU(5)))
+        );
+        assert_eq!(
+            compare(&arr_str_stub(), &Operation::Ne(Value::NumU(5))),
+            Some(Err::Ne(Value::NumU(5)))
+        );
 
-        assert_eq!(compare(&bool_stub(), &Operation::Gt(Value::NumU(5))), Some(Err::Gt(Value::NumU(5))));
-        assert_eq!(compare(&num_i_stub(), &Operation::Gt(Value::NumU(5))), Some(Err::Gt(Value::NumU(5))));
-        assert_eq!(compare(&num_f_stub(), &Operation::Gt(Value::NumU(5))), Some(Err::Gt(Value::NumU(5))));
-        assert_eq!(compare(&str_stub(), &Operation::Gt(Value::NumU(5))), Some(Err::Gt(Value::NumU(5))));
-        assert_eq!(compare(&arr_bool_stub(), &Operation::Gt(Value::NumU(5))), Some(Err::Gt(Value::NumU(5))));
-        assert_eq!(compare(&arr_str_stub(), &Operation::Gt(Value::NumU(5))), Some(Err::Gt(Value::NumU(5))));
+        assert_eq!(
+            compare(&bool_stub(), &Operation::Gt(Value::NumU(5))),
+            Some(Err::Gt(Value::NumU(5)))
+        );
+        assert_eq!(
+            compare(&num_i_stub(), &Operation::Gt(Value::NumU(5))),
+            Some(Err::Gt(Value::NumU(5)))
+        );
+        assert_eq!(
+            compare(&num_f_stub(), &Operation::Gt(Value::NumU(5))),
+            Some(Err::Gt(Value::NumU(5)))
+        );
+        assert_eq!(
+            compare(&str_stub(), &Operation::Gt(Value::NumU(5))),
+            Some(Err::Gt(Value::NumU(5)))
+        );
+        assert_eq!(
+            compare(&arr_bool_stub(), &Operation::Gt(Value::NumU(5))),
+            Some(Err::Gt(Value::NumU(5)))
+        );
+        assert_eq!(
+            compare(&arr_str_stub(), &Operation::Gt(Value::NumU(5))),
+            Some(Err::Gt(Value::NumU(5)))
+        );
 
-        assert_eq!(compare(&bool_stub(), &Operation::Lt(Value::NumU(5))), Some(Err::Lt(Value::NumU(5))));
-        assert_eq!(compare(&num_i_stub(), &Operation::Lt(Value::NumU(5))), Some(Err::Lt(Value::NumU(5))));
-        assert_eq!(compare(&num_f_stub(), &Operation::Lt(Value::NumU(5))), Some(Err::Lt(Value::NumU(5))));
-        assert_eq!(compare(&str_stub(), &Operation::Lt(Value::NumU(5))), Some(Err::Lt(Value::NumU(5))));
-        assert_eq!(compare(&arr_bool_stub(), &Operation::Lt(Value::NumU(5))), Some(Err::Lt(Value::NumU(5))));
-        assert_eq!(compare(&arr_str_stub(), &Operation::Lt(Value::NumU(5))), Some(Err::Lt(Value::NumU(5))));
+        assert_eq!(
+            compare(&bool_stub(), &Operation::Lt(Value::NumU(5))),
+            Some(Err::Lt(Value::NumU(5)))
+        );
+        assert_eq!(
+            compare(&num_i_stub(), &Operation::Lt(Value::NumU(5))),
+            Some(Err::Lt(Value::NumU(5)))
+        );
+        assert_eq!(
+            compare(&num_f_stub(), &Operation::Lt(Value::NumU(5))),
+            Some(Err::Lt(Value::NumU(5)))
+        );
+        assert_eq!(
+            compare(&str_stub(), &Operation::Lt(Value::NumU(5))),
+            Some(Err::Lt(Value::NumU(5)))
+        );
+        assert_eq!(
+            compare(&arr_bool_stub(), &Operation::Lt(Value::NumU(5))),
+            Some(Err::Lt(Value::NumU(5)))
+        );
+        assert_eq!(
+            compare(&arr_str_stub(), &Operation::Lt(Value::NumU(5))),
+            Some(Err::Lt(Value::NumU(5)))
+        );
 
-        assert_eq!(compare(&bool_stub(), &Operation::Ge(Value::NumU(5))), Some(Err::Ge(Value::NumU(5))));
-        assert_eq!(compare(&num_i_stub(), &Operation::Ge(Value::NumU(5))), Some(Err::Ge(Value::NumU(5))));
-        assert_eq!(compare(&num_f_stub(), &Operation::Ge(Value::NumU(5))), Some(Err::Ge(Value::NumU(5))));
-        assert_eq!(compare(&str_stub(), &Operation::Ge(Value::NumU(5))), Some(Err::Ge(Value::NumU(5))));
-        assert_eq!(compare(&arr_bool_stub(), &Operation::Ge(Value::NumU(5))), Some(Err::Ge(Value::NumU(5))));
-        assert_eq!(compare(&arr_str_stub(), &Operation::Ge(Value::NumU(5))), Some(Err::Ge(Value::NumU(5))));
+        assert_eq!(
+            compare(&bool_stub(), &Operation::Ge(Value::NumU(5))),
+            Some(Err::Ge(Value::NumU(5)))
+        );
+        assert_eq!(
+            compare(&num_i_stub(), &Operation::Ge(Value::NumU(5))),
+            Some(Err::Ge(Value::NumU(5)))
+        );
+        assert_eq!(
+            compare(&num_f_stub(), &Operation::Ge(Value::NumU(5))),
+            Some(Err::Ge(Value::NumU(5)))
+        );
+        assert_eq!(
+            compare(&str_stub(), &Operation::Ge(Value::NumU(5))),
+            Some(Err::Ge(Value::NumU(5)))
+        );
+        assert_eq!(
+            compare(&arr_bool_stub(), &Operation::Ge(Value::NumU(5))),
+            Some(Err::Ge(Value::NumU(5)))
+        );
+        assert_eq!(
+            compare(&arr_str_stub(), &Operation::Ge(Value::NumU(5))),
+            Some(Err::Ge(Value::NumU(5)))
+        );
 
-        assert_eq!(compare(&bool_stub(), &Operation::Le(Value::NumU(5))), Some(Err::Le(Value::NumU(5))));
-        assert_eq!(compare(&num_i_stub(), &Operation::Le(Value::NumU(5))), Some(Err::Le(Value::NumU(5))));
-        assert_eq!(compare(&num_f_stub(), &Operation::Le(Value::NumU(5))), Some(Err::Le(Value::NumU(5))));
-        assert_eq!(compare(&str_stub(), &Operation::Le(Value::NumU(5))), Some(Err::Le(Value::NumU(5))));
-        assert_eq!(compare(&arr_bool_stub(), &Operation::Le(Value::NumU(5))), Some(Err::Le(Value::NumU(5))));
-        assert_eq!(compare(&arr_str_stub(), &Operation::Le(Value::NumU(5))), Some(Err::Le(Value::NumU(5))));
+        assert_eq!(
+            compare(&bool_stub(), &Operation::Le(Value::NumU(5))),
+            Some(Err::Le(Value::NumU(5)))
+        );
+        assert_eq!(
+            compare(&num_i_stub(), &Operation::Le(Value::NumU(5))),
+            Some(Err::Le(Value::NumU(5)))
+        );
+        assert_eq!(
+            compare(&num_f_stub(), &Operation::Le(Value::NumU(5))),
+            Some(Err::Le(Value::NumU(5)))
+        );
+        assert_eq!(
+            compare(&str_stub(), &Operation::Le(Value::NumU(5))),
+            Some(Err::Le(Value::NumU(5)))
+        );
+        assert_eq!(
+            compare(&arr_bool_stub(), &Operation::Le(Value::NumU(5))),
+            Some(Err::Le(Value::NumU(5)))
+        );
+        assert_eq!(
+            compare(&arr_str_stub(), &Operation::Le(Value::NumU(5))),
+            Some(Err::Le(Value::NumU(5)))
+        );
     }
 
     #[test]
@@ -373,57 +541,183 @@ mod test {
     #[test]
     fn test_compare_num_i_some() {
         let value = Value::NumI(-42);
-        assert_eq!(compare(&value, &Operation::Eq(Value::NumI(-22))), Some(Err::Eq(Value::NumI(-22))));
-        assert_eq!(compare(&value, &Operation::Ne(Value::NumI(-42))), Some(Err::Ne(Value::NumI(-42))));
-        assert_eq!(compare(&value, &Operation::Gt(Value::NumI(-42))), Some(Err::Gt(Value::NumI(-42))));
-        assert_eq!(compare(&value, &Operation::Lt(Value::NumI(-42))), Some(Err::Lt(Value::NumI(-42))));
-        assert_eq!(compare(&value, &Operation::Ge(Value::NumI(-41))), Some(Err::Ge(Value::NumI(-41))));
-        assert_eq!(compare(&value, &Operation::Le(Value::NumI(-43))), Some(Err::Le(Value::NumI(-43))));
+        assert_eq!(
+            compare(&value, &Operation::Eq(Value::NumI(-22))),
+            Some(Err::Eq(Value::NumI(-22)))
+        );
+        assert_eq!(
+            compare(&value, &Operation::Ne(Value::NumI(-42))),
+            Some(Err::Ne(Value::NumI(-42)))
+        );
+        assert_eq!(
+            compare(&value, &Operation::Gt(Value::NumI(-42))),
+            Some(Err::Gt(Value::NumI(-42)))
+        );
+        assert_eq!(
+            compare(&value, &Operation::Lt(Value::NumI(-42))),
+            Some(Err::Lt(Value::NumI(-42)))
+        );
+        assert_eq!(
+            compare(&value, &Operation::Ge(Value::NumI(-41))),
+            Some(Err::Ge(Value::NumI(-41)))
+        );
+        assert_eq!(
+            compare(&value, &Operation::Le(Value::NumI(-43))),
+            Some(Err::Le(Value::NumI(-43)))
+        );
     }
 
     #[test]
     fn test_compare_num_i_other_types() {
-        assert_eq!(compare(&bool_stub(), &Operation::Eq(Value::NumI(-5))), Some(Err::Eq(Value::NumI(-5))));
-        assert_eq!(compare(&num_u_stub(), &Operation::Eq(Value::NumI(-5))), Some(Err::Eq(Value::NumI(-5))));
-        assert_eq!(compare(&num_f_stub(), &Operation::Eq(Value::NumI(-5))), Some(Err::Eq(Value::NumI(-5))));
-        assert_eq!(compare(&str_stub(), &Operation::Eq(Value::NumI(-5))), Some(Err::Eq(Value::NumI(-5))));
-        assert_eq!(compare(&arr_bool_stub(), &Operation::Eq(Value::NumI(-5))), Some(Err::Eq(Value::NumI(-5))));
-        assert_eq!(compare(&arr_str_stub(), &Operation::Eq(Value::NumI(-5))), Some(Err::Eq(Value::NumI(-5))));
+        assert_eq!(
+            compare(&bool_stub(), &Operation::Eq(Value::NumI(-5))),
+            Some(Err::Eq(Value::NumI(-5)))
+        );
+        assert_eq!(
+            compare(&num_u_stub(), &Operation::Eq(Value::NumI(-5))),
+            Some(Err::Eq(Value::NumI(-5)))
+        );
+        assert_eq!(
+            compare(&num_f_stub(), &Operation::Eq(Value::NumI(-5))),
+            Some(Err::Eq(Value::NumI(-5)))
+        );
+        assert_eq!(
+            compare(&str_stub(), &Operation::Eq(Value::NumI(-5))),
+            Some(Err::Eq(Value::NumI(-5)))
+        );
+        assert_eq!(
+            compare(&arr_bool_stub(), &Operation::Eq(Value::NumI(-5))),
+            Some(Err::Eq(Value::NumI(-5)))
+        );
+        assert_eq!(
+            compare(&arr_str_stub(), &Operation::Eq(Value::NumI(-5))),
+            Some(Err::Eq(Value::NumI(-5)))
+        );
 
-        assert_eq!(compare(&bool_stub(), &Operation::Ne(Value::NumI(-5))), Some(Err::Ne(Value::NumI(-5))));
-        assert_eq!(compare(&num_u_stub(), &Operation::Ne(Value::NumI(-5))), Some(Err::Ne(Value::NumI(-5))));
-        assert_eq!(compare(&num_f_stub(), &Operation::Ne(Value::NumI(-5))), Some(Err::Ne(Value::NumI(-5))));
-        assert_eq!(compare(&str_stub(), &Operation::Ne(Value::NumI(-5))), Some(Err::Ne(Value::NumI(-5))));
-        assert_eq!(compare(&arr_bool_stub(), &Operation::Ne(Value::NumI(-5))), Some(Err::Ne(Value::NumI(-5))));
-        assert_eq!(compare(&arr_str_stub(), &Operation::Ne(Value::NumI(-5))), Some(Err::Ne(Value::NumI(-5))));
+        assert_eq!(
+            compare(&bool_stub(), &Operation::Ne(Value::NumI(-5))),
+            Some(Err::Ne(Value::NumI(-5)))
+        );
+        assert_eq!(
+            compare(&num_u_stub(), &Operation::Ne(Value::NumI(-5))),
+            Some(Err::Ne(Value::NumI(-5)))
+        );
+        assert_eq!(
+            compare(&num_f_stub(), &Operation::Ne(Value::NumI(-5))),
+            Some(Err::Ne(Value::NumI(-5)))
+        );
+        assert_eq!(
+            compare(&str_stub(), &Operation::Ne(Value::NumI(-5))),
+            Some(Err::Ne(Value::NumI(-5)))
+        );
+        assert_eq!(
+            compare(&arr_bool_stub(), &Operation::Ne(Value::NumI(-5))),
+            Some(Err::Ne(Value::NumI(-5)))
+        );
+        assert_eq!(
+            compare(&arr_str_stub(), &Operation::Ne(Value::NumI(-5))),
+            Some(Err::Ne(Value::NumI(-5)))
+        );
 
-        assert_eq!(compare(&bool_stub(), &Operation::Gt(Value::NumI(-5))), Some(Err::Gt(Value::NumI(-5))));
-        assert_eq!(compare(&num_u_stub(), &Operation::Gt(Value::NumI(-5))), Some(Err::Gt(Value::NumI(-5))));
-        assert_eq!(compare(&num_f_stub(), &Operation::Gt(Value::NumI(-5))), Some(Err::Gt(Value::NumI(-5))));
-        assert_eq!(compare(&str_stub(), &Operation::Gt(Value::NumI(-5))), Some(Err::Gt(Value::NumI(-5))));
-        assert_eq!(compare(&arr_bool_stub(), &Operation::Gt(Value::NumI(-5))), Some(Err::Gt(Value::NumI(-5))));
-        assert_eq!(compare(&arr_str_stub(), &Operation::Gt(Value::NumI(-5))), Some(Err::Gt(Value::NumI(-5))));
+        assert_eq!(
+            compare(&bool_stub(), &Operation::Gt(Value::NumI(-5))),
+            Some(Err::Gt(Value::NumI(-5)))
+        );
+        assert_eq!(
+            compare(&num_u_stub(), &Operation::Gt(Value::NumI(-5))),
+            Some(Err::Gt(Value::NumI(-5)))
+        );
+        assert_eq!(
+            compare(&num_f_stub(), &Operation::Gt(Value::NumI(-5))),
+            Some(Err::Gt(Value::NumI(-5)))
+        );
+        assert_eq!(
+            compare(&str_stub(), &Operation::Gt(Value::NumI(-5))),
+            Some(Err::Gt(Value::NumI(-5)))
+        );
+        assert_eq!(
+            compare(&arr_bool_stub(), &Operation::Gt(Value::NumI(-5))),
+            Some(Err::Gt(Value::NumI(-5)))
+        );
+        assert_eq!(
+            compare(&arr_str_stub(), &Operation::Gt(Value::NumI(-5))),
+            Some(Err::Gt(Value::NumI(-5)))
+        );
 
-        assert_eq!(compare(&bool_stub(), &Operation::Lt(Value::NumI(-5))), Some(Err::Lt(Value::NumI(-5))));
-        assert_eq!(compare(&num_u_stub(), &Operation::Lt(Value::NumI(-5))), Some(Err::Lt(Value::NumI(-5))));
-        assert_eq!(compare(&num_f_stub(), &Operation::Lt(Value::NumI(-5))), Some(Err::Lt(Value::NumI(-5))));
-        assert_eq!(compare(&str_stub(), &Operation::Lt(Value::NumI(-5))), Some(Err::Lt(Value::NumI(-5))));
-        assert_eq!(compare(&arr_bool_stub(), &Operation::Lt(Value::NumI(-5))), Some(Err::Lt(Value::NumI(-5))));
-        assert_eq!(compare(&arr_str_stub(), &Operation::Lt(Value::NumI(-5))), Some(Err::Lt(Value::NumI(-5))));
+        assert_eq!(
+            compare(&bool_stub(), &Operation::Lt(Value::NumI(-5))),
+            Some(Err::Lt(Value::NumI(-5)))
+        );
+        assert_eq!(
+            compare(&num_u_stub(), &Operation::Lt(Value::NumI(-5))),
+            Some(Err::Lt(Value::NumI(-5)))
+        );
+        assert_eq!(
+            compare(&num_f_stub(), &Operation::Lt(Value::NumI(-5))),
+            Some(Err::Lt(Value::NumI(-5)))
+        );
+        assert_eq!(
+            compare(&str_stub(), &Operation::Lt(Value::NumI(-5))),
+            Some(Err::Lt(Value::NumI(-5)))
+        );
+        assert_eq!(
+            compare(&arr_bool_stub(), &Operation::Lt(Value::NumI(-5))),
+            Some(Err::Lt(Value::NumI(-5)))
+        );
+        assert_eq!(
+            compare(&arr_str_stub(), &Operation::Lt(Value::NumI(-5))),
+            Some(Err::Lt(Value::NumI(-5)))
+        );
 
-        assert_eq!(compare(&bool_stub(), &Operation::Ge(Value::NumI(-5))), Some(Err::Ge(Value::NumI(-5))));
-        assert_eq!(compare(&num_u_stub(), &Operation::Ge(Value::NumI(-5))), Some(Err::Ge(Value::NumI(-5))));
-        assert_eq!(compare(&num_f_stub(), &Operation::Ge(Value::NumI(-5))), Some(Err::Ge(Value::NumI(-5))));
-        assert_eq!(compare(&str_stub(), &Operation::Ge(Value::NumI(-5))), Some(Err::Ge(Value::NumI(-5))));
-        assert_eq!(compare(&arr_bool_stub(), &Operation::Ge(Value::NumI(-5))), Some(Err::Ge(Value::NumI(-5))));
-        assert_eq!(compare(&arr_str_stub(), &Operation::Ge(Value::NumI(-5))), Some(Err::Ge(Value::NumI(-5))));
+        assert_eq!(
+            compare(&bool_stub(), &Operation::Ge(Value::NumI(-5))),
+            Some(Err::Ge(Value::NumI(-5)))
+        );
+        assert_eq!(
+            compare(&num_u_stub(), &Operation::Ge(Value::NumI(-5))),
+            Some(Err::Ge(Value::NumI(-5)))
+        );
+        assert_eq!(
+            compare(&num_f_stub(), &Operation::Ge(Value::NumI(-5))),
+            Some(Err::Ge(Value::NumI(-5)))
+        );
+        assert_eq!(
+            compare(&str_stub(), &Operation::Ge(Value::NumI(-5))),
+            Some(Err::Ge(Value::NumI(-5)))
+        );
+        assert_eq!(
+            compare(&arr_bool_stub(), &Operation::Ge(Value::NumI(-5))),
+            Some(Err::Ge(Value::NumI(-5)))
+        );
+        assert_eq!(
+            compare(&arr_str_stub(), &Operation::Ge(Value::NumI(-5))),
+            Some(Err::Ge(Value::NumI(-5)))
+        );
 
-        assert_eq!(compare(&bool_stub(), &Operation::Le(Value::NumI(-5))), Some(Err::Le(Value::NumI(-5))));
-        assert_eq!(compare(&num_u_stub(), &Operation::Le(Value::NumI(-5))), Some(Err::Le(Value::NumI(-5))));
-        assert_eq!(compare(&num_f_stub(), &Operation::Le(Value::NumI(-5))), Some(Err::Le(Value::NumI(-5))));
-        assert_eq!(compare(&str_stub(), &Operation::Le(Value::NumI(-5))), Some(Err::Le(Value::NumI(-5))));
-        assert_eq!(compare(&arr_bool_stub(), &Operation::Le(Value::NumI(-5))), Some(Err::Le(Value::NumI(-5))));
-        assert_eq!(compare(&arr_str_stub(), &Operation::Le(Value::NumI(-5))), Some(Err::Le(Value::NumI(-5))));
+        assert_eq!(
+            compare(&bool_stub(), &Operation::Le(Value::NumI(-5))),
+            Some(Err::Le(Value::NumI(-5)))
+        );
+        assert_eq!(
+            compare(&num_u_stub(), &Operation::Le(Value::NumI(-5))),
+            Some(Err::Le(Value::NumI(-5)))
+        );
+        assert_eq!(
+            compare(&num_f_stub(), &Operation::Le(Value::NumI(-5))),
+            Some(Err::Le(Value::NumI(-5)))
+        );
+        assert_eq!(
+            compare(&str_stub(), &Operation::Le(Value::NumI(-5))),
+            Some(Err::Le(Value::NumI(-5)))
+        );
+        assert_eq!(
+            compare(&arr_bool_stub(), &Operation::Le(Value::NumI(-5))),
+            Some(Err::Le(Value::NumI(-5)))
+        );
+        assert_eq!(
+            compare(&arr_str_stub(), &Operation::Le(Value::NumI(-5))),
+            Some(Err::Le(Value::NumI(-5)))
+        );
     }
 
     #[test]
@@ -440,57 +734,183 @@ mod test {
     #[test]
     fn test_compare_num_f_some() {
         let value = Value::NumF(-42.5);
-        assert_eq!(compare(&value, &Operation::Eq(Value::NumF(-22.5))), Some(Err::Eq(Value::NumF(-22.5))));
-        assert_eq!(compare(&value, &Operation::Ne(Value::NumF(-42.5))), Some(Err::Ne(Value::NumF(-42.5))));
-        assert_eq!(compare(&value, &Operation::Gt(Value::NumF(-42.5))), Some(Err::Gt(Value::NumF(-42.5))));
-        assert_eq!(compare(&value, &Operation::Lt(Value::NumF(-42.5))), Some(Err::Lt(Value::NumF(-42.5))));
-        assert_eq!(compare(&value, &Operation::Ge(Value::NumF(-41.5))), Some(Err::Ge(Value::NumF(-41.5))));
-        assert_eq!(compare(&value, &Operation::Le(Value::NumF(-43.5))), Some(Err::Le(Value::NumF(-43.5))));
+        assert_eq!(
+            compare(&value, &Operation::Eq(Value::NumF(-22.5))),
+            Some(Err::Eq(Value::NumF(-22.5)))
+        );
+        assert_eq!(
+            compare(&value, &Operation::Ne(Value::NumF(-42.5))),
+            Some(Err::Ne(Value::NumF(-42.5)))
+        );
+        assert_eq!(
+            compare(&value, &Operation::Gt(Value::NumF(-42.5))),
+            Some(Err::Gt(Value::NumF(-42.5)))
+        );
+        assert_eq!(
+            compare(&value, &Operation::Lt(Value::NumF(-42.5))),
+            Some(Err::Lt(Value::NumF(-42.5)))
+        );
+        assert_eq!(
+            compare(&value, &Operation::Ge(Value::NumF(-41.5))),
+            Some(Err::Ge(Value::NumF(-41.5)))
+        );
+        assert_eq!(
+            compare(&value, &Operation::Le(Value::NumF(-43.5))),
+            Some(Err::Le(Value::NumF(-43.5)))
+        );
     }
 
     #[test]
     fn test_compare_num_f_other_types() {
-        assert_eq!(compare(&bool_stub(), &Operation::Eq(Value::NumF(-5.5))), Some(Err::Eq(Value::NumF(-5.5))));
-        assert_eq!(compare(&num_u_stub(), &Operation::Eq(Value::NumF(-5.5))), Some(Err::Eq(Value::NumF(-5.5))));
-        assert_eq!(compare(&num_i_stub(), &Operation::Eq(Value::NumF(-5.5))), Some(Err::Eq(Value::NumF(-5.5))));
-        assert_eq!(compare(&str_stub(), &Operation::Eq(Value::NumF(-5.5))), Some(Err::Eq(Value::NumF(-5.5))));
-        assert_eq!(compare(&arr_bool_stub(), &Operation::Eq(Value::NumF(-5.5))), Some(Err::Eq(Value::NumF(-5.5))));
-        assert_eq!(compare(&arr_str_stub(), &Operation::Eq(Value::NumF(-5.5))), Some(Err::Eq(Value::NumF(-5.5))));
+        assert_eq!(
+            compare(&bool_stub(), &Operation::Eq(Value::NumF(-5.5))),
+            Some(Err::Eq(Value::NumF(-5.5)))
+        );
+        assert_eq!(
+            compare(&num_u_stub(), &Operation::Eq(Value::NumF(-5.5))),
+            Some(Err::Eq(Value::NumF(-5.5)))
+        );
+        assert_eq!(
+            compare(&num_i_stub(), &Operation::Eq(Value::NumF(-5.5))),
+            Some(Err::Eq(Value::NumF(-5.5)))
+        );
+        assert_eq!(
+            compare(&str_stub(), &Operation::Eq(Value::NumF(-5.5))),
+            Some(Err::Eq(Value::NumF(-5.5)))
+        );
+        assert_eq!(
+            compare(&arr_bool_stub(), &Operation::Eq(Value::NumF(-5.5))),
+            Some(Err::Eq(Value::NumF(-5.5)))
+        );
+        assert_eq!(
+            compare(&arr_str_stub(), &Operation::Eq(Value::NumF(-5.5))),
+            Some(Err::Eq(Value::NumF(-5.5)))
+        );
 
-        assert_eq!(compare(&bool_stub(), &Operation::Ne(Value::NumF(-5.5))), Some(Err::Ne(Value::NumF(-5.5))));
-        assert_eq!(compare(&num_u_stub(), &Operation::Ne(Value::NumF(-5.5))), Some(Err::Ne(Value::NumF(-5.5))));
-        assert_eq!(compare(&num_i_stub(), &Operation::Ne(Value::NumF(-5.5))), Some(Err::Ne(Value::NumF(-5.5))));
-        assert_eq!(compare(&str_stub(), &Operation::Ne(Value::NumF(-5.5))), Some(Err::Ne(Value::NumF(-5.5))));
-        assert_eq!(compare(&arr_bool_stub(), &Operation::Ne(Value::NumF(-5.5))), Some(Err::Ne(Value::NumF(-5.5))));
-        assert_eq!(compare(&arr_str_stub(), &Operation::Ne(Value::NumF(-5.5))), Some(Err::Ne(Value::NumF(-5.5))));
+        assert_eq!(
+            compare(&bool_stub(), &Operation::Ne(Value::NumF(-5.5))),
+            Some(Err::Ne(Value::NumF(-5.5)))
+        );
+        assert_eq!(
+            compare(&num_u_stub(), &Operation::Ne(Value::NumF(-5.5))),
+            Some(Err::Ne(Value::NumF(-5.5)))
+        );
+        assert_eq!(
+            compare(&num_i_stub(), &Operation::Ne(Value::NumF(-5.5))),
+            Some(Err::Ne(Value::NumF(-5.5)))
+        );
+        assert_eq!(
+            compare(&str_stub(), &Operation::Ne(Value::NumF(-5.5))),
+            Some(Err::Ne(Value::NumF(-5.5)))
+        );
+        assert_eq!(
+            compare(&arr_bool_stub(), &Operation::Ne(Value::NumF(-5.5))),
+            Some(Err::Ne(Value::NumF(-5.5)))
+        );
+        assert_eq!(
+            compare(&arr_str_stub(), &Operation::Ne(Value::NumF(-5.5))),
+            Some(Err::Ne(Value::NumF(-5.5)))
+        );
 
-        assert_eq!(compare(&bool_stub(), &Operation::Gt(Value::NumF(-5.5))), Some(Err::Gt(Value::NumF(-5.5))));
-        assert_eq!(compare(&num_u_stub(), &Operation::Gt(Value::NumF(-5.5))), Some(Err::Gt(Value::NumF(-5.5))));
-        assert_eq!(compare(&num_i_stub(), &Operation::Gt(Value::NumF(-5.5))), Some(Err::Gt(Value::NumF(-5.5))));
-        assert_eq!(compare(&str_stub(), &Operation::Gt(Value::NumF(-5.5))), Some(Err::Gt(Value::NumF(-5.5))));
-        assert_eq!(compare(&arr_bool_stub(), &Operation::Gt(Value::NumF(-5.5))), Some(Err::Gt(Value::NumF(-5.5))));
-        assert_eq!(compare(&arr_str_stub(), &Operation::Gt(Value::NumF(-5.5))), Some(Err::Gt(Value::NumF(-5.5))));
+        assert_eq!(
+            compare(&bool_stub(), &Operation::Gt(Value::NumF(-5.5))),
+            Some(Err::Gt(Value::NumF(-5.5)))
+        );
+        assert_eq!(
+            compare(&num_u_stub(), &Operation::Gt(Value::NumF(-5.5))),
+            Some(Err::Gt(Value::NumF(-5.5)))
+        );
+        assert_eq!(
+            compare(&num_i_stub(), &Operation::Gt(Value::NumF(-5.5))),
+            Some(Err::Gt(Value::NumF(-5.5)))
+        );
+        assert_eq!(
+            compare(&str_stub(), &Operation::Gt(Value::NumF(-5.5))),
+            Some(Err::Gt(Value::NumF(-5.5)))
+        );
+        assert_eq!(
+            compare(&arr_bool_stub(), &Operation::Gt(Value::NumF(-5.5))),
+            Some(Err::Gt(Value::NumF(-5.5)))
+        );
+        assert_eq!(
+            compare(&arr_str_stub(), &Operation::Gt(Value::NumF(-5.5))),
+            Some(Err::Gt(Value::NumF(-5.5)))
+        );
 
-        assert_eq!(compare(&bool_stub(), &Operation::Lt(Value::NumF(-5.5))), Some(Err::Lt(Value::NumF(-5.5))));
-        assert_eq!(compare(&num_u_stub(), &Operation::Lt(Value::NumF(-5.5))), Some(Err::Lt(Value::NumF(-5.5))));
-        assert_eq!(compare(&num_i_stub(), &Operation::Lt(Value::NumF(-5.5))), Some(Err::Lt(Value::NumF(-5.5))));
-        assert_eq!(compare(&str_stub(), &Operation::Lt(Value::NumF(-5.5))), Some(Err::Lt(Value::NumF(-5.5))));
-        assert_eq!(compare(&arr_bool_stub(), &Operation::Lt(Value::NumF(-5.5))), Some(Err::Lt(Value::NumF(-5.5))));
-        assert_eq!(compare(&arr_str_stub(), &Operation::Lt(Value::NumF(-5.5))), Some(Err::Lt(Value::NumF(-5.5))));
+        assert_eq!(
+            compare(&bool_stub(), &Operation::Lt(Value::NumF(-5.5))),
+            Some(Err::Lt(Value::NumF(-5.5)))
+        );
+        assert_eq!(
+            compare(&num_u_stub(), &Operation::Lt(Value::NumF(-5.5))),
+            Some(Err::Lt(Value::NumF(-5.5)))
+        );
+        assert_eq!(
+            compare(&num_i_stub(), &Operation::Lt(Value::NumF(-5.5))),
+            Some(Err::Lt(Value::NumF(-5.5)))
+        );
+        assert_eq!(
+            compare(&str_stub(), &Operation::Lt(Value::NumF(-5.5))),
+            Some(Err::Lt(Value::NumF(-5.5)))
+        );
+        assert_eq!(
+            compare(&arr_bool_stub(), &Operation::Lt(Value::NumF(-5.5))),
+            Some(Err::Lt(Value::NumF(-5.5)))
+        );
+        assert_eq!(
+            compare(&arr_str_stub(), &Operation::Lt(Value::NumF(-5.5))),
+            Some(Err::Lt(Value::NumF(-5.5)))
+        );
 
-        assert_eq!(compare(&bool_stub(), &Operation::Ge(Value::NumF(-5.5))), Some(Err::Ge(Value::NumF(-5.5))));
-        assert_eq!(compare(&num_u_stub(), &Operation::Ge(Value::NumF(-5.5))), Some(Err::Ge(Value::NumF(-5.5))));
-        assert_eq!(compare(&num_i_stub(), &Operation::Ge(Value::NumF(-5.5))), Some(Err::Ge(Value::NumF(-5.5))));
-        assert_eq!(compare(&str_stub(), &Operation::Ge(Value::NumF(-5.5))), Some(Err::Ge(Value::NumF(-5.5))));
-        assert_eq!(compare(&arr_bool_stub(), &Operation::Ge(Value::NumF(-5.5))), Some(Err::Ge(Value::NumF(-5.5))));
-        assert_eq!(compare(&arr_str_stub(), &Operation::Ge(Value::NumF(-5.5))), Some(Err::Ge(Value::NumF(-5.5))));
+        assert_eq!(
+            compare(&bool_stub(), &Operation::Ge(Value::NumF(-5.5))),
+            Some(Err::Ge(Value::NumF(-5.5)))
+        );
+        assert_eq!(
+            compare(&num_u_stub(), &Operation::Ge(Value::NumF(-5.5))),
+            Some(Err::Ge(Value::NumF(-5.5)))
+        );
+        assert_eq!(
+            compare(&num_i_stub(), &Operation::Ge(Value::NumF(-5.5))),
+            Some(Err::Ge(Value::NumF(-5.5)))
+        );
+        assert_eq!(
+            compare(&str_stub(), &Operation::Ge(Value::NumF(-5.5))),
+            Some(Err::Ge(Value::NumF(-5.5)))
+        );
+        assert_eq!(
+            compare(&arr_bool_stub(), &Operation::Ge(Value::NumF(-5.5))),
+            Some(Err::Ge(Value::NumF(-5.5)))
+        );
+        assert_eq!(
+            compare(&arr_str_stub(), &Operation::Ge(Value::NumF(-5.5))),
+            Some(Err::Ge(Value::NumF(-5.5)))
+        );
 
-        assert_eq!(compare(&bool_stub(), &Operation::Le(Value::NumF(-5.5))), Some(Err::Le(Value::NumF(-5.5))));
-        assert_eq!(compare(&num_u_stub(), &Operation::Le(Value::NumF(-5.5))), Some(Err::Le(Value::NumF(-5.5))));
-        assert_eq!(compare(&num_i_stub(), &Operation::Le(Value::NumF(-5.5))), Some(Err::Le(Value::NumF(-5.5))));
-        assert_eq!(compare(&str_stub(), &Operation::Le(Value::NumF(-5.5))), Some(Err::Le(Value::NumF(-5.5))));
-        assert_eq!(compare(&arr_bool_stub(), &Operation::Le(Value::NumF(-5.5))), Some(Err::Le(Value::NumF(-5.5))));
-        assert_eq!(compare(&arr_str_stub(), &Operation::Le(Value::NumF(-5.5))), Some(Err::Le(Value::NumF(-5.5))));
+        assert_eq!(
+            compare(&bool_stub(), &Operation::Le(Value::NumF(-5.5))),
+            Some(Err::Le(Value::NumF(-5.5)))
+        );
+        assert_eq!(
+            compare(&num_u_stub(), &Operation::Le(Value::NumF(-5.5))),
+            Some(Err::Le(Value::NumF(-5.5)))
+        );
+        assert_eq!(
+            compare(&num_i_stub(), &Operation::Le(Value::NumF(-5.5))),
+            Some(Err::Le(Value::NumF(-5.5)))
+        );
+        assert_eq!(
+            compare(&str_stub(), &Operation::Le(Value::NumF(-5.5))),
+            Some(Err::Le(Value::NumF(-5.5)))
+        );
+        assert_eq!(
+            compare(&arr_bool_stub(), &Operation::Le(Value::NumF(-5.5))),
+            Some(Err::Le(Value::NumF(-5.5)))
+        );
+        assert_eq!(
+            compare(&arr_str_stub(), &Operation::Le(Value::NumF(-5.5))),
+            Some(Err::Le(Value::NumF(-5.5)))
+        );
     }
 
     #[test]
@@ -503,24 +923,66 @@ mod test {
     #[test]
     fn test_compare_str_some() {
         let value = Value::Str(String::from("Belisarius"));
-        assert_eq!(compare(&value, &Operation::Eq(Value::Str(String::from("Iustinianus")))), Some(Err::Eq(Value::Str(String::from("Iustinianus")))));
-        assert_eq!(compare(&value, &Operation::Ne(Value::Str(String::from("Belisarius")))), Some(Err::Ne(Value::Str(String::from("Belisarius")))));
+        assert_eq!(
+            compare(&value, &Operation::Eq(Value::Str(String::from("Iustinianus")))),
+            Some(Err::Eq(Value::Str(String::from("Iustinianus"))))
+        );
+        assert_eq!(
+            compare(&value, &Operation::Ne(Value::Str(String::from("Belisarius")))),
+            Some(Err::Ne(Value::Str(String::from("Belisarius"))))
+        );
     }
 
     #[test]
     fn test_compare_str_other_types() {
-        assert_eq!(compare(&bool_stub(), &Operation::Eq(Value::Str(String::from("Lemouria")))), Some(Err::Eq(Value::Str(String::from("Lemouria")))));
-        assert_eq!(compare(&num_u_stub(), &Operation::Eq(Value::Str(String::from("Lemouria")))), Some(Err::Eq(Value::Str(String::from("Lemouria")))));
-        assert_eq!(compare(&num_i_stub(), &Operation::Eq(Value::Str(String::from("Lemouria")))), Some(Err::Eq(Value::Str(String::from("Lemouria")))));
-        assert_eq!(compare(&num_f_stub(), &Operation::Eq(Value::Str(String::from("Lemouria")))), Some(Err::Eq(Value::Str(String::from("Lemouria")))));
-        assert_eq!(compare(&arr_bool_stub(), &Operation::Eq(Value::Str(String::from("Lemouria")))), Some(Err::Eq(Value::Str(String::from("Lemouria")))));
-        assert_eq!(compare(&arr_str_stub(), &Operation::Eq(Value::Str(String::from("Lemouria")))), Some(Err::Eq(Value::Str(String::from("Lemouria")))));
+        assert_eq!(
+            compare(&bool_stub(), &Operation::Eq(Value::Str(String::from("Lemouria")))),
+            Some(Err::Eq(Value::Str(String::from("Lemouria"))))
+        );
+        assert_eq!(
+            compare(&num_u_stub(), &Operation::Eq(Value::Str(String::from("Lemouria")))),
+            Some(Err::Eq(Value::Str(String::from("Lemouria"))))
+        );
+        assert_eq!(
+            compare(&num_i_stub(), &Operation::Eq(Value::Str(String::from("Lemouria")))),
+            Some(Err::Eq(Value::Str(String::from("Lemouria"))))
+        );
+        assert_eq!(
+            compare(&num_f_stub(), &Operation::Eq(Value::Str(String::from("Lemouria")))),
+            Some(Err::Eq(Value::Str(String::from("Lemouria"))))
+        );
+        assert_eq!(
+            compare(&arr_bool_stub(), &Operation::Eq(Value::Str(String::from("Lemouria")))),
+            Some(Err::Eq(Value::Str(String::from("Lemouria"))))
+        );
+        assert_eq!(
+            compare(&arr_str_stub(), &Operation::Eq(Value::Str(String::from("Lemouria")))),
+            Some(Err::Eq(Value::Str(String::from("Lemouria"))))
+        );
 
-        assert_eq!(compare(&bool_stub(), &Operation::Ne(Value::Str(String::from("Lemouria")))), Some(Err::Ne(Value::Str(String::from("Lemouria")))));
-        assert_eq!(compare(&num_u_stub(), &Operation::Ne(Value::Str(String::from("Lemouria")))), Some(Err::Ne(Value::Str(String::from("Lemouria")))));
-        assert_eq!(compare(&num_i_stub(), &Operation::Ne(Value::Str(String::from("Lemouria")))), Some(Err::Ne(Value::Str(String::from("Lemouria")))));
-        assert_eq!(compare(&num_f_stub(), &Operation::Ne(Value::Str(String::from("Lemouria")))), Some(Err::Ne(Value::Str(String::from("Lemouria")))));
-        assert_eq!(compare(&arr_bool_stub(), &Operation::Ne(Value::Str(String::from("Lemouria")))), Some(Err::Ne(Value::Str(String::from("Lemouria")))));
-        assert_eq!(compare(&arr_str_stub(), &Operation::Ne(Value::Str(String::from("Lemouria")))), Some(Err::Ne(Value::Str(String::from("Lemouria")))));
+        assert_eq!(
+            compare(&bool_stub(), &Operation::Ne(Value::Str(String::from("Lemouria")))),
+            Some(Err::Ne(Value::Str(String::from("Lemouria"))))
+        );
+        assert_eq!(
+            compare(&num_u_stub(), &Operation::Ne(Value::Str(String::from("Lemouria")))),
+            Some(Err::Ne(Value::Str(String::from("Lemouria"))))
+        );
+        assert_eq!(
+            compare(&num_i_stub(), &Operation::Ne(Value::Str(String::from("Lemouria")))),
+            Some(Err::Ne(Value::Str(String::from("Lemouria"))))
+        );
+        assert_eq!(
+            compare(&num_f_stub(), &Operation::Ne(Value::Str(String::from("Lemouria")))),
+            Some(Err::Ne(Value::Str(String::from("Lemouria"))))
+        );
+        assert_eq!(
+            compare(&arr_bool_stub(), &Operation::Ne(Value::Str(String::from("Lemouria")))),
+            Some(Err::Ne(Value::Str(String::from("Lemouria"))))
+        );
+        assert_eq!(
+            compare(&arr_str_stub(), &Operation::Ne(Value::Str(String::from("Lemouria")))),
+            Some(Err::Ne(Value::Str(String::from("Lemouria"))))
+        );
     }
 }

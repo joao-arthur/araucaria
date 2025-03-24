@@ -7,10 +7,14 @@ use num_u::NumUValidation;
 use str::StrValidation;
 
 pub mod bool;
+pub mod date;
+pub mod datetime;
+pub mod email;
 pub mod num_f;
 pub mod num_i;
 pub mod num_u;
 pub mod str;
+pub mod time;
 
 #[derive(Debug, PartialEq, Clone)]
 pub struct ObjValidation {

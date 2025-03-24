@@ -114,7 +114,7 @@ mod test {
     use super::*;
 
     #[test]
-    fn test_num_u_validation() {
+    fn test_num_f_validation() {
         assert_eq!(
             NumFValidation::default(),
             NumFValidation {
