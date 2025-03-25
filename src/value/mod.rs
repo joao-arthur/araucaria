@@ -65,8 +65,17 @@ pub fn value_to_string(value: &Value) -> String {
         Value::NumF(val) => val.to_string(),
         Value::Bool(val) => val.to_string(),
         Value::Str(val) => String::from("\"") + val + "\"",
-        Value::Arr(val) => String::from("[") + &val.iter().map(|v| value_to_string(v)).collect::<Vec<String>>().join(", ") + "]",
-        Value::Obj(val) => String::from("{ ") + &val.iter().map(|(k, v)| k.clone() + ": " + &value_to_string(v)).collect::<Vec<String>>().join(", ") +  " }",
+        Value::Arr(val) => {
+            String::from("[")
+                + &val.iter().map(|v| value_to_string(v)).collect::<Vec<String>>().join(", ")
+                + "]"
+        }
+        Value::Obj(val) => {
+            let mut parts: Vec<String> =
+                val.iter().map(|(k, v)| k.clone() + ": " + &value_to_string(v)).collect();
+            parts.sort();
+            String::from("{ ") + &parts.join(", ") + " }"
+        }
     }
 }
 
@@ -110,34 +119,37 @@ mod test {
         assert_eq!(value_to_string(&Value::NumI(-22)), String::from("-22"));
         assert_eq!(value_to_string(&Value::NumF(-3.65)), String::from("-3.65"));
         assert_eq!(value_to_string(&Value::Bool(true)), String::from("true"));
-        assert_eq!(value_to_string(&Value::from("Non sequitur")), String::from(r#""Non sequitur""#));
-        assert_eq!(value_to_string(
-            &Value::from([
+        assert_eq!(
+            value_to_string(&Value::from("Non sequitur")),
+            String::from(r#""Non sequitur""#)
+        );
+        assert_eq!(
+            value_to_string(&Value::from([
                 Value::from("Ad nauseam"),
                 Value::from("Ad ignorantiam"),
-                Value::from([
-                    Value::from("Ad hominem"),
-                    Value::from("Ad verecundiam"),
-                ])
+                Value::from([Value::from("Ad hominem"), Value::from("Ad verecundiam"),])
             ])),
             String::from(r#"["Ad nauseam", "Ad ignorantiam", ["Ad hominem", "Ad verecundiam"]]"#)
         );
-        assert_eq!(value_to_string(
-            &Value::from([
+        assert_eq!(
+            value_to_string(&Value::from([
                 (String::from("k_num"), Value::NumU(837)),
                 (String::from("k_bool"), Value::Bool(false)),
                 (String::from("k_str"), Value::from("Augustus")),
-                (String::from("k_nested"), Value::from([
-                    (String::from("l_1"), Value::from([
-                        (String::from("l_2"), Value::from([
-                            Value::from([
-                                (String::from("id"), Value::NumU(0))
-                            ])
-                        ]))
-                    ]))
-                ])),
+                (
+                    String::from("k_nested"),
+                    Value::from([(
+                        String::from("l_1"),
+                        Value::from([(
+                            String::from("l_2"),
+                            Value::from([Value::from([(String::from("id"), Value::NumU(0))])])
+                        )])
+                    )])
+                ),
             ])),
-            String::from(r#"{ k_num: 837, k_bool: false, k_str: "Augustus", k_nested: { l_1: { l_2: [{ id: 0 }] } } }"#)
+            String::from(
+                r#"{ k_bool: false, k_nested: { l_1: { l_2: [{ id: 0 }] } }, k_num: 837, k_str: "Augustus" }"#
+            )
         );
     }
 }
