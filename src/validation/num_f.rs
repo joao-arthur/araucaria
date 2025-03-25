@@ -140,9 +140,9 @@ mod test {
             }
         );
         assert_eq!(
-            NumFValidation::default().required().eq(-1.5),
+            NumFValidation::default().eq(-1.5),
             NumFValidation {
-                required: true,
+                required: false,
                 eq: Some(-1.5),
                 ne: None,
                 gt: None,
@@ -152,10 +152,10 @@ mod test {
             }
         );
         assert_eq!(
-            NumFValidation::default().required().eq(-1.5).ne(-2.5),
+            NumFValidation::default().ne(-2.5),
             NumFValidation {
-                required: true,
-                eq: Some(-1.5),
+                required: false,
+                eq: None,
                 ne: Some(-2.5),
                 gt: None,
                 lt: None,
@@ -164,11 +164,11 @@ mod test {
             }
         );
         assert_eq!(
-            NumFValidation::default().required().eq(-1.5).ne(-2.5).gt(-3.5),
+            NumFValidation::default().gt(-3.5),
             NumFValidation {
-                required: true,
-                eq: Some(-1.5),
-                ne: Some(-2.5),
+                required: false,
+                eq: None,
+                ne: None,
                 gt: Some(-3.5),
                 lt: None,
                 ge: None,
@@ -176,45 +176,38 @@ mod test {
             }
         );
         assert_eq!(
-            NumFValidation::default().required().eq(-1.5).ne(-2.5).gt(-3.5).lt(-4.5),
+            NumFValidation::default().lt(-4.5),
             NumFValidation {
-                required: true,
-                eq: Some(-1.5),
-                ne: Some(-2.5),
-                gt: Some(-3.5),
+                required: false,
+                eq: None,
+                ne: None,
+                gt: None,
                 lt: Some(-4.5),
                 ge: None,
                 le: None,
             }
         );
         assert_eq!(
-            NumFValidation::default().required().eq(-1.5).ne(-2.5).gt(-3.5).lt(-4.5).ge(-5.5),
+            NumFValidation::default().ge(-5.5),
             NumFValidation {
-                required: true,
-                eq: Some(-1.5),
-                ne: Some(-2.5),
-                gt: Some(-3.5),
-                lt: Some(-4.5),
+                required: false,
+                eq: None,
+                ne: None,
+                gt: None,
+                lt: None,
                 ge: Some(-5.5),
                 le: None,
             }
         );
         assert_eq!(
-            NumFValidation::default()
-                .required()
-                .eq(-1.5)
-                .ne(-2.5)
-                .gt(-3.5)
-                .lt(-4.5)
-                .ge(-5.5)
-                .le(-6.5),
+            NumFValidation::default().le(-6.5),
             NumFValidation {
-                required: true,
-                eq: Some(-1.5),
-                ne: Some(-2.5),
-                gt: Some(-3.5),
-                lt: Some(-4.5),
-                ge: Some(-5.5),
+                required: false,
+                eq: None,
+                ne: None,
+                gt: None,
+                lt: None,
+                ge: None,
                 le: Some(-6.5),
             }
         );

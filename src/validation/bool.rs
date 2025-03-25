@@ -40,12 +40,12 @@ mod test {
             BoolValidation { required: true, eq: None, ne: None }
         );
         assert_eq!(
-            BoolValidation::default().required().eq(false),
-            BoolValidation { required: true, eq: Some(false), ne: None }
+            BoolValidation::default().eq(false),
+            BoolValidation { required: false, eq: Some(false), ne: None }
         );
         assert_eq!(
-            BoolValidation::default().required().eq(false).ne(true),
-            BoolValidation { required: true, eq: Some(false), ne: Some(true) }
+            BoolValidation::default().ne(true),
+            BoolValidation { required: false, eq: None, ne: Some(true) }
         );
     }
 }

@@ -140,9 +140,9 @@ mod test {
             }
         );
         assert_eq!(
-            NumUValidation::default().required().eq(1),
+            NumUValidation::default().eq(1),
             NumUValidation {
-                required: true,
+                required: false,
                 eq: Some(1),
                 ne: None,
                 gt: None,
@@ -152,10 +152,10 @@ mod test {
             }
         );
         assert_eq!(
-            NumUValidation::default().required().eq(1).ne(2),
+            NumUValidation::default().ne(2),
             NumUValidation {
-                required: true,
-                eq: Some(1),
+                required: false,
+                eq: None,
                 ne: Some(2),
                 gt: None,
                 lt: None,
@@ -164,11 +164,11 @@ mod test {
             }
         );
         assert_eq!(
-            NumUValidation::default().required().eq(1).ne(2).gt(3),
+            NumUValidation::default().gt(3),
             NumUValidation {
-                required: true,
-                eq: Some(1),
-                ne: Some(2),
+                required: false,
+                eq: None,
+                ne: None,
                 gt: Some(3),
                 lt: None,
                 ge: None,
@@ -176,38 +176,38 @@ mod test {
             }
         );
         assert_eq!(
-            NumUValidation::default().required().eq(1).ne(2).gt(3).lt(4),
+            NumUValidation::default().lt(4),
             NumUValidation {
-                required: true,
-                eq: Some(1),
-                ne: Some(2),
-                gt: Some(3),
+                required: false,
+                eq: None,
+                ne: None,
+                gt: None,
                 lt: Some(4),
                 ge: None,
                 le: None,
             }
         );
         assert_eq!(
-            NumUValidation::default().required().eq(1).ne(2).gt(3).lt(4).ge(5),
+            NumUValidation::default().ge(5),
             NumUValidation {
-                required: true,
-                eq: Some(1),
-                ne: Some(2),
-                gt: Some(3),
-                lt: Some(4),
+                required: false,
+                eq: None,
+                ne: None,
+                gt: None,
+                lt: None,
                 ge: Some(5),
                 le: None,
             }
         );
         assert_eq!(
-            NumUValidation::default().required().eq(1).ne(2).gt(3).lt(4).ge(5).le(6),
+            NumUValidation::default().le(6),
             NumUValidation {
-                required: true,
-                eq: Some(1),
-                ne: Some(2),
-                gt: Some(3),
-                lt: Some(4),
-                ge: Some(5),
+                required: false,
+                eq: None,
+                ne: None,
+                gt: None,
+                lt: None,
+                ge: None,
                 le: Some(6),
             }
         );

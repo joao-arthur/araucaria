@@ -140,9 +140,9 @@ mod test {
             }
         );
         assert_eq!(
-            DateTimeValidation::default().required().eq(String::from("2026-08-12T08:10Z")),
+            DateTimeValidation::default().eq(String::from("2026-08-12T08:10Z")),
             DateTimeValidation {
-                required: true,
+                required: false,
                 eq: Some(String::from("2026-08-12T08:10Z")),
                 ne: None,
                 gt: None,
@@ -152,13 +152,10 @@ mod test {
             }
         );
         assert_eq!(
-            DateTimeValidation::default()
-                .required()
-                .eq(String::from("2026-08-12T08:10Z"))
-                .ne(String::from("2027-08-02T10:27Z")),
+            DateTimeValidation::default().ne(String::from("2027-08-02T10:27Z")),
             DateTimeValidation {
-                required: true,
-                eq: Some(String::from("2026-08-12T08:10Z")),
+                required: false,
+                eq: None,
                 ne: Some(String::from("2027-08-02T10:27Z")),
                 gt: None,
                 lt: None,
@@ -167,15 +164,11 @@ mod test {
             }
         );
         assert_eq!(
-            DateTimeValidation::default()
-                .required()
-                .eq(String::from("2026-08-12T08:10Z"))
-                .ne(String::from("2027-08-02T10:27Z"))
-                .gt(String::from("2028-07-22T19:41Z")),
+            DateTimeValidation::default().gt(String::from("2028-07-22T19:41Z")),
             DateTimeValidation {
-                required: true,
-                eq: Some(String::from("2026-08-12T08:10Z")),
-                ne: Some(String::from("2027-08-02T10:27Z")),
+                required: false,
+                eq: None,
+                ne: None,
                 gt: Some(String::from("2028-07-22T19:41Z")),
                 lt: None,
                 ge: None,
@@ -183,56 +176,38 @@ mod test {
             }
         );
         assert_eq!(
-            DateTimeValidation::default()
-                .required()
-                .eq(String::from("2026-08-12T08:10Z"))
-                .ne(String::from("2027-08-02T10:27Z"))
-                .gt(String::from("2028-07-22T19:41Z"))
-                .lt(String::from("2030-11-25T03:01Z")),
+            DateTimeValidation::default().lt(String::from("2030-11-25T03:01Z")),
             DateTimeValidation {
-                required: true,
-                eq: Some(String::from("2026-08-12T08:10Z")),
-                ne: Some(String::from("2027-08-02T10:27Z")),
-                gt: Some(String::from("2028-07-22T19:41Z")),
+                required: false,
+                eq: None,
+                ne: None,
+                gt: None,
                 lt: Some(String::from("2030-11-25T03:01Z")),
                 ge: None,
                 le: None,
             }
         );
         assert_eq!(
-            DateTimeValidation::default()
-                .required()
-                .eq(String::from("2026-08-12T08:10Z"))
-                .ne(String::from("2027-08-02T10:27Z"))
-                .gt(String::from("2028-07-22T19:41Z"))
-                .lt(String::from("2030-11-25T03:01Z"))
-                .ge(String::from("2031-11-14T00:00Z")),
+            DateTimeValidation::default().ge(String::from("2031-11-14T00:00Z")),
             DateTimeValidation {
-                required: true,
-                eq: Some(String::from("2026-08-12T08:10Z")),
-                ne: Some(String::from("2027-08-02T10:27Z")),
-                gt: Some(String::from("2028-07-22T19:41Z")),
-                lt: Some(String::from("2030-11-25T03:01Z")),
+                required: false,
+                eq: None,
+                ne: None,
+                gt: None,
+                lt: None,
                 ge: Some(String::from("2031-11-14T00:00Z")),
                 le: None,
             }
         );
         assert_eq!(
-            DateTimeValidation::default()
-                .required()
-                .eq(String::from("2026-08-12T08:10Z"))
-                .ne(String::from("2027-08-02T10:27Z"))
-                .gt(String::from("2028-07-22T19:41Z"))
-                .lt(String::from("2030-11-25T03:01Z"))
-                .ge(String::from("2031-11-14T00:00Z"))
-                .le(String::from("2033-03-30T01:01Z")),
+            DateTimeValidation::default().le(String::from("2033-03-30T01:01Z")),
             DateTimeValidation {
-                required: true,
-                eq: Some(String::from("2026-08-12T08:10Z")),
-                ne: Some(String::from("2027-08-02T10:27Z")),
-                gt: Some(String::from("2028-07-22T19:41Z")),
-                lt: Some(String::from("2030-11-25T03:01Z")),
-                ge: Some(String::from("2031-11-14T00:00Z")),
+                required: false,
+                eq: None,
+                ne: None,
+                gt: None,
+                lt: None,
+                ge: None,
                 le: Some(String::from("2033-03-30T01:01Z")),
             }
         );

@@ -140,9 +140,9 @@ mod test {
             }
         );
         assert_eq!(
-            TimeValidation::default().required().eq(String::from("08:10")),
+            TimeValidation::default().eq(String::from("08:10")),
             TimeValidation {
-                required: true,
+                required: false,
                 eq: Some(String::from("08:10")),
                 ne: None,
                 gt: None,
@@ -152,13 +152,10 @@ mod test {
             }
         );
         assert_eq!(
-            TimeValidation::default()
-                .required()
-                .eq(String::from("08:10"))
-                .ne(String::from("10:27")),
+            TimeValidation::default().ne(String::from("10:27")),
             TimeValidation {
-                required: true,
-                eq: Some(String::from("08:10")),
+                required: false,
+                eq: None,
                 ne: Some(String::from("10:27")),
                 gt: None,
                 lt: None,
@@ -167,15 +164,11 @@ mod test {
             }
         );
         assert_eq!(
-            TimeValidation::default()
-                .required()
-                .eq(String::from("08:10"))
-                .ne(String::from("10:27"))
-                .gt(String::from("19:41")),
+            TimeValidation::default().gt(String::from("19:41")),
             TimeValidation {
-                required: true,
-                eq: Some(String::from("08:10")),
-                ne: Some(String::from("10:27")),
+                required: false,
+                eq: None,
+                ne: None,
                 gt: Some(String::from("19:41")),
                 lt: None,
                 ge: None,
@@ -183,56 +176,38 @@ mod test {
             }
         );
         assert_eq!(
-            TimeValidation::default()
-                .required()
-                .eq(String::from("08:10"))
-                .ne(String::from("10:27"))
-                .gt(String::from("19:41"))
-                .lt(String::from("03:01")),
+            TimeValidation::default().lt(String::from("03:01")),
             TimeValidation {
-                required: true,
-                eq: Some(String::from("08:10")),
-                ne: Some(String::from("10:27")),
-                gt: Some(String::from("19:41")),
+                required: false,
+                eq: None,
+                ne: None,
+                gt: None,
                 lt: Some(String::from("03:01")),
                 ge: None,
                 le: None,
             }
         );
         assert_eq!(
-            TimeValidation::default()
-                .required()
-                .eq(String::from("08:10"))
-                .ne(String::from("10:27"))
-                .gt(String::from("19:41"))
-                .lt(String::from("03:01"))
-                .ge(String::from("00:00")),
+            TimeValidation::default().ge(String::from("00:00")),
             TimeValidation {
-                required: true,
-                eq: Some(String::from("08:10")),
-                ne: Some(String::from("10:27")),
-                gt: Some(String::from("19:41")),
-                lt: Some(String::from("03:01")),
+                required: false,
+                eq: None,
+                ne: None,
+                gt: None,
+                lt: None,
                 ge: Some(String::from("00:00")),
                 le: None,
             }
         );
         assert_eq!(
-            TimeValidation::default()
-                .required()
-                .eq(String::from("08:10"))
-                .ne(String::from("10:27"))
-                .gt(String::from("19:41"))
-                .lt(String::from("03:01"))
-                .ge(String::from("00:00"))
-                .le(String::from("01:01")),
+            TimeValidation::default().le(String::from("01:01")),
             TimeValidation {
-                required: true,
-                eq: Some(String::from("08:10")),
-                ne: Some(String::from("10:27")),
-                gt: Some(String::from("19:41")),
-                lt: Some(String::from("03:01")),
-                ge: Some(String::from("00:00")),
+                required: false,
+                eq: None,
+                ne: None,
+                gt: None,
+                lt: None,
+                ge: None,
                 le: Some(String::from("01:01")),
             }
         );
