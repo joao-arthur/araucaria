@@ -3,7 +3,7 @@ use std::collections::HashMap;
 use crate::value::Value;
 
 #[derive(Debug, PartialEq, Clone)]
-pub enum Err {
+pub enum ValidationErr {
     Required,
     Bool,
     Str,
@@ -19,39 +19,37 @@ pub enum Err {
 }
 
 #[derive(Debug, PartialEq, Clone)]
-pub enum ErrWrap {
-    Arr(Vec<Err>),
-    Obj(HashMap<String, ErrWrap>),
+pub enum SchemaErr {
+    Arr(Vec<ValidationErr>),
+    Obj(HashMap<String, SchemaErr>),
 }
 
-impl ErrWrap {
-    pub fn arr<const N: usize>(value: [Err; N]) -> Option<ErrWrap> {
-        Some(ErrWrap::Arr(value.to_vec()))
+impl SchemaErr {
+    pub fn arr<const N: usize>(value: [ValidationErr; N]) -> Option<SchemaErr> {
+        Some(SchemaErr::Arr(value.to_vec()))
     }
 
-    pub fn obj<const N: usize>(value: [(String, ErrWrap); N]) -> Option<ErrWrap> {
-        Some(ErrWrap::Obj(HashMap::from(value)))
+    pub fn obj<const N: usize>(value: [(String, SchemaErr); N]) -> Option<SchemaErr> {
+        Some(SchemaErr::Obj(HashMap::from(value)))
     }
 }
 
 #[cfg(test)]
 mod test {
-    use crate::error::Err;
-
     use super::*;
 
     #[test]
     fn test_arr() {
-        assert_eq!(ErrWrap::arr([Err::Required]), Some(ErrWrap::Arr(vec![Err::Required])));
+        assert_eq!(SchemaErr::arr([ValidationErr::Required]), Some(SchemaErr::Arr(vec![ValidationErr::Required])));
     }
 
     #[test]
     fn test_obj() {
         assert_eq!(
-            ErrWrap::obj([(String::from("is"), ErrWrap::Arr(vec![Err::Required]))]),
-            Some(ErrWrap::Obj(HashMap::from([(
+            SchemaErr::obj([(String::from("is"), SchemaErr::Arr(vec![ValidationErr::Required]))]),
+            Some(SchemaErr::Obj(HashMap::from([(
                 String::from("is"),
-                ErrWrap::Arr(vec![Err::Required])
+                SchemaErr::Arr(vec![ValidationErr::Required])
             )])))
         );
     }
