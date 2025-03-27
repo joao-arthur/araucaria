@@ -12,7 +12,7 @@ pub struct DateTimeValidation {
 impl Default for DateTimeValidation {
     fn default() -> Self {
         DateTimeValidation {
-            required: false,
+            required: true,
             eq: None,
             ne: None,
             gt: None,
@@ -24,9 +24,9 @@ impl Default for DateTimeValidation {
 }
 
 impl DateTimeValidation {
-    pub fn required(self) -> Self {
+    pub fn optional(self) -> Self {
         DateTimeValidation {
-            required: true,
+            required: false,
             eq: self.eq,
             ne: self.ne,
             gt: self.gt,
@@ -118,7 +118,7 @@ mod test {
         assert_eq!(
             DateTimeValidation::default(),
             DateTimeValidation {
-                required: false,
+                required: true,
                 eq: None,
                 ne: None,
                 gt: None,
@@ -128,9 +128,9 @@ mod test {
             }
         );
         assert_eq!(
-            DateTimeValidation::default().required(),
+            DateTimeValidation::default().optional(),
             DateTimeValidation {
-                required: true,
+                required: false,
                 eq: None,
                 ne: None,
                 gt: None,
@@ -142,7 +142,7 @@ mod test {
         assert_eq!(
             DateTimeValidation::default().eq(String::from("2026-08-12T08:10Z")),
             DateTimeValidation {
-                required: false,
+                required: true,
                 eq: Some(String::from("2026-08-12T08:10Z")),
                 ne: None,
                 gt: None,
@@ -154,7 +154,7 @@ mod test {
         assert_eq!(
             DateTimeValidation::default().ne(String::from("2027-08-02T10:27Z")),
             DateTimeValidation {
-                required: false,
+                required: true,
                 eq: None,
                 ne: Some(String::from("2027-08-02T10:27Z")),
                 gt: None,
@@ -166,7 +166,7 @@ mod test {
         assert_eq!(
             DateTimeValidation::default().gt(String::from("2028-07-22T19:41Z")),
             DateTimeValidation {
-                required: false,
+                required: true,
                 eq: None,
                 ne: None,
                 gt: Some(String::from("2028-07-22T19:41Z")),
@@ -178,7 +178,7 @@ mod test {
         assert_eq!(
             DateTimeValidation::default().lt(String::from("2030-11-25T03:01Z")),
             DateTimeValidation {
-                required: false,
+                required: true,
                 eq: None,
                 ne: None,
                 gt: None,
@@ -190,7 +190,7 @@ mod test {
         assert_eq!(
             DateTimeValidation::default().ge(String::from("2031-11-14T00:00Z")),
             DateTimeValidation {
-                required: false,
+                required: true,
                 eq: None,
                 ne: None,
                 gt: None,
@@ -202,7 +202,7 @@ mod test {
         assert_eq!(
             DateTimeValidation::default().le(String::from("2033-03-30T01:01Z")),
             DateTimeValidation {
-                required: false,
+                required: true,
                 eq: None,
                 ne: None,
                 gt: None,

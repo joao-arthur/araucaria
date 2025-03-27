@@ -7,13 +7,13 @@ pub struct BoolValidation {
 
 impl Default for BoolValidation {
     fn default() -> Self {
-        BoolValidation { required: false, eq: None, ne: None }
+        BoolValidation { required: true, eq: None, ne: None }
     }
 }
 
 impl BoolValidation {
-    pub fn required(self) -> Self {
-        BoolValidation { required: true, eq: self.eq, ne: self.ne }
+    pub fn optional(self) -> Self {
+        BoolValidation { required: false, eq: self.eq, ne: self.ne }
     }
 
     pub fn eq(self, value: bool) -> Self {
@@ -33,19 +33,19 @@ mod test {
     fn test_bool_validation() {
         assert_eq!(
             BoolValidation::default(),
-            BoolValidation { required: false, eq: None, ne: None }
-        );
-        assert_eq!(
-            BoolValidation::default().required(),
             BoolValidation { required: true, eq: None, ne: None }
         );
         assert_eq!(
+            BoolValidation::default().optional(),
+            BoolValidation { required: false, eq: None, ne: None }
+        );
+        assert_eq!(
             BoolValidation::default().eq(false),
-            BoolValidation { required: false, eq: Some(false), ne: None }
+            BoolValidation { required: true, eq: Some(false), ne: None }
         );
         assert_eq!(
             BoolValidation::default().ne(true),
-            BoolValidation { required: false, eq: None, ne: Some(true) }
+            BoolValidation { required: true, eq: None, ne: Some(true) }
         );
     }
 }

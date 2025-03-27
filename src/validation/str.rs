@@ -20,7 +20,7 @@ pub struct StrValidation {
 impl Default for StrValidation {
     fn default() -> Self {
         StrValidation {
-            required: false,
+            required: true,
             eq: None,
             ne: None,
             min_bytes_len: None,
@@ -40,9 +40,9 @@ impl Default for StrValidation {
 }
 
 impl StrValidation {
-    pub fn required(self) -> Self {
+    pub fn optional(self) -> Self {
         StrValidation {
-            required: true,
+            required: false,
             eq: self.eq,
             ne: self.ne,
             min_bytes_len: self.min_bytes_len,
@@ -350,7 +350,7 @@ mod test {
         assert_eq!(
             StrValidation::default(),
             StrValidation {
-                required: false,
+                required: true,
                 eq: None,
                 ne: None,
                 min_bytes_len: None,
@@ -368,9 +368,9 @@ mod test {
             }
         );
         assert_eq!(
-            StrValidation::default().required(),
+            StrValidation::default().optional(),
             StrValidation {
-                required: true,
+                required: false,
                 eq: None,
                 ne: None,
                 min_bytes_len: None,
@@ -390,7 +390,7 @@ mod test {
         assert_eq!(
             StrValidation::default().eq(String::from("Avalon")),
             StrValidation {
-                required: false,
+                required: true,
                 eq: Some(String::from("Avalon")),
                 ne: None,
                 min_bytes_len: None,
@@ -410,7 +410,7 @@ mod test {
         assert_eq!(
             StrValidation::default().ne(String::from("Mu")),
             StrValidation {
-                required: false,
+                required: true,
                 eq: None,
                 ne: Some(String::from("Mu")),
                 min_bytes_len: None,
@@ -430,7 +430,7 @@ mod test {
         assert_eq!(
             StrValidation::default().min_bytes_len(1),
             StrValidation {
-                required: false,
+                required: true,
                 eq: None,
                 ne: None,
                 min_bytes_len: Some(1),
@@ -450,7 +450,7 @@ mod test {
         assert_eq!(
             StrValidation::default().max_bytes_len(2),
             StrValidation {
-                required: false,
+                required: true,
                 eq: None,
                 ne: None,
                 min_bytes_len: None,
@@ -470,7 +470,7 @@ mod test {
         assert_eq!(
             StrValidation::default().min_graphemes_len(33),
             StrValidation {
-                required: false,
+                required: true,
                 eq: None,
                 ne: None,
                 min_bytes_len: None,
@@ -490,7 +490,7 @@ mod test {
         assert_eq!(
             StrValidation::default().max_graphemes_len(44),
             StrValidation {
-                required: false,
+                required: true,
                 eq: None,
                 ne: None,
                 min_bytes_len: None,
@@ -510,7 +510,7 @@ mod test {
         assert_eq!(
             StrValidation::default().min_lowercase_len(555),
             StrValidation {
-                required: false,
+                required: true,
                 eq: None,
                 ne: None,
                 min_bytes_len: None,
@@ -530,7 +530,7 @@ mod test {
         assert_eq!(
             StrValidation::default().max_lowercase_len(666),
             StrValidation {
-                required: false,
+                required: true,
                 eq: None,
                 ne: None,
                 min_bytes_len: None,
@@ -550,7 +550,7 @@ mod test {
         assert_eq!(
             StrValidation::default().min_uppercase_len(7_777),
             StrValidation {
-                required: false,
+                required: true,
                 eq: None,
                 ne: None,
                 min_bytes_len: None,
@@ -570,7 +570,7 @@ mod test {
         assert_eq!(
             StrValidation::default().max_uppercase_len(8_888),
             StrValidation {
-                required: false,
+                required: true,
                 eq: None,
                 ne: None,
                 min_bytes_len: None,
@@ -590,7 +590,7 @@ mod test {
         assert_eq!(
             StrValidation::default().min_number_len(99_999),
             StrValidation {
-                required: false,
+                required: true,
                 eq: None,
                 ne: None,
                 min_bytes_len: None,
@@ -610,7 +610,7 @@ mod test {
         assert_eq!(
             StrValidation::default().max_number_len(88_888),
             StrValidation {
-                required: false,
+                required: true,
                 eq: None,
                 ne: None,
                 min_bytes_len: None,
@@ -630,7 +630,7 @@ mod test {
         assert_eq!(
             StrValidation::default().min_symbols_len(777_777),
             StrValidation {
-                required: false,
+                required: true,
                 eq: None,
                 ne: None,
                 min_bytes_len: None,
@@ -650,7 +650,7 @@ mod test {
         assert_eq!(
             StrValidation::default().max_symbols_len(666_666),
             StrValidation {
-                required: false,
+                required: true,
                 eq: None,
                 ne: None,
                 min_bytes_len: None,

@@ -12,7 +12,7 @@ pub struct NumFValidation {
 impl Default for NumFValidation {
     fn default() -> Self {
         NumFValidation {
-            required: false,
+            required: true,
             eq: None,
             ne: None,
             gt: None,
@@ -24,9 +24,9 @@ impl Default for NumFValidation {
 }
 
 impl NumFValidation {
-    pub fn required(self) -> Self {
+    pub fn optional(self) -> Self {
         NumFValidation {
-            required: true,
+            required: false,
             eq: self.eq,
             ne: self.ne,
             gt: self.gt,
@@ -118,7 +118,7 @@ mod test {
         assert_eq!(
             NumFValidation::default(),
             NumFValidation {
-                required: false,
+                required: true,
                 eq: None,
                 ne: None,
                 gt: None,
@@ -128,9 +128,9 @@ mod test {
             }
         );
         assert_eq!(
-            NumFValidation::default().required(),
+            NumFValidation::default().optional(),
             NumFValidation {
-                required: true,
+                required: false,
                 eq: None,
                 ne: None,
                 gt: None,
@@ -142,7 +142,7 @@ mod test {
         assert_eq!(
             NumFValidation::default().eq(-1.5),
             NumFValidation {
-                required: false,
+                required: true,
                 eq: Some(-1.5),
                 ne: None,
                 gt: None,
@@ -154,7 +154,7 @@ mod test {
         assert_eq!(
             NumFValidation::default().ne(-2.5),
             NumFValidation {
-                required: false,
+                required: true,
                 eq: None,
                 ne: Some(-2.5),
                 gt: None,
@@ -166,7 +166,7 @@ mod test {
         assert_eq!(
             NumFValidation::default().gt(-3.5),
             NumFValidation {
-                required: false,
+                required: true,
                 eq: None,
                 ne: None,
                 gt: Some(-3.5),
@@ -178,7 +178,7 @@ mod test {
         assert_eq!(
             NumFValidation::default().lt(-4.5),
             NumFValidation {
-                required: false,
+                required: true,
                 eq: None,
                 ne: None,
                 gt: None,
@@ -190,7 +190,7 @@ mod test {
         assert_eq!(
             NumFValidation::default().ge(-5.5),
             NumFValidation {
-                required: false,
+                required: true,
                 eq: None,
                 ne: None,
                 gt: None,
@@ -202,7 +202,7 @@ mod test {
         assert_eq!(
             NumFValidation::default().le(-6.5),
             NumFValidation {
-                required: false,
+                required: true,
                 eq: None,
                 ne: None,
                 gt: None,

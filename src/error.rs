@@ -40,7 +40,10 @@ mod test {
 
     #[test]
     fn test_arr() {
-        assert_eq!(SchemaErr::arr([ValidationErr::Required]), Some(SchemaErr::Arr(vec![ValidationErr::Required])));
+        assert_eq!(
+            SchemaErr::arr([ValidationErr::Required]),
+            Some(SchemaErr::Arr(vec![ValidationErr::Required]))
+        );
     }
 
     #[test]

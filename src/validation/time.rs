@@ -12,7 +12,7 @@ pub struct TimeValidation {
 impl Default for TimeValidation {
     fn default() -> Self {
         TimeValidation {
-            required: false,
+            required: true,
             eq: None,
             ne: None,
             gt: None,
@@ -24,9 +24,9 @@ impl Default for TimeValidation {
 }
 
 impl TimeValidation {
-    pub fn required(self) -> Self {
+    pub fn optional(self) -> Self {
         TimeValidation {
-            required: true,
+            required: false,
             eq: self.eq,
             ne: self.ne,
             gt: self.gt,
@@ -118,7 +118,7 @@ mod test {
         assert_eq!(
             TimeValidation::default(),
             TimeValidation {
-                required: false,
+                required: true,
                 eq: None,
                 ne: None,
                 gt: None,
@@ -128,9 +128,9 @@ mod test {
             }
         );
         assert_eq!(
-            TimeValidation::default().required(),
+            TimeValidation::default().optional(),
             TimeValidation {
-                required: true,
+                required: false,
                 eq: None,
                 ne: None,
                 gt: None,
@@ -142,7 +142,7 @@ mod test {
         assert_eq!(
             TimeValidation::default().eq(String::from("08:10")),
             TimeValidation {
-                required: false,
+                required: true,
                 eq: Some(String::from("08:10")),
                 ne: None,
                 gt: None,
@@ -154,7 +154,7 @@ mod test {
         assert_eq!(
             TimeValidation::default().ne(String::from("10:27")),
             TimeValidation {
-                required: false,
+                required: true,
                 eq: None,
                 ne: Some(String::from("10:27")),
                 gt: None,
@@ -166,7 +166,7 @@ mod test {
         assert_eq!(
             TimeValidation::default().gt(String::from("19:41")),
             TimeValidation {
-                required: false,
+                required: true,
                 eq: None,
                 ne: None,
                 gt: Some(String::from("19:41")),
@@ -178,7 +178,7 @@ mod test {
         assert_eq!(
             TimeValidation::default().lt(String::from("03:01")),
             TimeValidation {
-                required: false,
+                required: true,
                 eq: None,
                 ne: None,
                 gt: None,
@@ -190,7 +190,7 @@ mod test {
         assert_eq!(
             TimeValidation::default().ge(String::from("00:00")),
             TimeValidation {
-                required: false,
+                required: true,
                 eq: None,
                 ne: None,
                 gt: None,
@@ -202,7 +202,7 @@ mod test {
         assert_eq!(
             TimeValidation::default().le(String::from("01:01")),
             TimeValidation {
-                required: false,
+                required: true,
                 eq: None,
                 ne: None,
                 gt: None,

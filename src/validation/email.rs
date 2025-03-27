@@ -5,13 +5,13 @@ pub struct EmailValidation {
 
 impl Default for EmailValidation {
     fn default() -> Self {
-        EmailValidation { required: false }
+        EmailValidation { required: true }
     }
 }
 
 impl EmailValidation {
-    pub fn required(self) -> Self {
-        EmailValidation { required: true }
+    pub fn optional(self) -> Self {
+        EmailValidation { required: false }
     }
 }
 
@@ -21,7 +21,7 @@ mod test {
 
     #[test]
     fn test_email_validation() {
-        assert_eq!(EmailValidation::default(), EmailValidation { required: false });
-        assert_eq!(EmailValidation::default().required(), EmailValidation { required: true });
+        assert_eq!(EmailValidation::default(), EmailValidation { required: true });
+        assert_eq!(EmailValidation::default().optional(), EmailValidation { required: false });
     }
 }

@@ -12,7 +12,7 @@ pub struct NumIValidation {
 impl Default for NumIValidation {
     fn default() -> Self {
         NumIValidation {
-            required: false,
+            required: true,
             eq: None,
             ne: None,
             gt: None,
@@ -24,9 +24,9 @@ impl Default for NumIValidation {
 }
 
 impl NumIValidation {
-    pub fn required(self) -> Self {
+    pub fn optional(self) -> Self {
         NumIValidation {
-            required: true,
+            required: false,
             eq: self.eq,
             ne: self.ne,
             gt: self.gt,
@@ -118,7 +118,7 @@ mod test {
         assert_eq!(
             NumIValidation::default(),
             NumIValidation {
-                required: false,
+                required: true,
                 eq: None,
                 ne: None,
                 gt: None,
@@ -128,9 +128,9 @@ mod test {
             }
         );
         assert_eq!(
-            NumIValidation::default().required(),
+            NumIValidation::default().optional(),
             NumIValidation {
-                required: true,
+                required: false,
                 eq: None,
                 ne: None,
                 gt: None,
@@ -142,7 +142,7 @@ mod test {
         assert_eq!(
             NumIValidation::default().eq(-1),
             NumIValidation {
-                required: false,
+                required: true,
                 eq: Some(-1),
                 ne: None,
                 gt: None,
@@ -154,7 +154,7 @@ mod test {
         assert_eq!(
             NumIValidation::default().ne(-2),
             NumIValidation {
-                required: false,
+                required: true,
                 eq: None,
                 ne: Some(-2),
                 gt: None,
@@ -166,7 +166,7 @@ mod test {
         assert_eq!(
             NumIValidation::default().gt(-3),
             NumIValidation {
-                required: false,
+                required: true,
                 eq: None,
                 ne: None,
                 gt: Some(-3),
@@ -178,7 +178,7 @@ mod test {
         assert_eq!(
             NumIValidation::default().lt(-4),
             NumIValidation {
-                required: false,
+                required: true,
                 eq: None,
                 ne: None,
                 gt: None,
@@ -190,7 +190,7 @@ mod test {
         assert_eq!(
             NumIValidation::default().ge(-5),
             NumIValidation {
-                required: false,
+                required: true,
                 eq: None,
                 ne: None,
                 gt: None,
@@ -202,7 +202,7 @@ mod test {
         assert_eq!(
             NumIValidation::default().le(-6),
             NumIValidation {
-                required: false,
+                required: true,
                 eq: None,
                 ne: None,
                 gt: None,
