@@ -1,6 +1,5 @@
 use std::collections::HashMap;
 
-#[cfg(test)]
 pub mod stub;
 
 #[derive(Debug, PartialEq, Clone)]
@@ -51,6 +50,36 @@ impl<const N: usize> From<[Value; N]> for Value {
     }
 }
 
+impl<const N: usize> From<[bool; N]> for Value {
+    fn from(value: [bool; N]) -> Self {
+        Value::Arr(value.to_vec().iter().map(|v| Value::Bool(*v)).collect())
+    }
+}
+
+impl<const N: usize> From<[u64; N]> for Value {
+    fn from(value: [u64; N]) -> Self {
+        Value::Arr(value.to_vec().iter().map(|v| Value::NumU(*v)).collect())
+    }
+}
+
+impl<const N: usize> From<[i64; N]> for Value {
+    fn from(value: [i64; N]) -> Self {
+        Value::Arr(value.to_vec().iter().map(|v| Value::NumI(*v)).collect())
+    }
+}
+
+impl<const N: usize> From<[f64; N]> for Value {
+    fn from(value: [f64; N]) -> Self {
+        Value::Arr(value.to_vec().iter().map(|v| Value::NumF(*v)).collect())
+    }
+}
+
+impl<const N: usize> From<[&str; N]> for Value {
+    fn from(value: [&str; N]) -> Self {
+        Value::Arr(value.to_vec().iter().map(|v| Value::Str(String::from(*v))).collect())
+    }
+}
+
 impl<const N: usize> From<[(String, Value); N]> for Value {
     fn from(value: [(String, Value); N]) -> Self {
         Value::Obj(HashMap::from(value))
@@ -91,11 +120,43 @@ mod test {
         assert_eq!(Value::from(false), Value::Bool(false));
         assert_eq!(Value::from("in vino veritas"), Value::Str(String::from("in vino veritas")));
         assert_eq!(
-            Value::from([Value::from("veni"), Value::from("vidi"), Value::from("vici")]),
+            Value::from([
+                Value::from("veni"),
+                Value::from("vidi"),
+                Value::from("vici"),
+                Value::Bool(false),
+                Value::NumF(-5.1)
+            ]),
             Value::Arr(vec![
                 Value::Str(String::from("veni")),
                 Value::Str(String::from("vidi")),
-                Value::Str(String::from("vici"))
+                Value::Str(String::from("vici")),
+                Value::Bool(false),
+                Value::NumF(-5.1),
+            ])
+        );
+        assert_eq!(
+            Value::from([false, true, true]),
+            Value::Arr(vec![Value::Bool(false), Value::Bool(true), Value::Bool(true)])
+        );
+        assert_eq!(
+            Value::from([9 as u64, 213897 as u64, 2394 as u64]),
+            Value::Arr(vec![Value::NumU(9), Value::NumU(213897), Value::NumU(2394)])
+        );
+        assert_eq!(
+            Value::from([-9 as i64, -213897 as i64, -2394 as i64]),
+            Value::Arr(vec![Value::NumI(-9), Value::NumI(-213897), Value::NumI(-2394)])
+        );
+        assert_eq!(
+            Value::from([-9.5 as f64, -213897.5 as f64, -2394.5 as f64]),
+            Value::Arr(vec![Value::NumF(-9.5), Value::NumF(-213897.5), Value::NumF(-2394.5)])
+        );
+        assert_eq!(
+            Value::from(["veni", "vidi", "vici"]),
+            Value::Arr(vec![
+                Value::Str(String::from("veni")),
+                Value::Str(String::from("vidi")),
+                Value::Str(String::from("vici")),
             ])
         );
         assert_eq!(
@@ -127,7 +188,7 @@ mod test {
             value_to_string(&Value::from([
                 Value::from("Ad nauseam"),
                 Value::from("Ad ignorantiam"),
-                Value::from([Value::from("Ad hominem"), Value::from("Ad verecundiam"),])
+                Value::from([Value::from("Ad hominem"), Value::from("Ad verecundiam")])
             ])),
             String::from(r#"["Ad nauseam", "Ad ignorantiam", ["Ad hominem", "Ad verecundiam"]]"#)
         );

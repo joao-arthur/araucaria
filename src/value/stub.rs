@@ -53,14 +53,14 @@ pub fn arr_str_stub() -> Value {
 
 pub fn obj_stub() -> Value {
     Value::Obj(HashMap::from([
-        (String::from("name"), Value::Str(String::from("The Beatles"))),
+        (String::from("name"), Value::from("The Beatles")),
         (
             String::from("members"),
             Value::Arr(vec![
-                Value::Str(String::from("George Harrison")),
-                Value::Str(String::from("John Lennon")),
-                Value::Str(String::from("Paul McCartney")),
-                Value::Str(String::from("Ringo Starr")),
+                Value::from("George Harrison"),
+                Value::from("John Lennon"),
+                Value::from("Paul McCartney"),
+                Value::from("Ringo Starr"),
             ]),
         ),
         (String::from("start_year"), Value::NumU(1960)),
