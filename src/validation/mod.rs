@@ -115,3 +115,141 @@ impl From<ObjValidation> for Validation {
         Validation::Obj(validation)
     }
 }
+
+#[cfg(test)]
+mod test {
+    use super::*;
+
+    #[test]
+    fn test_obj_validation() {
+        assert_eq!(
+            ObjValidation::default(),
+            ObjValidation { required: true, validation: HashMap::new() }
+        );
+        assert_eq!(
+            ObjValidation::default().optional(),
+            ObjValidation { required: false, validation: HashMap::new() }
+        );
+        assert_eq!(
+            ObjValidation::default().validation(HashMap::from([(
+                String::from("is"),
+                Validation::Bool(BoolValidation::default().eq(false))
+            )])),
+            ObjValidation {
+                required: true,
+                validation: HashMap::from([(
+                    String::from("is"),
+                    Validation::Bool(BoolValidation::default().eq(false))
+                )])
+            }
+        );
+    }
+
+    #[test]
+    fn test_validation_from() {
+        assert_eq!(
+            Validation::from(NumUValidation::default()),
+            Validation::NumU(NumUValidation {
+                required: true,
+                eq: None,
+                ne: None,
+                gt: None,
+                lt: None,
+                ge: None,
+                le: None,
+            })
+        );
+        assert_eq!(
+            Validation::from(NumIValidation::default()),
+            Validation::NumI(NumIValidation {
+                required: true,
+                eq: None,
+                ne: None,
+                gt: None,
+                lt: None,
+                ge: None,
+                le: None,
+            })
+        );
+        assert_eq!(
+            Validation::from(NumFValidation::default()),
+            Validation::NumF(NumFValidation {
+                required: true,
+                eq: None,
+                ne: None,
+                gt: None,
+                lt: None,
+                ge: None,
+                le: None,
+            })
+        );
+        assert_eq!(
+            Validation::from(BoolValidation::default()),
+            Validation::Bool(BoolValidation { required: true, eq: None, ne: None })
+        );
+        assert_eq!(
+            Validation::from(StrValidation::default()),
+            Validation::Str(StrValidation {
+                required: true,
+                eq: None,
+                ne: None,
+                min_bytes_len: None,
+                max_bytes_len: None,
+                min_graphemes_len: None,
+                max_graphemes_len: None,
+                min_lowercase_len: None,
+                max_lowercase_len: None,
+                min_uppercase_len: None,
+                max_uppercase_len: None,
+                min_number_len: None,
+                max_number_len: None,
+                min_symbols_len: None,
+                max_symbols_len: None,
+            })
+        );
+        assert_eq!(
+            Validation::from(EmailValidation::default()),
+            Validation::Email(EmailValidation { required: true })
+        );
+        assert_eq!(
+            Validation::from(DateValidation::default()),
+            Validation::Date(DateValidation {
+                required: true,
+                eq: None,
+                ne: None,
+                gt: None,
+                lt: None,
+                ge: None,
+                le: None,
+            })
+        );
+        assert_eq!(
+            Validation::from(TimeValidation::default()),
+            Validation::Time(TimeValidation {
+                required: true,
+                eq: None,
+                ne: None,
+                gt: None,
+                lt: None,
+                ge: None,
+                le: None,
+            })
+        );
+        assert_eq!(
+            Validation::from(DateTimeValidation::default()),
+            Validation::DateTime(DateTimeValidation {
+                required: true,
+                eq: None,
+                ne: None,
+                gt: None,
+                lt: None,
+                ge: None,
+                le: None,
+            })
+        );
+        assert_eq!(
+            Validation::from(ObjValidation::default()),
+            Validation::Obj(ObjValidation { required: true, validation: HashMap::new() })
+        );
+    }
+}
