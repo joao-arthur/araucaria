@@ -23,7 +23,7 @@ pub mod time;
 #[derive(Debug, PartialEq, Clone)]
 pub struct ObjValidation {
     pub required: bool,
-    pub validation: HashMap<&'static str, Validation>,
+    pub validation: HashMap<String, Validation>,
 }
 
 impl Default for ObjValidation {
@@ -37,7 +37,7 @@ impl ObjValidation {
         ObjValidation { required: false, validation: self.validation }
     }
 
-    pub fn validation(self, validation: HashMap<&'static str, Validation>) -> Self {
+    pub fn validation(self, validation: HashMap<String, Validation>) -> Self {
         ObjValidation { required: self.required, validation }
     }
 }
