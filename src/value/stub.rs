@@ -23,31 +23,31 @@ pub fn str_stub() -> Value {
 }
 
 pub fn arr_bool_stub() -> Value {
-    Value::Arr(vec![Value::Bool(false), Value::Bool(true), Value::Bool(false), Value::Bool(true)])
+    Value::from([Value::Bool(false), Value::Bool(true), Value::Bool(false), Value::Bool(true)])
 }
 
 pub fn arr_num_u_stub() -> Value {
-    Value::Arr(vec![Value::NumU(1), Value::NumU(10), Value::NumU(100)])
+    Value::from([Value::NumU(1), Value::NumU(10), Value::NumU(100)])
 }
 
 pub fn arr_num_i_stub() -> Value {
-    Value::Arr(vec![Value::NumI(-100), Value::NumI(0), Value::NumI(100)])
+    Value::from([Value::NumI(-100), Value::NumI(0), Value::NumI(100)])
 }
 
 pub fn arr_num_f_stub() -> Value {
-    Value::Arr(vec![Value::NumF(-10.5), Value::NumF(0.5), Value::NumF(10.5)])
+    Value::from([Value::NumF(-10.5), Value::NumF(0.5), Value::NumF(10.5)])
 }
 
 pub fn arr_num_stub() -> Value {
-    Value::Arr(vec![Value::NumU(10), Value::NumI(-10), Value::NumF(1.25)])
+    Value::from([Value::NumU(10), Value::NumI(-10), Value::NumF(1.25)])
 }
 
 pub fn arr_str_stub() -> Value {
-    Value::Arr(vec![
-        Value::Str(String::from("George Harrison")),
-        Value::Str(String::from("John Lennon")),
-        Value::Str(String::from("Paul McCartney")),
-        Value::Str(String::from("Ringo Starr")),
+    Value::from([
+        Value::from("George Harrison"),
+        Value::from("John Lennon"),
+        Value::from("Paul McCartney"),
+        Value::from("Ringo Starr"),
     ])
 }
 
