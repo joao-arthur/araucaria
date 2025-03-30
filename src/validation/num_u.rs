@@ -107,6 +107,18 @@ impl NumUValidation {
             le: Some(value),
         }
     }
+
+    pub fn between(self, a: u64, b: u64) -> Self {
+        NumUValidation {
+            required: self.required,
+            eq: self.eq,
+            ne: self.ne,
+            gt: self.gt,
+            lt: self.lt,
+            ge: Some(a),
+            le: Some(b),
+        }
+    }
 }
 
 #[cfg(test)]
@@ -209,6 +221,18 @@ mod test {
                 lt: None,
                 ge: None,
                 le: Some(6),
+            }
+        );
+        assert_eq!(
+            NumUValidation::default().between(1, 9),
+            NumUValidation {
+                required: true,
+                eq: None,
+                ne: None,
+                gt: None,
+                lt: None,
+                ge: Some(1),
+                le: Some(9),
             }
         );
     }

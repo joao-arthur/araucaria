@@ -107,6 +107,18 @@ impl DateValidation {
             le: Some(value),
         }
     }
+
+    pub fn between(self, a: String, b: String) -> Self {
+        DateValidation {
+            required: self.required,
+            eq: self.eq,
+            ne: self.ne,
+            gt: self.gt,
+            lt: self.lt,
+            ge: Some(a),
+            le: Some(b),
+        }
+    }
 }
 
 #[cfg(test)]
@@ -208,6 +220,19 @@ mod test {
                 gt: None,
                 lt: None,
                 ge: None,
+                le: Some(String::from("2033-03-30")),
+            }
+        );
+        assert_eq!(
+            DateValidation::default()
+                .between(String::from("2031-11-14"), String::from("2033-03-30")),
+            DateValidation {
+                required: true,
+                eq: None,
+                ne: None,
+                gt: None,
+                lt: None,
+                ge: Some(String::from("2031-11-14")),
                 le: Some(String::from("2033-03-30")),
             }
         );

@@ -107,6 +107,18 @@ impl NumFValidation {
             le: Some(value),
         }
     }
+
+    pub fn between(self, a: f64, b: f64) -> Self {
+        NumFValidation {
+            required: self.required,
+            eq: self.eq,
+            ne: self.ne,
+            gt: self.gt,
+            lt: self.lt,
+            ge: Some(a),
+            le: Some(b),
+        }
+    }
 }
 
 #[cfg(test)]
@@ -209,6 +221,18 @@ mod test {
                 lt: None,
                 ge: None,
                 le: Some(-6.5),
+            }
+        );
+        assert_eq!(
+            NumFValidation::default().between(-42.5, 42.5),
+            NumFValidation {
+                required: true,
+                eq: None,
+                ne: None,
+                gt: None,
+                lt: None,
+                ge: Some(-42.5),
+                le: Some(42.5),
             }
         );
     }

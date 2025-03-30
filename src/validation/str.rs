@@ -140,6 +140,26 @@ impl StrValidation {
         }
     }
 
+    pub fn between_bytes_len(self, a: usize, b: usize) -> Self {
+        StrValidation {
+            required: self.required,
+            eq: self.eq,
+            ne: self.ne,
+            min_bytes_len: Some(a),
+            max_bytes_len: Some(b),
+            min_graphemes_len: self.min_graphemes_len,
+            max_graphemes_len: self.max_graphemes_len,
+            min_lowercase_len: self.min_lowercase_len,
+            max_lowercase_len: self.max_lowercase_len,
+            min_uppercase_len: self.min_uppercase_len,
+            max_uppercase_len: self.max_uppercase_len,
+            min_number_len: self.min_number_len,
+            max_number_len: self.max_number_len,
+            min_symbols_len: self.min_symbols_len,
+            max_symbols_len: self.max_symbols_len,
+        }
+    }
+
     pub fn min_graphemes_len(self, value: usize) -> Self {
         StrValidation {
             required: self.required,
@@ -169,6 +189,26 @@ impl StrValidation {
             max_bytes_len: self.max_bytes_len,
             min_graphemes_len: self.min_graphemes_len,
             max_graphemes_len: Some(value),
+            min_lowercase_len: self.min_lowercase_len,
+            max_lowercase_len: self.max_lowercase_len,
+            min_uppercase_len: self.min_uppercase_len,
+            max_uppercase_len: self.max_uppercase_len,
+            min_number_len: self.min_number_len,
+            max_number_len: self.max_number_len,
+            min_symbols_len: self.min_symbols_len,
+            max_symbols_len: self.max_symbols_len,
+        }
+    }
+
+    pub fn between_graphemes_len(self, a: usize, b: usize) -> Self {
+        StrValidation {
+            required: self.required,
+            eq: self.eq,
+            ne: self.ne,
+            min_bytes_len: self.min_bytes_len,
+            max_bytes_len: self.max_bytes_len,
+            min_graphemes_len: Some(a),
+            max_graphemes_len: Some(b),
             min_lowercase_len: self.min_lowercase_len,
             max_lowercase_len: self.max_lowercase_len,
             min_uppercase_len: self.min_uppercase_len,
@@ -220,6 +260,26 @@ impl StrValidation {
         }
     }
 
+    pub fn between_lowercase_len(self, a: usize, b: usize) -> Self {
+        StrValidation {
+            required: self.required,
+            eq: self.eq,
+            ne: self.ne,
+            min_bytes_len: self.min_bytes_len,
+            max_bytes_len: self.max_bytes_len,
+            min_graphemes_len: self.min_graphemes_len,
+            max_graphemes_len: self.max_graphemes_len,
+            min_lowercase_len: Some(a),
+            max_lowercase_len: Some(b),
+            min_uppercase_len: self.min_uppercase_len,
+            max_uppercase_len: self.max_uppercase_len,
+            min_number_len: self.min_number_len,
+            max_number_len: self.max_number_len,
+            min_symbols_len: self.min_symbols_len,
+            max_symbols_len: self.max_symbols_len,
+        }
+    }
+
     pub fn min_uppercase_len(self, value: usize) -> Self {
         StrValidation {
             required: self.required,
@@ -253,6 +313,26 @@ impl StrValidation {
             max_lowercase_len: self.max_lowercase_len,
             min_uppercase_len: self.min_uppercase_len,
             max_uppercase_len: Some(value),
+            min_number_len: self.min_number_len,
+            max_number_len: self.max_number_len,
+            min_symbols_len: self.min_symbols_len,
+            max_symbols_len: self.max_symbols_len,
+        }
+    }
+
+    pub fn between_uppercase_len(self, a: usize, b: usize) -> Self {
+        StrValidation {
+            required: self.required,
+            eq: self.eq,
+            ne: self.ne,
+            min_bytes_len: self.min_bytes_len,
+            max_bytes_len: self.max_bytes_len,
+            min_graphemes_len: self.min_graphemes_len,
+            max_graphemes_len: self.max_graphemes_len,
+            min_lowercase_len: self.min_lowercase_len,
+            max_lowercase_len: self.max_lowercase_len,
+            min_uppercase_len: Some(a),
+            max_uppercase_len: Some(b),
             min_number_len: self.min_number_len,
             max_number_len: self.max_number_len,
             min_symbols_len: self.min_symbols_len,
@@ -300,6 +380,26 @@ impl StrValidation {
         }
     }
 
+    pub fn between_number_len(self, a: usize, b: usize) -> Self {
+        StrValidation {
+            required: self.required,
+            eq: self.eq,
+            ne: self.ne,
+            min_bytes_len: self.min_bytes_len,
+            max_bytes_len: self.max_bytes_len,
+            min_graphemes_len: self.min_graphemes_len,
+            max_graphemes_len: self.max_graphemes_len,
+            min_lowercase_len: self.min_lowercase_len,
+            max_lowercase_len: self.max_lowercase_len,
+            min_uppercase_len: self.min_uppercase_len,
+            max_uppercase_len: self.max_uppercase_len,
+            min_number_len: Some(a),
+            max_number_len: Some(b),
+            min_symbols_len: self.min_symbols_len,
+            max_symbols_len: self.max_symbols_len,
+        }
+    }
+
     pub fn min_symbols_len(self, value: usize) -> Self {
         StrValidation {
             required: self.required,
@@ -337,6 +437,26 @@ impl StrValidation {
             max_number_len: self.max_number_len,
             min_symbols_len: self.min_symbols_len,
             max_symbols_len: Some(value),
+        }
+    }
+
+    pub fn between_symbols_len(self, a: usize, b: usize) -> Self {
+        StrValidation {
+            required: self.required,
+            eq: self.eq,
+            ne: self.ne,
+            min_bytes_len: self.min_bytes_len,
+            max_bytes_len: self.max_bytes_len,
+            min_graphemes_len: self.min_graphemes_len,
+            max_graphemes_len: self.max_graphemes_len,
+            min_lowercase_len: self.min_lowercase_len,
+            max_lowercase_len: self.max_lowercase_len,
+            min_uppercase_len: self.min_uppercase_len,
+            max_uppercase_len: self.max_uppercase_len,
+            min_number_len: self.min_number_len,
+            max_number_len: self.max_number_len,
+            min_symbols_len: Some(a),
+            max_symbols_len: Some(b),
         }
     }
 }
@@ -468,6 +588,26 @@ mod test {
             }
         );
         assert_eq!(
+            StrValidation::default().between_bytes_len(1, 2),
+            StrValidation {
+                required: true,
+                eq: None,
+                ne: None,
+                min_bytes_len: Some(1),
+                max_bytes_len: Some(2),
+                min_graphemes_len: None,
+                max_graphemes_len: None,
+                min_lowercase_len: None,
+                max_lowercase_len: None,
+                min_uppercase_len: None,
+                max_uppercase_len: None,
+                min_number_len: None,
+                max_number_len: None,
+                min_symbols_len: None,
+                max_symbols_len: None,
+            }
+        );
+        assert_eq!(
             StrValidation::default().min_graphemes_len(33),
             StrValidation {
                 required: true,
@@ -496,6 +636,26 @@ mod test {
                 min_bytes_len: None,
                 max_bytes_len: None,
                 min_graphemes_len: None,
+                max_graphemes_len: Some(44),
+                min_lowercase_len: None,
+                max_lowercase_len: None,
+                min_uppercase_len: None,
+                max_uppercase_len: None,
+                min_number_len: None,
+                max_number_len: None,
+                min_symbols_len: None,
+                max_symbols_len: None,
+            }
+        );
+        assert_eq!(
+            StrValidation::default().between_graphemes_len(33, 44),
+            StrValidation {
+                required: true,
+                eq: None,
+                ne: None,
+                min_bytes_len: None,
+                max_bytes_len: None,
+                min_graphemes_len: Some(33),
                 max_graphemes_len: Some(44),
                 min_lowercase_len: None,
                 max_lowercase_len: None,
@@ -548,6 +708,26 @@ mod test {
             }
         );
         assert_eq!(
+            StrValidation::default().between_lowercase_len(555, 666),
+            StrValidation {
+                required: true,
+                eq: None,
+                ne: None,
+                min_bytes_len: None,
+                max_bytes_len: None,
+                min_graphemes_len: None,
+                max_graphemes_len: None,
+                min_lowercase_len: Some(555),
+                max_lowercase_len: Some(666),
+                min_uppercase_len: None,
+                max_uppercase_len: None,
+                min_number_len: None,
+                max_number_len: None,
+                min_symbols_len: None,
+                max_symbols_len: None,
+            }
+        );
+        assert_eq!(
             StrValidation::default().min_uppercase_len(7_777),
             StrValidation {
                 required: true,
@@ -580,6 +760,26 @@ mod test {
                 min_lowercase_len: None,
                 max_lowercase_len: None,
                 min_uppercase_len: None,
+                max_uppercase_len: Some(8_888),
+                min_number_len: None,
+                max_number_len: None,
+                min_symbols_len: None,
+                max_symbols_len: None,
+            }
+        );
+        assert_eq!(
+            StrValidation::default().between_uppercase_len(7_777, 8_888),
+            StrValidation {
+                required: true,
+                eq: None,
+                ne: None,
+                min_bytes_len: None,
+                max_bytes_len: None,
+                min_graphemes_len: None,
+                max_graphemes_len: None,
+                min_lowercase_len: None,
+                max_lowercase_len: None,
+                min_uppercase_len: Some(7_777),
                 max_uppercase_len: Some(8_888),
                 min_number_len: None,
                 max_number_len: None,
@@ -628,6 +828,26 @@ mod test {
             }
         );
         assert_eq!(
+            StrValidation::default().between_number_len(88_888, 99_999),
+            StrValidation {
+                required: true,
+                eq: None,
+                ne: None,
+                min_bytes_len: None,
+                max_bytes_len: None,
+                min_graphemes_len: None,
+                max_graphemes_len: None,
+                min_lowercase_len: None,
+                max_lowercase_len: None,
+                min_uppercase_len: None,
+                max_uppercase_len: None,
+                min_number_len: Some(88_888),
+                max_number_len: Some(99_999),
+                min_symbols_len: None,
+                max_symbols_len: None,
+            }
+        );
+        assert_eq!(
             StrValidation::default().min_symbols_len(777_777),
             StrValidation {
                 required: true,
@@ -665,6 +885,26 @@ mod test {
                 max_number_len: None,
                 min_symbols_len: None,
                 max_symbols_len: Some(666_666),
+            }
+        );
+        assert_eq!(
+            StrValidation::default().between_symbols_len(666_666, 777_777),
+            StrValidation {
+                required: true,
+                eq: None,
+                ne: None,
+                min_bytes_len: None,
+                max_bytes_len: None,
+                min_graphemes_len: None,
+                max_graphemes_len: None,
+                min_lowercase_len: None,
+                max_lowercase_len: None,
+                min_uppercase_len: None,
+                max_uppercase_len: None,
+                min_number_len: None,
+                max_number_len: None,
+                min_symbols_len: Some(666_666),
+                max_symbols_len: Some(777_777),
             }
         );
     }

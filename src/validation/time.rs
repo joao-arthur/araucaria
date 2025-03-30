@@ -107,6 +107,18 @@ impl TimeValidation {
             le: Some(value),
         }
     }
+
+    pub fn between(self, a: String, b: String) -> Self {
+        TimeValidation {
+            required: self.required,
+            eq: self.eq,
+            ne: self.ne,
+            gt: self.gt,
+            lt: self.lt,
+            ge: Some(a),
+            le: Some(b),
+        }
+    }
 }
 
 #[cfg(test)]
@@ -209,6 +221,18 @@ mod test {
                 lt: None,
                 ge: None,
                 le: Some(String::from("01:01")),
+            }
+        );
+        assert_eq!(
+            TimeValidation::default().between(String::from("00:00"), String::from("23:59")),
+            TimeValidation {
+                required: true,
+                eq: None,
+                ne: None,
+                gt: None,
+                lt: None,
+                ge: Some(String::from("00:00")),
+                le: Some(String::from("23:59")),
             }
         );
     }

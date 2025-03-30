@@ -95,9 +95,8 @@ pub fn value_to_string(value: &Value) -> String {
         Value::Bool(val) => val.to_string(),
         Value::Str(val) => String::from("\"") + val + "\"",
         Value::Arr(val) => {
-            String::from("[")
-                + &val.iter().map(|v| value_to_string(v)).collect::<Vec<String>>().join(", ")
-                + "]"
+            let parts: Vec<String> = val.iter().map(|v| value_to_string(v)).collect();
+            String::from("[") + &parts.join(", ") + "]"
         }
         Value::Obj(val) => {
             let mut parts: Vec<String> =
@@ -188,7 +187,7 @@ mod test {
             value_to_string(&Value::from([
                 Value::from("Ad nauseam"),
                 Value::from("Ad ignorantiam"),
-                Value::from([Value::from("Ad hominem"), Value::from("Ad verecundiam")])
+                Value::from(["Ad hominem", "Ad verecundiam"])
             ])),
             String::from(r#"["Ad nauseam", "Ad ignorantiam", ["Ad hominem", "Ad verecundiam"]]"#)
         );
