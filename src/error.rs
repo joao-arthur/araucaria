@@ -20,13 +20,13 @@ pub enum ValidationErr {
 
 #[derive(Debug, PartialEq, Clone)]
 pub enum SchemaErr {
-    Arr(Vec<ValidationErr>),
+    Validation(Vec<ValidationErr>),
     Obj(HashMap<String, SchemaErr>),
 }
 
 impl SchemaErr {
-    pub fn arr<const N: usize>(value: [ValidationErr; N]) -> SchemaErr {
-        SchemaErr::Arr(value.to_vec())
+    pub fn validation<const N: usize>(value: [ValidationErr; N]) -> SchemaErr {
+        SchemaErr::Validation(value.to_vec())
     }
 
     pub fn obj<const N: usize>(value: [(String, SchemaErr); N]) -> SchemaErr {
@@ -41,18 +41,21 @@ mod test {
     #[test]
     fn test_arr() {
         assert_eq!(
-            SchemaErr::arr([ValidationErr::Required]),
-            SchemaErr::Arr(vec![ValidationErr::Required])
+            SchemaErr::validation([ValidationErr::Required]),
+            SchemaErr::Validation(vec![ValidationErr::Required])
         );
     }
 
     #[test]
     fn test_obj() {
         assert_eq!(
-            SchemaErr::obj([(String::from("is"), SchemaErr::arr([ValidationErr::Required]))]),
+            SchemaErr::obj([(
+                String::from("is"),
+                SchemaErr::validation([ValidationErr::Required])
+            )]),
             SchemaErr::Obj(HashMap::from([(
                 String::from("is"),
-                SchemaErr::Arr(vec![ValidationErr::Required])
+                SchemaErr::Validation(vec![ValidationErr::Required])
             )]))
         );
     }
