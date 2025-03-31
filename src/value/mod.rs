@@ -99,8 +99,7 @@ pub fn value_to_string(value: &Value) -> String {
             String::from("[") + &parts.join(", ") + "]"
         }
         Value::Obj(val) => {
-            let mut parts: Vec<String> =
-                val.iter().map(|(k, v)| k.clone() + ": " + &value_to_string(v)).collect();
+            let mut parts: Vec<String> = val.iter().map(|(k, v)| k.clone() + ": " + &value_to_string(v)).collect();
             parts.sort();
             String::from("{ ") + &parts.join(", ") + " }"
         }
@@ -119,13 +118,7 @@ mod test {
         assert_eq!(Value::from(false), Value::Bool(false));
         assert_eq!(Value::from("in vino veritas"), Value::Str(String::from("in vino veritas")));
         assert_eq!(
-            Value::from([
-                Value::from("veni"),
-                Value::from("vidi"),
-                Value::from("vici"),
-                Value::Bool(false),
-                Value::NumF(-5.1)
-            ]),
+            Value::from([Value::from("veni"), Value::from("vidi"), Value::from("vici"), Value::Bool(false), Value::NumF(-5.1)]),
             Value::Arr(vec![
                 Value::Str(String::from("veni")),
                 Value::Str(String::from("vidi")),
@@ -134,14 +127,8 @@ mod test {
                 Value::NumF(-5.1),
             ])
         );
-        assert_eq!(
-            Value::from([false, true, true]),
-            Value::Arr(vec![Value::Bool(false), Value::Bool(true), Value::Bool(true)])
-        );
-        assert_eq!(
-            Value::from([9 as u64, 213897 as u64, 2394 as u64]),
-            Value::Arr(vec![Value::NumU(9), Value::NumU(213897), Value::NumU(2394)])
-        );
+        assert_eq!(Value::from([false, true, true]), Value::Arr(vec![Value::Bool(false), Value::Bool(true), Value::Bool(true)]));
+        assert_eq!(Value::from([9 as u64, 213897 as u64, 2394 as u64]), Value::Arr(vec![Value::NumU(9), Value::NumU(213897), Value::NumU(2394)]));
         assert_eq!(
             Value::from([-9 as i64, -213897 as i64, -2394 as i64]),
             Value::Arr(vec![Value::NumI(-9), Value::NumI(-213897), Value::NumI(-2394)])
@@ -152,11 +139,7 @@ mod test {
         );
         assert_eq!(
             Value::from(["veni", "vidi", "vici"]),
-            Value::Arr(vec![
-                Value::Str(String::from("veni")),
-                Value::Str(String::from("vidi")),
-                Value::Str(String::from("vici")),
-            ])
+            Value::Arr(vec![Value::Str(String::from("veni")), Value::Str(String::from("vidi")), Value::Str(String::from("vici")),])
         );
         assert_eq!(
             Value::from([
@@ -179,16 +162,9 @@ mod test {
         assert_eq!(value_to_string(&Value::NumI(-22)), String::from("-22"));
         assert_eq!(value_to_string(&Value::NumF(-3.65)), String::from("-3.65"));
         assert_eq!(value_to_string(&Value::Bool(true)), String::from("true"));
+        assert_eq!(value_to_string(&Value::from("Non sequitur")), String::from(r#""Non sequitur""#));
         assert_eq!(
-            value_to_string(&Value::from("Non sequitur")),
-            String::from(r#""Non sequitur""#)
-        );
-        assert_eq!(
-            value_to_string(&Value::from([
-                Value::from("Ad nauseam"),
-                Value::from("Ad ignorantiam"),
-                Value::from(["Ad hominem", "Ad verecundiam"])
-            ])),
+            value_to_string(&Value::from([Value::from("Ad nauseam"), Value::from("Ad ignorantiam"), Value::from(["Ad hominem", "Ad verecundiam"])])),
             String::from(r#"["Ad nauseam", "Ad ignorantiam", ["Ad hominem", "Ad verecundiam"]]"#)
         );
         assert_eq!(
@@ -200,16 +176,11 @@ mod test {
                     String::from("k_nested"),
                     Value::from([(
                         String::from("l_1"),
-                        Value::from([(
-                            String::from("l_2"),
-                            Value::from([Value::from([(String::from("id"), Value::NumU(0))])])
-                        )])
+                        Value::from([(String::from("l_2"), Value::from([Value::from([(String::from("id"), Value::NumU(0))])]))])
                     )])
                 ),
             ])),
-            String::from(
-                r#"{ k_bool: false, k_nested: { l_1: { l_2: [{ id: 0 }] } }, k_num: 837, k_str: "Augustus" }"#
-            )
+            String::from(r#"{ k_bool: false, k_nested: { l_1: { l_2: [{ id: 0 }] } }, k_num: 837, k_str: "Augustus" }"#)
         );
     }
 }

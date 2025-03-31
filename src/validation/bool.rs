@@ -31,21 +31,9 @@ mod test {
 
     #[test]
     fn test_bool_validation() {
-        assert_eq!(
-            BoolValidation::default(),
-            BoolValidation { required: true, eq: None, ne: None }
-        );
-        assert_eq!(
-            BoolValidation::default().optional(),
-            BoolValidation { required: false, eq: None, ne: None }
-        );
-        assert_eq!(
-            BoolValidation::default().eq(false),
-            BoolValidation { required: true, eq: Some(false), ne: None }
-        );
-        assert_eq!(
-            BoolValidation::default().ne(true),
-            BoolValidation { required: true, eq: None, ne: Some(true) }
-        );
+        assert_eq!(BoolValidation::default(), BoolValidation { required: true, eq: None, ne: None });
+        assert_eq!(BoolValidation::default().optional(), BoolValidation { required: false, eq: None, ne: None });
+        assert_eq!(BoolValidation::default().eq(false), BoolValidation { required: true, eq: Some(false), ne: None });
+        assert_eq!(BoolValidation::default().ne(true), BoolValidation { required: true, eq: None, ne: Some(true) });
     }
 }

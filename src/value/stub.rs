@@ -43,12 +43,7 @@ pub fn arr_num_stub() -> Value {
 }
 
 pub fn arr_str_stub() -> Value {
-    Value::from([
-        Value::from("George Harrison"),
-        Value::from("John Lennon"),
-        Value::from("Paul McCartney"),
-        Value::from("Ringo Starr"),
-    ])
+    Value::from([Value::from("George Harrison"), Value::from("John Lennon"), Value::from("Paul McCartney"), Value::from("Ringo Starr")])
 }
 
 pub fn obj_stub() -> Value {
@@ -56,12 +51,7 @@ pub fn obj_stub() -> Value {
         (String::from("name"), Value::from("The Beatles")),
         (
             String::from("members"),
-            Value::Arr(vec![
-                Value::from("George Harrison"),
-                Value::from("John Lennon"),
-                Value::from("Paul McCartney"),
-                Value::from("Ringo Starr"),
-            ]),
+            Value::Arr(vec![Value::from("George Harrison"), Value::from("John Lennon"), Value::from("Paul McCartney"), Value::from("Ringo Starr")]),
         ),
         (String::from("start_year"), Value::NumU(1960)),
         (String::from("end_year"), Value::NumU(1960)),
@@ -81,31 +71,11 @@ mod test {
         assert_eq!(num_i_stub(), Value::NumI(-42));
         assert_eq!(num_f_stub(), Value::NumF(-21.5));
         assert_eq!(str_stub(), Value::Str(String::from("Lorem ipsum")));
-        assert_eq!(
-            arr_bool_stub(),
-            Value::Arr(vec![
-                Value::Bool(false),
-                Value::Bool(true),
-                Value::Bool(false),
-                Value::Bool(true)
-            ])
-        );
-        assert_eq!(
-            arr_num_u_stub(),
-            Value::Arr(vec![Value::NumU(1), Value::NumU(10), Value::NumU(100)])
-        );
-        assert_eq!(
-            arr_num_i_stub(),
-            Value::Arr(vec![Value::NumI(-100), Value::NumI(0), Value::NumI(100)])
-        );
-        assert_eq!(
-            arr_num_f_stub(),
-            Value::Arr(vec![Value::NumF(-10.5), Value::NumF(0.5), Value::NumF(10.5)])
-        );
-        assert_eq!(
-            arr_num_stub(),
-            Value::Arr(vec![Value::NumU(10), Value::NumI(-10), Value::NumF(1.25)])
-        );
+        assert_eq!(arr_bool_stub(), Value::Arr(vec![Value::Bool(false), Value::Bool(true), Value::Bool(false), Value::Bool(true)]));
+        assert_eq!(arr_num_u_stub(), Value::Arr(vec![Value::NumU(1), Value::NumU(10), Value::NumU(100)]));
+        assert_eq!(arr_num_i_stub(), Value::Arr(vec![Value::NumI(-100), Value::NumI(0), Value::NumI(100)]));
+        assert_eq!(arr_num_f_stub(), Value::Arr(vec![Value::NumF(-10.5), Value::NumF(0.5), Value::NumF(10.5)]));
+        assert_eq!(arr_num_stub(), Value::Arr(vec![Value::NumU(10), Value::NumI(-10), Value::NumF(1.25)]));
         assert_eq!(
             arr_str_stub(),
             Value::Arr(vec![

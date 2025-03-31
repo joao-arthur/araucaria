@@ -40,23 +40,14 @@ mod test {
 
     #[test]
     fn test_arr() {
-        assert_eq!(
-            SchemaErr::validation([ValidationErr::Required]),
-            SchemaErr::Validation(vec![ValidationErr::Required])
-        );
+        assert_eq!(SchemaErr::validation([ValidationErr::Required]), SchemaErr::Validation(vec![ValidationErr::Required]));
     }
 
     #[test]
     fn test_obj() {
         assert_eq!(
-            SchemaErr::obj([(
-                String::from("is"),
-                SchemaErr::validation([ValidationErr::Required])
-            )]),
-            SchemaErr::Obj(HashMap::from([(
-                String::from("is"),
-                SchemaErr::Validation(vec![ValidationErr::Required])
-            )]))
+            SchemaErr::obj([(String::from("is"), SchemaErr::validation([ValidationErr::Required]))]),
+            SchemaErr::Obj(HashMap::from([(String::from("is"), SchemaErr::Validation(vec![ValidationErr::Required]))]))
         );
     }
 }
