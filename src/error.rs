@@ -5,11 +5,15 @@ use crate::value::Value;
 #[derive(Debug, PartialEq, Clone)]
 pub enum ValidationErr {
     Required,
-    Bool,
-    Str,
     NumU,
     NumI,
     NumF,
+    Bool,
+    Str,
+    Email,
+    Date,
+    Time,
+    DateTime,
     Eq(Value),
     Ne(Value),
     Gt(Value),
