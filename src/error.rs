@@ -20,6 +20,18 @@ pub enum ValidationErr {
     Lt(Value),
     Ge(Value),
     Le(Value),
+    MinBytesLen,
+    MaxBytesLen,
+    MinGraphemesLen,
+    MaxGraphemesLen,
+    MinLowercaseLen,
+    MaxLowercaseLen,
+    MinUppercaseLen,
+    MaxUppercaseLen,
+    MinNumberLen,
+    MaxNumberLen,
+    MinSymbolsLen,
+    MaxSymbolsLen,
 }
 
 #[derive(Debug, PartialEq, Clone)]

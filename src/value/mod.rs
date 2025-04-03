@@ -95,7 +95,7 @@ pub fn value_to_string(value: &Value) -> String {
         Value::Bool(val) => val.to_string(),
         Value::Str(val) => String::from("\"") + val + "\"",
         Value::Arr(val) => {
-            let parts: Vec<String> = val.iter().map(|v| value_to_string(v)).collect();
+            let parts: Vec<String> = val.iter().map(value_to_string).collect();
             String::from("[") + &parts.join(", ") + "]"
         }
         Value::Obj(val) => {
