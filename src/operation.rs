@@ -1,6 +1,5 @@
 use crate::{error::ValidationErr, value::Value};
 
-
 #[derive(Debug, PartialEq, Clone)]
 enum Operation {
     Eq(Value),
@@ -256,9 +255,7 @@ fn compare(value_a: &Value, operation: &Operation) -> Option<ValidationErr> {
 
 #[cfg(test)]
 mod test {
-    use crate::value::stub::{
-        arr_bool_stub, arr_str_stub, bool_stub, num_f_stub, num_i_stub, num_u_stub, str_stub,
-    };
+    use crate::value::stub::{arr_bool_stub, arr_str_stub, bool_stub, num_f_stub, num_i_stub, num_u_stub, str_stub};
 
     use super::*;
 
@@ -504,24 +501,66 @@ mod test {
     #[test]
     fn test_compare_str_some() {
         let value = Value::Str(String::from("Belisarius"));
-        assert_eq!(compare(&value, &Operation::Eq(Value::Str(String::from("Iustinianus")))), Some(ValidationErr::Eq(Value::Str(String::from("Iustinianus")))));
-        assert_eq!(compare(&value, &Operation::Ne(Value::Str(String::from("Belisarius")))), Some(ValidationErr::Ne(Value::Str(String::from("Belisarius")))));
+        assert_eq!(
+            compare(&value, &Operation::Eq(Value::Str(String::from("Iustinianus")))),
+            Some(ValidationErr::Eq(Value::Str(String::from("Iustinianus"))))
+        );
+        assert_eq!(
+            compare(&value, &Operation::Ne(Value::Str(String::from("Belisarius")))),
+            Some(ValidationErr::Ne(Value::Str(String::from("Belisarius"))))
+        );
     }
 
     #[test]
     fn test_compare_str_other_types() {
-        assert_eq!(compare(&bool_stub(), &Operation::Eq(Value::Str(String::from("Lemouria")))), Some(ValidationErr::Eq(Value::Str(String::from("Lemouria")))));
-        assert_eq!(compare(&num_u_stub(), &Operation::Eq(Value::Str(String::from("Lemouria")))), Some(ValidationErr::Eq(Value::Str(String::from("Lemouria")))));
-        assert_eq!(compare(&num_i_stub(), &Operation::Eq(Value::Str(String::from("Lemouria")))), Some(ValidationErr::Eq(Value::Str(String::from("Lemouria")))));
-        assert_eq!(compare(&num_f_stub(), &Operation::Eq(Value::Str(String::from("Lemouria")))), Some(ValidationErr::Eq(Value::Str(String::from("Lemouria")))));
-        assert_eq!(compare(&arr_bool_stub(), &Operation::Eq(Value::Str(String::from("Lemouria")))), Some(ValidationErr::Eq(Value::Str(String::from("Lemouria")))));
-        assert_eq!(compare(&arr_str_stub(), &Operation::Eq(Value::Str(String::from("Lemouria")))), Some(ValidationErr::Eq(Value::Str(String::from("Lemouria")))));
+        assert_eq!(
+            compare(&bool_stub(), &Operation::Eq(Value::Str(String::from("Lemouria")))),
+            Some(ValidationErr::Eq(Value::Str(String::from("Lemouria"))))
+        );
+        assert_eq!(
+            compare(&num_u_stub(), &Operation::Eq(Value::Str(String::from("Lemouria")))),
+            Some(ValidationErr::Eq(Value::Str(String::from("Lemouria"))))
+        );
+        assert_eq!(
+            compare(&num_i_stub(), &Operation::Eq(Value::Str(String::from("Lemouria")))),
+            Some(ValidationErr::Eq(Value::Str(String::from("Lemouria"))))
+        );
+        assert_eq!(
+            compare(&num_f_stub(), &Operation::Eq(Value::Str(String::from("Lemouria")))),
+            Some(ValidationErr::Eq(Value::Str(String::from("Lemouria"))))
+        );
+        assert_eq!(
+            compare(&arr_bool_stub(), &Operation::Eq(Value::Str(String::from("Lemouria")))),
+            Some(ValidationErr::Eq(Value::Str(String::from("Lemouria"))))
+        );
+        assert_eq!(
+            compare(&arr_str_stub(), &Operation::Eq(Value::Str(String::from("Lemouria")))),
+            Some(ValidationErr::Eq(Value::Str(String::from("Lemouria"))))
+        );
 
-        assert_eq!(compare(&bool_stub(), &Operation::Ne(Value::Str(String::from("Lemouria")))), Some(ValidationErr::Ne(Value::Str(String::from("Lemouria")))));
-        assert_eq!(compare(&num_u_stub(), &Operation::Ne(Value::Str(String::from("Lemouria")))), Some(ValidationErr::Ne(Value::Str(String::from("Lemouria")))));
-        assert_eq!(compare(&num_i_stub(), &Operation::Ne(Value::Str(String::from("Lemouria")))), Some(ValidationErr::Ne(Value::Str(String::from("Lemouria")))));
-        assert_eq!(compare(&num_f_stub(), &Operation::Ne(Value::Str(String::from("Lemouria")))), Some(ValidationErr::Ne(Value::Str(String::from("Lemouria")))));
-        assert_eq!(compare(&arr_bool_stub(), &Operation::Ne(Value::Str(String::from("Lemouria")))), Some(ValidationErr::Ne(Value::Str(String::from("Lemouria")))));
-        assert_eq!(compare(&arr_str_stub(), &Operation::Ne(Value::Str(String::from("Lemouria")))), Some(ValidationErr::Ne(Value::Str(String::from("Lemouria")))));
+        assert_eq!(
+            compare(&bool_stub(), &Operation::Ne(Value::Str(String::from("Lemouria")))),
+            Some(ValidationErr::Ne(Value::Str(String::from("Lemouria"))))
+        );
+        assert_eq!(
+            compare(&num_u_stub(), &Operation::Ne(Value::Str(String::from("Lemouria")))),
+            Some(ValidationErr::Ne(Value::Str(String::from("Lemouria"))))
+        );
+        assert_eq!(
+            compare(&num_i_stub(), &Operation::Ne(Value::Str(String::from("Lemouria")))),
+            Some(ValidationErr::Ne(Value::Str(String::from("Lemouria"))))
+        );
+        assert_eq!(
+            compare(&num_f_stub(), &Operation::Ne(Value::Str(String::from("Lemouria")))),
+            Some(ValidationErr::Ne(Value::Str(String::from("Lemouria"))))
+        );
+        assert_eq!(
+            compare(&arr_bool_stub(), &Operation::Ne(Value::Str(String::from("Lemouria")))),
+            Some(ValidationErr::Ne(Value::Str(String::from("Lemouria"))))
+        );
+        assert_eq!(
+            compare(&arr_str_stub(), &Operation::Ne(Value::Str(String::from("Lemouria")))),
+            Some(ValidationErr::Ne(Value::Str(String::from("Lemouria"))))
+        );
     }
 }
