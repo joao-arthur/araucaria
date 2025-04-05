@@ -17,35 +17,35 @@ impl Default for DateTimeValidation {
 
 impl DateTimeValidation {
     pub fn optional(self) -> Self {
-        DateTimeValidation { required: false, eq: self.eq, ne: self.ne, gt: self.gt, lt: self.lt, ge: self.ge, le: self.le }
+        DateTimeValidation { required: false, ..self }
     }
 
     pub fn eq(self, value: String) -> Self {
-        DateTimeValidation { required: self.required, eq: Some(value), ne: self.ne, gt: self.gt, lt: self.lt, ge: self.ge, le: self.le }
+        DateTimeValidation { eq: Some(value), ..self }
     }
 
     pub fn ne(self, value: String) -> Self {
-        DateTimeValidation { required: self.required, eq: self.eq, ne: Some(value), gt: self.gt, lt: self.lt, ge: self.ge, le: self.le }
+        DateTimeValidation { ne: Some(value), ..self }
     }
 
     pub fn gt(self, value: String) -> Self {
-        DateTimeValidation { required: self.required, eq: self.eq, ne: self.ne, gt: Some(value), lt: self.lt, ge: self.ge, le: self.le }
+        DateTimeValidation { gt: Some(value), ..self }
     }
 
     pub fn lt(self, value: String) -> Self {
-        DateTimeValidation { required: self.required, eq: self.eq, ne: self.ne, gt: self.gt, lt: Some(value), ge: self.ge, le: self.le }
+        DateTimeValidation { lt: Some(value), ..self }
     }
 
     pub fn ge(self, value: String) -> Self {
-        DateTimeValidation { required: self.required, eq: self.eq, ne: self.ne, gt: self.gt, lt: self.lt, ge: Some(value), le: self.le }
+        DateTimeValidation { ge: Some(value), ..self }
     }
 
     pub fn le(self, value: String) -> Self {
-        DateTimeValidation { required: self.required, eq: self.eq, ne: self.ne, gt: self.gt, lt: self.lt, ge: self.ge, le: Some(value) }
+        DateTimeValidation { le: Some(value), ..self }
     }
 
     pub fn between(self, a: String, b: String) -> Self {
-        DateTimeValidation { required: self.required, eq: self.eq, ne: self.ne, gt: self.gt, lt: self.lt, ge: Some(a), le: Some(b) }
+        DateTimeValidation { ge: Some(a), le: Some(b), ..self }
     }
 }
 

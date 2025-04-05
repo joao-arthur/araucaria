@@ -13,15 +13,15 @@ impl Default for BoolValidation {
 
 impl BoolValidation {
     pub fn optional(self) -> Self {
-        BoolValidation { required: false, eq: self.eq, ne: self.ne }
+        BoolValidation { required: false, ..self }
     }
 
     pub fn eq(self, value: bool) -> Self {
-        BoolValidation { required: self.required, eq: Some(value), ne: self.ne }
+        BoolValidation { eq: Some(value), ..self }
     }
 
     pub fn ne(self, value: bool) -> Self {
-        BoolValidation { required: self.required, eq: self.eq, ne: Some(value) }
+        BoolValidation { ne: Some(value), ..self }
     }
 }
 

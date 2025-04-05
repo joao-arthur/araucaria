@@ -33,153 +33,43 @@ impl Default for StrValidation {
 
 impl StrValidation {
     pub fn optional(self) -> Self {
-        StrValidation {
-            required: false,
-            eq: self.eq,
-            ne: self.ne,
-            bytes_len: self.bytes_len,
-            chars_len: self.chars_len,
-            graphemes_len: self.graphemes_len,
-            lowercase_len: self.lowercase_len,
-            uppercase_len: self.uppercase_len,
-            number_len: self.number_len,
-            symbols_len: self.symbols_len,
-        }
+        StrValidation { required: false, ..self }
     }
 
     pub fn eq(self, value: String) -> Self {
-        StrValidation {
-            required: self.required,
-            eq: Some(value),
-            ne: self.ne,
-            bytes_len: self.bytes_len,
-            chars_len: self.chars_len,
-            graphemes_len: self.graphemes_len,
-            lowercase_len: self.lowercase_len,
-            uppercase_len: self.uppercase_len,
-            number_len: self.number_len,
-            symbols_len: self.symbols_len,
-        }
+        StrValidation { eq: Some(value), ..self }
     }
 
     pub fn ne(self, value: String) -> Self {
-        StrValidation {
-            required: self.required,
-            eq: self.eq,
-            ne: Some(value),
-            bytes_len: self.bytes_len,
-            chars_len: self.chars_len,
-            graphemes_len: self.graphemes_len,
-            lowercase_len: self.lowercase_len,
-            uppercase_len: self.uppercase_len,
-            number_len: self.number_len,
-            symbols_len: self.symbols_len,
-        }
+        StrValidation { ne: Some(value), ..self }
     }
 
     pub fn bytes_len(self, operation: Operation) -> Self {
-        StrValidation {
-            required: self.required,
-            eq: self.eq,
-            ne: self.ne,
-            bytes_len: Some(operation),
-            chars_len: self.chars_len,
-            graphemes_len: self.graphemes_len,
-            lowercase_len: self.lowercase_len,
-            uppercase_len: self.uppercase_len,
-            number_len: self.number_len,
-            symbols_len: self.symbols_len,
-        }
+        StrValidation { bytes_len: Some(operation), ..self }
     }
 
     pub fn chars_len(self, operation: Operation) -> Self {
-        StrValidation {
-            required: self.required,
-            eq: self.eq,
-            ne: self.ne,
-            bytes_len: self.bytes_len,
-            chars_len: Some(operation),
-            graphemes_len: self.graphemes_len,
-            lowercase_len: self.lowercase_len,
-            uppercase_len: self.uppercase_len,
-            number_len: self.number_len,
-            symbols_len: self.symbols_len,
-        }
+        StrValidation { chars_len: Some(operation), ..self }
     }
 
     pub fn graphemes_len(self, operation: Operation) -> Self {
-        StrValidation {
-            required: self.required,
-            eq: self.eq,
-            ne: self.ne,
-            bytes_len: self.bytes_len,
-            chars_len: self.chars_len,
-            graphemes_len: Some(operation),
-            lowercase_len: self.lowercase_len,
-            uppercase_len: self.uppercase_len,
-            number_len: self.number_len,
-            symbols_len: self.symbols_len,
-        }
+        StrValidation { graphemes_len: Some(operation), ..self }
     }
 
     pub fn lowercase_len(self, operation: Operation) -> Self {
-        StrValidation {
-            required: self.required,
-            eq: self.eq,
-            ne: self.ne,
-            bytes_len: self.bytes_len,
-            chars_len: self.chars_len,
-            graphemes_len: self.graphemes_len,
-            lowercase_len: Some(operation),
-            uppercase_len: self.uppercase_len,
-            number_len: self.number_len,
-            symbols_len: self.symbols_len,
-        }
+        StrValidation { lowercase_len: Some(operation), ..self }
     }
 
     pub fn uppercase_len(self, operation: Operation) -> Self {
-        StrValidation {
-            required: self.required,
-            eq: self.eq,
-            ne: self.ne,
-            bytes_len: self.bytes_len,
-            chars_len: self.chars_len,
-            graphemes_len: self.graphemes_len,
-            lowercase_len: self.lowercase_len,
-            uppercase_len: Some(operation),
-            number_len: self.number_len,
-            symbols_len: self.symbols_len,
-        }
+        StrValidation { uppercase_len: Some(operation), ..self }
     }
 
     pub fn number_len(self, operation: Operation) -> Self {
-        StrValidation {
-            required: self.required,
-            eq: self.eq,
-            ne: self.ne,
-            bytes_len: self.bytes_len,
-            chars_len: self.chars_len,
-            graphemes_len: self.graphemes_len,
-            lowercase_len: self.lowercase_len,
-            uppercase_len: self.uppercase_len,
-            number_len: Some(operation),
-            symbols_len: self.symbols_len,
-        }
+        StrValidation { number_len: Some(operation), ..self }
     }
 
     pub fn symbols_len(self, operation: Operation) -> Self {
-        StrValidation {
-            required: self.required,
-            eq: self.eq,
-            ne: self.ne,
-            bytes_len: self.bytes_len,
-            chars_len: self.chars_len,
-            graphemes_len: self.graphemes_len,
-            lowercase_len: self.lowercase_len,
-            uppercase_len: self.uppercase_len,
-            number_len: self.number_len,
-            symbols_len: Some(operation),
-        }
+        StrValidation { symbols_len: Some(operation), ..self }
     }
 }
 

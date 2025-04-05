@@ -17,35 +17,35 @@ impl Default for NumUValidation {
 
 impl NumUValidation {
     pub fn optional(self) -> Self {
-        NumUValidation { required: false, eq: self.eq, ne: self.ne, gt: self.gt, lt: self.lt, ge: self.ge, le: self.le }
+        NumUValidation { required: false, ..self }
     }
 
     pub fn eq(self, value: u64) -> Self {
-        NumUValidation { required: self.required, eq: Some(value), ne: self.ne, gt: self.gt, lt: self.lt, ge: self.ge, le: self.le }
+        NumUValidation { eq: Some(value), ..self }
     }
 
     pub fn ne(self, value: u64) -> Self {
-        NumUValidation { required: self.required, eq: self.eq, ne: Some(value), gt: self.gt, lt: self.lt, ge: self.ge, le: self.le }
+        NumUValidation { ne: Some(value), ..self }
     }
 
     pub fn gt(self, value: u64) -> Self {
-        NumUValidation { required: self.required, eq: self.eq, ne: self.ne, gt: Some(value), lt: self.lt, ge: self.ge, le: self.le }
+        NumUValidation { gt: Some(value), ..self }
     }
 
     pub fn lt(self, value: u64) -> Self {
-        NumUValidation { required: self.required, eq: self.eq, ne: self.ne, gt: self.gt, lt: Some(value), ge: self.ge, le: self.le }
+        NumUValidation { lt: Some(value), ..self }
     }
 
     pub fn ge(self, value: u64) -> Self {
-        NumUValidation { required: self.required, eq: self.eq, ne: self.ne, gt: self.gt, lt: self.lt, ge: Some(value), le: self.le }
+        NumUValidation { ge: Some(value), ..self }
     }
 
     pub fn le(self, value: u64) -> Self {
-        NumUValidation { required: self.required, eq: self.eq, ne: self.ne, gt: self.gt, lt: self.lt, ge: self.ge, le: Some(value) }
+        NumUValidation { le: Some(value), ..self }
     }
 
     pub fn between(self, a: u64, b: u64) -> Self {
-        NumUValidation { required: self.required, eq: self.eq, ne: self.ne, gt: self.gt, lt: self.lt, ge: Some(a), le: Some(b) }
+        NumUValidation { ge: Some(a), le: Some(b), ..self }
     }
 }
 

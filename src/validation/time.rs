@@ -17,35 +17,35 @@ impl Default for TimeValidation {
 
 impl TimeValidation {
     pub fn optional(self) -> Self {
-        TimeValidation { required: false, eq: self.eq, ne: self.ne, gt: self.gt, lt: self.lt, ge: self.ge, le: self.le }
+        TimeValidation { required: false, ..self }
     }
 
     pub fn eq(self, value: String) -> Self {
-        TimeValidation { required: self.required, eq: Some(value), ne: self.ne, gt: self.gt, lt: self.lt, ge: self.ge, le: self.le }
+        TimeValidation { eq: Some(value), ..self }
     }
 
     pub fn ne(self, value: String) -> Self {
-        TimeValidation { required: self.required, eq: self.eq, ne: Some(value), gt: self.gt, lt: self.lt, ge: self.ge, le: self.le }
+        TimeValidation { ne: Some(value), ..self }
     }
 
     pub fn gt(self, value: String) -> Self {
-        TimeValidation { required: self.required, eq: self.eq, ne: self.ne, gt: Some(value), lt: self.lt, ge: self.ge, le: self.le }
+        TimeValidation { gt: Some(value), ..self }
     }
 
     pub fn lt(self, value: String) -> Self {
-        TimeValidation { required: self.required, eq: self.eq, ne: self.ne, gt: self.gt, lt: Some(value), ge: self.ge, le: self.le }
+        TimeValidation { lt: Some(value), ..self }
     }
 
     pub fn ge(self, value: String) -> Self {
-        TimeValidation { required: self.required, eq: self.eq, ne: self.ne, gt: self.gt, lt: self.lt, ge: Some(value), le: self.le }
+        TimeValidation { ge: Some(value), ..self }
     }
 
     pub fn le(self, value: String) -> Self {
-        TimeValidation { required: self.required, eq: self.eq, ne: self.ne, gt: self.gt, lt: self.lt, ge: self.ge, le: Some(value) }
+        TimeValidation { le: Some(value), ..self }
     }
 
     pub fn between(self, a: String, b: String) -> Self {
-        TimeValidation { required: self.required, eq: self.eq, ne: self.ne, gt: self.gt, lt: self.lt, ge: Some(a), le: Some(b) }
+        TimeValidation { ge: Some(a), le: Some(b), ..self }
     }
 }
 

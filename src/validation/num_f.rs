@@ -17,35 +17,35 @@ impl Default for NumFValidation {
 
 impl NumFValidation {
     pub fn optional(self) -> Self {
-        NumFValidation { required: false, eq: self.eq, ne: self.ne, gt: self.gt, lt: self.lt, ge: self.ge, le: self.le }
+        NumFValidation { required: false, ..self }
     }
 
     pub fn eq(self, value: f64) -> Self {
-        NumFValidation { required: self.required, eq: Some(value), ne: self.ne, gt: self.gt, lt: self.lt, ge: self.ge, le: self.le }
+        NumFValidation { eq: Some(value), ..self }
     }
 
     pub fn ne(self, value: f64) -> Self {
-        NumFValidation { required: self.required, eq: self.eq, ne: Some(value), gt: self.gt, lt: self.lt, ge: self.ge, le: self.le }
+        NumFValidation { ne: Some(value), ..self }
     }
 
     pub fn gt(self, value: f64) -> Self {
-        NumFValidation { required: self.required, eq: self.eq, ne: self.ne, gt: Some(value), lt: self.lt, ge: self.ge, le: self.le }
+        NumFValidation { gt: Some(value), ..self }
     }
 
     pub fn lt(self, value: f64) -> Self {
-        NumFValidation { required: self.required, eq: self.eq, ne: self.ne, gt: self.gt, lt: Some(value), ge: self.ge, le: self.le }
+        NumFValidation { lt: Some(value), ..self }
     }
 
     pub fn ge(self, value: f64) -> Self {
-        NumFValidation { required: self.required, eq: self.eq, ne: self.ne, gt: self.gt, lt: self.lt, ge: Some(value), le: self.le }
+        NumFValidation { ge: Some(value), ..self }
     }
 
     pub fn le(self, value: f64) -> Self {
-        NumFValidation { required: self.required, eq: self.eq, ne: self.ne, gt: self.gt, lt: self.lt, ge: self.ge, le: Some(value) }
+        NumFValidation { le: Some(value), ..self }
     }
 
     pub fn between(self, a: f64, b: f64) -> Self {
-        NumFValidation { required: self.required, eq: self.eq, ne: self.ne, gt: self.gt, lt: self.lt, ge: Some(a), le: Some(b) }
+        NumFValidation { ge: Some(a), le: Some(b), ..self }
     }
 }
 
