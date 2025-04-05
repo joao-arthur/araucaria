@@ -44,7 +44,7 @@ impl NumIValidation {
         NumIValidation { le: Some(value), ..self }
     }
 
-    pub fn between(self, a: i64, b: i64) -> Self {
+    pub fn btwn(self, a: i64, b: i64) -> Self {
         NumIValidation { ge: Some(a), le: Some(b), ..self }
     }
 }
@@ -85,7 +85,7 @@ mod test {
             NumIValidation { required: true, eq: None, ne: None, gt: None, lt: None, ge: None, le: Some(-6) }
         );
         assert_eq!(
-            NumIValidation::default().between(-42, 42),
+            NumIValidation::default().btwn(-42, 42),
             NumIValidation { required: true, eq: None, ne: None, gt: None, lt: None, ge: Some(-42), le: Some(42) }
         );
     }

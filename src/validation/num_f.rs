@@ -44,7 +44,7 @@ impl NumFValidation {
         NumFValidation { le: Some(value), ..self }
     }
 
-    pub fn between(self, a: f64, b: f64) -> Self {
+    pub fn btwn(self, a: f64, b: f64) -> Self {
         NumFValidation { ge: Some(a), le: Some(b), ..self }
     }
 }
@@ -85,7 +85,7 @@ mod test {
             NumFValidation { required: true, eq: None, ne: None, gt: None, lt: None, ge: None, le: Some(-6.5) }
         );
         assert_eq!(
-            NumFValidation::default().between(-42.5, 42.5),
+            NumFValidation::default().btwn(-42.5, 42.5),
             NumFValidation { required: true, eq: None, ne: None, gt: None, lt: None, ge: Some(-42.5), le: Some(42.5) }
         );
     }

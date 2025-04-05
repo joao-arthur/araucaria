@@ -44,7 +44,7 @@ impl DateValidation {
         DateValidation { le: Some(value), ..self }
     }
 
-    pub fn between(self, a: String, b: String) -> Self {
+    pub fn btwn(self, a: String, b: String) -> Self {
         DateValidation { ge: Some(a), le: Some(b), ..self }
     }
 }
@@ -85,7 +85,7 @@ mod test {
             DateValidation { required: true, eq: None, ne: None, gt: None, lt: None, ge: None, le: Some(String::from("2033-03-30")) }
         );
         assert_eq!(
-            DateValidation::default().between(String::from("2031-11-14"), String::from("2033-03-30")),
+            DateValidation::default().btwn(String::from("2031-11-14"), String::from("2033-03-30")),
             DateValidation {
                 required: true,
                 eq: None,

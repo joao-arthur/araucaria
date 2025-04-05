@@ -5,13 +5,13 @@ pub struct StrValidation {
     pub required: bool,
     pub eq: Option<String>,
     pub ne: Option<String>,
-    pub bytes_len: Option<Operation>,
-    pub chars_len: Option<Operation>,
-    pub graphemes_len: Option<Operation>,
-    pub lowercase_len: Option<Operation>,
-    pub uppercase_len: Option<Operation>,
-    pub number_len: Option<Operation>,
-    pub symbols_len: Option<Operation>,
+    pub bytes_len: Option<Operation<usize>>,
+    pub chars_len: Option<Operation<usize>>,
+    pub graphemes_len: Option<Operation<usize>>,
+    pub lowercase_len: Option<Operation<usize>>,
+    pub uppercase_len: Option<Operation<usize>>,
+    pub number_len: Option<Operation<usize>>,
+    pub symbols_len: Option<Operation<usize>>,
 }
 
 impl Default for StrValidation {
@@ -44,31 +44,31 @@ impl StrValidation {
         StrValidation { ne: Some(value), ..self }
     }
 
-    pub fn bytes_len(self, operation: Operation) -> Self {
+    pub fn bytes_len(self, operation: Operation<usize>) -> Self {
         StrValidation { bytes_len: Some(operation), ..self }
     }
 
-    pub fn chars_len(self, operation: Operation) -> Self {
+    pub fn chars_len(self, operation: Operation<usize>) -> Self {
         StrValidation { chars_len: Some(operation), ..self }
     }
 
-    pub fn graphemes_len(self, operation: Operation) -> Self {
+    pub fn graphemes_len(self, operation: Operation<usize>) -> Self {
         StrValidation { graphemes_len: Some(operation), ..self }
     }
 
-    pub fn lowercase_len(self, operation: Operation) -> Self {
+    pub fn lowercase_len(self, operation: Operation<usize>) -> Self {
         StrValidation { lowercase_len: Some(operation), ..self }
     }
 
-    pub fn uppercase_len(self, operation: Operation) -> Self {
+    pub fn uppercase_len(self, operation: Operation<usize>) -> Self {
         StrValidation { uppercase_len: Some(operation), ..self }
     }
 
-    pub fn number_len(self, operation: Operation) -> Self {
+    pub fn number_len(self, operation: Operation<usize>) -> Self {
         StrValidation { number_len: Some(operation), ..self }
     }
 
-    pub fn symbols_len(self, operation: Operation) -> Self {
+    pub fn symbols_len(self, operation: Operation<usize>) -> Self {
         StrValidation { symbols_len: Some(operation), ..self }
     }
 }
