@@ -166,7 +166,7 @@ mod test {
                 graphemes_len: None,
                 lowercase_len: None,
                 uppercase_len: None,
-                number_len: None,
+                numbers_len: None,
                 symbols_len: None,
             })
         );

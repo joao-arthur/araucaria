@@ -25,7 +25,7 @@ pub enum ValidationErr {
     GraphemesLen(Operation<usize>),
     LowercaseLen(Operation<usize>),
     UppercaseLen(Operation<usize>),
-    NumberLen(Operation<usize>),
+    NumbersLen(Operation<usize>),
     SymbolsLen(Operation<usize>),
 }
 

@@ -10,7 +10,7 @@ pub struct StrValidation {
     pub graphemes_len: Option<Operation<usize>>,
     pub lowercase_len: Option<Operation<usize>>,
     pub uppercase_len: Option<Operation<usize>>,
-    pub number_len: Option<Operation<usize>>,
+    pub numbers_len: Option<Operation<usize>>,
     pub symbols_len: Option<Operation<usize>>,
 }
 
@@ -25,7 +25,7 @@ impl Default for StrValidation {
             graphemes_len: None,
             lowercase_len: None,
             uppercase_len: None,
-            number_len: None,
+            numbers_len: None,
             symbols_len: None,
         }
     }
@@ -44,8 +44,32 @@ impl StrValidation {
         StrValidation { ne: Some(value), ..self }
     }
 
-    pub fn bytes_len(self, operation: Operation<usize>) -> Self {
-        StrValidation { bytes_len: Some(operation), ..self }
+    pub fn bytes_len_eq(self, len: usize) -> Self {
+        StrValidation { bytes_len: Some(Operation::Eq(len)), ..self }
+    }
+
+    pub fn bytes_len_ne(self, len: usize) -> Self {
+        StrValidation { bytes_len: Some(Operation::Ne(len)), ..self }
+    }
+
+    pub fn bytes_len_gt(self, len: usize) -> Self {
+        StrValidation { bytes_len: Some(Operation::Gt(len)), ..self }
+    }
+
+    pub fn bytes_len_ge(self, len: usize) -> Self {
+        StrValidation { bytes_len: Some(Operation::Ge(len)), ..self }
+    }
+
+    pub fn bytes_len_lt(self, len: usize) -> Self {
+        StrValidation { bytes_len: Some(Operation::Lt(len)), ..self }
+    }
+
+    pub fn bytes_len_le(self, len: usize) -> Self {
+        StrValidation { bytes_len: Some(Operation::Le(len)), ..self }
+    }
+
+    pub fn bytes_len_btwn(self, len_a: usize, len_b: usize) -> Self {
+        StrValidation { bytes_len: Some(Operation::Btwn(len_a, len_b)), ..self }
     }
 
     pub fn chars_len(self, operation: Operation<usize>) -> Self {
@@ -64,8 +88,8 @@ impl StrValidation {
         StrValidation { uppercase_len: Some(operation), ..self }
     }
 
-    pub fn number_len(self, operation: Operation<usize>) -> Self {
-        StrValidation { number_len: Some(operation), ..self }
+    pub fn numbers_len(self, operation: Operation<usize>) -> Self {
+        StrValidation { numbers_len: Some(operation), ..self }
     }
 
     pub fn symbols_len(self, operation: Operation<usize>) -> Self {
@@ -92,7 +116,7 @@ mod test {
                 graphemes_len: None,
                 lowercase_len: None,
                 uppercase_len: None,
-                number_len: None,
+                numbers_len: None,
                 symbols_len: None,
             }
         );
@@ -107,7 +131,7 @@ mod test {
                 graphemes_len: None,
                 lowercase_len: None,
                 uppercase_len: None,
-                number_len: None,
+                numbers_len: None,
                 symbols_len: None,
             }
         );
@@ -122,7 +146,7 @@ mod test {
                 graphemes_len: None,
                 lowercase_len: None,
                 uppercase_len: None,
-                number_len: None,
+                numbers_len: None,
                 symbols_len: None,
             }
         );
@@ -137,12 +161,12 @@ mod test {
                 graphemes_len: None,
                 lowercase_len: None,
                 uppercase_len: None,
-                number_len: None,
+                numbers_len: None,
                 symbols_len: None,
             }
         );
         assert_eq!(
-            StrValidation::default().bytes_len(Operation::Eq(11)),
+            StrValidation::default().bytes_len_eq(11),
             StrValidation {
                 required: true,
                 eq: None,
@@ -152,7 +176,97 @@ mod test {
                 graphemes_len: None,
                 lowercase_len: None,
                 uppercase_len: None,
-                number_len: None,
+                numbers_len: None,
+                symbols_len: None,
+            }
+        );
+        assert_eq!(
+            StrValidation::default().bytes_len_ne(12),
+            StrValidation {
+                required: true,
+                eq: None,
+                ne: None,
+                bytes_len: Some(Operation::Ne(12)),
+                chars_len: None,
+                graphemes_len: None,
+                lowercase_len: None,
+                uppercase_len: None,
+                numbers_len: None,
+                symbols_len: None,
+            }
+        );
+        assert_eq!(
+            StrValidation::default().bytes_len_gt(13),
+            StrValidation {
+                required: true,
+                eq: None,
+                ne: None,
+                bytes_len: Some(Operation::Gt(13)),
+                chars_len: None,
+                graphemes_len: None,
+                lowercase_len: None,
+                uppercase_len: None,
+                numbers_len: None,
+                symbols_len: None,
+            }
+        );
+        assert_eq!(
+            StrValidation::default().bytes_len_ge(14),
+            StrValidation {
+                required: true,
+                eq: None,
+                ne: None,
+                bytes_len: Some(Operation::Ge(14)),
+                chars_len: None,
+                graphemes_len: None,
+                lowercase_len: None,
+                uppercase_len: None,
+                numbers_len: None,
+                symbols_len: None,
+            }
+        );
+        assert_eq!(
+            StrValidation::default().bytes_len_lt(15),
+            StrValidation {
+                required: true,
+                eq: None,
+                ne: None,
+                bytes_len: Some(Operation::Lt(15)),
+                chars_len: None,
+                graphemes_len: None,
+                lowercase_len: None,
+                uppercase_len: None,
+                numbers_len: None,
+                symbols_len: None,
+            }
+        );
+        assert_eq!(
+            StrValidation::default().bytes_len_le(16),
+            StrValidation {
+                required: true,
+                eq: None,
+                ne: None,
+                bytes_len: Some(Operation::Le(16)),
+                chars_len: None,
+                graphemes_len: None,
+                lowercase_len: None,
+                uppercase_len: None,
+                numbers_len: None,
+                symbols_len: None,
+            }
+        );
+        assert_eq!(
+            StrValidation::default().bytes_len_btwn(17, 18),
+            StrValidation {
+                required: true,
+                eq: None,
+                ne: None,
+                bytes_len: Some(Operation::Btwn(17, 18)),
+                chars_len: None,
+                graphemes_len: None,
+                lowercase_len: None,
+                uppercase_len: None,
+                numbers_len: None,
                 symbols_len: None,
             }
         );
@@ -167,7 +281,7 @@ mod test {
                 graphemes_len: None,
                 lowercase_len: None,
                 uppercase_len: None,
-                number_len: None,
+                numbers_len: None,
                 symbols_len: None,
             }
         );
@@ -182,7 +296,7 @@ mod test {
                 graphemes_len: Some(Operation::Gt(33)),
                 lowercase_len: None,
                 uppercase_len: None,
-                number_len: None,
+                numbers_len: None,
                 symbols_len: None,
             }
         );
@@ -197,7 +311,7 @@ mod test {
                 graphemes_len: None,
                 lowercase_len: Some(Operation::Lt(44)),
                 uppercase_len: None,
-                number_len: None,
+                numbers_len: None,
                 symbols_len: None,
             }
         );
@@ -212,12 +326,12 @@ mod test {
                 graphemes_len: None,
                 lowercase_len: None,
                 uppercase_len: Some(Operation::Ge(55)),
-                number_len: None,
+                numbers_len: None,
                 symbols_len: None,
             }
         );
         assert_eq!(
-            StrValidation::default().number_len(Operation::Le(66)),
+            StrValidation::default().numbers_len(Operation::Le(66)),
             StrValidation {
                 required: true,
                 eq: None,
@@ -227,7 +341,7 @@ mod test {
                 graphemes_len: None,
                 lowercase_len: None,
                 uppercase_len: None,
-                number_len: Some(Operation::Le(66)),
+                numbers_len: Some(Operation::Le(66)),
                 symbols_len: None,
             }
         );
@@ -242,7 +356,7 @@ mod test {
                 graphemes_len: None,
                 lowercase_len: None,
                 uppercase_len: None,
-                number_len: None,
+                numbers_len: None,
                 symbols_len: Some(Operation::Btwn(77, 88)),
             }
         );
