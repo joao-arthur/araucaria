@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use crate::value::Value;
+use crate::{operation::Operation, value::Value};
 
 #[derive(Debug, PartialEq, Clone)]
 pub enum ValidationErr {
@@ -20,18 +20,13 @@ pub enum ValidationErr {
     Lt(Value),
     Ge(Value),
     Le(Value),
-    MinBytesLen,
-    MaxBytesLen,
-    MinGraphemesLen,
-    MaxGraphemesLen,
-    MinLowercaseLen,
-    MaxLowercaseLen,
-    MinUppercaseLen,
-    MaxUppercaseLen,
-    MinNumberLen,
-    MaxNumberLen,
-    MinSymbolsLen,
-    MaxSymbolsLen,
+    BytesLen(Operation<usize>),
+    CharsLen(Operation<usize>),
+    GraphemesLen(Operation<usize>),
+    LowercaseLen(Operation<usize>),
+    UppercaseLen(Operation<usize>),
+    NumberLen(Operation<usize>),
+    SymbolsLen(Operation<usize>),
 }
 
 #[derive(Debug, PartialEq, Clone)]
