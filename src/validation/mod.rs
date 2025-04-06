@@ -118,7 +118,14 @@ impl From<ObjValidation> for Validation {
 
 #[cfg(test)]
 mod test {
-    use super::*;
+    use std::collections::HashMap;
+
+    use crate::validation::{
+        bool::BoolValidation, date::DateValidation, datetime::DateTimeValidation, email::EmailValidation, num_f::NumFValidation,
+        num_i::NumIValidation, num_u::NumUValidation, str::StrValidation, time::TimeValidation,
+    };
+
+    use super::{ObjValidation, Validation};
 
     #[test]
     fn test_obj_validation() {

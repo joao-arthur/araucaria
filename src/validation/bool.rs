@@ -27,7 +27,7 @@ impl BoolValidation {
 
 #[cfg(test)]
 mod test {
-    use super::*;
+    use super::BoolValidation;
 
     #[test]
     fn test_bool_validation() {

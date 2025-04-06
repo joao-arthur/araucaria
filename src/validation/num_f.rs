@@ -51,7 +51,7 @@ impl NumFValidation {
 
 #[cfg(test)]
 mod test {
-    use super::*;
+    use super::NumFValidation;
 
     #[test]
     fn test_num_f_validation() {

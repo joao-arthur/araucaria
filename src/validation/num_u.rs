@@ -51,7 +51,7 @@ impl NumUValidation {
 
 #[cfg(test)]
 mod test {
-    use super::*;
+    use super::NumUValidation;
 
     #[test]
     fn test_num_u_validation() {

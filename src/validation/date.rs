@@ -51,7 +51,7 @@ impl DateValidation {
 
 #[cfg(test)]
 mod test {
-    use super::*;
+    use super::DateValidation;
 
     #[test]
     fn test_date_validation() {

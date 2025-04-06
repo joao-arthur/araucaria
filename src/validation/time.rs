@@ -51,7 +51,7 @@ impl TimeValidation {
 
 #[cfg(test)]
 mod test {
-    use super::*;
+    use super::TimeValidation;
 
     #[test]
     fn test_time_validation() {

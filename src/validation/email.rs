@@ -17,7 +17,7 @@ impl EmailValidation {
 
 #[cfg(test)]
 mod test {
-    use super::*;
+    use super::EmailValidation;
 
     #[test]
     fn test_email_validation() {

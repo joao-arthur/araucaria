@@ -75,7 +75,9 @@ impl StrValidation {
 
 #[cfg(test)]
 mod test {
-    use super::*;
+    use crate::operation::Operation;
+
+    use super::StrValidation;
 
     #[test]
     fn test_str_validation() {
