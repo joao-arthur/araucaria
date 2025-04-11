@@ -1,13 +1,14 @@
+use crate::operation::OperationEq;
+
 #[derive(Debug, PartialEq, Clone)]
 pub struct BoolValidation {
     pub required: bool,
-    pub eq: Option<bool>,
-    pub ne: Option<bool>,
+    pub operation: Option<OperationEq<bool>>,
 }
 
 impl Default for BoolValidation {
     fn default() -> Self {
-        BoolValidation { required: true, eq: None, ne: None }
+        BoolValidation { required: true, operation: None }
     }
 }
 
@@ -17,23 +18,25 @@ impl BoolValidation {
     }
 
     pub fn eq(self, value: bool) -> Self {
-        BoolValidation { eq: Some(value), ..self }
+        BoolValidation { operation: Some(OperationEq::Eq(value)), ..self }
     }
 
     pub fn ne(self, value: bool) -> Self {
-        BoolValidation { ne: Some(value), ..self }
+        BoolValidation { operation: Some(OperationEq::Ne(value)), ..self }
     }
 }
 
 #[cfg(test)]
 mod test {
+    use crate::operation::OperationEq;
+
     use super::BoolValidation;
 
     #[test]
     fn test_bool_validation() {
-        assert_eq!(BoolValidation::default(), BoolValidation { required: true, eq: None, ne: None });
-        assert_eq!(BoolValidation::default().optional(), BoolValidation { required: false, eq: None, ne: None });
-        assert_eq!(BoolValidation::default().eq(false), BoolValidation { required: true, eq: Some(false), ne: None });
-        assert_eq!(BoolValidation::default().ne(true), BoolValidation { required: true, eq: None, ne: Some(true) });
+        assert_eq!(BoolValidation::default(), BoolValidation { required: true, operation: None });
+        assert_eq!(BoolValidation::default().optional(), BoolValidation { required: false, operation: None });
+        assert_eq!(BoolValidation::default().eq(false), BoolValidation { required: true, operation: Some(OperationEq::Eq(false)) });
+        assert_eq!(BoolValidation::default().ne(true), BoolValidation { required: true, operation: Some(OperationEq::Ne(true)) });
     }
 }
