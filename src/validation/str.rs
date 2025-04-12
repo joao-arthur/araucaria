@@ -1,9 +1,9 @@
-use crate::operation::{Operation, OperationEq};
+use crate::operation::Operation;
 
 #[derive(Debug, PartialEq, Clone)]
 pub struct StrValidation {
     pub required: bool,
-    pub operation: Option<OperationEq<String>>,
+    pub operation: Option<Operation<String>>,
     pub bytes_len: Option<Operation<usize>>,
     pub chars_len: Option<Operation<usize>>,
     pub graphemes_len: Option<Operation<usize>>,
@@ -35,11 +35,11 @@ impl StrValidation {
     }
 
     pub fn eq(self, value: String) -> Self {
-        StrValidation { operation: Some(OperationEq::Eq(value)), ..self }
+        StrValidation { operation: Some(Operation::Eq(value)), ..self }
     }
 
     pub fn ne(self, value: String) -> Self {
-        StrValidation { operation: Some(OperationEq::Ne(value)), ..self }
+        StrValidation { operation: Some(Operation::Ne(value)), ..self }
     }
 
     pub fn bytes_len_eq(self, len: usize) -> Self {
@@ -97,7 +97,7 @@ impl StrValidation {
 
 #[cfg(test)]
 mod test {
-    use crate::operation::{Operation, OperationEq};
+    use crate::operation::Operation;
 
     use super::StrValidation;
 
@@ -135,7 +135,7 @@ mod test {
             StrValidation::default().eq(String::from("Avalon")),
             StrValidation {
                 required: true,
-                operation: Some(OperationEq::Eq(String::from("Avalon"))),
+                operation: Some(Operation::Eq(String::from("Avalon"))),
                 bytes_len: None,
                 chars_len: None,
                 graphemes_len: None,
@@ -149,7 +149,7 @@ mod test {
             StrValidation::default().ne(String::from("Mu")),
             StrValidation {
                 required: true,
-                operation: Some(OperationEq::Ne(String::from("Mu"))),
+                operation: Some(Operation::Ne(String::from("Mu"))),
                 bytes_len: None,
                 chars_len: None,
                 graphemes_len: None,
