@@ -14,18 +14,15 @@ pub enum ValidationErr {
     Date,
     Time,
     DateTime,
-    U64Operation(Operation<u64>),
-    I64Operation(Operation<i64>),
-    F64Operation(Operation<f64>),
-    StringOperation(Operation<String>),
-    BoolOperation(OperationEq<bool>),
-    BytesLen(Operation<usize>),
-    CharsLen(Operation<usize>),
-    GraphemesLen(Operation<usize>),
-    LowercaseLen(Operation<usize>),
-    UppercaseLen(Operation<usize>),
-    NumbersLen(Operation<usize>),
-    SymbolsLen(Operation<usize>),
+    OperationEq(OperationEq),
+    Operation(Operation),
+    BytesLen(Operation),
+    CharsLen(Operation),
+    GraphemesLen(Operation),
+    LowercaseLen(Operation),
+    UppercaseLen(Operation),
+    NumbersLen(Operation),
+    SymbolsLen(Operation),
 }
 
 #[derive(Debug, PartialEq, Clone)]
@@ -46,6 +43,8 @@ impl SchemaErr {
 
 #[cfg(test)]
 mod test {
+    use crate::operation::{Operand, OperandValue};
+
     use super::*;
 
     #[test]
@@ -61,52 +60,40 @@ mod test {
         assert_eq!(SchemaErr::validation([ValidationErr::Time]), SchemaErr::Validation(vec![ValidationErr::Time]));
         assert_eq!(SchemaErr::validation([ValidationErr::DateTime]), SchemaErr::Validation(vec![ValidationErr::DateTime]));
         assert_eq!(
-            SchemaErr::validation([ValidationErr::U64Operation(Operation::Gt(10))]),
-            SchemaErr::Validation(vec![ValidationErr::U64Operation(Operation::Gt(10))])
+            SchemaErr::validation([ValidationErr::Operation(Operation::Eq(Operand::Value(OperandValue::Str(String::from("Swords")))))]),
+            SchemaErr::Validation(vec![ValidationErr::Operation(Operation::Eq(Operand::Value(OperandValue::Str(String::from("Swords")))))])
         );
         assert_eq!(
-            SchemaErr::validation([ValidationErr::I64Operation(Operation::Ge(11))]),
-            SchemaErr::Validation(vec![ValidationErr::I64Operation(Operation::Ge(11))])
+            SchemaErr::validation([ValidationErr::OperationEq(OperationEq::Ne(Operand::Value(OperandValue::Bool(false))))]),
+            SchemaErr::Validation(vec![ValidationErr::OperationEq(OperationEq::Ne(Operand::Value(OperandValue::Bool(false))))])
         );
         assert_eq!(
-            SchemaErr::validation([ValidationErr::F64Operation(Operation::Lt(12.5))]),
-            SchemaErr::Validation(vec![ValidationErr::F64Operation(Operation::Lt(12.5))])
+            SchemaErr::validation([ValidationErr::BytesLen(Operation::Eq(Operand::Value(OperandValue::USize(1))))]),
+            SchemaErr::Validation(vec![ValidationErr::BytesLen(Operation::Eq(Operand::Value(OperandValue::USize(1))))])
         );
         assert_eq!(
-            SchemaErr::validation([ValidationErr::StringOperation(Operation::Le(String::from("Swords")))]),
-            SchemaErr::Validation(vec![ValidationErr::StringOperation(Operation::Le(String::from("Swords")))])
+            SchemaErr::validation([ValidationErr::CharsLen(Operation::Ne(Operand::Value(OperandValue::USize(2))))]),
+            SchemaErr::Validation(vec![ValidationErr::CharsLen(Operation::Ne(Operand::Value(OperandValue::USize(2))))])
         );
         assert_eq!(
-            SchemaErr::validation([ValidationErr::BoolOperation(OperationEq::Eq(false))]),
-            SchemaErr::Validation(vec![ValidationErr::BoolOperation(OperationEq::Eq(false))])
+            SchemaErr::validation([ValidationErr::GraphemesLen(Operation::Gt(Operand::Value(OperandValue::USize(3))))]),
+            SchemaErr::Validation(vec![ValidationErr::GraphemesLen(Operation::Gt(Operand::Value(OperandValue::USize(3))))])
         );
         assert_eq!(
-            SchemaErr::validation([ValidationErr::BytesLen(Operation::Eq(1))]),
-            SchemaErr::Validation(vec![ValidationErr::BytesLen(Operation::Eq(1))])
+            SchemaErr::validation([ValidationErr::LowercaseLen(Operation::Ge(Operand::Value(OperandValue::USize(4))))]),
+            SchemaErr::Validation(vec![ValidationErr::LowercaseLen(Operation::Ge(Operand::Value(OperandValue::USize(4))))])
         );
         assert_eq!(
-            SchemaErr::validation([ValidationErr::CharsLen(Operation::Ne(2))]),
-            SchemaErr::Validation(vec![ValidationErr::CharsLen(Operation::Ne(2))])
+            SchemaErr::validation([ValidationErr::UppercaseLen(Operation::Lt(Operand::Value(OperandValue::USize(5))))]),
+            SchemaErr::Validation(vec![ValidationErr::UppercaseLen(Operation::Lt(Operand::Value(OperandValue::USize(5))))])
         );
         assert_eq!(
-            SchemaErr::validation([ValidationErr::GraphemesLen(Operation::Gt(3))]),
-            SchemaErr::Validation(vec![ValidationErr::GraphemesLen(Operation::Gt(3))])
+            SchemaErr::validation([ValidationErr::NumbersLen(Operation::Le(Operand::Value(OperandValue::USize(6))))]),
+            SchemaErr::Validation(vec![ValidationErr::NumbersLen(Operation::Le(Operand::Value(OperandValue::USize(6))))])
         );
         assert_eq!(
-            SchemaErr::validation([ValidationErr::LowercaseLen(Operation::Ge(4))]),
-            SchemaErr::Validation(vec![ValidationErr::LowercaseLen(Operation::Ge(4))])
-        );
-        assert_eq!(
-            SchemaErr::validation([ValidationErr::UppercaseLen(Operation::Lt(5))]),
-            SchemaErr::Validation(vec![ValidationErr::UppercaseLen(Operation::Lt(5))])
-        );
-        assert_eq!(
-            SchemaErr::validation([ValidationErr::NumbersLen(Operation::Le(6))]),
-            SchemaErr::Validation(vec![ValidationErr::NumbersLen(Operation::Le(6))])
-        );
-        assert_eq!(
-            SchemaErr::validation([ValidationErr::SymbolsLen(Operation::Btwn(7, 8))]),
-            SchemaErr::Validation(vec![ValidationErr::SymbolsLen(Operation::Btwn(7, 8))])
+            SchemaErr::validation([ValidationErr::SymbolsLen(Operation::Btwn(Operand::Value(OperandValue::USize(7)), Operand::Value(OperandValue::USize(8))))]),
+            SchemaErr::Validation(vec![ValidationErr::SymbolsLen(Operation::Btwn(Operand::Value(OperandValue::USize(7)), Operand::Value(OperandValue::USize(8))))])
         );
     }
 
