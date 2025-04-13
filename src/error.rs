@@ -5,9 +5,9 @@ use crate::operation::{Operation, OperationEq};
 #[derive(Debug, PartialEq, Clone)]
 pub enum ValidationErr {
     Required,
-    NumU,
-    NumI,
-    NumF,
+    U64,
+    I64,
+    F64,
     Bool,
     Str,
     Email,
@@ -50,9 +50,9 @@ mod test {
     #[test]
     fn test_arr() {
         assert_eq!(SchemaErr::validation([ValidationErr::Required]), SchemaErr::Validation(vec![ValidationErr::Required]));
-        assert_eq!(SchemaErr::validation([ValidationErr::NumU]), SchemaErr::Validation(vec![ValidationErr::NumU]));
-        assert_eq!(SchemaErr::validation([ValidationErr::NumI]), SchemaErr::Validation(vec![ValidationErr::NumI]));
-        assert_eq!(SchemaErr::validation([ValidationErr::NumF]), SchemaErr::Validation(vec![ValidationErr::NumF]));
+        assert_eq!(SchemaErr::validation([ValidationErr::U64]), SchemaErr::Validation(vec![ValidationErr::U64]));
+        assert_eq!(SchemaErr::validation([ValidationErr::I64]), SchemaErr::Validation(vec![ValidationErr::I64]));
+        assert_eq!(SchemaErr::validation([ValidationErr::F64]), SchemaErr::Validation(vec![ValidationErr::F64]));
         assert_eq!(SchemaErr::validation([ValidationErr::Bool]), SchemaErr::Validation(vec![ValidationErr::Bool]));
         assert_eq!(SchemaErr::validation([ValidationErr::Str]), SchemaErr::Validation(vec![ValidationErr::Str]));
         assert_eq!(SchemaErr::validation([ValidationErr::Email]), SchemaErr::Validation(vec![ValidationErr::Email]));

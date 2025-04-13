@@ -44,9 +44,9 @@ impl ObjValidation {
 
 #[derive(Debug, PartialEq, Clone)]
 pub enum Validation {
-    NumU(NumUValidation),
-    NumI(NumIValidation),
-    NumF(NumFValidation),
+    U64(NumUValidation),
+    I64(NumIValidation),
+    F64(NumFValidation),
     Bool(BoolValidation),
     Str(StrValidation),
     Email(EmailValidation),
@@ -58,19 +58,19 @@ pub enum Validation {
 
 impl From<NumUValidation> for Validation {
     fn from(validation: NumUValidation) -> Self {
-        Validation::NumU(validation)
+        Validation::U64(validation)
     }
 }
 
 impl From<NumIValidation> for Validation {
     fn from(validation: NumIValidation) -> Self {
-        Validation::NumI(validation)
+        Validation::I64(validation)
     }
 }
 
 impl From<NumFValidation> for Validation {
     fn from(validation: NumFValidation) -> Self {
-        Validation::NumF(validation)
+        Validation::F64(validation)
     }
 }
 
@@ -142,9 +142,9 @@ mod test {
 
     #[test]
     fn test_validation_from() {
-        assert_eq!(Validation::from(NumUValidation::default()), Validation::NumU(NumUValidation { required: true, operation: None }));
-        assert_eq!(Validation::from(NumIValidation::default()), Validation::NumI(NumIValidation { required: true, operation: None }));
-        assert_eq!(Validation::from(NumFValidation::default()), Validation::NumF(NumFValidation { required: true, operation: None }));
+        assert_eq!(Validation::from(NumUValidation::default()), Validation::U64(NumUValidation { required: true, operation: None }));
+        assert_eq!(Validation::from(NumIValidation::default()), Validation::I64(NumIValidation { required: true, operation: None }));
+        assert_eq!(Validation::from(NumFValidation::default()), Validation::F64(NumFValidation { required: true, operation: None }));
         assert_eq!(Validation::from(BoolValidation::default()), Validation::Bool(BoolValidation { required: true, operation: None }));
         assert_eq!(
             Validation::from(StrValidation::default()),

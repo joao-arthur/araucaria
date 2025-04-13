@@ -5,9 +5,9 @@ pub mod stub;
 #[derive(Debug, PartialEq, Clone)]
 pub enum Value {
     None,
-    NumU(u64),
-    NumI(i64),
-    NumF(f64),
+    U64(u64),
+    I64(i64),
+    F64(f64),
     Bool(bool),
     Str(String),
     Arr(Vec<Value>),
@@ -22,19 +22,19 @@ impl From<bool> for Value {
 
 impl From<u64> for Value {
     fn from(value: u64) -> Self {
-        Value::NumU(value)
+        Value::U64(value)
     }
 }
 
 impl From<i64> for Value {
     fn from(value: i64) -> Self {
-        Value::NumI(value)
+        Value::I64(value)
     }
 }
 
 impl From<f64> for Value {
     fn from(value: f64) -> Self {
-        Value::NumF(value)
+        Value::F64(value)
     }
 }
 
@@ -58,19 +58,19 @@ impl<const N: usize> From<[bool; N]> for Value {
 
 impl<const N: usize> From<[u64; N]> for Value {
     fn from(value: [u64; N]) -> Self {
-        Value::Arr(value.to_vec().iter().map(|v| Value::NumU(*v)).collect())
+        Value::Arr(value.to_vec().iter().map(|v| Value::U64(*v)).collect())
     }
 }
 
 impl<const N: usize> From<[i64; N]> for Value {
     fn from(value: [i64; N]) -> Self {
-        Value::Arr(value.to_vec().iter().map(|v| Value::NumI(*v)).collect())
+        Value::Arr(value.to_vec().iter().map(|v| Value::I64(*v)).collect())
     }
 }
 
 impl<const N: usize> From<[f64; N]> for Value {
     fn from(value: [f64; N]) -> Self {
-        Value::Arr(value.to_vec().iter().map(|v| Value::NumF(*v)).collect())
+        Value::Arr(value.to_vec().iter().map(|v| Value::F64(*v)).collect())
     }
 }
 
@@ -89,9 +89,9 @@ impl<const N: usize> From<[(String, Value); N]> for Value {
 pub fn value_to_string(value: &Value) -> String {
     match value {
         Value::None => String::from(""),
-        Value::NumU(val) => val.to_string(),
-        Value::NumI(val) => val.to_string(),
-        Value::NumF(val) => val.to_string(),
+        Value::U64(val) => val.to_string(),
+        Value::I64(val) => val.to_string(),
+        Value::F64(val) => val.to_string(),
         Value::Bool(val) => val.to_string(),
         Value::Str(val) => String::from("\"") + val + "\"",
         Value::Arr(val) => {
@@ -112,30 +112,30 @@ mod test {
 
     #[test]
     fn test_value_from() {
-        assert_eq!(Value::from(8 as u64), Value::NumU(8));
-        assert_eq!(Value::from(-3 as i64), Value::NumI(-3));
-        assert_eq!(Value::from(-9.8), Value::NumF(-9.8));
+        assert_eq!(Value::from(8 as u64), Value::U64(8));
+        assert_eq!(Value::from(-3 as i64), Value::I64(-3));
+        assert_eq!(Value::from(-9.8), Value::F64(-9.8));
         assert_eq!(Value::from(false), Value::Bool(false));
         assert_eq!(Value::from("in vino veritas"), Value::Str(String::from("in vino veritas")));
         assert_eq!(
-            Value::from([Value::from("veni"), Value::from("vidi"), Value::from("vici"), Value::Bool(false), Value::NumF(-5.1)]),
+            Value::from([Value::from("veni"), Value::from("vidi"), Value::from("vici"), Value::Bool(false), Value::F64(-5.1)]),
             Value::Arr(vec![
                 Value::Str(String::from("veni")),
                 Value::Str(String::from("vidi")),
                 Value::Str(String::from("vici")),
                 Value::Bool(false),
-                Value::NumF(-5.1),
+                Value::F64(-5.1),
             ])
         );
         assert_eq!(Value::from([false, true, true]), Value::Arr(vec![Value::Bool(false), Value::Bool(true), Value::Bool(true)]));
-        assert_eq!(Value::from([9 as u64, 213897 as u64, 2394 as u64]), Value::Arr(vec![Value::NumU(9), Value::NumU(213897), Value::NumU(2394)]));
+        assert_eq!(Value::from([9 as u64, 213897 as u64, 2394 as u64]), Value::Arr(vec![Value::U64(9), Value::U64(213897), Value::U64(2394)]));
         assert_eq!(
             Value::from([-9 as i64, -213897 as i64, -2394 as i64]),
-            Value::Arr(vec![Value::NumI(-9), Value::NumI(-213897), Value::NumI(-2394)])
+            Value::Arr(vec![Value::I64(-9), Value::I64(-213897), Value::I64(-2394)])
         );
         assert_eq!(
             Value::from([-9.5 as f64, -213897.5 as f64, -2394.5 as f64]),
-            Value::Arr(vec![Value::NumF(-9.5), Value::NumF(-213897.5), Value::NumF(-2394.5)])
+            Value::Arr(vec![Value::F64(-9.5), Value::F64(-213897.5), Value::F64(-2394.5)])
         );
         assert_eq!(
             Value::from(["veni", "vidi", "vici"]),
@@ -148,7 +148,7 @@ mod test {
                 (String::from("alive"), Value::from(true)),
             ]),
             Value::Obj(HashMap::from([
-                (String::from("age"), Value::NumU(82)),
+                (String::from("age"), Value::U64(82)),
                 (String::from("name"), Value::Str(String::from("Paul"))),
                 (String::from("alive"), Value::Bool(true)),
             ]))
@@ -158,9 +158,9 @@ mod test {
     #[test]
     fn test_value_to_string() {
         assert_eq!(value_to_string(&Value::None), String::from(""));
-        assert_eq!(value_to_string(&Value::NumU(4)), String::from("4"));
-        assert_eq!(value_to_string(&Value::NumI(-22)), String::from("-22"));
-        assert_eq!(value_to_string(&Value::NumF(-3.65)), String::from("-3.65"));
+        assert_eq!(value_to_string(&Value::U64(4)), String::from("4"));
+        assert_eq!(value_to_string(&Value::I64(-22)), String::from("-22"));
+        assert_eq!(value_to_string(&Value::F64(-3.65)), String::from("-3.65"));
         assert_eq!(value_to_string(&Value::Bool(true)), String::from("true"));
         assert_eq!(value_to_string(&Value::from("Non sequitur")), String::from(r#""Non sequitur""#));
         assert_eq!(
@@ -169,14 +169,14 @@ mod test {
         );
         assert_eq!(
             value_to_string(&Value::from([
-                (String::from("k_num"), Value::NumU(837)),
+                (String::from("k_num"), Value::U64(837)),
                 (String::from("k_bool"), Value::Bool(false)),
                 (String::from("k_str"), Value::from("Augustus")),
                 (
                     String::from("k_nested"),
                     Value::from([(
                         String::from("l_1"),
-                        Value::from([(String::from("l_2"), Value::from([Value::from([(String::from("id"), Value::NumU(0))])]))])
+                        Value::from([(String::from("l_2"), Value::from([Value::from([(String::from("id"), Value::U64(0))])]))])
                     )])
                 ),
             ])),
