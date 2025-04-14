@@ -63,68 +63,68 @@ pub enum Operation {
     Btwn(Operand, Operand),
 }
 
-fn compare(operation: &Operation, value_a: &OperandValue) -> Option<Result<(), Operation>> {
+pub fn compare(operation: &Operation, value_a: &OperandValue) -> Option<Result<(), ()>> {
     match operation {
         Operation::Eq(operand) => match operand {
             Operand::Value(value_b) => match value_a.partial_cmp(value_b) {
                 Some(ord) => match ord {
-                    Ordering::Less => Some(Err(operation.clone())),
+                    Ordering::Less => Some(Err(())),
                     Ordering::Equal => Some(Ok(())),
-                    Ordering::Greater => Some(Err(operation.clone())),
+                    Ordering::Greater => Some(Err(())),
                 },
                 None => None,
             },
-            Operand::FieldPath(path_b) => Some(Ok(())),
+            Operand::FieldPath(_) => Some(Ok(())),
         },
         Operation::Ne(operand) => match operand {
             Operand::Value(value_b) => match value_a.partial_cmp(value_b) {
                 Some(ord) => match ord {
                     Ordering::Less | Ordering::Greater => Some(Ok(())),
-                    Ordering::Equal => Some(Err(operation.clone())),
+                    Ordering::Equal => Some(Err(())),
                 },
                 None => None,
             },
-            Operand::FieldPath(path_b) => Some(Ok(())),
+            Operand::FieldPath(_) => Some(Ok(())),
         },
         Operation::Gt(operand) => match operand {
             Operand::Value(value_b) => match value_a.partial_cmp(value_b) {
                 Some(ord) => match ord {
-                    Ordering::Less | Ordering::Equal => Some(Err(operation.clone())),
+                    Ordering::Less | Ordering::Equal => Some(Err(())),
                     Ordering::Greater => Some(Ok(())),
                 },
                 None => None,
             },
-            Operand::FieldPath(path_b) => Some(Ok(())),
+            Operand::FieldPath(_) => Some(Ok(())),
         },
         Operation::Ge(operand) => match operand {
             Operand::Value(value_b) => match value_a.partial_cmp(value_b) {
                 Some(ord) => match ord {
-                    Ordering::Less => Some(Err(operation.clone())),
+                    Ordering::Less => Some(Err(())),
                     Ordering::Equal | Ordering::Greater => Some(Ok(())),
                 },
                 None => None,
             },
-            Operand::FieldPath(path_b) => Some(Ok(())),
+            Operand::FieldPath(_) => Some(Ok(())),
         },
         Operation::Lt(operand) => match operand {
             Operand::Value(value_b) => match value_a.partial_cmp(value_b) {
                 Some(ord) => match ord {
                     Ordering::Less => Some(Ok(())),
-                    Ordering::Equal | Ordering::Greater => Some(Err(operation.clone())),
+                    Ordering::Equal | Ordering::Greater => Some(Err(())),
                 },
                 None => None,
             },
-            Operand::FieldPath(path_b) => Some(Ok(())),
+            Operand::FieldPath(_) => Some(Ok(())),
         },
         Operation::Le(operand) => match operand {
             Operand::Value(value_b) => match value_a.partial_cmp(value_b) {
                 Some(ord) => match ord {
                     Ordering::Less | Ordering::Equal => Some(Ok(())),
-                    Ordering::Greater => Some(Err(operation.clone())),
+                    Ordering::Greater => Some(Err(())),
                 },
                 None => None,
             },
-            Operand::FieldPath(path_b) => Some(Ok(())),
+            Operand::FieldPath(_) => Some(Ok(())),
         },
         Operation::Btwn(operand_a, operand_b) => match operand_a {
             Operand::Value(value_operand_a) => match operand_b {
@@ -133,11 +133,11 @@ fn compare(operation: &Operation, value_a: &OperandValue) -> Option<Result<(), O
                     let result_b = value_a.partial_cmp(value_operand_b);
                     match result_a {
                         Some(ord) => match ord {
-                            Ordering::Less => Some(Err(operation.clone())),
+                            Ordering::Less => Some(Err(())),
                             Ordering::Equal | Ordering::Greater => match result_b {
                                 Some(ord) => match ord {
                                     Ordering::Less | Ordering::Equal => Some(Ok(())),
-                                    Ordering::Greater => Some(Err(operation.clone())),
+                                    Ordering::Greater => Some(Err(())),
                                 },
                                 None => None,
                             },
@@ -145,9 +145,9 @@ fn compare(operation: &Operation, value_a: &OperandValue) -> Option<Result<(), O
                         None => None,
                     }
                 }
-                Operand::FieldPath(path_b) => Some(Ok(())),
+                Operand::FieldPath(_) => Some(Ok(())),
             },
-            Operand::FieldPath(path_b) => Some(Ok(())),
+            Operand::FieldPath(_) => Some(Ok(())),
         },
     }
 }
@@ -299,31 +299,31 @@ mod test {
     #[test]
     fn test_compare_u64_eq() {
         let v = Operation::Eq(Operand::Value(OperandValue::U64(42)));
-        assert_eq!(compare(&v, &OperandValue::U64(41)), Some(Err(v.clone())));
+        assert_eq!(compare(&v, &OperandValue::U64(41)), Some(Err(())));
         assert_eq!(compare(&v, &OperandValue::U64(42)), Some(Ok(())));
-        assert_eq!(compare(&v, &OperandValue::U64(43)), Some(Err(v.clone())));
+        assert_eq!(compare(&v, &OperandValue::U64(43)), Some(Err(())));
     }
 
     #[test]
     fn test_compare_u64_ne() {
         let v = Operation::Ne(Operand::Value(OperandValue::U64(42)));
         assert_eq!(compare(&v, &OperandValue::U64(41)), Some(Ok(())));
-        assert_eq!(compare(&v, &OperandValue::U64(42)), Some(Err(v.clone())));
+        assert_eq!(compare(&v, &OperandValue::U64(42)), Some(Err(())));
         assert_eq!(compare(&v, &OperandValue::U64(43)), Some(Ok(())));
     }
 
     #[test]
     fn test_compare_u64_gt() {
         let v = Operation::Gt(Operand::Value(OperandValue::U64(42)));
-        assert_eq!(compare(&v, &OperandValue::U64(41)), Some(Err(v.clone())));
-        assert_eq!(compare(&v, &OperandValue::U64(42)), Some(Err(v.clone())));
+        assert_eq!(compare(&v, &OperandValue::U64(41)), Some(Err(())));
+        assert_eq!(compare(&v, &OperandValue::U64(42)), Some(Err(())));
         assert_eq!(compare(&v, &OperandValue::U64(43)), Some(Ok(())));
     }
 
     #[test]
     fn test_compare_u64_ge() {
         let v = Operation::Ge(Operand::Value(OperandValue::U64(42)));
-        assert_eq!(compare(&v, &OperandValue::U64(41)), Some(Err(v.clone())));
+        assert_eq!(compare(&v, &OperandValue::U64(41)), Some(Err(())));
         assert_eq!(compare(&v, &OperandValue::U64(42)), Some(Ok(())));
         assert_eq!(compare(&v, &OperandValue::U64(43)), Some(Ok(())));
     }
@@ -332,8 +332,8 @@ mod test {
     fn test_compare_u64_lt() {
         let v = Operation::Lt(Operand::Value(OperandValue::U64(42)));
         assert_eq!(compare(&v, &OperandValue::U64(41)), Some(Ok(())));
-        assert_eq!(compare(&v, &OperandValue::U64(42)), Some(Err(v.clone())));
-        assert_eq!(compare(&v, &OperandValue::U64(43)), Some(Err(v.clone())));
+        assert_eq!(compare(&v, &OperandValue::U64(42)), Some(Err(())));
+        assert_eq!(compare(&v, &OperandValue::U64(43)), Some(Err(())));
     }
 
     #[test]
@@ -341,37 +341,48 @@ mod test {
         let v = Operation::Le(Operand::Value(OperandValue::U64(42)));
         assert_eq!(compare(&v, &OperandValue::U64(41)), Some(Ok(())));
         assert_eq!(compare(&v, &OperandValue::U64(42)), Some(Ok(())));
-        assert_eq!(compare(&v, &OperandValue::U64(43)), Some(Err(v.clone())));
+        assert_eq!(compare(&v, &OperandValue::U64(43)), Some(Err(())));
+    }
+
+    #[test]
+    fn test_compare_u64_btwn() {
+        let v = Operation::Btwn(Operand::Value(OperandValue::U64(24)), Operand::Value(OperandValue::U64(42)));
+        assert_eq!(compare(&v, &OperandValue::U64(23)), Some(Err(())));
+        assert_eq!(compare(&v, &OperandValue::U64(24)), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::U64(25)), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::U64(41)), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::U64(42)), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::U64(43)), Some(Err(())));
     }
 
     #[test]
     fn test_compare_i64_eq() {
         let v = Operation::Eq(Operand::Value(OperandValue::I64(42)));
-        assert_eq!(compare(&v, &OperandValue::I64(41)), Some(Err(v.clone())));
+        assert_eq!(compare(&v, &OperandValue::I64(41)), Some(Err(())));
         assert_eq!(compare(&v, &OperandValue::I64(42)), Some(Ok(())));
-        assert_eq!(compare(&v, &OperandValue::I64(43)), Some(Err(v.clone())));
+        assert_eq!(compare(&v, &OperandValue::I64(43)), Some(Err(())));
     }
 
     #[test]
     fn test_compare_i64_ne() {
         let v = Operation::Ne(Operand::Value(OperandValue::I64(42)));
         assert_eq!(compare(&v, &OperandValue::I64(41)), Some(Ok(())));
-        assert_eq!(compare(&v, &OperandValue::I64(42)), Some(Err(v.clone())));
+        assert_eq!(compare(&v, &OperandValue::I64(42)), Some(Err(())));
         assert_eq!(compare(&v, &OperandValue::I64(43)), Some(Ok(())));
     }
 
     #[test]
     fn test_compare_i64_gt() {
         let v = Operation::Gt(Operand::Value(OperandValue::I64(42)));
-        assert_eq!(compare(&v, &OperandValue::I64(41)), Some(Err(v.clone())));
-        assert_eq!(compare(&v, &OperandValue::I64(42)), Some(Err(v.clone())));
+        assert_eq!(compare(&v, &OperandValue::I64(41)), Some(Err(())));
+        assert_eq!(compare(&v, &OperandValue::I64(42)), Some(Err(())));
         assert_eq!(compare(&v, &OperandValue::I64(43)), Some(Ok(())));
     }
 
     #[test]
     fn test_compare_i64_ge() {
         let v = Operation::Ge(Operand::Value(OperandValue::I64(42)));
-        assert_eq!(compare(&v, &OperandValue::I64(41)), Some(Err(v.clone())));
+        assert_eq!(compare(&v, &OperandValue::I64(41)), Some(Err(())));
         assert_eq!(compare(&v, &OperandValue::I64(42)), Some(Ok(())));
         assert_eq!(compare(&v, &OperandValue::I64(43)), Some(Ok(())));
     }
@@ -380,8 +391,8 @@ mod test {
     fn test_compare_i64_lt() {
         let v = Operation::Lt(Operand::Value(OperandValue::I64(42)));
         assert_eq!(compare(&v, &OperandValue::I64(41)), Some(Ok(())));
-        assert_eq!(compare(&v, &OperandValue::I64(42)), Some(Err(v.clone())));
-        assert_eq!(compare(&v, &OperandValue::I64(43)), Some(Err(v.clone())));
+        assert_eq!(compare(&v, &OperandValue::I64(42)), Some(Err(())));
+        assert_eq!(compare(&v, &OperandValue::I64(43)), Some(Err(())));
     }
 
     #[test]
@@ -389,37 +400,48 @@ mod test {
         let v = Operation::Le(Operand::Value(OperandValue::I64(42)));
         assert_eq!(compare(&v, &OperandValue::I64(41)), Some(Ok(())));
         assert_eq!(compare(&v, &OperandValue::I64(42)), Some(Ok(())));
-        assert_eq!(compare(&v, &OperandValue::I64(43)), Some(Err(v.clone())));
+        assert_eq!(compare(&v, &OperandValue::I64(43)), Some(Err(())));
+    }
+
+    #[test]
+    fn test_compare_i64_btwn() {
+        let v = Operation::Btwn(Operand::Value(OperandValue::I64(24)), Operand::Value(OperandValue::I64(42)));
+        assert_eq!(compare(&v, &OperandValue::I64(23)), Some(Err(())));
+        assert_eq!(compare(&v, &OperandValue::I64(24)), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::I64(25)), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::I64(41)), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::I64(42)), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::I64(43)), Some(Err(())));
     }
 
     #[test]
     fn test_compare_f64_eq() {
         let v = Operation::Eq(Operand::Value(OperandValue::F64(42.0)));
-        assert_eq!(compare(&v, &OperandValue::F64(41.0)), Some(Err(v.clone())));
+        assert_eq!(compare(&v, &OperandValue::F64(41.0)), Some(Err(())));
         assert_eq!(compare(&v, &OperandValue::F64(42.0)), Some(Ok(())));
-        assert_eq!(compare(&v, &OperandValue::F64(43.0)), Some(Err(v.clone())));
+        assert_eq!(compare(&v, &OperandValue::F64(43.0)), Some(Err(())));
     }
 
     #[test]
     fn test_compare_f64_ne() {
         let v = Operation::Ne(Operand::Value(OperandValue::F64(42.0)));
         assert_eq!(compare(&v, &OperandValue::F64(41.0)), Some(Ok(())));
-        assert_eq!(compare(&v, &OperandValue::F64(42.0)), Some(Err(v.clone())));
+        assert_eq!(compare(&v, &OperandValue::F64(42.0)), Some(Err(())));
         assert_eq!(compare(&v, &OperandValue::F64(43.0)), Some(Ok(())));
     }
 
     #[test]
     fn test_compare_f64_gt() {
         let v = Operation::Gt(Operand::Value(OperandValue::F64(42.0)));
-        assert_eq!(compare(&v, &OperandValue::F64(41.0)), Some(Err(v.clone())));
-        assert_eq!(compare(&v, &OperandValue::F64(42.0)), Some(Err(v.clone())));
+        assert_eq!(compare(&v, &OperandValue::F64(41.0)), Some(Err(())));
+        assert_eq!(compare(&v, &OperandValue::F64(42.0)), Some(Err(())));
         assert_eq!(compare(&v, &OperandValue::F64(43.0)), Some(Ok(())));
     }
 
     #[test]
     fn test_compare_f64_ge() {
         let v = Operation::Ge(Operand::Value(OperandValue::F64(42.0)));
-        assert_eq!(compare(&v, &OperandValue::F64(41.0)), Some(Err(v.clone())));
+        assert_eq!(compare(&v, &OperandValue::F64(41.0)), Some(Err(())));
         assert_eq!(compare(&v, &OperandValue::F64(42.0)), Some(Ok(())));
         assert_eq!(compare(&v, &OperandValue::F64(43.0)), Some(Ok(())));
     }
@@ -428,8 +450,8 @@ mod test {
     fn test_compare_f64_lt() {
         let v = Operation::Lt(Operand::Value(OperandValue::F64(42.0)));
         assert_eq!(compare(&v, &OperandValue::F64(41.0)), Some(Ok(())));
-        assert_eq!(compare(&v, &OperandValue::F64(42.0)), Some(Err(v.clone())));
-        assert_eq!(compare(&v, &OperandValue::F64(43.0)), Some(Err(v.clone())));
+        assert_eq!(compare(&v, &OperandValue::F64(42.0)), Some(Err(())));
+        assert_eq!(compare(&v, &OperandValue::F64(43.0)), Some(Err(())));
     }
 
     #[test]
@@ -437,37 +459,48 @@ mod test {
         let v = Operation::Le(Operand::Value(OperandValue::F64(42.0)));
         assert_eq!(compare(&v, &OperandValue::F64(41.0)), Some(Ok(())));
         assert_eq!(compare(&v, &OperandValue::F64(42.0)), Some(Ok(())));
-        assert_eq!(compare(&v, &OperandValue::F64(43.0)), Some(Err(v.clone())));
+        assert_eq!(compare(&v, &OperandValue::F64(43.0)), Some(Err(())));
+    }
+
+    #[test]
+    fn test_compare_f64_btwn() {
+        let v = Operation::Btwn(Operand::Value(OperandValue::F64(24.5)), Operand::Value(OperandValue::F64(42.5)));
+        assert_eq!(compare(&v, &OperandValue::F64(23.5)), Some(Err(())));
+        assert_eq!(compare(&v, &OperandValue::F64(24.5)), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::F64(25.5)), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::F64(41.5)), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::F64(42.5)), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::F64(43.5)), Some(Err(())));
     }
 
     #[test]
     fn test_compare_usize_eq() {
         let v = Operation::Eq(Operand::Value(OperandValue::USize(42)));
-        assert_eq!(compare(&v, &OperandValue::USize(41)), Some(Err(v.clone())));
+        assert_eq!(compare(&v, &OperandValue::USize(41)), Some(Err(())));
         assert_eq!(compare(&v, &OperandValue::USize(42)), Some(Ok(())));
-        assert_eq!(compare(&v, &OperandValue::USize(43)), Some(Err(v.clone())));
+        assert_eq!(compare(&v, &OperandValue::USize(43)), Some(Err(())));
     }
 
     #[test]
     fn test_compare_usize_ne() {
         let v = Operation::Ne(Operand::Value(OperandValue::USize(42)));
         assert_eq!(compare(&v, &OperandValue::USize(41)), Some(Ok(())));
-        assert_eq!(compare(&v, &OperandValue::USize(42)), Some(Err(v.clone())));
+        assert_eq!(compare(&v, &OperandValue::USize(42)), Some(Err(())));
         assert_eq!(compare(&v, &OperandValue::USize(43)), Some(Ok(())));
     }
 
     #[test]
     fn test_compare_usize_gt() {
         let v = Operation::Gt(Operand::Value(OperandValue::USize(42)));
-        assert_eq!(compare(&v, &OperandValue::USize(41)), Some(Err(v.clone())));
-        assert_eq!(compare(&v, &OperandValue::USize(42)), Some(Err(v.clone())));
+        assert_eq!(compare(&v, &OperandValue::USize(41)), Some(Err(())));
+        assert_eq!(compare(&v, &OperandValue::USize(42)), Some(Err(())));
         assert_eq!(compare(&v, &OperandValue::USize(43)), Some(Ok(())));
     }
 
     #[test]
     fn test_compare_usize_ge() {
         let v = Operation::Ge(Operand::Value(OperandValue::USize(42)));
-        assert_eq!(compare(&v, &OperandValue::USize(41)), Some(Err(v.clone())));
+        assert_eq!(compare(&v, &OperandValue::USize(41)), Some(Err(())));
         assert_eq!(compare(&v, &OperandValue::USize(42)), Some(Ok(())));
         assert_eq!(compare(&v, &OperandValue::USize(43)), Some(Ok(())));
     }
@@ -476,8 +509,8 @@ mod test {
     fn test_compare_usize_lt() {
         let v = Operation::Lt(Operand::Value(OperandValue::USize(42)));
         assert_eq!(compare(&v, &OperandValue::USize(41)), Some(Ok(())));
-        assert_eq!(compare(&v, &OperandValue::USize(42)), Some(Err(v.clone())));
-        assert_eq!(compare(&v, &OperandValue::USize(43)), Some(Err(v.clone())));
+        assert_eq!(compare(&v, &OperandValue::USize(42)), Some(Err(())));
+        assert_eq!(compare(&v, &OperandValue::USize(43)), Some(Err(())));
     }
 
     #[test]
@@ -485,37 +518,97 @@ mod test {
         let v = Operation::Le(Operand::Value(OperandValue::USize(42)));
         assert_eq!(compare(&v, &OperandValue::USize(41)), Some(Ok(())));
         assert_eq!(compare(&v, &OperandValue::USize(42)), Some(Ok(())));
-        assert_eq!(compare(&v, &OperandValue::USize(43)), Some(Err(v.clone())));
+        assert_eq!(compare(&v, &OperandValue::USize(43)), Some(Err(())));
+    }
+
+    #[test]
+    fn test_compare_usize_btwn() {
+        let v = Operation::Btwn(Operand::Value(OperandValue::USize(24)), Operand::Value(OperandValue::USize(42)));
+        assert_eq!(compare(&v, &OperandValue::USize(23)), Some(Err(())));
+        assert_eq!(compare(&v, &OperandValue::USize(24)), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::USize(25)), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::USize(41)), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::USize(42)), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::USize(43)), Some(Err(())));
+    }
+
+    #[test]
+    fn test_compare_bool_eq() {
+        let v = Operation::Eq(Operand::Value(OperandValue::Bool(true)));
+        assert_eq!(compare(&v, &OperandValue::Bool(false)), Some(Err(())));
+        assert_eq!(compare(&v, &OperandValue::Bool(true)), Some(Ok(())));
+    }
+
+    #[test]
+    fn test_compare_bool_ne() {
+        let v = Operation::Ne(Operand::Value(OperandValue::Bool(true)));
+        assert_eq!(compare(&v, &OperandValue::Bool(false)), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::Bool(true)), Some(Err(())));
+    }
+
+    #[test]
+    fn test_compare_bool_gt() {
+        let v = Operation::Gt(Operand::Value(OperandValue::Bool(false)));
+        assert_eq!(compare(&v, &OperandValue::Bool(false)), Some(Err(())));
+        assert_eq!(compare(&v, &OperandValue::Bool(true)), Some(Ok(())));
+    }
+
+    #[test]
+    fn test_compare_bool_ge() {
+        let v = Operation::Ge(Operand::Value(OperandValue::Bool(true)));
+        assert_eq!(compare(&v, &OperandValue::Bool(false)), Some(Err(())));
+        assert_eq!(compare(&v, &OperandValue::Bool(true)), Some(Ok(())));
+    }
+
+    #[test]
+    fn test_compare_bool_lt() {
+        let v = Operation::Lt(Operand::Value(OperandValue::Bool(true)));
+        assert_eq!(compare(&v, &OperandValue::Bool(false)), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::Bool(true)), Some(Err(())));
+    }
+
+    #[test]
+    fn test_compare_bool_le() {
+        let v = Operation::Le(Operand::Value(OperandValue::Bool(true)));
+        assert_eq!(compare(&v, &OperandValue::Bool(false)), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::Bool(true)), Some(Ok(())));
+    }
+
+    #[test]
+    fn test_compare_bool_btwn() {
+        let v = Operation::Btwn(Operand::Value(OperandValue::Bool(false)), Operand::Value(OperandValue::Bool(true)));
+        assert_eq!(compare(&v, &OperandValue::Bool(false)), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::Bool(true)), Some(Ok(())));
     }
 
     #[test]
     fn test_compare_string_eq() {
         let v = Operation::Eq(Operand::Value(OperandValue::Str(String::from("j"))));
-        assert_eq!(compare(&v, &OperandValue::Str(String::from("i"))), Some(Err(v.clone())));
+        assert_eq!(compare(&v, &OperandValue::Str(String::from("i"))), Some(Err(())));
         assert_eq!(compare(&v, &OperandValue::Str(String::from("j"))), Some(Ok(())));
-        assert_eq!(compare(&v, &OperandValue::Str(String::from("k"))), Some(Err(v.clone())));
+        assert_eq!(compare(&v, &OperandValue::Str(String::from("k"))), Some(Err(())));
     }
 
     #[test]
     fn test_compare_string_ne() {
         let v = Operation::Ne(Operand::Value(OperandValue::Str(String::from("j"))));
         assert_eq!(compare(&v, &OperandValue::Str(String::from("i"))), Some(Ok(())));
-        assert_eq!(compare(&v, &OperandValue::Str(String::from("j"))), Some(Err(v.clone())));
+        assert_eq!(compare(&v, &OperandValue::Str(String::from("j"))), Some(Err(())));
         assert_eq!(compare(&v, &OperandValue::Str(String::from("k"))), Some(Ok(())));
     }
 
     #[test]
     fn test_compare_string_gt() {
         let v = Operation::Gt(Operand::Value(OperandValue::Str(String::from("j"))));
-        assert_eq!(compare(&v, &OperandValue::Str(String::from("i"))), Some(Err(v.clone())));
-        assert_eq!(compare(&v, &OperandValue::Str(String::from("j"))), Some(Err(v.clone())));
+        assert_eq!(compare(&v, &OperandValue::Str(String::from("i"))), Some(Err(())));
+        assert_eq!(compare(&v, &OperandValue::Str(String::from("j"))), Some(Err(())));
         assert_eq!(compare(&v, &OperandValue::Str(String::from("k"))), Some(Ok(())));
     }
 
     #[test]
     fn test_compare_string_ge() {
         let v = Operation::Ge(Operand::Value(OperandValue::Str(String::from("j"))));
-        assert_eq!(compare(&v, &OperandValue::Str(String::from("i"))), Some(Err(v.clone())));
+        assert_eq!(compare(&v, &OperandValue::Str(String::from("i"))), Some(Err(())));
         assert_eq!(compare(&v, &OperandValue::Str(String::from("j"))), Some(Ok(())));
         assert_eq!(compare(&v, &OperandValue::Str(String::from("k"))), Some(Ok(())));
     }
@@ -524,8 +617,8 @@ mod test {
     fn test_compare_string_lt() {
         let v = Operation::Lt(Operand::Value(OperandValue::Str(String::from("j"))));
         assert_eq!(compare(&v, &OperandValue::Str(String::from("i"))), Some(Ok(())));
-        assert_eq!(compare(&v, &OperandValue::Str(String::from("j"))), Some(Err(v.clone())));
-        assert_eq!(compare(&v, &OperandValue::Str(String::from("k"))), Some(Err(v.clone())));
+        assert_eq!(compare(&v, &OperandValue::Str(String::from("j"))), Some(Err(())));
+        assert_eq!(compare(&v, &OperandValue::Str(String::from("k"))), Some(Err(())));
     }
 
     #[test]
@@ -533,7 +626,18 @@ mod test {
         let v = Operation::Le(Operand::Value(OperandValue::Str(String::from("j"))));
         assert_eq!(compare(&v, &OperandValue::Str(String::from("i"))), Some(Ok(())));
         assert_eq!(compare(&v, &OperandValue::Str(String::from("j"))), Some(Ok(())));
-        assert_eq!(compare(&v, &OperandValue::Str(String::from("k"))), Some(Err(v.clone())));
+        assert_eq!(compare(&v, &OperandValue::Str(String::from("k"))), Some(Err(())));
+    }
+
+    #[test]
+    fn test_compare_string_btwn() {
+        let v = Operation::Btwn(Operand::Value(OperandValue::Str(String::from("f"))), Operand::Value(OperandValue::Str(String::from("j"))));
+        assert_eq!(compare(&v, &OperandValue::Str(String::from("e"))), Some(Err(())));
+        assert_eq!(compare(&v, &OperandValue::Str(String::from("f"))), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::Str(String::from("g"))), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::Str(String::from("i"))), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::Str(String::from("j"))), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::Str(String::from("k"))), Some(Err(())));
     }
 
     #[test]
