@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use crate::operation::{Operation, OperationEq};
+use crate::operation::Operation;
 
 #[derive(Debug, PartialEq, Clone)]
 pub enum ValidationErr {
@@ -14,7 +14,6 @@ pub enum ValidationErr {
     Date,
     Time,
     DateTime,
-    OperationEq(OperationEq),
     Operation(Operation),
     BytesLen(Operation),
     CharsLen(Operation),
@@ -62,10 +61,6 @@ mod test {
         assert_eq!(
             SchemaErr::validation([ValidationErr::Operation(Operation::Eq(Operand::Value(OperandValue::Str(String::from("Swords")))))]),
             SchemaErr::Validation(vec![ValidationErr::Operation(Operation::Eq(Operand::Value(OperandValue::Str(String::from("Swords")))))])
-        );
-        assert_eq!(
-            SchemaErr::validation([ValidationErr::OperationEq(OperationEq::Ne(Operand::Value(OperandValue::Bool(false))))]),
-            SchemaErr::Validation(vec![ValidationErr::OperationEq(OperationEq::Ne(Operand::Value(OperandValue::Bool(false))))])
         );
         assert_eq!(
             SchemaErr::validation([ValidationErr::BytesLen(Operation::Eq(Operand::Value(OperandValue::USize(1))))]),
