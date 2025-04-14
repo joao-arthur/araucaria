@@ -42,7 +42,10 @@ impl TimeValidation {
     }
 
     pub fn btwn(self, value_a: String, value_b: String) -> Self {
-        TimeValidation { operation: Some(Operation::Btwn(Operand::Value(OperandValue::Str(value_a)), Operand::Value(OperandValue::Str(value_b)))), ..self }
+        TimeValidation {
+            operation: Some(Operation::Btwn(Operand::Value(OperandValue::Str(value_a)), Operand::Value(OperandValue::Str(value_b)))),
+            ..self
+        }
     }
 
     pub fn eq_field(self, field: String) -> Self {
@@ -110,7 +113,13 @@ mod test {
         );
         assert_eq!(
             TimeValidation::default().btwn(String::from("00:00"), String::from("23:59")),
-            TimeValidation { required: true, operation: Some(Operation::Btwn(Operand::Value(OperandValue::Str(String::from("00:00"))), Operand::Value(OperandValue::Str(String::from("23:59"))))) }
+            TimeValidation {
+                required: true,
+                operation: Some(Operation::Btwn(
+                    Operand::Value(OperandValue::Str(String::from("00:00"))),
+                    Operand::Value(OperandValue::Str(String::from("23:59")))
+                ))
+            }
         );
         assert_eq!(
             TimeValidation::default().eq_field(String::from("user.info.details.last_login")),
@@ -138,7 +147,13 @@ mod test {
         );
         assert_eq!(
             TimeValidation::default().btwn_field(String::from("user.info.details.last_login"), String::from("user.info.details.last_logout")),
-            TimeValidation { required: true, operation: Some(Operation::Btwn(Operand::FieldPath(String::from("user.info.details.last_login")), Operand::FieldPath(String::from("user.info.details.last_logout")))) }
+            TimeValidation {
+                required: true,
+                operation: Some(Operation::Btwn(
+                    Operand::FieldPath(String::from("user.info.details.last_login")),
+                    Operand::FieldPath(String::from("user.info.details.last_logout"))
+                ))
+            }
         );
     }
 }

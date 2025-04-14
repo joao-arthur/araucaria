@@ -42,7 +42,10 @@ impl NumUValidation {
     }
 
     pub fn btwn(self, value_a: u64, value_b: u64) -> Self {
-        NumUValidation { operation: Some(Operation::Btwn(Operand::Value(OperandValue::U64(value_a)), Operand::Value(OperandValue::U64(value_b)))), ..self }
+        NumUValidation {
+            operation: Some(Operation::Btwn(Operand::Value(OperandValue::U64(value_a)), Operand::Value(OperandValue::U64(value_b)))),
+            ..self
+        }
     }
 
     pub fn eq_field(self, field: String) -> Self {
@@ -84,19 +87,70 @@ mod test {
     fn test_num_u_validation() {
         assert_eq!(NumUValidation::default(), NumUValidation { required: true, operation: None });
         assert_eq!(NumUValidation::default().optional(), NumUValidation { required: false, operation: None });
-        assert_eq!(NumUValidation::default().eq(1), NumUValidation { required: true, operation: Some(Operation::Eq(Operand::Value(OperandValue::U64(1)))) });
-        assert_eq!(NumUValidation::default().ne(2), NumUValidation { required: true, operation: Some(Operation::Ne(Operand::Value(OperandValue::U64(2)))) });
-        assert_eq!(NumUValidation::default().gt(3), NumUValidation { required: true, operation: Some(Operation::Gt(Operand::Value(OperandValue::U64(3)))) });
-        assert_eq!(NumUValidation::default().ge(4), NumUValidation { required: true, operation: Some(Operation::Ge(Operand::Value(OperandValue::U64(4)))) });
-        assert_eq!(NumUValidation::default().lt(5), NumUValidation { required: true, operation: Some(Operation::Lt(Operand::Value(OperandValue::U64(5)))) });
-        assert_eq!(NumUValidation::default().le(6), NumUValidation { required: true, operation: Some(Operation::Le(Operand::Value(OperandValue::U64(6)))) });
-        assert_eq!(NumUValidation::default().btwn(1, 9), NumUValidation { required: true, operation: Some(Operation::Btwn(Operand::Value(OperandValue::U64(1)), Operand::Value(OperandValue::U64(9)))) });
-        assert_eq!(NumUValidation::default().eq_field(String::from("user.personal.info.height")), NumUValidation { required: true, operation: Some(Operation::Eq(Operand::FieldPath(String::from("user.personal.info.height")))) });
-        assert_eq!(NumUValidation::default().ne_field(String::from("user.personal.info.height")), NumUValidation { required: true, operation: Some(Operation::Ne(Operand::FieldPath(String::from("user.personal.info.height")))) });
-        assert_eq!(NumUValidation::default().gt_field(String::from("user.personal.info.height")), NumUValidation { required: true, operation: Some(Operation::Gt(Operand::FieldPath(String::from("user.personal.info.height")))) });
-        assert_eq!(NumUValidation::default().ge_field(String::from("user.personal.info.height")), NumUValidation { required: true, operation: Some(Operation::Ge(Operand::FieldPath(String::from("user.personal.info.height")))) });
-        assert_eq!(NumUValidation::default().lt_field(String::from("user.personal.info.height")), NumUValidation { required: true, operation: Some(Operation::Lt(Operand::FieldPath(String::from("user.personal.info.height")))) });
-        assert_eq!(NumUValidation::default().le_field(String::from("user.personal.info.height")), NumUValidation { required: true, operation: Some(Operation::Le(Operand::FieldPath(String::from("user.data.info.score_change")))) });
-        assert_eq!(NumUValidation::default().btwn_field(String::from("user.personal.info.min_height"), String::from("user.personal.info.max_height")), NumUValidation { required: true, operation: Some(Operation::Btwn(Operand::FieldPath(String::from("user.personal.info.min_height")), Operand::FieldPath(String::from("user.personal.info.max_height")))) });
+        assert_eq!(
+            NumUValidation::default().eq(1),
+            NumUValidation { required: true, operation: Some(Operation::Eq(Operand::Value(OperandValue::U64(1)))) }
+        );
+        assert_eq!(
+            NumUValidation::default().ne(2),
+            NumUValidation { required: true, operation: Some(Operation::Ne(Operand::Value(OperandValue::U64(2)))) }
+        );
+        assert_eq!(
+            NumUValidation::default().gt(3),
+            NumUValidation { required: true, operation: Some(Operation::Gt(Operand::Value(OperandValue::U64(3)))) }
+        );
+        assert_eq!(
+            NumUValidation::default().ge(4),
+            NumUValidation { required: true, operation: Some(Operation::Ge(Operand::Value(OperandValue::U64(4)))) }
+        );
+        assert_eq!(
+            NumUValidation::default().lt(5),
+            NumUValidation { required: true, operation: Some(Operation::Lt(Operand::Value(OperandValue::U64(5)))) }
+        );
+        assert_eq!(
+            NumUValidation::default().le(6),
+            NumUValidation { required: true, operation: Some(Operation::Le(Operand::Value(OperandValue::U64(6)))) }
+        );
+        assert_eq!(
+            NumUValidation::default().btwn(1, 9),
+            NumUValidation {
+                required: true,
+                operation: Some(Operation::Btwn(Operand::Value(OperandValue::U64(1)), Operand::Value(OperandValue::U64(9))))
+            }
+        );
+        assert_eq!(
+            NumUValidation::default().eq_field(String::from("user.personal.info.height")),
+            NumUValidation { required: true, operation: Some(Operation::Eq(Operand::FieldPath(String::from("user.personal.info.height")))) }
+        );
+        assert_eq!(
+            NumUValidation::default().ne_field(String::from("user.personal.info.height")),
+            NumUValidation { required: true, operation: Some(Operation::Ne(Operand::FieldPath(String::from("user.personal.info.height")))) }
+        );
+        assert_eq!(
+            NumUValidation::default().gt_field(String::from("user.personal.info.height")),
+            NumUValidation { required: true, operation: Some(Operation::Gt(Operand::FieldPath(String::from("user.personal.info.height")))) }
+        );
+        assert_eq!(
+            NumUValidation::default().ge_field(String::from("user.personal.info.height")),
+            NumUValidation { required: true, operation: Some(Operation::Ge(Operand::FieldPath(String::from("user.personal.info.height")))) }
+        );
+        assert_eq!(
+            NumUValidation::default().lt_field(String::from("user.personal.info.height")),
+            NumUValidation { required: true, operation: Some(Operation::Lt(Operand::FieldPath(String::from("user.personal.info.height")))) }
+        );
+        assert_eq!(
+            NumUValidation::default().le_field(String::from("user.personal.info.height")),
+            NumUValidation { required: true, operation: Some(Operation::Le(Operand::FieldPath(String::from("user.personal.info.height")))) }
+        );
+        assert_eq!(
+            NumUValidation::default().btwn_field(String::from("user.personal.info.min_height"), String::from("user.personal.info.max_height")),
+            NumUValidation {
+                required: true,
+                operation: Some(Operation::Btwn(
+                    Operand::FieldPath(String::from("user.personal.info.min_height")),
+                    Operand::FieldPath(String::from("user.personal.info.max_height"))
+                ))
+            }
+        );
     }
 }

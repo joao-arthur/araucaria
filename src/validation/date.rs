@@ -42,7 +42,10 @@ impl DateValidation {
     }
 
     pub fn btwn(self, value_a: String, value_b: String) -> Self {
-        DateValidation { operation: Some(Operation::Btwn(Operand::Value(OperandValue::Str(value_a)), Operand::Value(OperandValue::Str(value_b)))), ..self }
+        DateValidation {
+            operation: Some(Operation::Btwn(Operand::Value(OperandValue::Str(value_a)), Operand::Value(OperandValue::Str(value_b)))),
+            ..self
+        }
     }
 
     pub fn eq_field(self, field: String) -> Self {
@@ -110,7 +113,13 @@ mod test {
         );
         assert_eq!(
             DateValidation::default().btwn(String::from("2031-11-14"), String::from("2033-03-30")),
-            DateValidation { required: true, operation: Some(Operation::Btwn(Operand::Value(OperandValue::Str(String::from("2031-11-14"))), Operand::Value(OperandValue::Str(String::from("2033-03-30"))))) }
+            DateValidation {
+                required: true,
+                operation: Some(Operation::Btwn(
+                    Operand::Value(OperandValue::Str(String::from("2031-11-14"))),
+                    Operand::Value(OperandValue::Str(String::from("2033-03-30")))
+                ))
+            }
         );
     }
 }

@@ -59,7 +59,10 @@ impl StrValidation {
     }
 
     pub fn btwn(self, value_a: String, value_b: String) -> Self {
-        StrValidation { operation: Some(Operation::Btwn(Operand::Value(OperandValue::Str(value_a)), Operand::Value(OperandValue::Str(value_b)))), ..self }
+        StrValidation {
+            operation: Some(Operation::Btwn(Operand::Value(OperandValue::Str(value_a)), Operand::Value(OperandValue::Str(value_b)))),
+            ..self
+        }
     }
 
     pub fn bytes_len_eq(self, len: usize) -> Self {
@@ -87,7 +90,10 @@ impl StrValidation {
     }
 
     pub fn bytes_len_btwn(self, len_a: usize, len_b: usize) -> Self {
-        StrValidation { bytes_len: Some(Operation::Btwn(Operand::Value(OperandValue::USize(len_a)), Operand::Value(OperandValue::USize(len_b)))), ..self }
+        StrValidation {
+            bytes_len: Some(Operation::Btwn(Operand::Value(OperandValue::USize(len_a)), Operand::Value(OperandValue::USize(len_b)))),
+            ..self
+        }
     }
 
     pub fn chars_len_eq(self, len: usize) -> Self {
@@ -115,7 +121,10 @@ impl StrValidation {
     }
 
     pub fn chars_len_btwn(self, len_a: usize, len_b: usize) -> Self {
-        StrValidation { chars_len: Some(Operation::Btwn(Operand::Value(OperandValue::USize(len_a)), Operand::Value(OperandValue::USize(len_b)))), ..self }
+        StrValidation {
+            chars_len: Some(Operation::Btwn(Operand::Value(OperandValue::USize(len_a)), Operand::Value(OperandValue::USize(len_b)))),
+            ..self
+        }
     }
 
     pub fn graphemes_len_eq(self, len: usize) -> Self {
@@ -143,7 +152,10 @@ impl StrValidation {
     }
 
     pub fn graphemes_len_btwn(self, len_a: usize, len_b: usize) -> Self {
-        StrValidation { graphemes_len: Some(Operation::Btwn(Operand::Value(OperandValue::USize(len_a)), Operand::Value(OperandValue::USize(len_b)))), ..self }
+        StrValidation {
+            graphemes_len: Some(Operation::Btwn(Operand::Value(OperandValue::USize(len_a)), Operand::Value(OperandValue::USize(len_b)))),
+            ..self
+        }
     }
 
     pub fn lowercase_len_eq(self, len: usize) -> Self {
@@ -171,7 +183,10 @@ impl StrValidation {
     }
 
     pub fn lowercase_len_btwn(self, len_a: usize, len_b: usize) -> Self {
-        StrValidation { lowercase_len: Some(Operation::Btwn(Operand::Value(OperandValue::USize(len_a)), Operand::Value(OperandValue::USize(len_b)))), ..self }
+        StrValidation {
+            lowercase_len: Some(Operation::Btwn(Operand::Value(OperandValue::USize(len_a)), Operand::Value(OperandValue::USize(len_b)))),
+            ..self
+        }
     }
 
     pub fn uppercase_len_eq(self, len: usize) -> Self {
@@ -199,7 +214,10 @@ impl StrValidation {
     }
 
     pub fn uppercase_len_btwn(self, len_a: usize, len_b: usize) -> Self {
-        StrValidation { uppercase_len: Some(Operation::Btwn(Operand::Value(OperandValue::USize(len_a)), Operand::Value(OperandValue::USize(len_b)))), ..self }
+        StrValidation {
+            uppercase_len: Some(Operation::Btwn(Operand::Value(OperandValue::USize(len_a)), Operand::Value(OperandValue::USize(len_b)))),
+            ..self
+        }
     }
 
     pub fn numbers_len_eq(self, len: usize) -> Self {
@@ -227,7 +245,10 @@ impl StrValidation {
     }
 
     pub fn numbers_len_btwn(self, len_a: usize, len_b: usize) -> Self {
-        StrValidation { numbers_len: Some(Operation::Btwn(Operand::Value(OperandValue::USize(len_a)), Operand::Value(OperandValue::USize(len_b)))), ..self }
+        StrValidation {
+            numbers_len: Some(Operation::Btwn(Operand::Value(OperandValue::USize(len_a)), Operand::Value(OperandValue::USize(len_b)))),
+            ..self
+        }
     }
 
     pub fn symbols_len_eq(self, len: usize) -> Self {
@@ -255,7 +276,10 @@ impl StrValidation {
     }
 
     pub fn symbols_len_btwn(self, len_a: usize, len_b: usize) -> Self {
-        StrValidation { symbols_len: Some(Operation::Btwn(Operand::Value(OperandValue::USize(len_a)), Operand::Value(OperandValue::USize(len_b)))), ..self }
+        StrValidation {
+            symbols_len: Some(Operation::Btwn(Operand::Value(OperandValue::USize(len_a)), Operand::Value(OperandValue::USize(len_b)))),
+            ..self
+        }
     }
 
     pub fn eq_field(self, field: String) -> Self {
@@ -506,118 +530,513 @@ mod test {
             }
         );
         assert_eq!(StrValidation::default().optional(), StrValidation { required: false, ..Default::default() });
-        assert_eq!(StrValidation::default().eq(String::from("Avalon")), StrValidation { operation: Some(Operation::Eq(Operand::Value(OperandValue::Str(String::from("Avalon"))))), ..Default::default() });
-        assert_eq!(StrValidation::default().ne(String::from("Avalon")), StrValidation { operation: Some(Operation::Ne(Operand::Value(OperandValue::Str(String::from("Avalon"))))), ..Default::default() });
-        assert_eq!(StrValidation::default().gt(String::from("Avalon")), StrValidation { operation: Some(Operation::Gt(Operand::Value(OperandValue::Str(String::from("Avalon"))))), ..Default::default() });
-        assert_eq!(StrValidation::default().ge(String::from("Avalon")), StrValidation { operation: Some(Operation::Ge(Operand::Value(OperandValue::Str(String::from("Avalon"))))), ..Default::default() });
-        assert_eq!(StrValidation::default().lt(String::from("Avalon")), StrValidation { operation: Some(Operation::Lt(Operand::Value(OperandValue::Str(String::from("Avalon"))))), ..Default::default() });
-        assert_eq!(StrValidation::default().le(String::from("Avalon")), StrValidation { operation: Some(Operation::Le(Operand::Value(OperandValue::Str(String::from("Avalon"))))), ..Default::default() });
-        assert_eq!(StrValidation::default().btwn(String::from("Avalon"), String::from("Mu")), StrValidation { operation: Some(Operation::Btwn(Operand::Value(OperandValue::Str(String::from("Avalon"))), Operand::Value(OperandValue::Str(String::from("Mu"))))), ..Default::default() });
-        assert_eq!(StrValidation::default().bytes_len_eq(11), StrValidation { bytes_len: Some(Operation::Eq(Operand::Value(OperandValue::USize(11)))), ..Default::default() });
-        assert_eq!(StrValidation::default().bytes_len_ne(12), StrValidation { bytes_len: Some(Operation::Ne(Operand::Value(OperandValue::USize(12)))), ..Default::default() });
-        assert_eq!(StrValidation::default().bytes_len_gt(13), StrValidation { bytes_len: Some(Operation::Gt(Operand::Value(OperandValue::USize(13)))), ..Default::default() });
-        assert_eq!(StrValidation::default().bytes_len_ge(14), StrValidation { bytes_len: Some(Operation::Ge(Operand::Value(OperandValue::USize(14)))), ..Default::default() });
-        assert_eq!(StrValidation::default().bytes_len_lt(15), StrValidation { bytes_len: Some(Operation::Lt(Operand::Value(OperandValue::USize(15)))), ..Default::default() });
-        assert_eq!(StrValidation::default().bytes_len_le(16), StrValidation { bytes_len: Some(Operation::Le(Operand::Value(OperandValue::USize(16)))), ..Default::default() });
-        assert_eq!(StrValidation::default().bytes_len_btwn(17, 18), StrValidation { bytes_len: Some(Operation::Btwn(Operand::Value(OperandValue::USize(17)), Operand::Value(OperandValue::USize(18)))), ..Default::default() });
-        assert_eq!(StrValidation::default().chars_len_eq(21), StrValidation { chars_len: Some(Operation::Eq(Operand::Value(OperandValue::USize(21)))), ..Default::default() });
-        assert_eq!(StrValidation::default().chars_len_ne(22), StrValidation { chars_len: Some(Operation::Ne(Operand::Value(OperandValue::USize(22)))), ..Default::default() });
-        assert_eq!(StrValidation::default().chars_len_gt(23), StrValidation { chars_len: Some(Operation::Gt(Operand::Value(OperandValue::USize(23)))), ..Default::default() });
-        assert_eq!(StrValidation::default().chars_len_ge(24), StrValidation { chars_len: Some(Operation::Ge(Operand::Value(OperandValue::USize(24)))), ..Default::default() });
-        assert_eq!(StrValidation::default().chars_len_lt(25), StrValidation { chars_len: Some(Operation::Lt(Operand::Value(OperandValue::USize(25)))), ..Default::default() });
-        assert_eq!(StrValidation::default().chars_len_le(26), StrValidation { chars_len: Some(Operation::Le(Operand::Value(OperandValue::USize(26)))), ..Default::default() });
-        assert_eq!(StrValidation::default().chars_len_btwn(27, 28), StrValidation { chars_len: Some(Operation::Btwn(Operand::Value(OperandValue::USize(27)), Operand::Value(OperandValue::USize(28)))), ..Default::default() });
-        assert_eq!(StrValidation::default().graphemes_len_eq(31), StrValidation { graphemes_len: Some(Operation::Eq(Operand::Value(OperandValue::USize(31)))), ..Default::default() });
-        assert_eq!(StrValidation::default().graphemes_len_ne(32), StrValidation { graphemes_len: Some(Operation::Ne(Operand::Value(OperandValue::USize(32)))), ..Default::default() });
-        assert_eq!(StrValidation::default().graphemes_len_gt(33), StrValidation { graphemes_len: Some(Operation::Gt(Operand::Value(OperandValue::USize(33)))), ..Default::default() });
-        assert_eq!(StrValidation::default().graphemes_len_ge(34), StrValidation { graphemes_len: Some(Operation::Ge(Operand::Value(OperandValue::USize(34)))), ..Default::default() });
-        assert_eq!(StrValidation::default().graphemes_len_lt(35), StrValidation { graphemes_len: Some(Operation::Lt(Operand::Value(OperandValue::USize(35)))), ..Default::default() });
-        assert_eq!(StrValidation::default().graphemes_len_le(36), StrValidation { graphemes_len: Some(Operation::Le(Operand::Value(OperandValue::USize(36)))), ..Default::default() });
-        assert_eq!(StrValidation::default().graphemes_len_btwn(37, 38), StrValidation { graphemes_len: Some(Operation::Btwn(Operand::Value(OperandValue::USize(37)), Operand::Value(OperandValue::USize(38)))), ..Default::default() });
-        assert_eq!(StrValidation::default().lowercase_len_eq(41), StrValidation { lowercase_len: Some(Operation::Eq(Operand::Value(OperandValue::USize(41)))), ..Default::default() });
-        assert_eq!(StrValidation::default().lowercase_len_ne(42), StrValidation { lowercase_len: Some(Operation::Ne(Operand::Value(OperandValue::USize(42)))), ..Default::default() });
-        assert_eq!(StrValidation::default().lowercase_len_gt(43), StrValidation { lowercase_len: Some(Operation::Gt(Operand::Value(OperandValue::USize(43)))), ..Default::default() });
-        assert_eq!(StrValidation::default().lowercase_len_ge(44), StrValidation { lowercase_len: Some(Operation::Ge(Operand::Value(OperandValue::USize(44)))), ..Default::default() });
-        assert_eq!(StrValidation::default().lowercase_len_lt(45), StrValidation { lowercase_len: Some(Operation::Lt(Operand::Value(OperandValue::USize(45)))), ..Default::default() });
-        assert_eq!(StrValidation::default().lowercase_len_le(46), StrValidation { lowercase_len: Some(Operation::Le(Operand::Value(OperandValue::USize(46)))), ..Default::default() });
-        assert_eq!(StrValidation::default().lowercase_len_btwn(47, 48), StrValidation { lowercase_len: Some(Operation::Btwn(Operand::Value(OperandValue::USize(47)), Operand::Value(OperandValue::USize(48)))), ..Default::default() });
-        assert_eq!(StrValidation::default().uppercase_len_eq(51), StrValidation { uppercase_len: Some(Operation::Eq(Operand::Value(OperandValue::USize(51)))), ..Default::default() });
-        assert_eq!(StrValidation::default().uppercase_len_ne(52), StrValidation { uppercase_len: Some(Operation::Ne(Operand::Value(OperandValue::USize(52)))), ..Default::default() });
-        assert_eq!(StrValidation::default().uppercase_len_gt(53), StrValidation { uppercase_len: Some(Operation::Gt(Operand::Value(OperandValue::USize(53)))), ..Default::default() });
-        assert_eq!(StrValidation::default().uppercase_len_ge(54), StrValidation { uppercase_len: Some(Operation::Ge(Operand::Value(OperandValue::USize(54)))), ..Default::default() });
-        assert_eq!(StrValidation::default().uppercase_len_lt(55), StrValidation { uppercase_len: Some(Operation::Lt(Operand::Value(OperandValue::USize(55)))), ..Default::default() });
-        assert_eq!(StrValidation::default().uppercase_len_le(56), StrValidation { uppercase_len: Some(Operation::Le(Operand::Value(OperandValue::USize(56)))), ..Default::default() });
-        assert_eq!(StrValidation::default().uppercase_len_btwn(57, 58), StrValidation { uppercase_len: Some(Operation::Btwn(Operand::Value(OperandValue::USize(57)), Operand::Value(OperandValue::USize(58)))), ..Default::default() });
-        assert_eq!(StrValidation::default().numbers_len_eq(61), StrValidation { numbers_len: Some(Operation::Eq(Operand::Value(OperandValue::USize(61)))), ..Default::default() });
-        assert_eq!(StrValidation::default().numbers_len_ne(62), StrValidation { numbers_len: Some(Operation::Ne(Operand::Value(OperandValue::USize(62)))), ..Default::default() });
-        assert_eq!(StrValidation::default().numbers_len_gt(63), StrValidation { numbers_len: Some(Operation::Gt(Operand::Value(OperandValue::USize(63)))), ..Default::default() });
-        assert_eq!(StrValidation::default().numbers_len_ge(64), StrValidation { numbers_len: Some(Operation::Ge(Operand::Value(OperandValue::USize(64)))), ..Default::default() });
-        assert_eq!(StrValidation::default().numbers_len_lt(65), StrValidation { numbers_len: Some(Operation::Lt(Operand::Value(OperandValue::USize(65)))), ..Default::default() });
-        assert_eq!(StrValidation::default().numbers_len_le(66), StrValidation { numbers_len: Some(Operation::Le(Operand::Value(OperandValue::USize(66)))), ..Default::default() });
-        assert_eq!(StrValidation::default().numbers_len_btwn(67, 68), StrValidation { numbers_len: Some(Operation::Btwn(Operand::Value(OperandValue::USize(67)), Operand::Value(OperandValue::USize(68)))), ..Default::default() });
-        assert_eq!(StrValidation::default().symbols_len_eq(71), StrValidation { symbols_len: Some(Operation::Eq(Operand::Value(OperandValue::USize(71)))), ..Default::default() });
-        assert_eq!(StrValidation::default().symbols_len_ne(72), StrValidation { symbols_len: Some(Operation::Ne(Operand::Value(OperandValue::USize(72)))), ..Default::default() });
-        assert_eq!(StrValidation::default().symbols_len_gt(73), StrValidation { symbols_len: Some(Operation::Gt(Operand::Value(OperandValue::USize(73)))), ..Default::default() });
-        assert_eq!(StrValidation::default().symbols_len_ge(74), StrValidation { symbols_len: Some(Operation::Ge(Operand::Value(OperandValue::USize(74)))), ..Default::default() });
-        assert_eq!(StrValidation::default().symbols_len_lt(75), StrValidation { symbols_len: Some(Operation::Lt(Operand::Value(OperandValue::USize(75)))), ..Default::default() });
-        assert_eq!(StrValidation::default().symbols_len_le(76), StrValidation { symbols_len: Some(Operation::Le(Operand::Value(OperandValue::USize(76)))), ..Default::default() });
-        assert_eq!(StrValidation::default().symbols_len_btwn(77, 78), StrValidation { symbols_len: Some(Operation::Btwn(Operand::Value(OperandValue::USize(77)), Operand::Value(OperandValue::USize(78)))), ..Default::default() });
-
-        assert_eq!(StrValidation::default().eq_field(String::from("foo.bar.baz")), StrValidation { operation: Some(Operation::Eq(Operand::FieldPath(String::from("foo.bar.baz")))), ..Default::default() });
-        assert_eq!(StrValidation::default().ne_field(String::from("foo.bar.baz")), StrValidation { operation: Some(Operation::Ne(Operand::FieldPath(String::from("foo.bar.baz")))), ..Default::default() });
-        assert_eq!(StrValidation::default().gt_field(String::from("foo.bar.baz")), StrValidation { operation: Some(Operation::Gt(Operand::FieldPath(String::from("foo.bar.baz")))), ..Default::default() });
-        assert_eq!(StrValidation::default().ge_field(String::from("foo.bar.baz")), StrValidation { operation: Some(Operation::Ge(Operand::FieldPath(String::from("foo.bar.baz")))), ..Default::default() });
-        assert_eq!(StrValidation::default().lt_field(String::from("foo.bar.baz")), StrValidation { operation: Some(Operation::Lt(Operand::FieldPath(String::from("foo.bar.baz")))), ..Default::default() });
-        assert_eq!(StrValidation::default().le_field(String::from("foo.bar.baz")), StrValidation { operation: Some(Operation::Le(Operand::FieldPath(String::from("foo.bar.baz")))), ..Default::default() });
-        assert_eq!(StrValidation::default().btwn_field(String::from("foo.bar.baz"), String::from("baz.bar.foo")), StrValidation { operation: Some(Operation::Btwn(Operand::FieldPath(String::from("Avalon")), Operand::FieldPath(String::from("baz.bar.foo")))), ..Default::default() });
-        assert_eq!(StrValidation::default().bytes_len_eq_field(String::from("foo.bar.baz")), StrValidation { bytes_len: Some(Operation::Eq(Operand::FieldPath(String::from("foo.bar.baz")))), ..Default::default() });
-        assert_eq!(StrValidation::default().bytes_len_ne_field(String::from("foo.bar.baz")), StrValidation { bytes_len: Some(Operation::Ne(Operand::FieldPath(String::from("foo.bar.baz")))), ..Default::default() });
-        assert_eq!(StrValidation::default().bytes_len_gt_field(String::from("foo.bar.baz")), StrValidation { bytes_len: Some(Operation::Gt(Operand::FieldPath(String::from("foo.bar.baz")))), ..Default::default() });
-        assert_eq!(StrValidation::default().bytes_len_ge_field(String::from("foo.bar.baz")), StrValidation { bytes_len: Some(Operation::Ge(Operand::FieldPath(String::from("foo.bar.baz")))), ..Default::default() });
-        assert_eq!(StrValidation::default().bytes_len_lt_field(String::from("foo.bar.baz")), StrValidation { bytes_len: Some(Operation::Lt(Operand::FieldPath(String::from("foo.bar.baz")))), ..Default::default() });
-        assert_eq!(StrValidation::default().bytes_len_le_field(String::from("foo.bar.baz")), StrValidation { bytes_len: Some(Operation::Le(Operand::FieldPath(String::from("foo.bar.baz")))), ..Default::default() });
-        assert_eq!(StrValidation::default().bytes_len_btwn_field(String::from("foo.bar.baz"), String::from("baz.bar.foo")), StrValidation { bytes_len: Some(Operation::Btwn(Operand::FieldPath(String::from("foo.bar.baz")), Operand::FieldPath(String::from("baz.bar.foo")))), ..Default::default() });
-        assert_eq!(StrValidation::default().chars_len_eq_field(String::from("foo.bar.baz")), StrValidation { chars_len: Some(Operation::Eq(Operand::FieldPath(String::from("foo.bar.baz")))), ..Default::default() });
-        assert_eq!(StrValidation::default().chars_len_ne_field(String::from("foo.bar.baz")), StrValidation { chars_len: Some(Operation::Ne(Operand::FieldPath(String::from("foo.bar.baz")))), ..Default::default() });
-        assert_eq!(StrValidation::default().chars_len_gt_field(String::from("foo.bar.baz")), StrValidation { chars_len: Some(Operation::Gt(Operand::FieldPath(String::from("foo.bar.baz")))), ..Default::default() });
-        assert_eq!(StrValidation::default().chars_len_ge_field(String::from("foo.bar.baz")), StrValidation { chars_len: Some(Operation::Ge(Operand::FieldPath(String::from("foo.bar.baz")))), ..Default::default() });
-        assert_eq!(StrValidation::default().chars_len_lt_field(String::from("foo.bar.baz")), StrValidation { chars_len: Some(Operation::Lt(Operand::FieldPath(String::from("foo.bar.baz")))), ..Default::default() });
-        assert_eq!(StrValidation::default().chars_len_le_field(String::from("foo.bar.baz")), StrValidation { chars_len: Some(Operation::Le(Operand::FieldPath(String::from("foo.bar.baz")))), ..Default::default() });
-        assert_eq!(StrValidation::default().chars_len_btwn_field(String::from("foo.bar.baz"), String::from("baz.bar.foo")), StrValidation { chars_len: Some(Operation::Btwn(Operand::FieldPath(String::from("foo.bar.baz")), Operand::FieldPath(String::from("baz.bar.foo")))), ..Default::default() });
-        assert_eq!(StrValidation::default().graphemes_len_eq_field(String::from("foo.bar.baz")), StrValidation { graphemes_len: Some(Operation::Eq(Operand::FieldPath(String::from("foo.bar.baz")))), ..Default::default() });
-        assert_eq!(StrValidation::default().graphemes_len_ne_field(String::from("foo.bar.baz")), StrValidation { graphemes_len: Some(Operation::Ne(Operand::FieldPath(String::from("foo.bar.baz")))), ..Default::default() });
-        assert_eq!(StrValidation::default().graphemes_len_gt_field(String::from("foo.bar.baz")), StrValidation { graphemes_len: Some(Operation::Gt(Operand::FieldPath(String::from("foo.bar.baz")))), ..Default::default() });
-        assert_eq!(StrValidation::default().graphemes_len_ge_field(String::from("foo.bar.baz")), StrValidation { graphemes_len: Some(Operation::Ge(Operand::FieldPath(String::from("foo.bar.baz")))), ..Default::default() });
-        assert_eq!(StrValidation::default().graphemes_len_lt_field(String::from("foo.bar.baz")), StrValidation { graphemes_len: Some(Operation::Lt(Operand::FieldPath(String::from("foo.bar.baz")))), ..Default::default() });
-        assert_eq!(StrValidation::default().graphemes_len_le_field(String::from("foo.bar.baz")), StrValidation { graphemes_len: Some(Operation::Le(Operand::FieldPath(String::from("foo.bar.baz")))), ..Default::default() });
-        assert_eq!(StrValidation::default().graphemes_len_btwn_field(String::from("foo.bar.baz"), String::from("baz.bar.foo")), StrValidation { graphemes_len: Some(Operation::Btwn(Operand::FieldPath(String::from("foo.bar.baz")), Operand::FieldPath(String::from("baz.bar.foo")))), ..Default::default() });
-        assert_eq!(StrValidation::default().lowercase_len_eq_field(String::from("foo.bar.baz")), StrValidation { lowercase_len: Some(Operation::Eq(Operand::FieldPath(String::from("foo.bar.baz")))), ..Default::default() });
-        assert_eq!(StrValidation::default().lowercase_len_ne_field(String::from("foo.bar.baz")), StrValidation { lowercase_len: Some(Operation::Ne(Operand::FieldPath(String::from("foo.bar.baz")))), ..Default::default() });
-        assert_eq!(StrValidation::default().lowercase_len_gt_field(String::from("foo.bar.baz")), StrValidation { lowercase_len: Some(Operation::Gt(Operand::FieldPath(String::from("foo.bar.baz")))), ..Default::default() });
-        assert_eq!(StrValidation::default().lowercase_len_ge_field(String::from("foo.bar.baz")), StrValidation { lowercase_len: Some(Operation::Ge(Operand::FieldPath(String::from("foo.bar.baz")))), ..Default::default() });
-        assert_eq!(StrValidation::default().lowercase_len_lt_field(String::from("foo.bar.baz")), StrValidation { lowercase_len: Some(Operation::Lt(Operand::FieldPath(String::from("foo.bar.baz")))), ..Default::default() });
-        assert_eq!(StrValidation::default().lowercase_len_le_field(String::from("foo.bar.baz")), StrValidation { lowercase_len: Some(Operation::Le(Operand::FieldPath(String::from("foo.bar.baz")))), ..Default::default() });
-        assert_eq!(StrValidation::default().lowercase_len_btwn_field(String::from("foo.bar.baz"), String::from("baz.bar.foo")), StrValidation { lowercase_len: Some(Operation::Btwn(Operand::FieldPath(String::from("foo.bar.baz")), Operand::FieldPath(String::from("baz.bar.foo")))), ..Default::default() });
-        assert_eq!(StrValidation::default().uppercase_len_eq_field(String::from("foo.bar.baz")), StrValidation { uppercase_len: Some(Operation::Eq(Operand::FieldPath(String::from("foo.bar.baz")))), ..Default::default() });
-        assert_eq!(StrValidation::default().uppercase_len_ne_field(String::from("foo.bar.baz")), StrValidation { uppercase_len: Some(Operation::Ne(Operand::FieldPath(String::from("foo.bar.baz")))), ..Default::default() });
-        assert_eq!(StrValidation::default().uppercase_len_gt_field(String::from("foo.bar.baz")), StrValidation { uppercase_len: Some(Operation::Gt(Operand::FieldPath(String::from("foo.bar.baz")))), ..Default::default() });
-        assert_eq!(StrValidation::default().uppercase_len_ge_field(String::from("foo.bar.baz")), StrValidation { uppercase_len: Some(Operation::Ge(Operand::FieldPath(String::from("foo.bar.baz")))), ..Default::default() });
-        assert_eq!(StrValidation::default().uppercase_len_lt_field(String::from("foo.bar.baz")), StrValidation { uppercase_len: Some(Operation::Lt(Operand::FieldPath(String::from("foo.bar.baz")))), ..Default::default() });
-        assert_eq!(StrValidation::default().uppercase_len_le_field(String::from("foo.bar.baz")), StrValidation { uppercase_len: Some(Operation::Le(Operand::FieldPath(String::from("foo.bar.baz")))), ..Default::default() });
-        assert_eq!(StrValidation::default().uppercase_len_btwn_field(String::from("foo.bar.baz"), String::from("baz.bar.foo")), StrValidation { uppercase_len: Some(Operation::Btwn(Operand::FieldPath(String::from("foo.bar.baz")), Operand::FieldPath(String::from("baz.bar.foo")))), ..Default::default() });
-        assert_eq!(StrValidation::default().numbers_len_eq_field(String::from("foo.bar.baz")), StrValidation { numbers_len: Some(Operation::Eq(Operand::FieldPath(String::from("foo.bar.baz")))), ..Default::default() });
-        assert_eq!(StrValidation::default().numbers_len_ne_field(String::from("foo.bar.baz")), StrValidation { numbers_len: Some(Operation::Ne(Operand::FieldPath(String::from("foo.bar.baz")))), ..Default::default() });
-        assert_eq!(StrValidation::default().numbers_len_gt_field(String::from("foo.bar.baz")), StrValidation { numbers_len: Some(Operation::Gt(Operand::FieldPath(String::from("foo.bar.baz")))), ..Default::default() });
-        assert_eq!(StrValidation::default().numbers_len_ge_field(String::from("foo.bar.baz")), StrValidation { numbers_len: Some(Operation::Ge(Operand::FieldPath(String::from("foo.bar.baz")))), ..Default::default() });
-        assert_eq!(StrValidation::default().numbers_len_lt_field(String::from("foo.bar.baz")), StrValidation { numbers_len: Some(Operation::Lt(Operand::FieldPath(String::from("foo.bar.baz")))), ..Default::default() });
-        assert_eq!(StrValidation::default().numbers_len_le_field(String::from("foo.bar.baz")), StrValidation { numbers_len: Some(Operation::Le(Operand::FieldPath(String::from("foo.bar.baz")))), ..Default::default() });
-        assert_eq!(StrValidation::default().numbers_len_btwn_field(String::from("foo.bar.baz"), String::from("baz.bar.foo")), StrValidation { numbers_len: Some(Operation::Btwn(Operand::FieldPath(String::from("foo.bar.baz")), Operand::FieldPath(String::from("baz.bar.foo")))), ..Default::default() });
-        assert_eq!(StrValidation::default().symbols_len_eq_field(String::from("foo.bar.baz")), StrValidation { symbols_len: Some(Operation::Eq(Operand::FieldPath(String::from("foo.bar.baz")))), ..Default::default() });
-        assert_eq!(StrValidation::default().symbols_len_ne_field(String::from("foo.bar.baz")), StrValidation { symbols_len: Some(Operation::Ne(Operand::FieldPath(String::from("foo.bar.baz")))), ..Default::default() });
-        assert_eq!(StrValidation::default().symbols_len_gt_field(String::from("foo.bar.baz")), StrValidation { symbols_len: Some(Operation::Gt(Operand::FieldPath(String::from("foo.bar.baz")))), ..Default::default() });
-        assert_eq!(StrValidation::default().symbols_len_ge_field(String::from("foo.bar.baz")), StrValidation { symbols_len: Some(Operation::Ge(Operand::FieldPath(String::from("foo.bar.baz")))), ..Default::default() });
-        assert_eq!(StrValidation::default().symbols_len_lt_field(String::from("foo.bar.baz")), StrValidation { symbols_len: Some(Operation::Lt(Operand::FieldPath(String::from("foo.bar.baz")))), ..Default::default() });
-        assert_eq!(StrValidation::default().symbols_len_le_field(String::from("foo.bar.baz")), StrValidation { symbols_len: Some(Operation::Le(Operand::FieldPath(String::from("foo.bar.baz")))), ..Default::default() });
-        assert_eq!(StrValidation::default().symbols_len_btwn_field(String::from("foo.bar.baz"), String::from("baz.bar.foo")), StrValidation { symbols_len: Some(Operation::Btwn(Operand::FieldPath(String::from("foo.bar.baz")), Operand::FieldPath(String::from("baz.bar.foo")))), ..Default::default() });
+        assert_eq!(
+            StrValidation::default().eq(String::from("Avalon")),
+            StrValidation { operation: Some(Operation::Eq(Operand::Value(OperandValue::Str(String::from("Avalon"))))), ..Default::default() }
+        );
+        assert_eq!(
+            StrValidation::default().ne(String::from("Avalon")),
+            StrValidation { operation: Some(Operation::Ne(Operand::Value(OperandValue::Str(String::from("Avalon"))))), ..Default::default() }
+        );
+        assert_eq!(
+            StrValidation::default().gt(String::from("Avalon")),
+            StrValidation { operation: Some(Operation::Gt(Operand::Value(OperandValue::Str(String::from("Avalon"))))), ..Default::default() }
+        );
+        assert_eq!(
+            StrValidation::default().ge(String::from("Avalon")),
+            StrValidation { operation: Some(Operation::Ge(Operand::Value(OperandValue::Str(String::from("Avalon"))))), ..Default::default() }
+        );
+        assert_eq!(
+            StrValidation::default().lt(String::from("Avalon")),
+            StrValidation { operation: Some(Operation::Lt(Operand::Value(OperandValue::Str(String::from("Avalon"))))), ..Default::default() }
+        );
+        assert_eq!(
+            StrValidation::default().le(String::from("Avalon")),
+            StrValidation { operation: Some(Operation::Le(Operand::Value(OperandValue::Str(String::from("Avalon"))))), ..Default::default() }
+        );
+        assert_eq!(
+            StrValidation::default().btwn(String::from("Avalon"), String::from("Mu")),
+            StrValidation {
+                operation: Some(Operation::Btwn(
+                    Operand::Value(OperandValue::Str(String::from("Avalon"))),
+                    Operand::Value(OperandValue::Str(String::from("Mu")))
+                )),
+                ..Default::default()
+            }
+        );
+        assert_eq!(
+            StrValidation::default().bytes_len_eq(11),
+            StrValidation { bytes_len: Some(Operation::Eq(Operand::Value(OperandValue::USize(11)))), ..Default::default() }
+        );
+        assert_eq!(
+            StrValidation::default().bytes_len_ne(12),
+            StrValidation { bytes_len: Some(Operation::Ne(Operand::Value(OperandValue::USize(12)))), ..Default::default() }
+        );
+        assert_eq!(
+            StrValidation::default().bytes_len_gt(13),
+            StrValidation { bytes_len: Some(Operation::Gt(Operand::Value(OperandValue::USize(13)))), ..Default::default() }
+        );
+        assert_eq!(
+            StrValidation::default().bytes_len_ge(14),
+            StrValidation { bytes_len: Some(Operation::Ge(Operand::Value(OperandValue::USize(14)))), ..Default::default() }
+        );
+        assert_eq!(
+            StrValidation::default().bytes_len_lt(15),
+            StrValidation { bytes_len: Some(Operation::Lt(Operand::Value(OperandValue::USize(15)))), ..Default::default() }
+        );
+        assert_eq!(
+            StrValidation::default().bytes_len_le(16),
+            StrValidation { bytes_len: Some(Operation::Le(Operand::Value(OperandValue::USize(16)))), ..Default::default() }
+        );
+        assert_eq!(
+            StrValidation::default().bytes_len_btwn(17, 18),
+            StrValidation {
+                bytes_len: Some(Operation::Btwn(Operand::Value(OperandValue::USize(17)), Operand::Value(OperandValue::USize(18)))),
+                ..Default::default()
+            }
+        );
+        assert_eq!(
+            StrValidation::default().chars_len_eq(21),
+            StrValidation { chars_len: Some(Operation::Eq(Operand::Value(OperandValue::USize(21)))), ..Default::default() }
+        );
+        assert_eq!(
+            StrValidation::default().chars_len_ne(22),
+            StrValidation { chars_len: Some(Operation::Ne(Operand::Value(OperandValue::USize(22)))), ..Default::default() }
+        );
+        assert_eq!(
+            StrValidation::default().chars_len_gt(23),
+            StrValidation { chars_len: Some(Operation::Gt(Operand::Value(OperandValue::USize(23)))), ..Default::default() }
+        );
+        assert_eq!(
+            StrValidation::default().chars_len_ge(24),
+            StrValidation { chars_len: Some(Operation::Ge(Operand::Value(OperandValue::USize(24)))), ..Default::default() }
+        );
+        assert_eq!(
+            StrValidation::default().chars_len_lt(25),
+            StrValidation { chars_len: Some(Operation::Lt(Operand::Value(OperandValue::USize(25)))), ..Default::default() }
+        );
+        assert_eq!(
+            StrValidation::default().chars_len_le(26),
+            StrValidation { chars_len: Some(Operation::Le(Operand::Value(OperandValue::USize(26)))), ..Default::default() }
+        );
+        assert_eq!(
+            StrValidation::default().chars_len_btwn(27, 28),
+            StrValidation {
+                chars_len: Some(Operation::Btwn(Operand::Value(OperandValue::USize(27)), Operand::Value(OperandValue::USize(28)))),
+                ..Default::default()
+            }
+        );
+        assert_eq!(
+            StrValidation::default().graphemes_len_eq(31),
+            StrValidation { graphemes_len: Some(Operation::Eq(Operand::Value(OperandValue::USize(31)))), ..Default::default() }
+        );
+        assert_eq!(
+            StrValidation::default().graphemes_len_ne(32),
+            StrValidation { graphemes_len: Some(Operation::Ne(Operand::Value(OperandValue::USize(32)))), ..Default::default() }
+        );
+        assert_eq!(
+            StrValidation::default().graphemes_len_gt(33),
+            StrValidation { graphemes_len: Some(Operation::Gt(Operand::Value(OperandValue::USize(33)))), ..Default::default() }
+        );
+        assert_eq!(
+            StrValidation::default().graphemes_len_ge(34),
+            StrValidation { graphemes_len: Some(Operation::Ge(Operand::Value(OperandValue::USize(34)))), ..Default::default() }
+        );
+        assert_eq!(
+            StrValidation::default().graphemes_len_lt(35),
+            StrValidation { graphemes_len: Some(Operation::Lt(Operand::Value(OperandValue::USize(35)))), ..Default::default() }
+        );
+        assert_eq!(
+            StrValidation::default().graphemes_len_le(36),
+            StrValidation { graphemes_len: Some(Operation::Le(Operand::Value(OperandValue::USize(36)))), ..Default::default() }
+        );
+        assert_eq!(
+            StrValidation::default().graphemes_len_btwn(37, 38),
+            StrValidation {
+                graphemes_len: Some(Operation::Btwn(Operand::Value(OperandValue::USize(37)), Operand::Value(OperandValue::USize(38)))),
+                ..Default::default()
+            }
+        );
+        assert_eq!(
+            StrValidation::default().lowercase_len_eq(41),
+            StrValidation { lowercase_len: Some(Operation::Eq(Operand::Value(OperandValue::USize(41)))), ..Default::default() }
+        );
+        assert_eq!(
+            StrValidation::default().lowercase_len_ne(42),
+            StrValidation { lowercase_len: Some(Operation::Ne(Operand::Value(OperandValue::USize(42)))), ..Default::default() }
+        );
+        assert_eq!(
+            StrValidation::default().lowercase_len_gt(43),
+            StrValidation { lowercase_len: Some(Operation::Gt(Operand::Value(OperandValue::USize(43)))), ..Default::default() }
+        );
+        assert_eq!(
+            StrValidation::default().lowercase_len_ge(44),
+            StrValidation { lowercase_len: Some(Operation::Ge(Operand::Value(OperandValue::USize(44)))), ..Default::default() }
+        );
+        assert_eq!(
+            StrValidation::default().lowercase_len_lt(45),
+            StrValidation { lowercase_len: Some(Operation::Lt(Operand::Value(OperandValue::USize(45)))), ..Default::default() }
+        );
+        assert_eq!(
+            StrValidation::default().lowercase_len_le(46),
+            StrValidation { lowercase_len: Some(Operation::Le(Operand::Value(OperandValue::USize(46)))), ..Default::default() }
+        );
+        assert_eq!(
+            StrValidation::default().lowercase_len_btwn(47, 48),
+            StrValidation {
+                lowercase_len: Some(Operation::Btwn(Operand::Value(OperandValue::USize(47)), Operand::Value(OperandValue::USize(48)))),
+                ..Default::default()
+            }
+        );
+        assert_eq!(
+            StrValidation::default().uppercase_len_eq(51),
+            StrValidation { uppercase_len: Some(Operation::Eq(Operand::Value(OperandValue::USize(51)))), ..Default::default() }
+        );
+        assert_eq!(
+            StrValidation::default().uppercase_len_ne(52),
+            StrValidation { uppercase_len: Some(Operation::Ne(Operand::Value(OperandValue::USize(52)))), ..Default::default() }
+        );
+        assert_eq!(
+            StrValidation::default().uppercase_len_gt(53),
+            StrValidation { uppercase_len: Some(Operation::Gt(Operand::Value(OperandValue::USize(53)))), ..Default::default() }
+        );
+        assert_eq!(
+            StrValidation::default().uppercase_len_ge(54),
+            StrValidation { uppercase_len: Some(Operation::Ge(Operand::Value(OperandValue::USize(54)))), ..Default::default() }
+        );
+        assert_eq!(
+            StrValidation::default().uppercase_len_lt(55),
+            StrValidation { uppercase_len: Some(Operation::Lt(Operand::Value(OperandValue::USize(55)))), ..Default::default() }
+        );
+        assert_eq!(
+            StrValidation::default().uppercase_len_le(56),
+            StrValidation { uppercase_len: Some(Operation::Le(Operand::Value(OperandValue::USize(56)))), ..Default::default() }
+        );
+        assert_eq!(
+            StrValidation::default().uppercase_len_btwn(57, 58),
+            StrValidation {
+                uppercase_len: Some(Operation::Btwn(Operand::Value(OperandValue::USize(57)), Operand::Value(OperandValue::USize(58)))),
+                ..Default::default()
+            }
+        );
+        assert_eq!(
+            StrValidation::default().numbers_len_eq(61),
+            StrValidation { numbers_len: Some(Operation::Eq(Operand::Value(OperandValue::USize(61)))), ..Default::default() }
+        );
+        assert_eq!(
+            StrValidation::default().numbers_len_ne(62),
+            StrValidation { numbers_len: Some(Operation::Ne(Operand::Value(OperandValue::USize(62)))), ..Default::default() }
+        );
+        assert_eq!(
+            StrValidation::default().numbers_len_gt(63),
+            StrValidation { numbers_len: Some(Operation::Gt(Operand::Value(OperandValue::USize(63)))), ..Default::default() }
+        );
+        assert_eq!(
+            StrValidation::default().numbers_len_ge(64),
+            StrValidation { numbers_len: Some(Operation::Ge(Operand::Value(OperandValue::USize(64)))), ..Default::default() }
+        );
+        assert_eq!(
+            StrValidation::default().numbers_len_lt(65),
+            StrValidation { numbers_len: Some(Operation::Lt(Operand::Value(OperandValue::USize(65)))), ..Default::default() }
+        );
+        assert_eq!(
+            StrValidation::default().numbers_len_le(66),
+            StrValidation { numbers_len: Some(Operation::Le(Operand::Value(OperandValue::USize(66)))), ..Default::default() }
+        );
+        assert_eq!(
+            StrValidation::default().numbers_len_btwn(67, 68),
+            StrValidation {
+                numbers_len: Some(Operation::Btwn(Operand::Value(OperandValue::USize(67)), Operand::Value(OperandValue::USize(68)))),
+                ..Default::default()
+            }
+        );
+        assert_eq!(
+            StrValidation::default().symbols_len_eq(71),
+            StrValidation { symbols_len: Some(Operation::Eq(Operand::Value(OperandValue::USize(71)))), ..Default::default() }
+        );
+        assert_eq!(
+            StrValidation::default().symbols_len_ne(72),
+            StrValidation { symbols_len: Some(Operation::Ne(Operand::Value(OperandValue::USize(72)))), ..Default::default() }
+        );
+        assert_eq!(
+            StrValidation::default().symbols_len_gt(73),
+            StrValidation { symbols_len: Some(Operation::Gt(Operand::Value(OperandValue::USize(73)))), ..Default::default() }
+        );
+        assert_eq!(
+            StrValidation::default().symbols_len_ge(74),
+            StrValidation { symbols_len: Some(Operation::Ge(Operand::Value(OperandValue::USize(74)))), ..Default::default() }
+        );
+        assert_eq!(
+            StrValidation::default().symbols_len_lt(75),
+            StrValidation { symbols_len: Some(Operation::Lt(Operand::Value(OperandValue::USize(75)))), ..Default::default() }
+        );
+        assert_eq!(
+            StrValidation::default().symbols_len_le(76),
+            StrValidation { symbols_len: Some(Operation::Le(Operand::Value(OperandValue::USize(76)))), ..Default::default() }
+        );
+        assert_eq!(
+            StrValidation::default().symbols_len_btwn(77, 78),
+            StrValidation {
+                symbols_len: Some(Operation::Btwn(Operand::Value(OperandValue::USize(77)), Operand::Value(OperandValue::USize(78)))),
+                ..Default::default()
+            }
+        );
+        assert_eq!(
+            StrValidation::default().eq_field(String::from("foo.bar.baz")),
+            StrValidation { operation: Some(Operation::Eq(Operand::FieldPath(String::from("foo.bar.baz")))), ..Default::default() }
+        );
+        assert_eq!(
+            StrValidation::default().ne_field(String::from("foo.bar.baz")),
+            StrValidation { operation: Some(Operation::Ne(Operand::FieldPath(String::from("foo.bar.baz")))), ..Default::default() }
+        );
+        assert_eq!(
+            StrValidation::default().gt_field(String::from("foo.bar.baz")),
+            StrValidation { operation: Some(Operation::Gt(Operand::FieldPath(String::from("foo.bar.baz")))), ..Default::default() }
+        );
+        assert_eq!(
+            StrValidation::default().ge_field(String::from("foo.bar.baz")),
+            StrValidation { operation: Some(Operation::Ge(Operand::FieldPath(String::from("foo.bar.baz")))), ..Default::default() }
+        );
+        assert_eq!(
+            StrValidation::default().lt_field(String::from("foo.bar.baz")),
+            StrValidation { operation: Some(Operation::Lt(Operand::FieldPath(String::from("foo.bar.baz")))), ..Default::default() }
+        );
+        assert_eq!(
+            StrValidation::default().le_field(String::from("foo.bar.baz")),
+            StrValidation { operation: Some(Operation::Le(Operand::FieldPath(String::from("foo.bar.baz")))), ..Default::default() }
+        );
+        assert_eq!(
+            StrValidation::default().btwn_field(String::from("foo.bar.baz"), String::from("baz.bar.foo")),
+            StrValidation {
+                operation: Some(Operation::Btwn(Operand::FieldPath(String::from("foo.bar.baz")), Operand::FieldPath(String::from("baz.bar.foo")))),
+                ..Default::default()
+            }
+        );
+        assert_eq!(
+            StrValidation::default().bytes_len_eq_field(String::from("foo.bar.baz")),
+            StrValidation { bytes_len: Some(Operation::Eq(Operand::FieldPath(String::from("foo.bar.baz")))), ..Default::default() }
+        );
+        assert_eq!(
+            StrValidation::default().bytes_len_ne_field(String::from("foo.bar.baz")),
+            StrValidation { bytes_len: Some(Operation::Ne(Operand::FieldPath(String::from("foo.bar.baz")))), ..Default::default() }
+        );
+        assert_eq!(
+            StrValidation::default().bytes_len_gt_field(String::from("foo.bar.baz")),
+            StrValidation { bytes_len: Some(Operation::Gt(Operand::FieldPath(String::from("foo.bar.baz")))), ..Default::default() }
+        );
+        assert_eq!(
+            StrValidation::default().bytes_len_ge_field(String::from("foo.bar.baz")),
+            StrValidation { bytes_len: Some(Operation::Ge(Operand::FieldPath(String::from("foo.bar.baz")))), ..Default::default() }
+        );
+        assert_eq!(
+            StrValidation::default().bytes_len_lt_field(String::from("foo.bar.baz")),
+            StrValidation { bytes_len: Some(Operation::Lt(Operand::FieldPath(String::from("foo.bar.baz")))), ..Default::default() }
+        );
+        assert_eq!(
+            StrValidation::default().bytes_len_le_field(String::from("foo.bar.baz")),
+            StrValidation { bytes_len: Some(Operation::Le(Operand::FieldPath(String::from("foo.bar.baz")))), ..Default::default() }
+        );
+        assert_eq!(
+            StrValidation::default().bytes_len_btwn_field(String::from("foo.bar.baz"), String::from("baz.bar.foo")),
+            StrValidation {
+                bytes_len: Some(Operation::Btwn(Operand::FieldPath(String::from("foo.bar.baz")), Operand::FieldPath(String::from("baz.bar.foo")))),
+                ..Default::default()
+            }
+        );
+        assert_eq!(
+            StrValidation::default().chars_len_eq_field(String::from("foo.bar.baz")),
+            StrValidation { chars_len: Some(Operation::Eq(Operand::FieldPath(String::from("foo.bar.baz")))), ..Default::default() }
+        );
+        assert_eq!(
+            StrValidation::default().chars_len_ne_field(String::from("foo.bar.baz")),
+            StrValidation { chars_len: Some(Operation::Ne(Operand::FieldPath(String::from("foo.bar.baz")))), ..Default::default() }
+        );
+        assert_eq!(
+            StrValidation::default().chars_len_gt_field(String::from("foo.bar.baz")),
+            StrValidation { chars_len: Some(Operation::Gt(Operand::FieldPath(String::from("foo.bar.baz")))), ..Default::default() }
+        );
+        assert_eq!(
+            StrValidation::default().chars_len_ge_field(String::from("foo.bar.baz")),
+            StrValidation { chars_len: Some(Operation::Ge(Operand::FieldPath(String::from("foo.bar.baz")))), ..Default::default() }
+        );
+        assert_eq!(
+            StrValidation::default().chars_len_lt_field(String::from("foo.bar.baz")),
+            StrValidation { chars_len: Some(Operation::Lt(Operand::FieldPath(String::from("foo.bar.baz")))), ..Default::default() }
+        );
+        assert_eq!(
+            StrValidation::default().chars_len_le_field(String::from("foo.bar.baz")),
+            StrValidation { chars_len: Some(Operation::Le(Operand::FieldPath(String::from("foo.bar.baz")))), ..Default::default() }
+        );
+        assert_eq!(
+            StrValidation::default().chars_len_btwn_field(String::from("foo.bar.baz"), String::from("baz.bar.foo")),
+            StrValidation {
+                chars_len: Some(Operation::Btwn(Operand::FieldPath(String::from("foo.bar.baz")), Operand::FieldPath(String::from("baz.bar.foo")))),
+                ..Default::default()
+            }
+        );
+        assert_eq!(
+            StrValidation::default().graphemes_len_eq_field(String::from("foo.bar.baz")),
+            StrValidation { graphemes_len: Some(Operation::Eq(Operand::FieldPath(String::from("foo.bar.baz")))), ..Default::default() }
+        );
+        assert_eq!(
+            StrValidation::default().graphemes_len_ne_field(String::from("foo.bar.baz")),
+            StrValidation { graphemes_len: Some(Operation::Ne(Operand::FieldPath(String::from("foo.bar.baz")))), ..Default::default() }
+        );
+        assert_eq!(
+            StrValidation::default().graphemes_len_gt_field(String::from("foo.bar.baz")),
+            StrValidation { graphemes_len: Some(Operation::Gt(Operand::FieldPath(String::from("foo.bar.baz")))), ..Default::default() }
+        );
+        assert_eq!(
+            StrValidation::default().graphemes_len_ge_field(String::from("foo.bar.baz")),
+            StrValidation { graphemes_len: Some(Operation::Ge(Operand::FieldPath(String::from("foo.bar.baz")))), ..Default::default() }
+        );
+        assert_eq!(
+            StrValidation::default().graphemes_len_lt_field(String::from("foo.bar.baz")),
+            StrValidation { graphemes_len: Some(Operation::Lt(Operand::FieldPath(String::from("foo.bar.baz")))), ..Default::default() }
+        );
+        assert_eq!(
+            StrValidation::default().graphemes_len_le_field(String::from("foo.bar.baz")),
+            StrValidation { graphemes_len: Some(Operation::Le(Operand::FieldPath(String::from("foo.bar.baz")))), ..Default::default() }
+        );
+        assert_eq!(
+            StrValidation::default().graphemes_len_btwn_field(String::from("foo.bar.baz"), String::from("baz.bar.foo")),
+            StrValidation {
+                graphemes_len: Some(Operation::Btwn(
+                    Operand::FieldPath(String::from("foo.bar.baz")),
+                    Operand::FieldPath(String::from("baz.bar.foo"))
+                )),
+                ..Default::default()
+            }
+        );
+        assert_eq!(
+            StrValidation::default().lowercase_len_eq_field(String::from("foo.bar.baz")),
+            StrValidation { lowercase_len: Some(Operation::Eq(Operand::FieldPath(String::from("foo.bar.baz")))), ..Default::default() }
+        );
+        assert_eq!(
+            StrValidation::default().lowercase_len_ne_field(String::from("foo.bar.baz")),
+            StrValidation { lowercase_len: Some(Operation::Ne(Operand::FieldPath(String::from("foo.bar.baz")))), ..Default::default() }
+        );
+        assert_eq!(
+            StrValidation::default().lowercase_len_gt_field(String::from("foo.bar.baz")),
+            StrValidation { lowercase_len: Some(Operation::Gt(Operand::FieldPath(String::from("foo.bar.baz")))), ..Default::default() }
+        );
+        assert_eq!(
+            StrValidation::default().lowercase_len_ge_field(String::from("foo.bar.baz")),
+            StrValidation { lowercase_len: Some(Operation::Ge(Operand::FieldPath(String::from("foo.bar.baz")))), ..Default::default() }
+        );
+        assert_eq!(
+            StrValidation::default().lowercase_len_lt_field(String::from("foo.bar.baz")),
+            StrValidation { lowercase_len: Some(Operation::Lt(Operand::FieldPath(String::from("foo.bar.baz")))), ..Default::default() }
+        );
+        assert_eq!(
+            StrValidation::default().lowercase_len_le_field(String::from("foo.bar.baz")),
+            StrValidation { lowercase_len: Some(Operation::Le(Operand::FieldPath(String::from("foo.bar.baz")))), ..Default::default() }
+        );
+        assert_eq!(
+            StrValidation::default().lowercase_len_btwn_field(String::from("foo.bar.baz"), String::from("baz.bar.foo")),
+            StrValidation {
+                lowercase_len: Some(Operation::Btwn(
+                    Operand::FieldPath(String::from("foo.bar.baz")),
+                    Operand::FieldPath(String::from("baz.bar.foo"))
+                )),
+                ..Default::default()
+            }
+        );
+        assert_eq!(
+            StrValidation::default().uppercase_len_eq_field(String::from("foo.bar.baz")),
+            StrValidation { uppercase_len: Some(Operation::Eq(Operand::FieldPath(String::from("foo.bar.baz")))), ..Default::default() }
+        );
+        assert_eq!(
+            StrValidation::default().uppercase_len_ne_field(String::from("foo.bar.baz")),
+            StrValidation { uppercase_len: Some(Operation::Ne(Operand::FieldPath(String::from("foo.bar.baz")))), ..Default::default() }
+        );
+        assert_eq!(
+            StrValidation::default().uppercase_len_gt_field(String::from("foo.bar.baz")),
+            StrValidation { uppercase_len: Some(Operation::Gt(Operand::FieldPath(String::from("foo.bar.baz")))), ..Default::default() }
+        );
+        assert_eq!(
+            StrValidation::default().uppercase_len_ge_field(String::from("foo.bar.baz")),
+            StrValidation { uppercase_len: Some(Operation::Ge(Operand::FieldPath(String::from("foo.bar.baz")))), ..Default::default() }
+        );
+        assert_eq!(
+            StrValidation::default().uppercase_len_lt_field(String::from("foo.bar.baz")),
+            StrValidation { uppercase_len: Some(Operation::Lt(Operand::FieldPath(String::from("foo.bar.baz")))), ..Default::default() }
+        );
+        assert_eq!(
+            StrValidation::default().uppercase_len_le_field(String::from("foo.bar.baz")),
+            StrValidation { uppercase_len: Some(Operation::Le(Operand::FieldPath(String::from("foo.bar.baz")))), ..Default::default() }
+        );
+        assert_eq!(
+            StrValidation::default().uppercase_len_btwn_field(String::from("foo.bar.baz"), String::from("baz.bar.foo")),
+            StrValidation {
+                uppercase_len: Some(Operation::Btwn(
+                    Operand::FieldPath(String::from("foo.bar.baz")),
+                    Operand::FieldPath(String::from("baz.bar.foo"))
+                )),
+                ..Default::default()
+            }
+        );
+        assert_eq!(
+            StrValidation::default().numbers_len_eq_field(String::from("foo.bar.baz")),
+            StrValidation { numbers_len: Some(Operation::Eq(Operand::FieldPath(String::from("foo.bar.baz")))), ..Default::default() }
+        );
+        assert_eq!(
+            StrValidation::default().numbers_len_ne_field(String::from("foo.bar.baz")),
+            StrValidation { numbers_len: Some(Operation::Ne(Operand::FieldPath(String::from("foo.bar.baz")))), ..Default::default() }
+        );
+        assert_eq!(
+            StrValidation::default().numbers_len_gt_field(String::from("foo.bar.baz")),
+            StrValidation { numbers_len: Some(Operation::Gt(Operand::FieldPath(String::from("foo.bar.baz")))), ..Default::default() }
+        );
+        assert_eq!(
+            StrValidation::default().numbers_len_ge_field(String::from("foo.bar.baz")),
+            StrValidation { numbers_len: Some(Operation::Ge(Operand::FieldPath(String::from("foo.bar.baz")))), ..Default::default() }
+        );
+        assert_eq!(
+            StrValidation::default().numbers_len_lt_field(String::from("foo.bar.baz")),
+            StrValidation { numbers_len: Some(Operation::Lt(Operand::FieldPath(String::from("foo.bar.baz")))), ..Default::default() }
+        );
+        assert_eq!(
+            StrValidation::default().numbers_len_le_field(String::from("foo.bar.baz")),
+            StrValidation { numbers_len: Some(Operation::Le(Operand::FieldPath(String::from("foo.bar.baz")))), ..Default::default() }
+        );
+        assert_eq!(
+            StrValidation::default().numbers_len_btwn_field(String::from("foo.bar.baz"), String::from("baz.bar.foo")),
+            StrValidation {
+                numbers_len: Some(Operation::Btwn(Operand::FieldPath(String::from("foo.bar.baz")), Operand::FieldPath(String::from("baz.bar.foo")))),
+                ..Default::default()
+            }
+        );
+        assert_eq!(
+            StrValidation::default().symbols_len_eq_field(String::from("foo.bar.baz")),
+            StrValidation { symbols_len: Some(Operation::Eq(Operand::FieldPath(String::from("foo.bar.baz")))), ..Default::default() }
+        );
+        assert_eq!(
+            StrValidation::default().symbols_len_ne_field(String::from("foo.bar.baz")),
+            StrValidation { symbols_len: Some(Operation::Ne(Operand::FieldPath(String::from("foo.bar.baz")))), ..Default::default() }
+        );
+        assert_eq!(
+            StrValidation::default().symbols_len_gt_field(String::from("foo.bar.baz")),
+            StrValidation { symbols_len: Some(Operation::Gt(Operand::FieldPath(String::from("foo.bar.baz")))), ..Default::default() }
+        );
+        assert_eq!(
+            StrValidation::default().symbols_len_ge_field(String::from("foo.bar.baz")),
+            StrValidation { symbols_len: Some(Operation::Ge(Operand::FieldPath(String::from("foo.bar.baz")))), ..Default::default() }
+        );
+        assert_eq!(
+            StrValidation::default().symbols_len_lt_field(String::from("foo.bar.baz")),
+            StrValidation { symbols_len: Some(Operation::Lt(Operand::FieldPath(String::from("foo.bar.baz")))), ..Default::default() }
+        );
+        assert_eq!(
+            StrValidation::default().symbols_len_le_field(String::from("foo.bar.baz")),
+            StrValidation { symbols_len: Some(Operation::Le(Operand::FieldPath(String::from("foo.bar.baz")))), ..Default::default() }
+        );
+        assert_eq!(
+            StrValidation::default().symbols_len_btwn_field(String::from("foo.bar.baz"), String::from("baz.bar.foo")),
+            StrValidation {
+                symbols_len: Some(Operation::Btwn(Operand::FieldPath(String::from("foo.bar.baz")), Operand::FieldPath(String::from("baz.bar.foo")))),
+                ..Default::default()
+            }
+        );
     }
 }

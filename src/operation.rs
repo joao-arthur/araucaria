@@ -8,10 +8,46 @@ pub enum OperandValue {
     Str(String),
 }
 
+impl PartialOrd for OperandValue {
+    fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
+        if let OperandValue::U64(a) = self {
+            if let OperandValue::U64(b) = other {
+                return a.partial_cmp(b);
+            }
+        }
+        if let OperandValue::I64(a) = self {
+            if let OperandValue::I64(b) = other {
+                return a.partial_cmp(b);
+            }
+        }
+        if let OperandValue::F64(a) = self {
+            if let OperandValue::F64(b) = other {
+                return a.partial_cmp(b);
+            }
+        }
+        if let OperandValue::USize(a) = self {
+            if let OperandValue::USize(b) = other {
+                return a.partial_cmp(b);
+            }
+        }
+        if let OperandValue::Bool(a) = self {
+            if let OperandValue::Bool(b) = other {
+                return a.partial_cmp(b);
+            }
+        }
+        if let OperandValue::Str(a) = self {
+            if let OperandValue::Str(b) = other {
+                return a.partial_cmp(b);
+            }
+        }
+        None
+    }
+}
+
 #[derive(Debug, PartialEq, Clone)]
 pub enum Operand {
     Value(OperandValue),
-    FieldPath(String)
+    FieldPath(String),
 }
 
 #[derive(Debug, PartialEq, Clone)]
@@ -31,599 +67,963 @@ pub enum Operation {
     Btwn(Operand, Operand),
 }
 
-fn compare(value_a: &OperandValue, operation: &Operation) -> Result<(), Operation> {
+fn compare(operation: &Operation, value_a: &OperandValue) -> Option<Result<(), Operation>> {
     match operation {
         Operation::Eq(operand) => match operand {
-            match operand {
-                Operand::Value(value_b) => {
-                    match value_b {
-                        OperandValue::U64(b) => match value_a {
-                            OperandValue::U64(a) => {
-                                if a == b {
-                                    Ok(())
-                                } else {
-                                    Err(operation.clone())
-                                }
-                            }
-                            _ => Err(operand.clone()),
-                        },
-                        OperandValue::I64(b) => match value_a {
-                            OperandValue::I64(a) => {
-                                if a == b {
-                                    Ok(())
-                                } else {
-                                    Err(operand.clone())
-                                }
-                            }
-                            _ => Err(operand.clone()),
-                        },
-                        OperandValue::F64(b) => match value_a {
-                            OperandValue::F64(a) => {
-                                if a == b {
-                                    Ok(())
-                                } else {
-                                    Err(operand.clone())
-                                }
-                            }
-                            _ => Err(operand.clone()),
-                        },
-                        OperandValue::Bool(b) => match value_a {
-                            OperandValue::Bool(a) => {
-                                if a == b {
-                                    Ok(())
-                                } else {
-                                    Err(operand.clone())
-                                }
-                            }
-                            _ => Err(operand.clone()),
-                        },
-
-                        OperandValue::Str(b) => match value_a {
-                            OperandValue::Str(a) => {
-                                if a == b {
-                                    Ok(())
-                                } else {
-                                    Err(operand.clone())
-                                }
-                            }
-                            _ => Err(operand.clone()),
-                        },
+            Operand::Value(value_b) => match value_b {
+                OperandValue::U64(b) => match value_a {
+                    OperandValue::U64(a) => {
+                        if a == b {
+                            Some(Ok(()))
+                        } else {
+                            Some(Err(operation.clone()))
+                        }
                     }
-                }
-                Operand::FieldPath(path_b) => Ok(())
-            }
-        },
-        Operation::Ne(operand) => match value_b {
-            match operand {
-                Operand::Value(value_b) => {
-                    match operand {
-                        OperandValue::Bool(b) => match value_a {
-                            OperandValue::Bool(a) => {
-                                if a != b {
-                                    Ok(())
-                                } else {
-                                    Err(operand.clone())
-                                }
-                            }
-                            _ => Err(operand.clone()),
-                        },
-                        OperandValue::U64(b) => match value_a {
-                            OperandValue::U64(a) => {
-                                if a != b {
-                                    Ok(())
-                                } else {
-                                    Err(operand.clone())
-                                }
-                            }
-                            _ => Err(operand.clone()),
-                        },
-                        OperandValue::I64(b) => match value_a {
-                            OperandValue::I64(a) => {
-                                if a != b {
-                                    Ok(())
-                                } else {
-                                    Err(operand.clone())
-                                }
-                            }
-                            _ => Err(operand.clone()),
-                        },
-                        OperandValue::F64(b) => match value_a {
-                            OperandValue::F64(a) => {
-                                if a != b {
-                                    Ok(())
-                                } else {
-                                    Err(operand.clone()))
-                                }
-                            }
-                            _ => Err(operand.clone()),
-                        },
-                        OperandValue::Str(b) => match value_a {
-                            OperandValue::Str(a) => {
-                                if a != b {
-                                    Ok(())
-                                } else {
-                                    Err(operand.clone())
-                                }
-                            }
-                            _ => Err(operand.clone()),
-                        },
+                    _ => None,
+                },
+                OperandValue::I64(b) => match value_a {
+                    OperandValue::I64(a) => {
+                        if a == b {
+                            Some(Ok(()))
+                        } else {
+                            Some(Err(operation.clone()))
+                        }
                     }
-                }
-                Operand::FieldPath(path_b) => Ok(()) 
-            }
-          
-        },
-        Operation::Gt(operand) => match value_b {
-            match operand {
-                Operand::Value(value_b) => {
-                    match operand {
-                        OperandValue::U64(b) => match value_a {
-                            OperandValue::U64(a) => {
-                                if a > b {
-                                    Ok(())
-                                } else {
-                                    Err(operand.clone()))
-                                }
-                            }
-                            _ => Err(operand.clone()),
-                        },
-                        OperandValue::I64(b) => match value_a {
-                            OperandValue::I64(a) => {
-                                if a > b {
-                                    Ok(())
-                                } else {
-                                    Err(operand.clone())
-                                }
-                            }
-                            _ => Err(operand.clone()),
-                        },
-                        OperandValue::F64(b) => match value_a {
-                            OperandValue::F64(a) => {
-                                if a > b {
-                                    Ok(())
-                                } else {
-                                    Err(operand.clone())
-                                }
-                            }
-                            _ => Err(operand.clone()),
-                        },
+                    _ => None,
+                },
+                OperandValue::F64(b) => match value_a {
+                    OperandValue::F64(a) => {
+                        if a == b {
+                            Some(Ok(()))
+                        } else {
+                            Some(Err(operation.clone()))
+                        }
                     }
-                }
-                Operand::FieldPath(path_b) => Ok(())
-            }
-           
-        },
-        Operation::Lt(operand) => match value_b {
-            match operand {
-                Operand::Value(value_b) => {
-                    OperandValue::U64(b) => match value_a {
-                        OperandValue::U64(a) => {
-                            if a < b {
-                                Ok(())
-                            } else {
-                                Err(operand.clone())
-                            }
+                    _ => None,
+                },
+                OperandValue::USize(b) => match value_a {
+                    OperandValue::USize(a) => {
+                        if a == b {
+                            Some(Ok(()))
+                        } else {
+                            Some(Err(operation.clone()))
                         }
-                        _ => Err(operand.clone()),
-                    },
-                    OperandValue::I64(b) => match value_a {
-                        OperandValue::I64(a) => {
-                            if a < b {
-                                Ok(())
-                            } else {
-                                Err(operand.clone())
-                            }
-                        }
-                        _ => Err(operand.clone()),
-                    },
-                    OperandValue::F64(b) => match value_a {
-                        OperandValue::F64(a) => {
-                            if a < b {
-                                Ok(())
-                            } else {
-                                Err(operand.clone())
-                            }
-                        }
-                        _ => Err(operand.clone()),
-                    },
-                }
-                Operand::FieldPath(path_b) => Ok(()) 
-            }
-      
-        },
-        Operation::Ge(operand) => match value_b {
-            match operand {
-                Operand::Value(value_b) => {
-                    match operand {
-                        OperandValue::U64(b) => match value_a {
-                            OperandValue::U64(a) => {
-                                if a >= b {
-                                    Ok(())
-                                } else {
-                                    Err(operand.clone())
-                                }
-                            }
-                            _ => Err(operand.clone()),
-                        },
-                        OperandValue::I64(b) => match value_a {
-                            OperandValue::I64(a) => {
-                                if a >= b {
-                                    Ok(())
-                                } else {
-                                    Err(operand.clone())
-                                }
-                            }
-                            _ => Err(operand.clone()),
-                        },
-                        Value::F64(b) => match value_a {
-                            Value::F64(a) => {
-                                if a >= b {
-                                    Ok(())
-                                } else {
-                                    Err(operand.clone())
-                                }
-                            }
-                            _ => Err(operand.clone()),
-                        },
                     }
-                }
-                Operand::FieldPath(path_b) => Ok(())
-            }
+                    _ => None,
+                },
+                OperandValue::Bool(b) => match value_a {
+                    OperandValue::Bool(a) => {
+                        if a == b {
+                            Some(Ok(()))
+                        } else {
+                            Some(Err(operation.clone()))
+                        }
+                    }
+                    _ => None,
+                },
+                OperandValue::Str(b) => match value_a {
+                    OperandValue::Str(a) => {
+                        if a == b {
+                            Some(Ok(()))
+                        } else {
+                            Some(Err(operation.clone()))
+                        }
+                    }
+                    _ => None,
+                },
+            },
+            Operand::FieldPath(path_b) => Some(Ok(())),
         },
-        Operation::Le(operand) => match value_b {
-            match operand {
-                Operand::Value(value_b) => {
-                    OperandValue::U64(b) => match value_a {
-                        OperandValue::U64(a) => {
-                            if a <= b {
-                                Ok(())
-                            } else {
-                                Err(operand.clone())
-                            }
+        Operation::Ne(operand) => match operand {
+            Operand::Value(value_b) => match value_b {
+                OperandValue::U64(b) => match value_a {
+                    OperandValue::U64(a) => {
+                        if a != b {
+                            Some(Ok(()))
+                        } else {
+                            Some(Err(operation.clone()))
                         }
-                        _ => Err(operand.clone()),
-                    },
-                    OperandValue::I64(b) => match value_a {
-                        OperandValue::I64(a) => {
-                            if a <= b {
-                                Ok(())
-                            } else {
-                                Err(operand.clone())
-                            }
+                    }
+                   _ => None,
+                },
+                OperandValue::I64(b) => match value_a {
+                    OperandValue::I64(a) => {
+                        if a != b {
+                            Some(Ok(()))
+                        } else {
+                            Some(Err(operation.clone()))
                         }
-                        _ => Err(operand.clone()),
-                    },
-                    OperandValue::F64(b) => match value_a {
-                        OperandValue::F64(a) => {
-                            if a <= b {
-                                Ok(())
-                            } else {
-                                Err(operand.clone())
-                            }
+                    }
+                   _ => None,
+                },
+                OperandValue::F64(b) => match value_a {
+                    OperandValue::F64(a) => {
+                        if a != b {
+                            Some(Ok(()))
+                        } else {
+                            Some(Err(operation.clone()))
                         }
-                        _ => Err(operand.clone()),
-                    },
-                }
-                Operand::FieldPath(path_b) => Ok(())
-            }
+                    }
+                   _ => None,
+                },
+                OperandValue::USize(b) => match value_a {
+                    OperandValue::USize(a) => {
+                        if a != b {
+                            Some(Ok(()))
+                        } else {
+                            Some(Err(operation.clone()))
+                        }
+                    }
+                   _ => None,
+                },
+                OperandValue::Str(b) => match value_a {
+                    OperandValue::Str(a) => {
+                        if a != b {
+                            Some(Ok(()))
+                        } else {
+                            Some(Err(operation.clone()))
+                        }
+                    }
+                   _ => None,
+                },
+                OperandValue::Bool(b) => match value_a {
+                    OperandValue::Bool(a) => {
+                        if a != b {
+                            Some(Ok(()))
+                        } else {
+                            Some(Err(operation.clone()))
+                        }
+                    }
+                   _ => None,
+                },
+            },
+            Operand::FieldPath(path_b) => Some(Ok(())),
         },
+        Operation::Gt(operand) => match operand {
+            Operand::Value(value_b) => match value_b {
+                OperandValue::U64(b) => match value_a {
+                    OperandValue::U64(a) => {
+                        if a > b {
+                            Some(Ok(()))
+                        } else {
+                            Some(Err(operation.clone()))
+                        }
+                    }
+                   _ => None,
+                },
+                OperandValue::I64(b) => match value_a {
+                    OperandValue::I64(a) => {
+                        if a > b {
+                            Some(Ok(()))
+                        } else {
+                            Some(Err(operation.clone()))
+                        }
+                    }
+                   _ => None,
+                },
+                OperandValue::F64(b) => match value_a {
+                    OperandValue::F64(a) => {
+                        if a > b {
+                            Some(Ok(()))
+                        } else {
+                            Some(Err(operation.clone()))
+                        }
+                    }
+                   _ => None,
+                },
+                OperandValue::USize(b) =>  match value_a {
+                    OperandValue::USize(a) => {
+                        if a > b {
+                            Some(Ok(()))
+                        } else {
+                            Some(Err(operation.clone()))
+                        }
+                    }
+                   _ => None,
+                },
+                OperandValue::Str(b) =>match value_a {
+                    OperandValue::Str(a) => {
+                        if a > b {
+                            Some(Ok(()))
+                        } else {
+                            Some(Err(operation.clone()))
+                        }
+                    }
+                   _ => None,
+                },
+                OperandValue::Bool(b) => None,
+            },
+            Operand::FieldPath(path_b) => Some(Ok(())),
+        },
+        Operation::Ge(operand) => match operand {
+            Operand::Value(value_b) => match value_b {
+                OperandValue::U64(b) => match value_a {
+                    OperandValue::U64(a) => {
+                        if a >= b {
+                            Some(Ok(()))
+                        } else {
+                            Some(Err(operation.clone()))
+                        }
+                    }
+                   _ => None,
+                },
+                OperandValue::I64(b) => match value_a {
+                    OperandValue::I64(a) => {
+                        if a >= b {
+                            Some(Ok(()))
+                        } else {
+                            Some(Err(operation.clone()))
+                        }
+                    }
+                   _ => None,
+                },
+                OperandValue::F64(b) => match value_a {
+                    OperandValue::F64(a) => {
+                        if a >= b {
+                            Some(Ok(()))
+                        } else {
+                            Some(Err(operation.clone()))
+                        }
+                    }
+                   _ => None,
+                },
+                OperandValue::USize(b) =>  match value_a {
+                    OperandValue::USize(a) => {
+                        if a >= b {
+                            Some(Ok(()))
+                        } else {
+                            Some(Err(operation.clone()))
+                        }
+                    }
+                   _ => None,
+                },
+                OperandValue::Str(b) => match value_a {
+                    OperandValue::Str(a) => {
+                        if a >= b {
+                            Some(Ok(()))
+                        } else {
+                            Some(Err(operation.clone()))
+                        }
+                    }
+                   _ => None,
+                },
+                OperandValue::Bool(b) => None,
+            },
+            Operand::FieldPath(path_b) => Some(Ok(())),
+        },
+        Operation::Lt(operand) => match operand {
+            Operand::Value(value_b) => match value_b {
+                OperandValue::U64(b) => match value_a {
+                    OperandValue::U64(a) => {
+                        if a < b {
+                            Some(Ok(()))
+                        } else {
+                            Some(Err(operation.clone()))
+                        }
+                    }
+                   _ => None,
+                },
+                OperandValue::I64(b) => match value_a {
+                    OperandValue::I64(a) => {
+                        if a < b {
+                            Some(Ok(()))
+                        } else {
+                            Some(Err(operation.clone()))
+                        }
+                    }
+                   _ => None,
+                },
+                OperandValue::F64(b) => match value_a {
+                    OperandValue::F64(a) => {
+                        if a < b {
+                            Some(Ok(()))
+                        } else {
+                            Some(Err(operation.clone()))
+                        }
+                    }
+                   _ => None,
+                },
+                OperandValue::USize(b) => match value_a {
+                    OperandValue::USize(a) => {
+                        if a < b {
+                            Some(Ok(()))
+                        } else {
+                            Some(Err(operation.clone()))
+                        }
+                    }
+                   _ => None,
+                },
+                OperandValue::Str(b) => match value_a {
+                    OperandValue::Str(a) => {
+                        if a < b {
+                            Some(Ok(()))
+                        } else {
+                            Some(Err(operation.clone()))
+                        }
+                    }
+                   _ => None,
+                },
+                OperandValue::Bool(b) => None,
+            },
+            Operand::FieldPath(path_b) => Some(Ok(())),
+        },
+        Operation::Le(operand) => match operand {
+            Operand::Value(value_b) => match value_b {
+                OperandValue::U64(b) => match value_a {
+                    OperandValue::U64(a) => {
+                        if a <= b {
+                            Some(Ok(()))
+                        } else {
+                            Some(Err(operation.clone()))
+                        }
+                    }
+                   _ => None,
+                },
+                OperandValue::I64(b) => match value_a {
+                    OperandValue::I64(a) => {
+                        if a <= b {
+                            Some(Ok(()))
+                        } else {
+                            Some(Err(operation.clone()))
+                        }
+                    }
+                   _ => None,
+                },
+                OperandValue::F64(b) => match value_a {
+                    OperandValue::F64(a) => {
+                        if a <= b {
+                            Some(Ok(()))
+                        } else {
+                            Some(Err(operation.clone()))
+                        }
+                    }
+                   _ => None,
+                },
+                OperandValue::USize(b) =>  match value_a {
+                    OperandValue::USize(a) => {
+                        if a <= b {
+                            Some(Ok(()))
+                        } else {
+                            Some(Err(operation.clone()))
+                        }
+                    }
+                   _ => None,
+                },
+                OperandValue::Str(b) => match value_a {
+                    OperandValue::Str(a) => {
+                        if a <= b {
+                            Some(Ok(()))
+                        } else {
+                            Some(Err(operation.clone()))
+                        }
+                    }
+                   _ => None,
+                },
+                OperandValue::Bool(b) => None,
+            },
+            Operand::FieldPath(path_b) => Some(Ok(())),
+        },
+        Operation::Btwn(operand_a, operand_b) => Some(Ok(())),
     }
+}
+
+#[cfg(test)]
+mod test {
+    use super::{compare, Operand, OperandValue, Operation};
+
+    #[test]
+    fn test_operand_value_eq_true() {
+        assert!(OperandValue::U64(42) == OperandValue::U64(42));
+        assert!(OperandValue::I64(-42) == OperandValue::I64(-42));
+        assert!(OperandValue::F64(-4.2) == OperandValue::F64(-4.2));
+        assert!(OperandValue::Bool(false) == OperandValue::Bool(false));
+        assert!(OperandValue::Str(String::from("a b c")) == OperandValue::Str(String::from("a b c")));
+    }
+
+    #[test]
+    fn test_operand_value_eq_false() {
+        assert_eq!(OperandValue::U64(42) == OperandValue::U64(24), false);
+        assert_eq!(OperandValue::I64(-42) == OperandValue::I64(-24), false);
+        assert_eq!(OperandValue::F64(-4.2) == OperandValue::F64(-2.4), false);
+        assert_eq!(OperandValue::Bool(false) == OperandValue::Bool(true), false);
+        assert_eq!(OperandValue::Str(String::from("a b c")) == OperandValue::Str(String::from("z y w")), false);
+    }
+
+
+
+
+
+
+
+
+
+    #[test]
+    fn test_compare_u64_eq() {
+        let v = Operation::Eq(Operand::Value(OperandValue::U64(42)));   
+        assert_eq!(compare(&v, &OperandValue::U64(41)), Some(Err(v.clone())));
+        assert_eq!(compare(&v, &OperandValue::U64(42)), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::U64(43)), Some(Err(v.clone())));
+    }
+
+    #[test]
+    fn test_compare_u64_ne() {
+        let v = Operation::Ne(Operand::Value(OperandValue::U64(42)));
+        assert_eq!(compare(&v, &OperandValue::U64(41)), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::U64(42)), Some(Err(v.clone())));
+        assert_eq!(compare(&v, &OperandValue::U64(43)), Some(Ok(())));
+    }
+
+    #[test]
+    fn test_compare_u64_gt() {
+        let v = Operation::Gt(Operand::Value(OperandValue::U64(42)));
+        assert_eq!(compare(&v, &OperandValue::U64(41)), Some(Err(v.clone())));
+        assert_eq!(compare(&v, &OperandValue::U64(42)), Some(Err(v.clone())));
+        assert_eq!(compare(&v, &OperandValue::U64(43)), Some(Ok(())));
+    }
+
+    #[test]
+    fn test_compare_u64_ge() {
+        let v = Operation::Ge(Operand::Value(OperandValue::U64(42)));
+        assert_eq!(compare(&v, &OperandValue::U64(41)), Some(Err(v.clone())));
+        assert_eq!(compare(&v, &OperandValue::U64(42)), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::U64(43)), Some(Ok(())));
+    }
+
+    #[test]
+    fn test_compare_u64_lt() {
+        let v = Operation::Lt(Operand::Value(OperandValue::U64(42)));
+        assert_eq!(compare(&v, &OperandValue::U64(41)), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::U64(42)), Some(Err(v.clone())));
+        assert_eq!(compare(&v, &OperandValue::U64(43)), Some(Err(v.clone())));
+    }
+
+    #[test]
+    fn test_compare_u64_le() {
+        let v = Operation::Le(Operand::Value(OperandValue::U64(42)));
+        assert_eq!(compare(&v, &OperandValue::U64(41)), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::U64(42)), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::U64(43)), Some(Err(v.clone())));
+    }
+
+    #[test]
+    fn test_compare_i64_eq() {
+        let v = Operation::Eq(Operand::Value(OperandValue::I64(42)));   
+        assert_eq!(compare(&v, &OperandValue::I64(41)), Some(Err(v.clone())));
+        assert_eq!(compare(&v, &OperandValue::I64(42)), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::I64(43)), Some(Err(v.clone())));
+    }
+
+    #[test]
+    fn test_compare_i64_ne() {
+        let v = Operation::Ne(Operand::Value(OperandValue::I64(42)));
+        assert_eq!(compare(&v, &OperandValue::I64(41)), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::I64(42)), Some(Err(v.clone())));
+        assert_eq!(compare(&v, &OperandValue::I64(43)), Some(Ok(())));
+    }
+
+    #[test]
+    fn test_compare_i64_gt() {
+        let v = Operation::Gt(Operand::Value(OperandValue::I64(42)));
+        assert_eq!(compare(&v, &OperandValue::I64(41)), Some(Err(v.clone())));
+        assert_eq!(compare(&v, &OperandValue::I64(42)), Some(Err(v.clone())));
+        assert_eq!(compare(&v, &OperandValue::I64(43)), Some(Ok(())));
+    }
+
+    #[test]
+    fn test_compare_i64_ge() {
+        let v = Operation::Ge(Operand::Value(OperandValue::I64(42)));
+        assert_eq!(compare(&v, &OperandValue::I64(41)), Some(Err(v.clone())));
+        assert_eq!(compare(&v, &OperandValue::I64(42)), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::I64(43)), Some(Ok(())));
+    }
+
+    #[test]
+    fn test_compare_i64_lt() {
+        let v = Operation::Lt(Operand::Value(OperandValue::I64(42)));
+        assert_eq!(compare(&v, &OperandValue::I64(41)), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::I64(42)), Some(Err(v.clone())));
+        assert_eq!(compare(&v, &OperandValue::I64(43)), Some(Err(v.clone())));
+    }
+
+    #[test]
+    fn test_compare_i64_le() {
+        let v = Operation::Le(Operand::Value(OperandValue::I64(42)));
+        assert_eq!(compare(&v, &OperandValue::I64(41)), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::I64(42)), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::I64(43)), Some(Err(v.clone())));
+    }
+
+    #[test]
+    fn test_compare_f64_eq() {
+        let v = Operation::Eq(Operand::Value(OperandValue::F64(42.0)));   
+        assert_eq!(compare(&v, &OperandValue::F64(41.0)), Some(Err(v.clone())));
+        assert_eq!(compare(&v, &OperandValue::F64(42.0)), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::F64(43.0)), Some(Err(v.clone())));
+    }
+
+    #[test]
+    fn test_compare_f64_ne() {
+        let v = Operation::Ne(Operand::Value(OperandValue::F64(42.0)));
+        assert_eq!(compare(&v, &OperandValue::F64(41.0)), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::F64(42.0)), Some(Err(v.clone())));
+        assert_eq!(compare(&v, &OperandValue::F64(43.0)), Some(Ok(())));
+    }
+
+    #[test]
+    fn test_compare_f64_gt() {
+        let v = Operation::Gt(Operand::Value(OperandValue::F64(42.0)));
+        assert_eq!(compare(&v, &OperandValue::F64(41.0)), Some(Err(v.clone())));
+        assert_eq!(compare(&v, &OperandValue::F64(42.0)), Some(Err(v.clone())));
+        assert_eq!(compare(&v, &OperandValue::F64(43.0)), Some(Ok(())));
+    }
+
+    #[test]
+    fn test_compare_f64_ge() {
+        let v = Operation::Ge(Operand::Value(OperandValue::F64(42.0)));
+        assert_eq!(compare(&v, &OperandValue::F64(41.0)), Some(Err(v.clone())));
+        assert_eq!(compare(&v, &OperandValue::F64(42.0)), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::F64(43.0)), Some(Ok(())));
+    }
+
+    #[test]
+    fn test_compare_f64_lt() {
+        let v = Operation::Lt(Operand::Value(OperandValue::F64(42.0)));
+        assert_eq!(compare(&v, &OperandValue::F64(41.0)), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::F64(42.0)), Some(Err(v.clone())));
+        assert_eq!(compare(&v, &OperandValue::F64(43.0)), Some(Err(v.clone())));
+    }
+
+    #[test]
+    fn test_compare_f64_le() {
+        let v = Operation::Le(Operand::Value(OperandValue::F64(42.0)));
+        assert_eq!(compare(&v, &OperandValue::F64(41.0)), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::F64(42.0)), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::F64(43.0)), Some(Err(v.clone())));
+    }
+
+    #[test]
+    fn test_compare_usize_eq() {
+        let v = Operation::Eq(Operand::Value(OperandValue::USize(42)));   
+        assert_eq!(compare(&v, &OperandValue::USize(41)), Some(Err(v.clone())));
+        assert_eq!(compare(&v, &OperandValue::USize(42)), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::USize(43)), Some(Err(v.clone())));
+    }
+
+    #[test]
+    fn test_compare_usize_ne() {
+        let v = Operation::Ne(Operand::Value(OperandValue::USize(42)));
+        assert_eq!(compare(&v, &OperandValue::USize(41)), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::USize(42)), Some(Err(v.clone())));
+        assert_eq!(compare(&v, &OperandValue::USize(43)), Some(Ok(())));
+    }
+
+    #[test]
+    fn test_compare_usize_gt() {
+        let v = Operation::Gt(Operand::Value(OperandValue::USize(42)));
+        assert_eq!(compare(&v, &OperandValue::USize(41)), Some(Err(v.clone())));
+        assert_eq!(compare(&v, &OperandValue::USize(42)), Some(Err(v.clone())));
+        assert_eq!(compare(&v, &OperandValue::USize(43)), Some(Ok(())));
+    }
+
+    #[test]
+    fn test_compare_usize_ge() {
+        let v = Operation::Ge(Operand::Value(OperandValue::USize(42)));
+        assert_eq!(compare(&v, &OperandValue::USize(41)), Some(Err(v.clone())));
+        assert_eq!(compare(&v, &OperandValue::USize(42)), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::USize(43)), Some(Ok(())));
+    }
+
+    #[test]
+    fn test_compare_usize_lt() {
+        let v = Operation::Lt(Operand::Value(OperandValue::USize(42)));
+        assert_eq!(compare(&v, &OperandValue::USize(41)), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::USize(42)), Some(Err(v.clone())));
+        assert_eq!(compare(&v, &OperandValue::USize(43)), Some(Err(v.clone())));
+    }
+
+    #[test]
+    fn test_compare_usize_le() {
+        let v = Operation::Le(Operand::Value(OperandValue::USize(42)));
+        assert_eq!(compare(&v, &OperandValue::USize(41)), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::USize(42)), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::USize(43)), Some(Err(v.clone())));
+    }
+
+    #[test]
+    fn test_compare_string_eq() {
+        let v = Operation::Eq(Operand::Value(OperandValue::Str(String::from("j"))));   
+        assert_eq!(compare(&v, &OperandValue::Str(String::from("i"))), Some(Err(v.clone())));
+        assert_eq!(compare(&v, &OperandValue::Str(String::from("j"))), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::Str(String::from("k"))), Some(Err(v.clone())));
+    }
+
+    #[test]
+    fn test_compare_string_ne() {
+        let v = Operation::Ne(Operand::Value(OperandValue::Str(String::from("j"))));
+        assert_eq!(compare(&v, &OperandValue::Str(String::from("i"))), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::Str(String::from("j"))), Some(Err(v.clone())));
+        assert_eq!(compare(&v, &OperandValue::Str(String::from("k"))), Some(Ok(())));
+    }
+
+    #[test]
+    fn test_compare_string_gt() {
+        let v = Operation::Gt(Operand::Value(OperandValue::Str(String::from("j"))));
+        assert_eq!(compare(&v, &OperandValue::Str(String::from("i"))), Some(Err(v.clone())));
+        assert_eq!(compare(&v, &OperandValue::Str(String::from("j"))), Some(Err(v.clone())));
+        assert_eq!(compare(&v, &OperandValue::Str(String::from("k"))), Some(Ok(())));
+    }
+
+    #[test]
+    fn test_compare_string_ge() {
+        let v = Operation::Ge(Operand::Value(OperandValue::Str(String::from("j"))));
+        assert_eq!(compare(&v, &OperandValue::Str(String::from("i"))), Some(Err(v.clone())));
+        assert_eq!(compare(&v, &OperandValue::Str(String::from("j"))), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::Str(String::from("k"))), Some(Ok(())));
+    }
+
+    #[test]
+    fn test_compare_string_lt() {
+        let v = Operation::Lt(Operand::Value(OperandValue::Str(String::from("j"))));
+        assert_eq!(compare(&v, &OperandValue::Str(String::from("i"))), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::Str(String::from("j"))), Some(Err(v.clone())));
+        assert_eq!(compare(&v, &OperandValue::Str(String::from("k"))), Some(Err(v.clone())));
+    }
+
+    #[test]
+    fn test_compare_string_le() {
+        let v = Operation::Le(Operand::Value(OperandValue::Str(String::from("j"))));
+        assert_eq!(compare(&v, &OperandValue::Str(String::from("i"))), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::Str(String::from("j"))), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::Str(String::from("k"))), Some(Err(v.clone())));
+    }
+
+    #[test]
+    fn test_compare_u64_other_types() {
+        assert_eq!(compare(&Operation::Eq(Operand::Value(OperandValue::U64(42))), &OperandValue::I64(41)), None);
+        assert_eq!(compare(&Operation::Ne(Operand::Value(OperandValue::U64(42))), &OperandValue::F64(41.5)), None);
+        assert_eq!(compare(&Operation::Gt(Operand::Value(OperandValue::U64(42))), &OperandValue::USize(41)), None);
+        assert_eq!(compare(&Operation::Ge(Operand::Value(OperandValue::U64(42))), &OperandValue::Bool(false)), None);
+        assert_eq!(compare(&Operation::Lt(Operand::Value(OperandValue::U64(42))), &OperandValue::Str(String::from("abc"))), None);
+        //assert_eq!(compare(&Operation::Btwn(Operand::Value(OperandValue::U64(24)), Operand::Value(OperandValue::U64(42))), &OperandValue::I64(41)), None);
+    }
+
+    //#[test]
+    //fn test_compare_u64_btwn() {
+    //    let v = Operation::Btwn(Operand::Value(OperandValue::U64(24)), Operand::Value(OperandValue::U64(42)));
+    //    assert_eq!(compare(&v, &OperandValue::U64(23)), Err(v.clone()));
+    //    assert_eq!(compare(&v, &OperandValue::U64(24)), Ok(()));
+    //    assert_eq!(compare(&v, &OperandValue::U64(25)), Ok(()));
+    //    assert_eq!(compare(&v, &OperandValue::U64(41)), Ok(()));
+    //    assert_eq!(compare(&v, &OperandValue::U64(42)), Ok(()));
+    //    assert_eq!(compare(&v, &OperandValue::U64(43)), Err(v.clone()));
+    //}
+
+    //    #[test]
+    //    fn test_compare_bool_ok() {
+    //        assert_eq!(compare(&Operation::Eq(Operand::Value(OperandValue::Bool(true))), &OperandValue::Bool(true)), Ok(()));
+    //        assert_eq!(compare(&Operation::Ne(Operand::Value(OperandValue::Bool(true))), &OperandValue::Bool(false)), Ok(()));
+    //    }
+
+    //    #[test]
+    //    fn test_compare_bool_some() {
+    //        let value = OperandValue::Bool(true);
+    //        assert_eq!(compare(&Operation::Eq(Operand::Value(OperandValue::Bool(false))), &value), Err(Operand::Bool(false)));
+    //        assert_eq!(compare(&Operation::Ne(Operand::Value(OperandValue::Bool(true))), &value), Err(Operand::Bool(true)));
+    //    }
+    //
+    //    #[test]
+    //    fn test_compare_bool_other_types() {
+    //        assert_eq!(compare(&num_u_stub(), &Operation::Eq(Operand::Value(OperandValue::Bool(true)))), Err(Operand::Bool(true)));
+    //        assert_eq!(compare(&num_i_stub(), &Operation::Eq(Operand::Value(OperandValue::Bool(true)))), Err(Operand::Bool(true)));
+    //        assert_eq!(compare(&num_f_stub(), &Operation::Eq(Operand::Value(OperandValue::Bool(true)))), Err(Operand::Bool(true)));
+    //        assert_eq!(compare(&str_stub(), &Operation::Eq(Operand::Value(OperandValue::Bool(true)))), Err(Operand::Bool(true)));
+    //        assert_eq!(compare(&arr_bool_stub(), &Operation::Eq(Operand::Value(OperandValue::Bool(true)))), Err(Operand::Bool(true)));
+    //        assert_eq!(compare(&arr_str_stub(), &Operation::Eq(Operand::Value(OperandValue::Bool(true)))), Err(Operand::Bool(true)));
+    //
+    //        assert_eq!(compare(&num_u_stub(), &Operation::Ne(Operand::Value(OperandValue::Bool(true))), Err(Operand::Bool(true)));
+    //        assert_eq!(compare(&num_i_stub(), &Operation::Ne(Operand::Value(OperandValue::Bool(true))), Err(Operand::Bool(true)));
+    //        assert_eq!(compare(&num_f_stub(), &Operation::Ne(Operand::Value(OperandValue::Bool(true))), Err(Operand::Bool(true)));
+    //        assert_eq!(compare(&str_stub(), &Operation::Ne(Operand::Value(OperandValue::Bool(true))), Err(Operand::Bool(true)));
+    //        assert_eq!(compare(&arr_bool_stub(), &Operation::Ne(Operand::Value(OperandValue::Bool(true))), Err(Operand::Bool(true)));
+    //        assert_eq!(compare(&arr_str_stub(), &Operation::Ne(Operand::Value(OperandValue::Bool(true))), Err(Operand::Bool(true)));
+    //    }
+    //
+    //    #[test]
+    //    fn test_compare_num_u_none() {
+    //        let value = OperandValue::U64(42);
+    //        assert_eq!(compare(&value, &Operation::Eq(OperandValue::U64(42))), Ok(()));
+    //        assert_eq!(compare(&value, &Operation::Ne(OperandValue::U64(109))), Ok(()));
+    //        assert_eq!(compare(&value, &Operation::Gt(OperandValue::U64(41))), Ok(()));
+    //        assert_eq!(compare(&value, &Operation::Lt(OperandValue::U64(43))), Ok(()));
+    //        assert_eq!(compare(&value, &Operation::Ge(OperandValue::U64(42))), Ok(()));
+    //        assert_eq!(compare(&value, &Operation::Le(OperandValue::U64(42))), Ok(()));
+    //    }
+    //
+    //    #[test]
+    //    fn test_compare_num_u_some() {
+    //        let value = OperandValue::U64(42);
+    //        assert_eq!(compare(&value, &Operation::Eq(OperandValue::U64(22))), Err(Operand::U64(22))));
+    //        assert_eq!(compare(&value, &Operation::Ne(OperandValue::U64(42))), Err(Operand::U64(42))));
+    //        assert_eq!(compare(&value, &Operation::Gt(OperandValue::U64(42))), Err(Operand::U64(42))));
+    //        assert_eq!(compare(&value, &Operation::Lt(OperandValue::U64(42))), Err(Operand::U64(42))));
+    //        assert_eq!(compare(&value, &Operation::Ge(OperandValue::U64(43))), Err(Operand::U64(43))));
+    //        assert_eq!(compare(&value, &Operation::Le(OperandValue::U64(41))), Err(Operand::U64(41))));
+    //    }
+    //
+    //    #[test]
+    //    fn test_compare_num_u_other_types() {
+    //        assert_eq!(compare(&bool_stub(), &Operation::Eq(OperandValue::U64(5))), Err(Operand::U64(5))));
+    //        assert_eq!(compare(&num_i_stub(), &Operation::Eq(OperandValue::U64(5))), Err(Operand::U64(5))));
+    //        assert_eq!(compare(&num_f_stub(), &Operation::Eq(OperandValue::U64(5))), Err(Operand::U64(5))));
+    //        assert_eq!(compare(&str_stub(), &Operation::Eq(OperandValue::U64(5))), Err(Operand::U64(5))));
+    //        assert_eq!(compare(&arr_bool_stub(), &Operation::Eq(OperandValue::U64(5))), Err(Operand::U64(5))));
+    //        assert_eq!(compare(&arr_str_stub(), &Operation::Eq(OperandValue::U64(5))), Err(Operand::U64(5))));
+    //
+    //        assert_eq!(compare(&bool_stub(), &Operation::Ne(OperandValue::U64(5))), Err(Operand::U64(5))));
+    //        assert_eq!(compare(&num_i_stub(), &Operation::Ne(OperandValue::U64(5))), Err(Operand::U64(5))));
+    //        assert_eq!(compare(&num_f_stub(), &Operation::Ne(OperandValue::U64(5))), Err(Operand::U64(5))));
+    //        assert_eq!(compare(&str_stub(), &Operation::Ne(OperandValue::U64(5))), Err(Operand::U64(5))));
+    //        assert_eq!(compare(&arr_bool_stub(), &Operation::Ne(OperandValue::U64(5))), Err(Operand::U64(5))));
+    //        assert_eq!(compare(&arr_str_stub(), &Operation::Ne(OperandValue::U64(5))), Err(Operand::U64(5))));
+    //
+    //        assert_eq!(compare(&bool_stub(), &Operation::Gt(OperandValue::U64(5))), Err(Operand::U64(5))));
+    //        assert_eq!(compare(&num_i_stub(), &Operation::Gt(OperandValue::U64(5))), Err(Operand::U64(5))));
+    //        assert_eq!(compare(&num_f_stub(), &Operation::Gt(OperandValue::U64(5))), Err(Operand::U64(5))));
+    //        assert_eq!(compare(&str_stub(), &Operation::Gt(OperandValue::U64(5))), Err(Operand::U64(5))));
+    //        assert_eq!(compare(&arr_bool_stub(), &Operation::Gt(OperandValue::U64(5))), Err(Operand::U64(5))));
+    //        assert_eq!(compare(&arr_str_stub(), &Operation::Gt(OperandValue::U64(5))), Err(Operand::U64(5))));
+    //
+    //        assert_eq!(compare(&bool_stub(), &Operation::Lt(OperandValue::U64(5))), Err(Operand::U64(5))));
+    //        assert_eq!(compare(&num_i_stub(), &Operation::Lt(OperandValue::U64(5))), Err(Operand::U64(5))));
+    //        assert_eq!(compare(&num_f_stub(), &Operation::Lt(OperandValue::U64(5))), Err(Operand::U64(5))));
+    //        assert_eq!(compare(&str_stub(), &Operation::Lt(OperandValue::U64(5))), Err(Operand::U64(5))));
+    //        assert_eq!(compare(&arr_bool_stub(), &Operation::Lt(OperandValue::U64(5))), Err(Operand::U64(5))));
+    //        assert_eq!(compare(&arr_str_stub(), &Operation::Lt(OperandValue::U64(5))), Err(Operand::U64(5))));
+    //
+    //        assert_eq!(compare(&bool_stub(), &Operation::Ge(OperandValue::U64(5))), Err(Operand::U64(5))));
+    //        assert_eq!(compare(&num_i_stub(), &Operation::Ge(OperandValue::U64(5))), Err(Operand::U64(5))));
+    //        assert_eq!(compare(&num_f_stub(), &Operation::Ge(OperandValue::U64(5))), Err(Operand::U64(5))));
+    //        assert_eq!(compare(&str_stub(), &Operation::Ge(OperandValue::U64(5))), Err(Operand::U64(5))));
+    //        assert_eq!(compare(&arr_bool_stub(), &Operation::Ge(OperandValue::U64(5))), Err(Operand::U64(5))));
+    //        assert_eq!(compare(&arr_str_stub(), &Operation::Ge(OperandValue::U64(5))), Err(Operand::U64(5))));
+    //
+    //        assert_eq!(compare(&bool_stub(), &Operation::Le(OperandValue::U64(5))), Err(Operand::U64(5))));
+    //        assert_eq!(compare(&num_i_stub(), &Operation::Le(OperandValue::U64(5))), Err(Operand::U64(5))));
+    //        assert_eq!(compare(&num_f_stub(), &Operation::Le(OperandValue::U64(5))), Err(Operand::U64(5))));
+    //        assert_eq!(compare(&str_stub(), &Operation::Le(OperandValue::U64(5))), Err(Operand::U64(5))));
+    //        assert_eq!(compare(&arr_bool_stub(), &Operation::Le(OperandValue::U64(5))), Err(Operand::U64(5))));
+    //        assert_eq!(compare(&arr_str_stub(), &Operation::Le(OperandValue::U64(5))), Err(Operand::U64(5))));
+    //    }
+    //
+    //    #[test]
+    //    fn test_compare_num_i_none() {
+    //        let value = OperandValue::I64(-42);
+    //        assert_eq!(compare(&value, &Operation::Eq(OperandValue::I64(-42))), Ok(()));
+    //        assert_eq!(compare(&value, &Operation::Ne(OperandValue::I64(-109))), Ok(()));
+    //        assert_eq!(compare(&value, &Operation::Gt(OperandValue::I64(-43))), Ok(()));
+    //        assert_eq!(compare(&value, &Operation::Lt(OperandValue::I64(-41))), Ok(()));
+    //        assert_eq!(compare(&value, &Operation::Ge(OperandValue::I64(-42))), Ok(()));
+    //        assert_eq!(compare(&value, &Operation::Le(OperandValue::I64(-42))), Ok(()));
+    //    }
+    //
+    //    #[test]
+    //    fn test_compare_num_i_some() {
+    //        let value = OperandValue::I64(-42);
+    //        assert_eq!(compare(&value, &Operation::Eq(OperandValue::I64(-22))), Err(Operand::I64(-22))));
+    //        assert_eq!(compare(&value, &Operation::Ne(OperandValue::I64(-42))), Err(Operand::I64(-42))));
+    //        assert_eq!(compare(&value, &Operation::Gt(OperandValue::I64(-42))), Err(Operand::I64(-42))));
+    //        assert_eq!(compare(&value, &Operation::Lt(OperandValue::I64(-42))), Err(Operand::I64(-42))));
+    //        assert_eq!(compare(&value, &Operation::Ge(OperandValue::I64(-41))), Err(Operand::I64(-41))));
+    //        assert_eq!(compare(&value, &Operation::Le(OperandValue::I64(-43))), Err(Operand::I64(-43))));
+    //    }
+    //
+    //    #[test]
+    //    fn test_compare_num_i_other_types() {
+    //        assert_eq!(compare(&bool_stub(), &Operation::Eq(OperandValue::I64(-5))), Err(Operand::I64(-5))));
+    //        assert_eq!(compare(&num_u_stub(), &Operation::Eq(OperandValue::I64(-5))), Err(Operand::I64(-5))));
+    //        assert_eq!(compare(&num_f_stub(), &Operation::Eq(OperandValue::I64(-5))), Err(Operand::I64(-5))));
+    //        assert_eq!(compare(&str_stub(), &Operation::Eq(OperandValue::I64(-5))), Err(Operand::I64(-5))));
+    //        assert_eq!(compare(&arr_bool_stub(), &Operation::Eq(OperandValue::I64(-5))), Err(Operand::I64(-5))));
+    //        assert_eq!(compare(&arr_str_stub(), &Operation::Eq(OperandValue::I64(-5))), Err(Operand::I64(-5))));
+    //
+    //        assert_eq!(compare(&bool_stub(), &Operation::Ne(OperandValue::I64(-5))), Err(Operand::I64(-5))));
+    //        assert_eq!(compare(&num_u_stub(), &Operation::Ne(OperandValue::I64(-5))), Err(Operand::I64(-5))));
+    //        assert_eq!(compare(&num_f_stub(), &Operation::Ne(OperandValue::I64(-5))), Err(Operand::I64(-5))));
+    //        assert_eq!(compare(&str_stub(), &Operation::Ne(OperandValue::I64(-5))), Err(Operand::I64(-5))));
+    //        assert_eq!(compare(&arr_bool_stub(), &Operation::Ne(OperandValue::I64(-5))), Err(Operand::I64(-5))));
+    //        assert_eq!(compare(&arr_str_stub(), &Operation::Ne(OperandValue::I64(-5))), Err(Operand::I64(-5))));
+    //
+    //        assert_eq!(compare(&bool_stub(), &Operation::Gt(OperandValue::I64(-5))), Err(Operand::I64(-5))));
+    //        assert_eq!(compare(&num_u_stub(), &Operation::Gt(OperandValue::I64(-5))), Err(Operand::I64(-5))));
+    //        assert_eq!(compare(&num_f_stub(), &Operation::Gt(OperandValue::I64(-5))), Err(Operand::I64(-5))));
+    //        assert_eq!(compare(&str_stub(), &Operation::Gt(OperandValue::I64(-5))), Err(Operand::I64(-5))));
+    //        assert_eq!(compare(&arr_bool_stub(), &Operation::Gt(OperandValue::I64(-5))), Err(Operand::I64(-5))));
+    //        assert_eq!(compare(&arr_str_stub(), &Operation::Gt(OperandValue::I64(-5))), Err(Operand::I64(-5))));
+    //
+    //        assert_eq!(compare(&bool_stub(), &Operation::Lt(OperandValue::I64(-5))), Err(Operand::I64(-5))));
+    //        assert_eq!(compare(&num_u_stub(), &Operation::Lt(OperandValue::I64(-5))), Err(Operand::I64(-5))));
+    //        assert_eq!(compare(&num_f_stub(), &Operation::Lt(OperandValue::I64(-5))), Err(Operand::I64(-5))));
+    //        assert_eq!(compare(&str_stub(), &Operation::Lt(OperandValue::I64(-5))), Err(Operand::I64(-5))));
+    //        assert_eq!(compare(&arr_bool_stub(), &Operation::Lt(OperandValue::I64(-5))), Err(Operand::I64(-5))));
+    //        assert_eq!(compare(&arr_str_stub(), &Operation::Lt(OperandValue::I64(-5))), Err(Operand::I64(-5))));
+    //
+    //        assert_eq!(compare(&bool_stub(), &Operation::Ge(OperandValue::I64(-5))), Err(Operand::I64(-5))));
+    //        assert_eq!(compare(&num_u_stub(), &Operation::Ge(OperandValue::I64(-5))), Err(Operand::I64(-5))));
+    //        assert_eq!(compare(&num_f_stub(), &Operation::Ge(OperandValue::I64(-5))), Err(Operand::I64(-5))));
+    //        assert_eq!(compare(&str_stub(), &Operation::Ge(OperandValue::I64(-5))), Err(Operand::I64(-5))));
+    //        assert_eq!(compare(&arr_bool_stub(), &Operation::Ge(OperandValue::I64(-5))), Err(Operand::I64(-5))));
+    //        assert_eq!(compare(&arr_str_stub(), &Operation::Ge(OperandValue::I64(-5))), Err(Operand::I64(-5))));
+    //
+    //        assert_eq!(compare(&bool_stub(), &Operation::Le(OperandValue::I64(-5))), Err(Operand::I64(-5))));
+    //        assert_eq!(compare(&num_u_stub(), &Operation::Le(OperandValue::I64(-5))), Err(Operand::I64(-5))));
+    //        assert_eq!(compare(&num_f_stub(), &Operation::Le(OperandValue::I64(-5))), Err(Operand::I64(-5))));
+    //        assert_eq!(compare(&str_stub(), &Operation::Le(OperandValue::I64(-5))), Err(Operand::I64(-5))));
+    //        assert_eq!(compare(&arr_bool_stub(), &Operation::Le(OperandValue::I64(-5))), Err(Operand::I64(-5))));
+    //        assert_eq!(compare(&arr_str_stub(), &Operation::Le(OperandValue::I64(-5))), Err(Operand::I64(-5))));
+    //    }
+    //
+    //    #[test]
+    //    fn test_compare_num_f_none() {
+    //        let value = OperandValue::F64(-42.5);
+    //        assert_eq!(compare(&value, &Operation::Eq(OperandValue::F64(-42.5))), Ok(()));
+    //        assert_eq!(compare(&value, &Operation::Ne(OperandValue::F64(-10.5))), Ok(()));
+    //        assert_eq!(compare(&value, &Operation::Gt(OperandValue::F64(-43.5))), Ok(()));
+    //        assert_eq!(compare(&value, &Operation::Lt(OperandValue::F64(-41.5))), Ok(()));
+    //        assert_eq!(compare(&value, &Operation::Ge(OperandValue::F64(-42.5))), Ok(()));
+    //        assert_eq!(compare(&value, &Operation::Le(OperandValue::F64(-42.5))), Ok(()));
+    //    }
+    //
+    //    #[test]
+    //    fn test_compare_num_f_some() {
+    //        let value = OperandValue::F64(-42.5);
+    //        assert_eq!(compare(&value, &Operation::Eq(OperandValue::F64(-22.5))), Err(Operand::F64(-22.5))));
+    //        assert_eq!(compare(&value, &Operation::Ne(OperandValue::F64(-42.5))), Err(Operand::F64(-42.5))));
+    //        assert_eq!(compare(&value, &Operation::Gt(OperandValue::F64(-42.5))), Err(Operand::F64(-42.5))));
+    //        assert_eq!(compare(&value, &Operation::Lt(OperandValue::F64(-42.5))), Err(Operand::F64(-42.5))));
+    //        assert_eq!(compare(&value, &Operation::Ge(OperandValue::F64(-41.5))), Err(Operand::F64(-41.5))));
+    //        assert_eq!(compare(&value, &Operation::Le(OperandValue::F64(-43.5))), Err(Operand::F64(-43.5))));
+    //    }
+    //
+    //    #[test]
+    //    fn test_compare_num_f_other_types() {
+    //        assert_eq!(compare(&bool_stub(), &Operation::Eq(OperandValue::F64(-5.5))), Err(Operand::F64(-5.5))));
+    //        assert_eq!(compare(&num_u_stub(), &Operation::Eq(OperandValue::F64(-5.5))), Err(Operand::F64(-5.5))));
+    //        assert_eq!(compare(&num_i_stub(), &Operation::Eq(OperandValue::F64(-5.5))), Err(Operand::F64(-5.5))));
+    //        assert_eq!(compare(&str_stub(), &Operation::Eq(OperandValue::F64(-5.5))), Err(Operand::F64(-5.5))));
+    //        assert_eq!(compare(&arr_bool_stub(), &Operation::Eq(OperandValue::F64(-5.5))), Err(Operand::F64(-5.5))));
+    //        assert_eq!(compare(&arr_str_stub(), &Operation::Eq(OperandValue::F64(-5.5))), Err(Operand::F64(-5.5))));
+    //
+    //        assert_eq!(compare(&bool_stub(), &Operation::Ne(OperandValue::F64(-5.5))), Err(Operand::F64(-5.5))));
+    //        assert_eq!(compare(&num_u_stub(), &Operation::Ne(OperandValue::F64(-5.5))), Err(Operand::F64(-5.5))));
+    //        assert_eq!(compare(&num_i_stub(), &Operation::Ne(OperandValue::F64(-5.5))), Err(Operand::F64(-5.5))));
+    //        assert_eq!(compare(&str_stub(), &Operation::Ne(OperandValue::F64(-5.5))), Err(Operand::F64(-5.5))));
+    //        assert_eq!(compare(&arr_bool_stub(), &Operation::Ne(OperandValue::F64(-5.5))), Err(Operand::F64(-5.5))));
+    //        assert_eq!(compare(&arr_str_stub(), &Operation::Ne(OperandValue::F64(-5.5))), Err(Operand::F64(-5.5))));
+    //
+    //        assert_eq!(compare(&bool_stub(), &Operation::Gt(OperandValue::F64(-5.5))), Err(Operand::F64(-5.5))));
+    //        assert_eq!(compare(&num_u_stub(), &Operation::Gt(OperandValue::F64(-5.5))), Err(Operand::F64(-5.5))));
+    //        assert_eq!(compare(&num_i_stub(), &Operation::Gt(OperandValue::F64(-5.5))), Err(Operand::F64(-5.5))));
+    //        assert_eq!(compare(&str_stub(), &Operation::Gt(OperandValue::F64(-5.5))), Err(Operand::F64(-5.5))));
+    //        assert_eq!(compare(&arr_bool_stub(), &Operation::Gt(OperandValue::F64(-5.5))), Err(Operand::F64(-5.5))));
+    //        assert_eq!(compare(&arr_str_stub(), &Operation::Gt(OperandValue::F64(-5.5))), Err(Operand::F64(-5.5))));
+    //
+    //        assert_eq!(compare(&bool_stub(), &Operation::Lt(OperandValue::F64(-5.5))), Err(Operand::F64(-5.5))));
+    //        assert_eq!(compare(&num_u_stub(), &Operation::Lt(OperandValue::F64(-5.5))), Err(Operand::F64(-5.5))));
+    //        assert_eq!(compare(&num_i_stub(), &Operation::Lt(OperandValue::F64(-5.5))), Err(Operand::F64(-5.5))));
+    //        assert_eq!(compare(&str_stub(), &Operation::Lt(OperandValue::F64(-5.5))), Err(Operand::F64(-5.5))));
+    //        assert_eq!(compare(&arr_bool_stub(), &Operation::Lt(OperandValue::F64(-5.5))), Err(Operand::F64(-5.5))));
+    //        assert_eq!(compare(&arr_str_stub(), &Operation::Lt(OperandValue::F64(-5.5))), Err(Operand::F64(-5.5))));
+    //
+    //        assert_eq!(compare(&bool_stub(), &Operation::Ge(OperandValue::F64(-5.5))), Err(Operand::F64(-5.5))));
+    //        assert_eq!(compare(&num_u_stub(), &Operation::Ge(OperandValue::F64(-5.5))), Err(Operand::F64(-5.5))));
+    //        assert_eq!(compare(&num_i_stub(), &Operation::Ge(OperandValue::F64(-5.5))), Err(Operand::F64(-5.5))));
+    //        assert_eq!(compare(&str_stub(), &Operation::Ge(OperandValue::F64(-5.5))), Err(Operand::F64(-5.5))));
+    //        assert_eq!(compare(&arr_bool_stub(), &Operation::Ge(OperandValue::F64(-5.5))), Err(Operand::F64(-5.5))));
+    //        assert_eq!(compare(&arr_str_stub(), &Operation::Ge(OperandValue::F64(-5.5))), Err(Operand::F64(-5.5))));
+    //
+    //        assert_eq!(compare(&bool_stub(), &Operation::Le(OperandValue::F64(-5.5))), Err(Operand::F64(-5.5))));
+    //        assert_eq!(compare(&num_u_stub(), &Operation::Le(OperandValue::F64(-5.5))), Err(Operand::F64(-5.5))));
+    //        assert_eq!(compare(&num_i_stub(), &Operation::Le(OperandValue::F64(-5.5))), Err(Operand::F64(-5.5))));
+    //        assert_eq!(compare(&str_stub(), &Operation::Le(OperandValue::F64(-5.5))), Err(Operand::F64(-5.5))));
+    //        assert_eq!(compare(&arr_bool_stub(), &Operation::Le(OperandValue::F64(-5.5))), Err(Operand::F64(-5.5))));
+    //        assert_eq!(compare(&arr_str_stub(), &Operation::Le(OperandValue::F64(-5.5))), Err(Operand::F64(-5.5))));
+    //    }
+    //
+    //    #[test]
+    //    fn test_compare_str_none() {
+    //        let value = OperandValue::Str(String::from("Belisarius"));
+    //        assert_eq!(compare(&value, &Operation::Eq(OperandValue::Str(String::from("Belisarius")))), Ok(()));
+    //        assert_eq!(compare(&value, &Operation::Ne(OperandValue::Str(String::from("Iustinianus")))), Ok(()));
+    //    }
+    //
+    //    #[test]
+    //    fn test_compare_str_some() {
+    //        let value = OperandValue::Str(String::from("Belisarius"));
+    //        assert_eq!(
+    //            compare(&value, &Operation::Eq(OperandValue::Str(String::from("Iustinianus")))),
+    //            Err(Operand::Str(String::from("Iustinianus"))))
+    //        );
+    //        assert_eq!(
+    //            compare(&value, &Operation::Ne(OperandValue::Str(String::from("Belisarius")))),
+    //            Err(Operand::Str(String::from("Belisarius"))))
+    //        );
+    //    }
+    //
+    //    #[test]
+    //    fn test_compare_str_other_types() {
+    //        assert_eq!(
+    //            compare(&bool_stub(), &Operation::Eq(OperandValue::Str(String::from("Lemouria")))),
+    //            Err(Operand::Str(String::from("Lemouria"))))
+    //        );
+    //        assert_eq!(
+    //            compare(&num_u_stub(), &Operation::Eq(OperandValue::Str(String::from("Lemouria")))),
+    //            Err(Operand::Str(String::from("Lemouria"))))
+    //        );
+    //        assert_eq!(
+    //            compare(&num_i_stub(), &Operation::Eq(OperandValue::Str(String::from("Lemouria")))),
+    //            Err(Operand::Str(String::from("Lemouria"))))
+    //        );
+    //        assert_eq!(
+    //            compare(&num_f_stub(), &Operation::Eq(OperandValue::Str(String::from("Lemouria")))),
+    //            Err(Operand::Str(String::from("Lemouria"))))
+    //        );
+    //        assert_eq!(
+    //            compare(&arr_bool_stub(), &Operation::Eq(OperandValue::Str(String::from("Lemouria")))),
+    //            Err(Operand::Str(String::from("Lemouria"))))
+    //        );
+    //        assert_eq!(
+    //            compare(&arr_str_stub(), &Operation::Eq(OperandValue::Str(String::from("Lemouria")))),
+    //            Err(Operand::Str(String::from("Lemouria"))))
+    //        );
+    //
+    //        assert_eq!(
+    //            compare(&bool_stub(), &Operation::Ne(OperandValue::Str(String::from("Lemouria")))),
+    //            Err(Operand::Str(String::from("Lemouria"))))
+    //        );
+    //        assert_eq!(
+    //            compare(&num_u_stub(), &Operation::Ne(OperandValue::Str(String::from("Lemouria")))),
+    //            Err(Operand::Str(String::from("Lemouria"))))
+    //        );
+    //        assert_eq!(
+    //            compare(&num_i_stub(), &Operation::Ne(OperandValue::Str(String::from("Lemouria")))),
+    //            Err(Operand::Str(String::from("Lemouria"))))
+    //        );
+    //        assert_eq!(
+    //            compare(&num_f_stub(), &Operation::Ne(OperandValue::Str(String::from("Lemouria")))),
+    //            Err(Operand::Str(String::from("Lemouria"))))
+    //        );
+    //        assert_eq!(
+    //            compare(&arr_bool_stub(), &Operation::Ne(OperandValue::Str(String::from("Lemouria")))),
+    //            Err(Operand::Str(String::from("Lemouria"))))
+    //        );
+    //        assert_eq!(
+    //            compare(&arr_str_stub(), &Operation::Ne(OperandValue::Str(String::from("Lemouria")))),
+    //            Err(Operand::Str(String::from("Lemouria"))))
+    //        );
+    //    }
 }
 
 /*
-#[cfg(test)]
-mod test {
-    use crate::value::stub::{arr_bool_stub, arr_str_stub, bool_stub, num_f_stub, num_i_stub, num_u_stub, str_stub};
-
-    use super::*;
-
-    #[test]
-    fn test_compare_bool_none() {
-        let value = Value::Bool(true);
-        assert_eq!(compare(&value, &Operation::Eq(Value::Bool(true))), Ok(()));
-        assert_eq!(compare(&value, &Operation::Ne(Value::Bool(false))), Ok(()));
-    }
-
-    #[test]
-    fn test_compare_bool_some() {
-        let value = Value::Bool(true);
-        assert_eq!(compare(&value, &Operation::Eq(Value::Bool(false))), Err(operand::Bool(false))));
-        assert_eq!(compare(&value, &Operation::Ne(Value::Bool(true))), Err(operand::Bool(true))));
-    }
-
-    #[test]
-    fn test_compare_bool_other_types() {
-        assert_eq!(compare(&num_u_stub(), &Operation::Eq(Value::Bool(true))), Err(operand::Bool(true))));
-        assert_eq!(compare(&num_i_stub(), &Operation::Eq(Value::Bool(true))), Err(operand::Bool(true))));
-        assert_eq!(compare(&num_f_stub(), &Operation::Eq(Value::Bool(true))), Err(operand::Bool(true))));
-        assert_eq!(compare(&str_stub(), &Operation::Eq(Value::Bool(true))), Err(operand::Bool(true))));
-        assert_eq!(compare(&arr_bool_stub(), &Operation::Eq(Value::Bool(true))), Err(operand::Bool(true))));
-        assert_eq!(compare(&arr_str_stub(), &Operation::Eq(Value::Bool(true))), Err(operand::Bool(true))));
-
-        assert_eq!(compare(&num_u_stub(), &Operation::Ne(Value::Bool(true))), Err(operand::Bool(true))));
-        assert_eq!(compare(&num_i_stub(), &Operation::Ne(Value::Bool(true))), Err(operand::Bool(true))));
-        assert_eq!(compare(&num_f_stub(), &Operation::Ne(Value::Bool(true))), Err(operand::Bool(true))));
-        assert_eq!(compare(&str_stub(), &Operation::Ne(Value::Bool(true))), Err(operand::Bool(true))));
-        assert_eq!(compare(&arr_bool_stub(), &Operation::Ne(Value::Bool(true))), Err(operand::Bool(true))));
-        assert_eq!(compare(&arr_str_stub(), &Operation::Ne(Value::Bool(true))), Err(operand::Bool(true))));
-    }
-
-    #[test]
-    fn test_compare_num_u_none() {
-        let value = Value::U64(42);
-        assert_eq!(compare(&value, &Operation::Eq(Value::U64(42))), Ok(()));
-        assert_eq!(compare(&value, &Operation::Ne(Value::U64(109))), Ok(()));
-        assert_eq!(compare(&value, &Operation::Gt(Value::U64(41))), Ok(()));
-        assert_eq!(compare(&value, &Operation::Lt(Value::U64(43))), Ok(()));
-        assert_eq!(compare(&value, &Operation::Ge(Value::U64(42))), Ok(()));
-        assert_eq!(compare(&value, &Operation::Le(Value::U64(42))), Ok(()));
-    }
-
-    #[test]
-    fn test_compare_num_u_some() {
-        let value = Value::U64(42);
-        assert_eq!(compare(&value, &Operation::Eq(Value::U64(22))), Err(operand::U64(22))));
-        assert_eq!(compare(&value, &Operation::Ne(Value::U64(42))), Err(operand::U64(42))));
-        assert_eq!(compare(&value, &Operation::Gt(Value::U64(42))), Err(operand::U64(42))));
-        assert_eq!(compare(&value, &Operation::Lt(Value::U64(42))), Err(operand::U64(42))));
-        assert_eq!(compare(&value, &Operation::Ge(Value::U64(43))), Err(operand::U64(43))));
-        assert_eq!(compare(&value, &Operation::Le(Value::U64(41))), Err(operand::U64(41))));
-    }
-
-    #[test]
-    fn test_compare_num_u_other_types() {
-        assert_eq!(compare(&bool_stub(), &Operation::Eq(Value::U64(5))), Err(operand::U64(5))));
-        assert_eq!(compare(&num_i_stub(), &Operation::Eq(Value::U64(5))), Err(operand::U64(5))));
-        assert_eq!(compare(&num_f_stub(), &Operation::Eq(Value::U64(5))), Err(operand::U64(5))));
-        assert_eq!(compare(&str_stub(), &Operation::Eq(Value::U64(5))), Err(operand::U64(5))));
-        assert_eq!(compare(&arr_bool_stub(), &Operation::Eq(Value::U64(5))), Err(operand::U64(5))));
-        assert_eq!(compare(&arr_str_stub(), &Operation::Eq(Value::U64(5))), Err(operand::U64(5))));
-
-        assert_eq!(compare(&bool_stub(), &Operation::Ne(Value::U64(5))), Err(operand::U64(5))));
-        assert_eq!(compare(&num_i_stub(), &Operation::Ne(Value::U64(5))), Err(operand::U64(5))));
-        assert_eq!(compare(&num_f_stub(), &Operation::Ne(Value::U64(5))), Err(operand::U64(5))));
-        assert_eq!(compare(&str_stub(), &Operation::Ne(Value::U64(5))), Err(operand::U64(5))));
-        assert_eq!(compare(&arr_bool_stub(), &Operation::Ne(Value::U64(5))), Err(operand::U64(5))));
-        assert_eq!(compare(&arr_str_stub(), &Operation::Ne(Value::U64(5))), Err(operand::U64(5))));
-
-        assert_eq!(compare(&bool_stub(), &Operation::Gt(Value::U64(5))), Err(operand::U64(5))));
-        assert_eq!(compare(&num_i_stub(), &Operation::Gt(Value::U64(5))), Err(operand::U64(5))));
-        assert_eq!(compare(&num_f_stub(), &Operation::Gt(Value::U64(5))), Err(operand::U64(5))));
-        assert_eq!(compare(&str_stub(), &Operation::Gt(Value::U64(5))), Err(operand::U64(5))));
-        assert_eq!(compare(&arr_bool_stub(), &Operation::Gt(Value::U64(5))), Err(operand::U64(5))));
-        assert_eq!(compare(&arr_str_stub(), &Operation::Gt(Value::U64(5))), Err(operand::U64(5))));
-
-        assert_eq!(compare(&bool_stub(), &Operation::Lt(Value::U64(5))), Err(operand::U64(5))));
-        assert_eq!(compare(&num_i_stub(), &Operation::Lt(Value::U64(5))), Err(operand::U64(5))));
-        assert_eq!(compare(&num_f_stub(), &Operation::Lt(Value::U64(5))), Err(operand::U64(5))));
-        assert_eq!(compare(&str_stub(), &Operation::Lt(Value::U64(5))), Err(operand::U64(5))));
-        assert_eq!(compare(&arr_bool_stub(), &Operation::Lt(Value::U64(5))), Err(operand::U64(5))));
-        assert_eq!(compare(&arr_str_stub(), &Operation::Lt(Value::U64(5))), Err(operand::U64(5))));
-
-        assert_eq!(compare(&bool_stub(), &Operation::Ge(Value::U64(5))), Err(operand::U64(5))));
-        assert_eq!(compare(&num_i_stub(), &Operation::Ge(Value::U64(5))), Err(operand::U64(5))));
-        assert_eq!(compare(&num_f_stub(), &Operation::Ge(Value::U64(5))), Err(operand::U64(5))));
-        assert_eq!(compare(&str_stub(), &Operation::Ge(Value::U64(5))), Err(operand::U64(5))));
-        assert_eq!(compare(&arr_bool_stub(), &Operation::Ge(Value::U64(5))), Err(operand::U64(5))));
-        assert_eq!(compare(&arr_str_stub(), &Operation::Ge(Value::U64(5))), Err(operand::U64(5))));
-
-        assert_eq!(compare(&bool_stub(), &Operation::Le(Value::U64(5))), Err(operand::U64(5))));
-        assert_eq!(compare(&num_i_stub(), &Operation::Le(Value::U64(5))), Err(operand::U64(5))));
-        assert_eq!(compare(&num_f_stub(), &Operation::Le(Value::U64(5))), Err(operand::U64(5))));
-        assert_eq!(compare(&str_stub(), &Operation::Le(Value::U64(5))), Err(operand::U64(5))));
-        assert_eq!(compare(&arr_bool_stub(), &Operation::Le(Value::U64(5))), Err(operand::U64(5))));
-        assert_eq!(compare(&arr_str_stub(), &Operation::Le(Value::U64(5))), Err(operand::U64(5))));
-    }
-
-    #[test]
-    fn test_compare_num_i_none() {
-        let value = Value::I64(-42);
-        assert_eq!(compare(&value, &Operation::Eq(Value::I64(-42))), Ok(()));
-        assert_eq!(compare(&value, &Operation::Ne(Value::I64(-109))), Ok(()));
-        assert_eq!(compare(&value, &Operation::Gt(Value::I64(-43))), Ok(()));
-        assert_eq!(compare(&value, &Operation::Lt(Value::I64(-41))), Ok(()));
-        assert_eq!(compare(&value, &Operation::Ge(Value::I64(-42))), Ok(()));
-        assert_eq!(compare(&value, &Operation::Le(Value::I64(-42))), Ok(()));
-    }
-
-    #[test]
-    fn test_compare_num_i_some() {
-        let value = Value::I64(-42);
-        assert_eq!(compare(&value, &Operation::Eq(Value::I64(-22))), Err(operand::I64(-22))));
-        assert_eq!(compare(&value, &Operation::Ne(Value::I64(-42))), Err(operand::I64(-42))));
-        assert_eq!(compare(&value, &Operation::Gt(Value::I64(-42))), Err(operand::I64(-42))));
-        assert_eq!(compare(&value, &Operation::Lt(Value::I64(-42))), Err(operand::I64(-42))));
-        assert_eq!(compare(&value, &Operation::Ge(Value::I64(-41))), Err(operand::I64(-41))));
-        assert_eq!(compare(&value, &Operation::Le(Value::I64(-43))), Err(operand::I64(-43))));
-    }
-
-    #[test]
-    fn test_compare_num_i_other_types() {
-        assert_eq!(compare(&bool_stub(), &Operation::Eq(Value::I64(-5))), Err(operand::I64(-5))));
-        assert_eq!(compare(&num_u_stub(), &Operation::Eq(Value::I64(-5))), Err(operand::I64(-5))));
-        assert_eq!(compare(&num_f_stub(), &Operation::Eq(Value::I64(-5))), Err(operand::I64(-5))));
-        assert_eq!(compare(&str_stub(), &Operation::Eq(Value::I64(-5))), Err(operand::I64(-5))));
-        assert_eq!(compare(&arr_bool_stub(), &Operation::Eq(Value::I64(-5))), Err(operand::I64(-5))));
-        assert_eq!(compare(&arr_str_stub(), &Operation::Eq(Value::I64(-5))), Err(operand::I64(-5))));
-
-        assert_eq!(compare(&bool_stub(), &Operation::Ne(Value::I64(-5))), Err(operand::I64(-5))));
-        assert_eq!(compare(&num_u_stub(), &Operation::Ne(Value::I64(-5))), Err(operand::I64(-5))));
-        assert_eq!(compare(&num_f_stub(), &Operation::Ne(Value::I64(-5))), Err(operand::I64(-5))));
-        assert_eq!(compare(&str_stub(), &Operation::Ne(Value::I64(-5))), Err(operand::I64(-5))));
-        assert_eq!(compare(&arr_bool_stub(), &Operation::Ne(Value::I64(-5))), Err(operand::I64(-5))));
-        assert_eq!(compare(&arr_str_stub(), &Operation::Ne(Value::I64(-5))), Err(operand::I64(-5))));
-
-        assert_eq!(compare(&bool_stub(), &Operation::Gt(Value::I64(-5))), Err(operand::I64(-5))));
-        assert_eq!(compare(&num_u_stub(), &Operation::Gt(Value::I64(-5))), Err(operand::I64(-5))));
-        assert_eq!(compare(&num_f_stub(), &Operation::Gt(Value::I64(-5))), Err(operand::I64(-5))));
-        assert_eq!(compare(&str_stub(), &Operation::Gt(Value::I64(-5))), Err(operand::I64(-5))));
-        assert_eq!(compare(&arr_bool_stub(), &Operation::Gt(Value::I64(-5))), Err(operand::I64(-5))));
-        assert_eq!(compare(&arr_str_stub(), &Operation::Gt(Value::I64(-5))), Err(operand::I64(-5))));
-
-        assert_eq!(compare(&bool_stub(), &Operation::Lt(Value::I64(-5))), Err(operand::I64(-5))));
-        assert_eq!(compare(&num_u_stub(), &Operation::Lt(Value::I64(-5))), Err(operand::I64(-5))));
-        assert_eq!(compare(&num_f_stub(), &Operation::Lt(Value::I64(-5))), Err(operand::I64(-5))));
-        assert_eq!(compare(&str_stub(), &Operation::Lt(Value::I64(-5))), Err(operand::I64(-5))));
-        assert_eq!(compare(&arr_bool_stub(), &Operation::Lt(Value::I64(-5))), Err(operand::I64(-5))));
-        assert_eq!(compare(&arr_str_stub(), &Operation::Lt(Value::I64(-5))), Err(operand::I64(-5))));
-
-        assert_eq!(compare(&bool_stub(), &Operation::Ge(Value::I64(-5))), Err(operand::I64(-5))));
-        assert_eq!(compare(&num_u_stub(), &Operation::Ge(Value::I64(-5))), Err(operand::I64(-5))));
-        assert_eq!(compare(&num_f_stub(), &Operation::Ge(Value::I64(-5))), Err(operand::I64(-5))));
-        assert_eq!(compare(&str_stub(), &Operation::Ge(Value::I64(-5))), Err(operand::I64(-5))));
-        assert_eq!(compare(&arr_bool_stub(), &Operation::Ge(Value::I64(-5))), Err(operand::I64(-5))));
-        assert_eq!(compare(&arr_str_stub(), &Operation::Ge(Value::I64(-5))), Err(operand::I64(-5))));
-
-        assert_eq!(compare(&bool_stub(), &Operation::Le(Value::I64(-5))), Err(operand::I64(-5))));
-        assert_eq!(compare(&num_u_stub(), &Operation::Le(Value::I64(-5))), Err(operand::I64(-5))));
-        assert_eq!(compare(&num_f_stub(), &Operation::Le(Value::I64(-5))), Err(operand::I64(-5))));
-        assert_eq!(compare(&str_stub(), &Operation::Le(Value::I64(-5))), Err(operand::I64(-5))));
-        assert_eq!(compare(&arr_bool_stub(), &Operation::Le(Value::I64(-5))), Err(operand::I64(-5))));
-        assert_eq!(compare(&arr_str_stub(), &Operation::Le(Value::I64(-5))), Err(operand::I64(-5))));
-    }
-
-    #[test]
-    fn test_compare_num_f_none() {
-        let value = Value::F64(-42.5);
-        assert_eq!(compare(&value, &Operation::Eq(Value::F64(-42.5))), Ok(()));
-        assert_eq!(compare(&value, &Operation::Ne(Value::F64(-10.5))), Ok(()));
-        assert_eq!(compare(&value, &Operation::Gt(Value::F64(-43.5))), Ok(()));
-        assert_eq!(compare(&value, &Operation::Lt(Value::F64(-41.5))), Ok(()));
-        assert_eq!(compare(&value, &Operation::Ge(Value::F64(-42.5))), Ok(()));
-        assert_eq!(compare(&value, &Operation::Le(Value::F64(-42.5))), Ok(()));
-    }
-
-    #[test]
-    fn test_compare_num_f_some() {
-        let value = Value::F64(-42.5);
-        assert_eq!(compare(&value, &Operation::Eq(Value::F64(-22.5))), Err(operand::F64(-22.5))));
-        assert_eq!(compare(&value, &Operation::Ne(Value::F64(-42.5))), Err(operand::F64(-42.5))));
-        assert_eq!(compare(&value, &Operation::Gt(Value::F64(-42.5))), Err(operand::F64(-42.5))));
-        assert_eq!(compare(&value, &Operation::Lt(Value::F64(-42.5))), Err(operand::F64(-42.5))));
-        assert_eq!(compare(&value, &Operation::Ge(Value::F64(-41.5))), Err(operand::F64(-41.5))));
-        assert_eq!(compare(&value, &Operation::Le(Value::F64(-43.5))), Err(operand::F64(-43.5))));
-    }
-
-    #[test]
-    fn test_compare_num_f_other_types() {
-        assert_eq!(compare(&bool_stub(), &Operation::Eq(Value::F64(-5.5))), Err(operand::F64(-5.5))));
-        assert_eq!(compare(&num_u_stub(), &Operation::Eq(Value::F64(-5.5))), Err(operand::F64(-5.5))));
-        assert_eq!(compare(&num_i_stub(), &Operation::Eq(Value::F64(-5.5))), Err(operand::F64(-5.5))));
-        assert_eq!(compare(&str_stub(), &Operation::Eq(Value::F64(-5.5))), Err(operand::F64(-5.5))));
-        assert_eq!(compare(&arr_bool_stub(), &Operation::Eq(Value::F64(-5.5))), Err(operand::F64(-5.5))));
-        assert_eq!(compare(&arr_str_stub(), &Operation::Eq(Value::F64(-5.5))), Err(operand::F64(-5.5))));
-
-        assert_eq!(compare(&bool_stub(), &Operation::Ne(Value::F64(-5.5))), Err(operand::F64(-5.5))));
-        assert_eq!(compare(&num_u_stub(), &Operation::Ne(Value::F64(-5.5))), Err(operand::F64(-5.5))));
-        assert_eq!(compare(&num_i_stub(), &Operation::Ne(Value::F64(-5.5))), Err(operand::F64(-5.5))));
-        assert_eq!(compare(&str_stub(), &Operation::Ne(Value::F64(-5.5))), Err(operand::F64(-5.5))));
-        assert_eq!(compare(&arr_bool_stub(), &Operation::Ne(Value::F64(-5.5))), Err(operand::F64(-5.5))));
-        assert_eq!(compare(&arr_str_stub(), &Operation::Ne(Value::F64(-5.5))), Err(operand::F64(-5.5))));
-
-        assert_eq!(compare(&bool_stub(), &Operation::Gt(Value::F64(-5.5))), Err(operand::F64(-5.5))));
-        assert_eq!(compare(&num_u_stub(), &Operation::Gt(Value::F64(-5.5))), Err(operand::F64(-5.5))));
-        assert_eq!(compare(&num_i_stub(), &Operation::Gt(Value::F64(-5.5))), Err(operand::F64(-5.5))));
-        assert_eq!(compare(&str_stub(), &Operation::Gt(Value::F64(-5.5))), Err(operand::F64(-5.5))));
-        assert_eq!(compare(&arr_bool_stub(), &Operation::Gt(Value::F64(-5.5))), Err(operand::F64(-5.5))));
-        assert_eq!(compare(&arr_str_stub(), &Operation::Gt(Value::F64(-5.5))), Err(operand::F64(-5.5))));
-
-        assert_eq!(compare(&bool_stub(), &Operation::Lt(Value::F64(-5.5))), Err(operand::F64(-5.5))));
-        assert_eq!(compare(&num_u_stub(), &Operation::Lt(Value::F64(-5.5))), Err(operand::F64(-5.5))));
-        assert_eq!(compare(&num_i_stub(), &Operation::Lt(Value::F64(-5.5))), Err(operand::F64(-5.5))));
-        assert_eq!(compare(&str_stub(), &Operation::Lt(Value::F64(-5.5))), Err(operand::F64(-5.5))));
-        assert_eq!(compare(&arr_bool_stub(), &Operation::Lt(Value::F64(-5.5))), Err(operand::F64(-5.5))));
-        assert_eq!(compare(&arr_str_stub(), &Operation::Lt(Value::F64(-5.5))), Err(operand::F64(-5.5))));
-
-        assert_eq!(compare(&bool_stub(), &Operation::Ge(Value::F64(-5.5))), Err(operand::F64(-5.5))));
-        assert_eq!(compare(&num_u_stub(), &Operation::Ge(Value::F64(-5.5))), Err(operand::F64(-5.5))));
-        assert_eq!(compare(&num_i_stub(), &Operation::Ge(Value::F64(-5.5))), Err(operand::F64(-5.5))));
-        assert_eq!(compare(&str_stub(), &Operation::Ge(Value::F64(-5.5))), Err(operand::F64(-5.5))));
-        assert_eq!(compare(&arr_bool_stub(), &Operation::Ge(Value::F64(-5.5))), Err(operand::F64(-5.5))));
-        assert_eq!(compare(&arr_str_stub(), &Operation::Ge(Value::F64(-5.5))), Err(operand::F64(-5.5))));
-
-        assert_eq!(compare(&bool_stub(), &Operation::Le(Value::F64(-5.5))), Err(operand::F64(-5.5))));
-        assert_eq!(compare(&num_u_stub(), &Operation::Le(Value::F64(-5.5))), Err(operand::F64(-5.5))));
-        assert_eq!(compare(&num_i_stub(), &Operation::Le(Value::F64(-5.5))), Err(operand::F64(-5.5))));
-        assert_eq!(compare(&str_stub(), &Operation::Le(Value::F64(-5.5))), Err(operand::F64(-5.5))));
-        assert_eq!(compare(&arr_bool_stub(), &Operation::Le(Value::F64(-5.5))), Err(operand::F64(-5.5))));
-        assert_eq!(compare(&arr_str_stub(), &Operation::Le(Value::F64(-5.5))), Err(operand::F64(-5.5))));
-    }
-
-    #[test]
-    fn test_compare_str_none() {
-        let value = Value::Str(String::from("Belisarius"));
-        assert_eq!(compare(&value, &Operation::Eq(Value::Str(String::from("Belisarius")))), Ok(()));
-        assert_eq!(compare(&value, &Operation::Ne(Value::Str(String::from("Iustinianus")))), Ok(()));
-    }
-
-    #[test]
-    fn test_compare_str_some() {
-        let value = Value::Str(String::from("Belisarius"));
-        assert_eq!(
-            compare(&value, &Operation::Eq(Value::Str(String::from("Iustinianus")))),
-            Err(operand::Str(String::from("Iustinianus"))))
-        );
-        assert_eq!(
-            compare(&value, &Operation::Ne(Value::Str(String::from("Belisarius")))),
-            Err(operand::Str(String::from("Belisarius"))))
-        );
-    }
-
-    #[test]
-    fn test_compare_str_other_types() {
-        assert_eq!(
-            compare(&bool_stub(), &Operation::Eq(Value::Str(String::from("Lemouria")))),
-            Err(operand::Str(String::from("Lemouria"))))
-        );
-        assert_eq!(
-            compare(&num_u_stub(), &Operation::Eq(Value::Str(String::from("Lemouria")))),
-            Err(operand::Str(String::from("Lemouria"))))
-        );
-        assert_eq!(
-            compare(&num_i_stub(), &Operation::Eq(Value::Str(String::from("Lemouria")))),
-            Err(operand::Str(String::from("Lemouria"))))
-        );
-        assert_eq!(
-            compare(&num_f_stub(), &Operation::Eq(Value::Str(String::from("Lemouria")))),
-            Err(operand::Str(String::from("Lemouria"))))
-        );
-        assert_eq!(
-            compare(&arr_bool_stub(), &Operation::Eq(Value::Str(String::from("Lemouria")))),
-            Err(operand::Str(String::from("Lemouria"))))
-        );
-        assert_eq!(
-            compare(&arr_str_stub(), &Operation::Eq(Value::Str(String::from("Lemouria")))),
-            Err(operand::Str(String::from("Lemouria"))))
-        );
-
-        assert_eq!(
-            compare(&bool_stub(), &Operation::Ne(Value::Str(String::from("Lemouria")))),
-            Err(operand::Str(String::from("Lemouria"))))
-        );
-        assert_eq!(
-            compare(&num_u_stub(), &Operation::Ne(Value::Str(String::from("Lemouria")))),
-            Err(operand::Str(String::from("Lemouria"))))
-        );
-        assert_eq!(
-            compare(&num_i_stub(), &Operation::Ne(Value::Str(String::from("Lemouria")))),
-            Err(operand::Str(String::from("Lemouria"))))
-        );
-        assert_eq!(
-            compare(&num_f_stub(), &Operation::Ne(Value::Str(String::from("Lemouria")))),
-            Err(operand::Str(String::from("Lemouria"))))
-        );
-        assert_eq!(
-            compare(&arr_bool_stub(), &Operation::Ne(Value::Str(String::from("Lemouria")))),
-            Err(operand::Str(String::from("Lemouria"))))
-        );
-        assert_eq!(
-            compare(&arr_str_stub(), &Operation::Ne(Value::Str(String::from("Lemouria")))),
-            Err(operand::Str(String::from("Lemouria"))))
-        );
-    }
-}
-
-
 
 pub fn compare_eq<T>(operation: &OperationEq, value: &T) -> Result<(), OperationEq>
 where
@@ -641,10 +1041,10 @@ where
             }
         }
     }
-    Ok(())
+    SomSome(e(Ok(()))
 }
 
-pub fn compare<T>(operation: &Operation, value: &T) -> Result<(), Operation>
+pub fn co)mpare<T>(operation: &Operation, value: &T) -> Result<(), Operation>
 where
     T: PartialOrd + Clone,
 {
@@ -685,10 +1085,10 @@ where
             }
         }
     }
-    Ok(())
+    SomSome(e(Ok(()))
 }
 
-#[cfg(test)]
+#[cfg(tes)t)]
 mod test {
     use crate::operation::compare;
 

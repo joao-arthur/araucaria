@@ -42,7 +42,10 @@ impl DateTimeValidation {
     }
 
     pub fn btwn(self, value_a: String, value_b: String) -> Self {
-        DateTimeValidation { operation: Some(Operation::Btwn(Operand::Value(OperandValue::Str(value_a)), Operand::Value(OperandValue::Str(value_b)))), ..self }
+        DateTimeValidation {
+            operation: Some(Operation::Btwn(Operand::Value(OperandValue::Str(value_a)), Operand::Value(OperandValue::Str(value_b)))),
+            ..self
+        }
     }
 
     pub fn eq_field(self, field: String) -> Self {
@@ -86,31 +89,55 @@ mod test {
         assert_eq!(DateTimeValidation::default().optional(), DateTimeValidation { required: false, operation: None });
         assert_eq!(
             DateTimeValidation::default().eq(String::from("2026-08-12T08:10Z")),
-            DateTimeValidation { required: true, operation: Some(Operation::Eq(Operand::Value(OperandValue::Str(String::from("2026-08-12T08:10Z"))))) }
+            DateTimeValidation {
+                required: true,
+                operation: Some(Operation::Eq(Operand::Value(OperandValue::Str(String::from("2026-08-12T08:10Z")))))
+            }
         );
         assert_eq!(
             DateTimeValidation::default().ne(String::from("2027-08-02T10:27Z")),
-            DateTimeValidation { required: true, operation: Some(Operation::Ne(Operand::Value(OperandValue::Str(String::from("2027-08-02T10:27Z"))))) }
+            DateTimeValidation {
+                required: true,
+                operation: Some(Operation::Ne(Operand::Value(OperandValue::Str(String::from("2027-08-02T10:27Z")))))
+            }
         );
         assert_eq!(
             DateTimeValidation::default().gt(String::from("2028-07-22T19:41Z")),
-            DateTimeValidation { required: true, operation: Some(Operation::Gt(Operand::Value(OperandValue::Str(String::from("2028-07-22T19:41Z"))))) }
+            DateTimeValidation {
+                required: true,
+                operation: Some(Operation::Gt(Operand::Value(OperandValue::Str(String::from("2028-07-22T19:41Z")))))
+            }
         );
         assert_eq!(
             DateTimeValidation::default().ge(String::from("2030-11-25T03:01Z")),
-            DateTimeValidation { required: true, operation: Some(Operation::Ge(Operand::Value(OperandValue::Str(String::from("2030-11-25T03:01Z"))))) }
+            DateTimeValidation {
+                required: true,
+                operation: Some(Operation::Ge(Operand::Value(OperandValue::Str(String::from("2030-11-25T03:01Z")))))
+            }
         );
         assert_eq!(
             DateTimeValidation::default().lt(String::from("2031-11-14T00:00Z")),
-            DateTimeValidation { required: true, operation: Some(Operation::Lt(Operand::Value(OperandValue::Str(String::from("2031-11-14T00:00Z"))))) }
+            DateTimeValidation {
+                required: true,
+                operation: Some(Operation::Lt(Operand::Value(OperandValue::Str(String::from("2031-11-14T00:00Z")))))
+            }
         );
         assert_eq!(
             DateTimeValidation::default().le(String::from("2033-03-30T01:01Z")),
-            DateTimeValidation { required: true, operation: Some(Operation::Le(Operand::Value(OperandValue::Str(String::from("2033-03-30T01:01Z"))))) }
+            DateTimeValidation {
+                required: true,
+                operation: Some(Operation::Le(Operand::Value(OperandValue::Str(String::from("2033-03-30T01:01Z")))))
+            }
         );
         assert_eq!(
             DateTimeValidation::default().btwn(String::from("2031-11-14T00:00Z"), String::from("2033-03-30T01:01Z")),
-            DateTimeValidation { required: true, operation: Some(Operation::Btwn(Operand::Value(OperandValue::Str(String::from("2031-11-14T00:00Z"))), Operand::Value(OperandValue::Str(String::from("2033-03-30T01:01Z"))))) }
+            DateTimeValidation {
+                required: true,
+                operation: Some(Operation::Btwn(
+                    Operand::Value(OperandValue::Str(String::from("2031-11-14T00:00Z"))),
+                    Operand::Value(OperandValue::Str(String::from("2033-03-30T01:01Z")))
+                ))
+            }
         );
     }
 }

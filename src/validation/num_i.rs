@@ -42,7 +42,10 @@ impl NumIValidation {
     }
 
     pub fn btwn(self, value_a: i64, value_b: i64) -> Self {
-        NumIValidation { operation: Some(Operation::Btwn(Operand::Value(OperandValue::I64(value_a)), Operand::Value(OperandValue::I64(value_b)))), ..self }
+        NumIValidation {
+            operation: Some(Operation::Btwn(Operand::Value(OperandValue::I64(value_a)), Operand::Value(OperandValue::I64(value_b)))),
+            ..self
+        }
     }
 
     pub fn eq_field(self, field: String) -> Self {
@@ -84,19 +87,70 @@ mod test {
     fn test_num_i_validation() {
         assert_eq!(NumIValidation::default(), NumIValidation { required: true, operation: None });
         assert_eq!(NumIValidation::default().optional(), NumIValidation { required: false, operation: None });
-        assert_eq!(NumIValidation::default().eq(-1), NumIValidation { required: true, operation: Some(Operation::Eq(Operand::Value(OperandValue::I64(-1)))) });
-        assert_eq!(NumIValidation::default().ne(-2), NumIValidation { required: true, operation: Some(Operation::Ne(Operand::Value(OperandValue::I64(-2)))) });
-        assert_eq!(NumIValidation::default().gt(-3), NumIValidation { required: true, operation: Some(Operation::Gt(Operand::Value(OperandValue::I64(-3)))) });
-        assert_eq!(NumIValidation::default().ge(-4), NumIValidation { required: true, operation: Some(Operation::Ge(Operand::Value(OperandValue::I64(-4)))) });
-        assert_eq!(NumIValidation::default().lt(-5), NumIValidation { required: true, operation: Some(Operation::Lt(Operand::Value(OperandValue::I64(-5)))) });
-        assert_eq!(NumIValidation::default().le(-6), NumIValidation { required: true, operation: Some(Operation::Le(Operand::Value(OperandValue::I64(-6)))) });
-        assert_eq!(NumIValidation::default().btwn(-42, 42), NumIValidation { required: true, operation: Some(Operation::Btwn(Operand::Value(OperandValue::I64(-42)), Operand::Value(OperandValue::I64(42)))) });
-        assert_eq!(NumIValidation::default().eq_field(String::from("user.data.info.score_change")), NumIValidation { required: true, operation: Some(Operation::Eq(Operand::FieldPath(String::from("user.data.info.score_change")))) });
-        assert_eq!(NumIValidation::default().ne_field(String::from("user.data.info.score_change")), NumIValidation { required: true, operation: Some(Operation::Ne(Operand::FieldPath(String::from("user.data.info.score_change")))) });
-        assert_eq!(NumIValidation::default().gt_field(String::from("user.data.info.score_change")), NumIValidation { required: true, operation: Some(Operation::Gt(Operand::FieldPath(String::from("user.data.info.score_change")))) });
-        assert_eq!(NumIValidation::default().ge_field(String::from("user.data.info.score_change")), NumIValidation { required: true, operation: Some(Operation::Ge(Operand::FieldPath(String::from("user.data.info.score_change")))) });
-        assert_eq!(NumIValidation::default().lt_field(String::from("user.data.info.score_change")), NumIValidation { required: true, operation: Some(Operation::Lt(Operand::FieldPath(String::from("user.data.info.score_change")))) });
-        assert_eq!(NumIValidation::default().le_field(String::from("user.data.info.score_change")), NumIValidation { required: true, operation: Some(Operation::Le(Operand::FieldPath(String::from("user.data.info.score_change")))) });
-        assert_eq!(NumIValidation::default().btwn_field(String::from("user.data.info.min_score"), String::from("user.data.info.max_score")), NumIValidation { required: true, operation: Some(Operation::Btwn(Operand::FieldPath(String::from("user.data.info.min_score")), Operand::FieldPath(String::from("user.data.info.max_score")))) });
+        assert_eq!(
+            NumIValidation::default().eq(-1),
+            NumIValidation { required: true, operation: Some(Operation::Eq(Operand::Value(OperandValue::I64(-1)))) }
+        );
+        assert_eq!(
+            NumIValidation::default().ne(-2),
+            NumIValidation { required: true, operation: Some(Operation::Ne(Operand::Value(OperandValue::I64(-2)))) }
+        );
+        assert_eq!(
+            NumIValidation::default().gt(-3),
+            NumIValidation { required: true, operation: Some(Operation::Gt(Operand::Value(OperandValue::I64(-3)))) }
+        );
+        assert_eq!(
+            NumIValidation::default().ge(-4),
+            NumIValidation { required: true, operation: Some(Operation::Ge(Operand::Value(OperandValue::I64(-4)))) }
+        );
+        assert_eq!(
+            NumIValidation::default().lt(-5),
+            NumIValidation { required: true, operation: Some(Operation::Lt(Operand::Value(OperandValue::I64(-5)))) }
+        );
+        assert_eq!(
+            NumIValidation::default().le(-6),
+            NumIValidation { required: true, operation: Some(Operation::Le(Operand::Value(OperandValue::I64(-6)))) }
+        );
+        assert_eq!(
+            NumIValidation::default().btwn(-42, 42),
+            NumIValidation {
+                required: true,
+                operation: Some(Operation::Btwn(Operand::Value(OperandValue::I64(-42)), Operand::Value(OperandValue::I64(42))))
+            }
+        );
+        assert_eq!(
+            NumIValidation::default().eq_field(String::from("user.data.info.score_change")),
+            NumIValidation { required: true, operation: Some(Operation::Eq(Operand::FieldPath(String::from("user.data.info.score_change")))) }
+        );
+        assert_eq!(
+            NumIValidation::default().ne_field(String::from("user.data.info.score_change")),
+            NumIValidation { required: true, operation: Some(Operation::Ne(Operand::FieldPath(String::from("user.data.info.score_change")))) }
+        );
+        assert_eq!(
+            NumIValidation::default().gt_field(String::from("user.data.info.score_change")),
+            NumIValidation { required: true, operation: Some(Operation::Gt(Operand::FieldPath(String::from("user.data.info.score_change")))) }
+        );
+        assert_eq!(
+            NumIValidation::default().ge_field(String::from("user.data.info.score_change")),
+            NumIValidation { required: true, operation: Some(Operation::Ge(Operand::FieldPath(String::from("user.data.info.score_change")))) }
+        );
+        assert_eq!(
+            NumIValidation::default().lt_field(String::from("user.data.info.score_change")),
+            NumIValidation { required: true, operation: Some(Operation::Lt(Operand::FieldPath(String::from("user.data.info.score_change")))) }
+        );
+        assert_eq!(
+            NumIValidation::default().le_field(String::from("user.data.info.score_change")),
+            NumIValidation { required: true, operation: Some(Operation::Le(Operand::FieldPath(String::from("user.data.info.score_change")))) }
+        );
+        assert_eq!(
+            NumIValidation::default().btwn_field(String::from("user.data.info.min_score"), String::from("user.data.info.max_score")),
+            NumIValidation {
+                required: true,
+                operation: Some(Operation::Btwn(
+                    Operand::FieldPath(String::from("user.data.info.min_score")),
+                    Operand::FieldPath(String::from("user.data.info.max_score"))
+                ))
+            }
+        );
     }
 }

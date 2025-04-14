@@ -92,8 +92,14 @@ mod test {
             SchemaErr::Validation(vec![ValidationErr::NumbersLen(Operation::Le(Operand::Value(OperandValue::USize(6))))])
         );
         assert_eq!(
-            SchemaErr::validation([ValidationErr::SymbolsLen(Operation::Btwn(Operand::Value(OperandValue::USize(7)), Operand::Value(OperandValue::USize(8))))]),
-            SchemaErr::Validation(vec![ValidationErr::SymbolsLen(Operation::Btwn(Operand::Value(OperandValue::USize(7)), Operand::Value(OperandValue::USize(8))))])
+            SchemaErr::validation([ValidationErr::SymbolsLen(Operation::Btwn(
+                Operand::Value(OperandValue::USize(7)),
+                Operand::Value(OperandValue::USize(8))
+            ))]),
+            SchemaErr::Validation(vec![ValidationErr::SymbolsLen(Operation::Btwn(
+                Operand::Value(OperandValue::USize(7)),
+                Operand::Value(OperandValue::USize(8))
+            ))])
         );
     }
 

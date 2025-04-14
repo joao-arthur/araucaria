@@ -129,10 +129,7 @@ mod test {
         );
         assert_eq!(Value::from([false, true, true]), Value::Arr(vec![Value::Bool(false), Value::Bool(true), Value::Bool(true)]));
         assert_eq!(Value::from([9 as u64, 213897 as u64, 2394 as u64]), Value::Arr(vec![Value::U64(9), Value::U64(213897), Value::U64(2394)]));
-        assert_eq!(
-            Value::from([-9 as i64, -213897 as i64, -2394 as i64]),
-            Value::Arr(vec![Value::I64(-9), Value::I64(-213897), Value::I64(-2394)])
-        );
+        assert_eq!(Value::from([-9 as i64, -213897 as i64, -2394 as i64]), Value::Arr(vec![Value::I64(-9), Value::I64(-213897), Value::I64(-2394)]));
         assert_eq!(
             Value::from([-9.5 as f64, -213897.5 as f64, -2394.5 as f64]),
             Value::Arr(vec![Value::F64(-9.5), Value::F64(-213897.5), Value::F64(-2394.5)])
