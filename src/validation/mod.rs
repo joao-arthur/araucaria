@@ -2,7 +2,7 @@ use std::collections::HashMap;
 
 use bool::BoolValidation;
 use date::DateValidation;
-use datetime::DateTimeValidation;
+use date_time::DateTimeValidation;
 use email::EmailValidation;
 use num_f::NumFValidation;
 use num_i::NumIValidation;
@@ -12,7 +12,7 @@ use time::TimeValidation;
 
 pub mod bool;
 pub mod date;
-pub mod datetime;
+pub mod date_time;
 pub mod email;
 pub mod num_f;
 pub mod num_i;
@@ -121,7 +121,7 @@ mod test {
     use std::collections::HashMap;
 
     use crate::validation::{
-        bool::BoolValidation, date::DateValidation, datetime::DateTimeValidation, email::EmailValidation, num_f::NumFValidation,
+        bool::BoolValidation, date::DateValidation, date_time::DateTimeValidation, email::EmailValidation, num_f::NumFValidation,
         num_i::NumIValidation, num_u::NumUValidation, str::StrValidation, time::TimeValidation,
     };
 
