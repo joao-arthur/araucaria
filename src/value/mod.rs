@@ -112,8 +112,8 @@ mod test {
 
     #[test]
     fn test_value_from() {
-        assert_eq!(Value::from(8 as u64), Value::U64(8));
-        assert_eq!(Value::from(-3 as i64), Value::I64(-3));
+        assert_eq!(Value::from(8_u64), Value::U64(8));
+        assert_eq!(Value::from(-3_i64), Value::I64(-3));
         assert_eq!(Value::from(-9.8), Value::F64(-9.8));
         assert_eq!(Value::from(false), Value::Bool(false));
         assert_eq!(Value::from("in vino veritas"), Value::Str(String::from("in vino veritas")));
@@ -128,10 +128,10 @@ mod test {
             ])
         );
         assert_eq!(Value::from([false, true, true]), Value::Arr(vec![Value::Bool(false), Value::Bool(true), Value::Bool(true)]));
-        assert_eq!(Value::from([9 as u64, 213897 as u64, 2394 as u64]), Value::Arr(vec![Value::U64(9), Value::U64(213897), Value::U64(2394)]));
-        assert_eq!(Value::from([-9 as i64, -213897 as i64, -2394 as i64]), Value::Arr(vec![Value::I64(-9), Value::I64(-213897), Value::I64(-2394)]));
+        assert_eq!(Value::from([9_u64, 213897_u64, 2394_u64]), Value::Arr(vec![Value::U64(9), Value::U64(213897), Value::U64(2394)]));
+        assert_eq!(Value::from([-9_i64, -213897_i64, -2394_i64]), Value::Arr(vec![Value::I64(-9), Value::I64(-213897), Value::I64(-2394)]));
         assert_eq!(
-            Value::from([-9.5 as f64, -213897.5 as f64, -2394.5 as f64]),
+            Value::from([-9.5_f64, -213897.5_f64, -2394.5_f64]),
             Value::Arr(vec![Value::F64(-9.5), Value::F64(-213897.5), Value::F64(-2394.5)])
         );
         assert_eq!(
@@ -140,7 +140,7 @@ mod test {
         );
         assert_eq!(
             Value::from([
-                (String::from("age"), Value::from(82 as u64)),
+                (String::from("age"), Value::from(82_u64)),
                 (String::from("name"), Value::from("Paul")),
                 (String::from("alive"), Value::from(true)),
             ]),
