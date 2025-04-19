@@ -4,6 +4,7 @@ use bool::BoolValidation;
 use date::DateValidation;
 use date_time::DateTimeValidation;
 use email::EmailValidation;
+use enumerated::EnumValidation;
 use num_f::NumFValidation;
 use num_i::NumIValidation;
 use num_u::NumUValidation;
@@ -14,6 +15,7 @@ pub mod bool;
 pub mod date;
 pub mod date_time;
 pub mod email;
+pub mod enumerated;
 pub mod num_f;
 pub mod num_i;
 pub mod num_u;
@@ -54,6 +56,7 @@ pub enum Validation {
     Time(TimeValidation),
     DateTime(DateTimeValidation),
     Obj(ObjValidation),
+    Enum(EnumValidation),
 }
 
 impl From<NumUValidation> for Validation {
@@ -116,13 +119,27 @@ impl From<ObjValidation> for Validation {
     }
 }
 
+impl From<EnumValidation> for Validation {
+    fn from(validation: EnumValidation) -> Self {
+        Validation::Enum(validation)
+    }
+}
+
 #[cfg(test)]
 mod test {
     use std::collections::HashMap;
 
     use crate::validation::{
-        bool::BoolValidation, date::DateValidation, date_time::DateTimeValidation, email::EmailValidation, num_f::NumFValidation,
-        num_i::NumIValidation, num_u::NumUValidation, str::StrValidation, time::TimeValidation,
+        bool::BoolValidation,
+        date::DateValidation,
+        date_time::DateTimeValidation,
+        email::EmailValidation,
+        enumerated::{EnumValidation, EnumValues},
+        num_f::NumFValidation,
+        num_i::NumIValidation,
+        num_u::NumUValidation,
+        str::StrValidation,
+        time::TimeValidation,
     };
 
     use super::{ObjValidation, Validation};
@@ -165,5 +182,9 @@ mod test {
         assert_eq!(Validation::from(TimeValidation::default()), Validation::Time(TimeValidation { required: true, operation: None }));
         assert_eq!(Validation::from(DateTimeValidation::default()), Validation::DateTime(DateTimeValidation { required: true, operation: None }));
         assert_eq!(Validation::from(ObjValidation::default()), Validation::Obj(ObjValidation { required: true, validation: HashMap::new() }));
+        assert_eq!(
+            Validation::from(EnumValidation::from(vec![1_usize, 2_usize, 3_usize])),
+            Validation::Enum(EnumValidation { required: true, values: EnumValues::USize(vec![1_usize, 2_usize, 3_usize]) })
+        );
     }
 }
