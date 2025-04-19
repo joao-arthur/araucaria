@@ -2,10 +2,6 @@ use std::collections::HashMap;
 
 use crate::value::Value;
 
-pub fn bool_stub() -> Value {
-    Value::Bool(true)
-}
-
 pub fn num_u_stub() -> Value {
     Value::U64(42)
 }
@@ -16,6 +12,10 @@ pub fn num_i_stub() -> Value {
 
 pub fn num_f_stub() -> Value {
     Value::F64(-21.5)
+}
+
+pub fn bool_stub() -> Value {
+    Value::Bool(true)
 }
 
 pub fn str_stub() -> Value {
@@ -49,10 +49,7 @@ pub fn arr_str_stub() -> Value {
 pub fn obj_stub() -> Value {
     Value::Obj(HashMap::from([
         (String::from("name"), Value::from("The Beatles")),
-        (
-            String::from("members"),
-            Value::Arr(vec![Value::from("George Harrison"), Value::from("John Lennon"), Value::from("Paul McCartney"), Value::from("Ringo Starr")]),
-        ),
+        (String::from("members"), Value::from(["George Harrison", "John Lennon", "Paul McCartney", "Ringo Starr"])),
         (String::from("start_year"), Value::U64(1960)),
         (String::from("end_year"), Value::U64(1960)),
         (String::from("number_of_albums"), Value::U64(13)),
