@@ -1,34 +1,15 @@
 use crate::value::Value;
 
 pub fn resolve_path(value: &Value, field_path: String) -> Option<Value> {
-    let mut paths: Vec<&str> = field_path.split(".").collect();
-    let field = paths.remove(0);
-    match value {
-        Value::Obj(obj) => match obj.get(field) {
-            Some(v) => {
-                if paths.len() > 0 {
-                    resolve_path(v, paths.join("."))
-                } else {
-                    Some(v.clone())
-                }
-            }
-            None => None,
-        },
-        Value::Arr(arr) => match field.parse::<usize>() {
-            Ok(index) => match arr.get(index) {
-                Some(v) => {
-                    if paths.len() > 0 {
-                        resolve_path(v, paths.join("."))
-                    } else {
-                        Some(v.clone())
-                    }
-                }
-                None => None,
-            },
-            Err(_) => None,
-        },
-        _ => None,
+    let mut current = value;
+    for key in field_path.split('.') {
+        current = match current {
+            Value::Obj(obj) => obj.get(key)?,
+            Value::Arr(arr) => arr.get(key.parse::<usize>().ok()?)?,
+            _ => return None,
+        };
     }
+    Some(current.clone())
 }
 
 #[cfg(test)]
