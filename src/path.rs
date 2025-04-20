@@ -2,7 +2,6 @@ use crate::value::Value;
 
 pub fn resolve_path(value: &Value, field_path: String) -> Option<Value> {
     let mut paths: Vec<&str> = field_path.split(".").collect();
-
     if paths.len() > 0 {
         let field = paths.remove(0);
         match value {
@@ -20,6 +19,33 @@ pub fn resolve_path(value: &Value, field_path: String) -> Option<Value> {
                         return None;
                     }
                 }
+            }
+            Value::Arr(arr) => {
+                if field.chars().all(|c| c.is_ascii_digit()) {
+                    println!("{}", field);
+                    let index = field.parse::<usize>();
+                    match index {
+                        Ok(index) => {
+                            let curr_value = arr.get(index);
+                            match curr_value {
+                                Some(v) => {
+                                    if paths.len() > 0 {
+                                        return resolve_path(v, paths.join("."));
+                                    } else {
+                                        return Some(v.clone());
+                                    }
+                                }
+                                None => {
+                                    return None;
+                                }
+                            }
+                        }
+                        Err(_) => {
+                            return None;
+                        }
+                    }
+                }
+                return None;
             }
             _ => None,
         }
@@ -76,8 +102,21 @@ mod test {
     }
 
     #[test]
-    fn test_resolve_path_obj_() {
+    fn test_resolve_path_arr_other_values() {
+        assert_eq!(resolve_path(&num_u_stub(), String::from("0")), None);
+        assert_eq!(resolve_path(&num_i_stub(), String::from("0")), None);
+        assert_eq!(resolve_path(&num_f_stub(), String::from("0")), None);
+        assert_eq!(resolve_path(&bool_stub(), String::from("0")), None);
+        assert_eq!(resolve_path(&obj_stub(), String::from("0")), None);
+    }
+
+    #[test]
+    fn test_resolve_path_obj_existent() {
         assert_eq!(resolve_path(&obj_stub(), String::from("name")), Some(Value::from("The Beatles")));
+    }
+
+    #[test]
+    fn test_resolve_path_obj_not_found() {
         assert_eq!(resolve_path(&obj_stub(), String::from("name.name")), None);
     }
 
@@ -94,5 +133,29 @@ mod test {
             )])),
         )]));
         assert_eq!(resolve_path(&obj, String::from("user.account.details.birthdate")), Some(Value::from("2000-08-22")));
+    }
+
+    #[test]
+    fn test_resolve_path_arr() {
+        assert_eq!(resolve_path(&arr_num_f_stub(), String::from("-2")), None);
+        assert_eq!(resolve_path(&arr_num_f_stub(), String::from("-1")), None);
+        assert_eq!(resolve_path(&arr_num_f_stub(), String::from("0")), Some(Value::F64(-10.5)));
+        assert_eq!(resolve_path(&arr_num_f_stub(), String::from("1")), Some(Value::F64(0.5)));
+        assert_eq!(resolve_path(&arr_num_f_stub(), String::from("2")), Some(Value::F64(10.5)));
+        assert_eq!(resolve_path(&arr_num_f_stub(), String::from("3")), None);
+    }
+
+    #[test]
+    fn test_resolve_path_arr_nested() {
+        let arr = Value::from([
+            Value::U64(1),
+            Value::U64(2),
+            Value::from([
+                Value::U64(10),
+                Value::U64(20),
+                Value::from([Value::U64(100), Value::U64(200), Value::from([Value::U64(1000), Value::U64(2000), Value::U64(3000)])]),
+            ]),
+        ]);
+        assert_eq!(resolve_path(&arr, String::from("2.2.2.2")), Some(Value::U64(3000)));
     }
 }
