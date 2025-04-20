@@ -4,48 +4,29 @@ pub fn resolve_path(value: &Value, field_path: String) -> Option<Value> {
     let mut paths: Vec<&str> = field_path.split(".").collect();
     let field = paths.remove(0);
     match value {
-        Value::Obj(obj) => {
-            let curr_value = obj.get(field);
-            match curr_value {
+        Value::Obj(obj) => match obj.get(field) {
+            Some(v) => {
+                if paths.len() > 0 {
+                    resolve_path(v, paths.join("."))
+                } else {
+                    Some(v.clone())
+                }
+            }
+            None => None,
+        },
+        Value::Arr(arr) => match field.parse::<usize>() {
+            Ok(index) => match arr.get(index) {
                 Some(v) => {
                     if paths.len() > 0 {
-                        return resolve_path(v, paths.join("."));
+                        resolve_path(v, paths.join("."))
                     } else {
-                        return Some(v.clone());
+                        Some(v.clone())
                     }
                 }
-                None => {
-                    return None;
-                }
-            }
-        }
-        Value::Arr(arr) => {
-            if field.chars().all(|c| c.is_ascii_digit()) {
-                println!("{}", field);
-                let index = field.parse::<usize>();
-                match index {
-                    Ok(index) => {
-                        let curr_value = arr.get(index);
-                        match curr_value {
-                            Some(v) => {
-                                if paths.len() > 0 {
-                                    return resolve_path(v, paths.join("."));
-                                } else {
-                                    return Some(v.clone());
-                                }
-                            }
-                            None => {
-                                return None;
-                            }
-                        }
-                    }
-                    Err(_) => {
-                        return None;
-                    }
-                }
-            }
-            return None;
-        }
+                None => None,
+            },
+            Err(_) => None,
+        },
         _ => None,
     }
 }
@@ -150,8 +131,14 @@ mod test {
 
     #[test]
     fn test_resolve_path_arr() {
+        assert_eq!(resolve_path(&arr_num_f_stub(), String::from("one")), None);
+        assert_eq!(resolve_path(&arr_num_f_stub(), String::from("two")), None);
+        assert_eq!(resolve_path(&arr_num_f_stub(), String::from("0x0")), None);
+        assert_eq!(resolve_path(&arr_num_f_stub(), String::from("0b0")), None);
         assert_eq!(resolve_path(&arr_num_f_stub(), String::from("-2")), None);
         assert_eq!(resolve_path(&arr_num_f_stub(), String::from("-1")), None);
+        assert_eq!(resolve_path(&arr_num_f_stub(), String::from("00")), Some(Value::F64(-10.5)));
+        assert_eq!(resolve_path(&arr_num_f_stub(), String::from("01")), Some(Value::F64(0.5)));
         assert_eq!(resolve_path(&arr_num_f_stub(), String::from("0")), Some(Value::F64(-10.5)));
         assert_eq!(resolve_path(&arr_num_f_stub(), String::from("1")), Some(Value::F64(0.5)));
         assert_eq!(resolve_path(&arr_num_f_stub(), String::from("2")), Some(Value::F64(10.5)));
