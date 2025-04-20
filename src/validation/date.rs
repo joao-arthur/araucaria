@@ -121,5 +121,39 @@ mod test {
                 ))
             }
         );
+        assert_eq!(
+            DateValidation::default().eq_field(String::from("user.info.details.birthdate")),
+            DateValidation { required: true, operation: Some(Operation::Eq(Operand::FieldPath(String::from("user.info.details.birthdate")))) }
+        );
+        assert_eq!(
+            DateValidation::default().ne_field(String::from("user.info.details.birthdate")),
+            DateValidation { required: true, operation: Some(Operation::Ne(Operand::FieldPath(String::from("user.info.details.birthdate")))) }
+        );
+        assert_eq!(
+            DateValidation::default().gt_field(String::from("user.info.details.birthdate")),
+            DateValidation { required: true, operation: Some(Operation::Gt(Operand::FieldPath(String::from("user.info.details.birthdate")))) }
+        );
+        assert_eq!(
+            DateValidation::default().ge_field(String::from("user.info.details.birthdate")),
+            DateValidation { required: true, operation: Some(Operation::Ge(Operand::FieldPath(String::from("user.info.details.birthdate")))) }
+        );
+        assert_eq!(
+            DateValidation::default().lt_field(String::from("user.info.details.birthdate")),
+            DateValidation { required: true, operation: Some(Operation::Lt(Operand::FieldPath(String::from("user.info.details.birthdate")))) }
+        );
+        assert_eq!(
+            DateValidation::default().le_field(String::from("user.info.details.birthdate")),
+            DateValidation { required: true, operation: Some(Operation::Le(Operand::FieldPath(String::from("user.info.details.birthdate")))) }
+        );
+        assert_eq!(
+            DateValidation::default().btwn_field(String::from("user.info.details.birthdate"), String::from("user.info.details.ripdate")),
+            DateValidation {
+                required: true,
+                operation: Some(Operation::Btwn(
+                    Operand::FieldPath(String::from("user.info.details.birthdate")),
+                    Operand::FieldPath(String::from("user.info.details.ripdate"))
+                ))
+            }
+        );
     }
 }

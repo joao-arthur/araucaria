@@ -2,55 +2,51 @@ use crate::value::Value;
 
 pub fn resolve_path(value: &Value, field_path: String) -> Option<Value> {
     let mut paths: Vec<&str> = field_path.split(".").collect();
-    if paths.len() > 0 {
-        let field = paths.remove(0);
-        match value {
-            Value::Obj(obj) => {
-                let curr_value = obj.get(field);
-                match curr_value {
-                    Some(v) => {
-                        if paths.len() > 0 {
-                            return resolve_path(v, paths.join("."));
-                        } else {
-                            return Some(v.clone());
+    let field = paths.remove(0);
+    match value {
+        Value::Obj(obj) => {
+            let curr_value = obj.get(field);
+            match curr_value {
+                Some(v) => {
+                    if paths.len() > 0 {
+                        return resolve_path(v, paths.join("."));
+                    } else {
+                        return Some(v.clone());
+                    }
+                }
+                None => {
+                    return None;
+                }
+            }
+        }
+        Value::Arr(arr) => {
+            if field.chars().all(|c| c.is_ascii_digit()) {
+                println!("{}", field);
+                let index = field.parse::<usize>();
+                match index {
+                    Ok(index) => {
+                        let curr_value = arr.get(index);
+                        match curr_value {
+                            Some(v) => {
+                                if paths.len() > 0 {
+                                    return resolve_path(v, paths.join("."));
+                                } else {
+                                    return Some(v.clone());
+                                }
+                            }
+                            None => {
+                                return None;
+                            }
                         }
                     }
-                    None => {
+                    Err(_) => {
                         return None;
                     }
                 }
             }
-            Value::Arr(arr) => {
-                if field.chars().all(|c| c.is_ascii_digit()) {
-                    println!("{}", field);
-                    let index = field.parse::<usize>();
-                    match index {
-                        Ok(index) => {
-                            let curr_value = arr.get(index);
-                            match curr_value {
-                                Some(v) => {
-                                    if paths.len() > 0 {
-                                        return resolve_path(v, paths.join("."));
-                                    } else {
-                                        return Some(v.clone());
-                                    }
-                                }
-                                None => {
-                                    return None;
-                                }
-                            }
-                        }
-                        Err(_) => {
-                            return None;
-                        }
-                    }
-                }
-                return None;
-            }
-            _ => None,
+            return None;
         }
-    } else {
-        None
+        _ => None,
     }
 }
 
@@ -83,6 +79,23 @@ mod test {
         assert_eq!(resolve_path(&arr_num_stub(), String::from("")), None);
         assert_eq!(resolve_path(&arr_str_stub(), String::from("")), None);
         assert_eq!(resolve_path(&obj_stub(), String::from("")), None);
+    }
+
+    #[test]
+    fn test_resolve_path_dot_path() {
+        assert_eq!(resolve_path(&num_u_stub(), String::from(".")), None);
+        assert_eq!(resolve_path(&num_i_stub(), String::from(".")), None);
+        assert_eq!(resolve_path(&num_f_stub(), String::from(".")), None);
+        assert_eq!(resolve_path(&bool_stub(), String::from(".")), None);
+        assert_eq!(resolve_path(&str_stub(), String::from(".")), None);
+        assert_eq!(resolve_path(&str_stub(), String::from(".")), None);
+        assert_eq!(resolve_path(&arr_bool_stub(), String::from(".")), None);
+        assert_eq!(resolve_path(&arr_num_u_stub(), String::from(".")), None);
+        assert_eq!(resolve_path(&arr_num_i_stub(), String::from(".")), None);
+        assert_eq!(resolve_path(&arr_num_f_stub(), String::from(".")), None);
+        assert_eq!(resolve_path(&arr_num_stub(), String::from(".")), None);
+        assert_eq!(resolve_path(&arr_str_stub(), String::from(".")), None);
+        assert_eq!(resolve_path(&obj_stub(), String::from(".")), None);
     }
 
     #[test]
@@ -157,5 +170,28 @@ mod test {
             ]),
         ]);
         assert_eq!(resolve_path(&arr, String::from("2.2.2.2")), Some(Value::U64(3000)));
+    }
+
+    #[test]
+    fn test_resolve_path_nested() {
+        let value = Value::Obj(HashMap::from([(
+            String::from("0"),
+            Value::from([
+                Value::U64(1),
+                Value::U64(2),
+                Value::from([
+                    Value::U64(10),
+                    Value::U64(20),
+                    Value::Obj(HashMap::from([(
+                        String::from("user"),
+                        Value::Obj(HashMap::from([(
+                            String::from("account"),
+                            Value::Obj(HashMap::from([(String::from("details"), Value::from([Value::U64(111), Value::U64(222), Value::U64(333)]))])),
+                        )])),
+                    )])),
+                ]),
+            ]),
+        )]));
+        assert_eq!(resolve_path(&value, String::from("0.2.2.user.account.details.1")), Some(Value::U64(222)));
     }
 }

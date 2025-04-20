@@ -693,4 +693,13 @@ mod test {
         assert_eq!(compare(&Operation::Ge(Operand::Value(OperandValue::Str(String::from("abc")))), &OperandValue::USize(41)), None);
         assert_eq!(compare(&Operation::Lt(Operand::Value(OperandValue::Str(String::from("abc")))), &OperandValue::Bool(false)), None);
     }
+
+    #[test]
+    fn test_compare_field_path() {
+        assert_eq!(compare(&Operation::Eq(Operand::FieldPath(String::from("info"))), &OperandValue::U64(41)), Some(Ok(())));
+        assert_eq!(compare(&Operation::Ne(Operand::FieldPath(String::from("info"))), &OperandValue::I64(41)), Some(Ok(())));
+        assert_eq!(compare(&Operation::Gt(Operand::FieldPath(String::from("info"))), &OperandValue::F64(41.5)), Some(Ok(())));
+        assert_eq!(compare(&Operation::Ge(Operand::FieldPath(String::from("info"))), &OperandValue::USize(41)), Some(Ok(())));
+        assert_eq!(compare(&Operation::Lt(Operand::FieldPath(String::from("info"))), &OperandValue::Bool(false)), Some(Ok(())));
+    }
 }
