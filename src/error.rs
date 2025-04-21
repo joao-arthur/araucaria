@@ -42,9 +42,11 @@ impl SchemaErr {
 
 #[cfg(test)]
 mod test {
-    use crate::operation::{Operand, OperandValue};
+    use std::collections::HashMap;
 
-    use super::*;
+    use crate::operation::{Operand, OperandValue, Operation};
+
+    use super::{SchemaErr, ValidationErr};
 
     #[test]
     fn test_arr() {

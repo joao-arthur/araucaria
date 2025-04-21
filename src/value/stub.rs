@@ -59,7 +59,14 @@ pub fn obj_stub() -> Value {
 
 #[cfg(test)]
 mod test {
-    use super::*;
+    use std::collections::HashMap;
+
+    use crate::value::Value;
+
+    use super::{
+        arr_bool_stub, arr_num_f_stub, arr_num_i_stub, arr_num_stub, arr_num_u_stub, arr_str_stub, bool_stub, num_f_stub, num_i_stub, num_u_stub,
+        obj_stub, str_stub,
+    };
 
     #[test]
     fn test_stub() {

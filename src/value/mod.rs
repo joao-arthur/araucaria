@@ -108,7 +108,9 @@ pub fn value_to_string(value: &Value) -> String {
 
 #[cfg(test)]
 mod test {
-    use super::*;
+    use std::collections::HashMap;
+
+    use super::{value_to_string, Value};
 
     #[test]
     fn test_value_from() {
