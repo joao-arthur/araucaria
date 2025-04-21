@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::collections::BTreeMap;
 
 use crate::operation::Operation;
 
@@ -27,7 +27,7 @@ pub enum ValidationErr {
 #[derive(Debug, PartialEq, Clone)]
 pub enum SchemaErr {
     Validation(Vec<ValidationErr>),
-    Obj(HashMap<String, SchemaErr>),
+    Obj(BTreeMap<String, SchemaErr>),
 }
 
 impl SchemaErr {
@@ -36,13 +36,13 @@ impl SchemaErr {
     }
 
     pub fn obj<const N: usize>(value: [(String, SchemaErr); N]) -> SchemaErr {
-        SchemaErr::Obj(HashMap::from(value))
+        SchemaErr::Obj(BTreeMap::from(value))
     }
 }
 
 #[cfg(test)]
 mod test {
-    use std::collections::HashMap;
+    use std::collections::BTreeMap;
 
     use crate::operation::{Operand, OperandValue, Operation};
 
@@ -104,23 +104,23 @@ mod test {
     fn test_obj() {
         assert_eq!(
             SchemaErr::obj([(String::from("is"), SchemaErr::validation([ValidationErr::Required]))]),
-            SchemaErr::Obj(HashMap::from([(String::from("is"), SchemaErr::Validation(vec![ValidationErr::Required]))]))
+            SchemaErr::Obj(BTreeMap::from([(String::from("is"), SchemaErr::Validation(vec![ValidationErr::Required]))]))
         );
         assert_eq!(
             SchemaErr::obj([(String::from("is"), SchemaErr::validation([ValidationErr::Required]))]),
-            SchemaErr::Obj(HashMap::from([(String::from("is"), SchemaErr::Validation(vec![ValidationErr::Required]))]))
+            SchemaErr::Obj(BTreeMap::from([(String::from("is"), SchemaErr::Validation(vec![ValidationErr::Required]))]))
         );
         assert_eq!(
             SchemaErr::obj([(String::from("is"), SchemaErr::validation([ValidationErr::Required]))]),
-            SchemaErr::Obj(HashMap::from([(String::from("is"), SchemaErr::Validation(vec![ValidationErr::Required]))]))
+            SchemaErr::Obj(BTreeMap::from([(String::from("is"), SchemaErr::Validation(vec![ValidationErr::Required]))]))
         );
         assert_eq!(
             SchemaErr::obj([(String::from("is"), SchemaErr::validation([ValidationErr::Required]))]),
-            SchemaErr::Obj(HashMap::from([(String::from("is"), SchemaErr::Validation(vec![ValidationErr::Required]))]))
+            SchemaErr::Obj(BTreeMap::from([(String::from("is"), SchemaErr::Validation(vec![ValidationErr::Required]))]))
         );
         assert_eq!(
             SchemaErr::obj([(String::from("is"), SchemaErr::validation([ValidationErr::Required]))]),
-            SchemaErr::Obj(HashMap::from([(String::from("is"), SchemaErr::Validation(vec![ValidationErr::Required]))]))
+            SchemaErr::Obj(BTreeMap::from([(String::from("is"), SchemaErr::Validation(vec![ValidationErr::Required]))]))
         );
     }
 }

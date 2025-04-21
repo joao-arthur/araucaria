@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::collections::BTreeMap;
 
 pub mod stub;
 
@@ -11,7 +11,7 @@ pub enum Value {
     Bool(bool),
     Str(String),
     Arr(Vec<Value>),
-    Obj(HashMap<String, Value>),
+    Obj(BTreeMap<String, Value>),
 }
 
 impl From<bool> for Value {
@@ -82,7 +82,7 @@ impl<const N: usize> From<[&str; N]> for Value {
 
 impl<const N: usize> From<[(String, Value); N]> for Value {
     fn from(value: [(String, Value); N]) -> Self {
-        Value::Obj(HashMap::from(value))
+        Value::Obj(BTreeMap::from(value))
     }
 }
 
@@ -108,7 +108,7 @@ pub fn value_to_string(value: &Value) -> String {
 
 #[cfg(test)]
 mod test {
-    use std::collections::HashMap;
+    use std::collections::BTreeMap;
 
     use super::{value_to_string, Value};
 
@@ -146,7 +146,7 @@ mod test {
                 (String::from("name"), Value::from("Paul")),
                 (String::from("alive"), Value::from(true)),
             ]),
-            Value::Obj(HashMap::from([
+            Value::Obj(BTreeMap::from([
                 (String::from("age"), Value::U64(82)),
                 (String::from("name"), Value::Str(String::from("Paul"))),
                 (String::from("alive"), Value::Bool(true)),

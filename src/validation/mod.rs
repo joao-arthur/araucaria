@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::collections::BTreeMap;
 
 use bool::BoolValidation;
 use date::DateValidation;
@@ -25,12 +25,12 @@ pub mod time;
 #[derive(Debug, PartialEq, Clone)]
 pub struct ObjValidation {
     pub required: bool,
-    pub validation: HashMap<String, Validation>,
+    pub validation: BTreeMap<String, Validation>,
 }
 
 impl Default for ObjValidation {
     fn default() -> Self {
-        ObjValidation { required: true, validation: HashMap::new() }
+        ObjValidation { required: true, validation: BTreeMap::new() }
     }
 }
 
@@ -39,7 +39,7 @@ impl ObjValidation {
         ObjValidation { required: false, validation: self.validation }
     }
 
-    pub fn validation(self, validation: HashMap<String, Validation>) -> Self {
+    pub fn validation(self, validation: BTreeMap<String, Validation>) -> Self {
         ObjValidation { required: self.required, validation }
     }
 }
@@ -127,7 +127,7 @@ impl From<EnumValidation> for Validation {
 
 #[cfg(test)]
 mod test {
-    use std::collections::HashMap;
+    use std::collections::BTreeMap;
 
     use crate::validation::{
         bool::BoolValidation,
@@ -146,13 +146,13 @@ mod test {
 
     #[test]
     fn test_obj_validation() {
-        assert_eq!(ObjValidation::default(), ObjValidation { required: true, validation: HashMap::new() });
-        assert_eq!(ObjValidation::default().optional(), ObjValidation { required: false, validation: HashMap::new() });
+        assert_eq!(ObjValidation::default(), ObjValidation { required: true, validation: BTreeMap::new() });
+        assert_eq!(ObjValidation::default().optional(), ObjValidation { required: false, validation: BTreeMap::new() });
         assert_eq!(
-            ObjValidation::default().validation(HashMap::from([(String::from("is"), Validation::Bool(BoolValidation::default().eq(false)))])),
+            ObjValidation::default().validation(BTreeMap::from([(String::from("is"), Validation::Bool(BoolValidation::default().eq(false)))])),
             ObjValidation {
                 required: true,
-                validation: HashMap::from([(String::from("is"), Validation::Bool(BoolValidation::default().eq(false)))])
+                validation: BTreeMap::from([(String::from("is"), Validation::Bool(BoolValidation::default().eq(false)))])
             }
         );
     }
@@ -181,7 +181,7 @@ mod test {
         assert_eq!(Validation::from(DateValidation::default()), Validation::Date(DateValidation { required: true, operation: None }));
         assert_eq!(Validation::from(TimeValidation::default()), Validation::Time(TimeValidation { required: true, operation: None }));
         assert_eq!(Validation::from(DateTimeValidation::default()), Validation::DateTime(DateTimeValidation { required: true, operation: None }));
-        assert_eq!(Validation::from(ObjValidation::default()), Validation::Obj(ObjValidation { required: true, validation: HashMap::new() }));
+        assert_eq!(Validation::from(ObjValidation::default()), Validation::Obj(ObjValidation { required: true, validation: BTreeMap::new() }));
         assert_eq!(
             Validation::from(EnumValidation::from(vec![1_usize, 2_usize, 3_usize])),
             Validation::Enum(EnumValidation { required: true, values: EnumValues::USize(vec![1_usize, 2_usize, 3_usize]) })

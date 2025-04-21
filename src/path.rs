@@ -14,7 +14,7 @@ pub fn resolve_path(value: &Value, field_path: String) -> Option<Value> {
 
 #[cfg(test)]
 mod test {
-    use std::collections::HashMap;
+    use std::collections::BTreeMap;
 
     use crate::value::{
         stub::{
@@ -97,13 +97,13 @@ mod test {
 
     #[test]
     fn test_resolve_path_obj_nested() {
-        let obj = Value::Obj(HashMap::from([(
+        let obj = Value::Obj(BTreeMap::from([(
             String::from("user"),
-            Value::Obj(HashMap::from([(
+            Value::Obj(BTreeMap::from([(
                 String::from("account"),
-                Value::Obj(HashMap::from([(
+                Value::Obj(BTreeMap::from([(
                     String::from("details"),
-                    Value::Obj(HashMap::from([(String::from("birthdate"), Value::from("2000-08-22"))])),
+                    Value::Obj(BTreeMap::from([(String::from("birthdate"), Value::from("2000-08-22"))])),
                 )])),
             )])),
         )]));
@@ -142,7 +142,7 @@ mod test {
 
     #[test]
     fn test_resolve_path_nested() {
-        let value = Value::Obj(HashMap::from([(
+        let value = Value::Obj(BTreeMap::from([(
             String::from("0"),
             Value::from([
                 Value::U64(1),
@@ -150,11 +150,11 @@ mod test {
                 Value::from([
                     Value::U64(10),
                     Value::U64(20),
-                    Value::Obj(HashMap::from([(
+                    Value::Obj(BTreeMap::from([(
                         String::from("user"),
-                        Value::Obj(HashMap::from([(
+                        Value::Obj(BTreeMap::from([(
                             String::from("account"),
-                            Value::Obj(HashMap::from([(String::from("details"), Value::from([Value::U64(111), Value::U64(222), Value::U64(333)]))])),
+                            Value::Obj(BTreeMap::from([(String::from("details"), Value::from([Value::U64(111), Value::U64(222), Value::U64(333)]))])),
                         )])),
                     )])),
                 ]),

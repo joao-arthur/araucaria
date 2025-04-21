@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::collections::BTreeMap;
 
 use crate::value::Value;
 
@@ -47,7 +47,7 @@ pub fn arr_str_stub() -> Value {
 }
 
 pub fn obj_stub() -> Value {
-    Value::Obj(HashMap::from([
+    Value::Obj(BTreeMap::from([
         (String::from("name"), Value::from("The Beatles")),
         (String::from("members"), Value::from(["George Harrison", "John Lennon", "Paul McCartney", "Ringo Starr"])),
         (String::from("start_year"), Value::U64(1960)),
@@ -59,7 +59,7 @@ pub fn obj_stub() -> Value {
 
 #[cfg(test)]
 mod test {
-    use std::collections::HashMap;
+    use std::collections::BTreeMap;
 
     use crate::value::Value;
 
@@ -91,7 +91,7 @@ mod test {
         );
         assert_eq!(
             obj_stub(),
-            Value::Obj(HashMap::from([
+            Value::Obj(BTreeMap::from([
                 (String::from("name"), Value::Str(String::from("The Beatles"))),
                 (
                     String::from("members"),
