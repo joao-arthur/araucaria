@@ -65,90 +65,113 @@ pub enum Operation {
     Btwn(Operand, Operand),
 }
 
+fn compare_eq(value_a: &OperandValue, value_b: &OperandValue)-> Option<Result<(), ()>>  {
+    match value_a.partial_cmp(value_b)? {
+        Ordering::Less | Ordering::Greater => Some(Err(())),
+        Ordering::Equal => Some(Ok(())),
+    }
+}
+
+fn compare_ne(value_a: &OperandValue, value_b: &OperandValue)-> Option<Result<(), ()>>  {
+    match value_a.partial_cmp(value_b)? {
+        Ordering::Less | Ordering::Greater => Some(Ok(())),
+        Ordering::Equal => Some(Err(())),
+    }
+}
+
+fn compare_gt(value_a: &OperandValue, value_b: &OperandValue)-> Option<Result<(), ()>>  {
+    match value_a.partial_cmp(value_b)? {
+        Ordering::Less | Ordering::Equal => Some(Err(())),
+        Ordering::Greater => Some(Ok(())),
+    }
+}
+
+fn compare_ge(value_a: &OperandValue, value_b: &OperandValue)-> Option<Result<(), ()>>  {
+    match value_a.partial_cmp(value_b)? {
+        Ordering::Less => Some(Err(())),
+        Ordering::Equal | Ordering::Greater => Some(Ok(())),
+    }
+}
+
+fn compare_lt(value_a: &OperandValue, value_b: &OperandValue)-> Option<Result<(), ()>>  {
+    match value_a.partial_cmp(value_b)? {
+        Ordering::Less => Some(Ok(())),
+        Ordering::Equal | Ordering::Greater => Some(Err(())),
+    }
+}
+
+fn compare_le (value_a: &OperandValue, value_b: &OperandValue)-> Option<Result<(), ()>>  {
+    match value_a.partial_cmp(value_b)? {
+        Ordering::Less | Ordering::Equal => Some(Ok(())),
+        Ordering::Greater => Some(Err(())),
+    }
+}
+
+fn value_to_operand_value(value: &Value) -> Option<OperandValue> {
+    match value {
+        Value::U64(val) => Some(OperandValue::U64(*val)),
+        Value::I64(val)=> Some(OperandValue::I64(*val)),
+        Value::F64(val)=> Some(OperandValue::F64(*val)),
+        Value::Bool(val)=> Some(OperandValue::Bool(*val)),
+        Value::Str(val)=> Some(OperandValue::Str(val.clone())),
+        _ => None
+    }
+}
+
 pub fn compare(operation: &Operation, value_a: &OperandValue, root: &Value) -> Option<Result<(), ()>> {
     match operation {
         Operation::Eq(operand) => match operand {
-            Operand::Value(value_b) => {
-                let ord = value_a.partial_cmp(value_b)?;
-                match ord {
-                    Ordering::Less | Ordering::Greater => Some(Err(())),
-                    Ordering::Equal => Some(Ok(())),
-                }
-            }
-            Operand::FieldPath(field_path) => Some(Ok(())),
+            Operand::Value(value_b) => compare_eq(&value_a, &value_b),
+            Operand::FieldPath(field_path) => {
+                let field = resolve_path(root, field_path)?;
+                let value_b = value_to_operand_value(&field)?;
+                compare_eq(&value_a, &value_b)
+            },
         },
         Operation::Ne(operand) => match operand {
-            Operand::Value(value_b) => {
-                let ord = value_a.partial_cmp(value_b)?;
-                match ord {
-                    Ordering::Less | Ordering::Greater => Some(Ok(())),
-                    Ordering::Equal => Some(Err(())),
-                }
-            }
-            Operand::FieldPath(_) => Some(Ok(())),
+            Operand::Value(value_b) =>compare_ne(&value_a, &value_b),
+            Operand::FieldPath(field_path) => Some(Ok(())),
         },
         Operation::Gt(operand) => match operand {
-            Operand::Value(value_b) => {
-                let ord = value_a.partial_cmp(value_b)?;
-                match ord {
-                    Ordering::Less | Ordering::Equal => Some(Err(())),
-                    Ordering::Greater => Some(Ok(())),
-                }
-            },
-            Operand::FieldPath(_) => Some(Ok(())),
+            Operand::Value(value_b) => compare_gt(&value_a, &value_b),
+            Operand::FieldPath(field_path) => Some(Ok(())),
         },
         Operation::Ge(operand) => match operand {
-            Operand::Value(value_b) => {
-                let ord = value_a.partial_cmp(value_b)?;
-                match ord {
-                    Ordering::Less => Some(Err(())),
-                    Ordering::Equal | Ordering::Greater => Some(Ok(())),
-                }
-            },
-            Operand::FieldPath(_) => Some(Ok(())),
+            Operand::Value(value_b) => compare_ge(&value_a, &value_b),
+            Operand::FieldPath(field_path) => Some(Ok(())),
         },
         Operation::Lt(operand) => match operand {
-            Operand::Value(value_b) => {
-                let ord = value_a.partial_cmp(value_b)?;
-                match ord {
-                    Ordering::Less => Some(Ok(())),
-                    Ordering::Equal | Ordering::Greater => Some(Err(())),
-                }
-            },
-            Operand::FieldPath(_) => Some(Ok(())),
+            Operand::Value(value_b) => compare_lt(&value_a, &value_b),
+            Operand::FieldPath(field_path) => Some(Ok(())),
         },
         Operation::Le(operand) => match operand {
-            Operand::Value(value_b) => {
-                let ord = value_a.partial_cmp(value_b)?;
-                match ord {
-                    Ordering::Less | Ordering::Equal => Some(Ok(())),
-                    Ordering::Greater => Some(Err(())),
-                }
-            },
-            Operand::FieldPath(_) => Some(Ok(())),
+            Operand::Value(value_b) => compare_le(&value_a, &value_b),
+            Operand::FieldPath(field_path) => Some(Ok(())),
         },
         Operation::Btwn(operand_a, operand_b) => match operand_a {
             Operand::Value(value_operand_a) => match operand_b {
                 Operand::Value(value_operand_b) => {
-                    let ord_a = value_a.partial_cmp(value_operand_a)?;
-                    let ord_b = value_a.partial_cmp(value_operand_b)?;
-                    match ord_a {
-                        Ordering::Less => Some(Err(())),
-                        Ordering::Equal | Ordering::Greater => match ord_b {
-                            Ordering::Less | Ordering::Equal => Some(Ok(())),
-                            Ordering::Greater => Some(Err(())),
-                        },
+                    if let Some(Ok(_)) =compare_ge(&value_a, &value_operand_a) {
+                        if let Some(Ok(())) = compare_le(&value_a, &value_operand_b) {
+                            Some(Ok(()))
+                        } else { 
+                            Some(Err(()))
+                        }
+                    }else {
+                        Some(Err(()))
                     }
                 }
-                Operand::FieldPath(_) => Some(Ok(())),
+                Operand::FieldPath(field_path) => Some(Ok(())),
             },
-            Operand::FieldPath(_) => Some(Ok(())),
+            Operand::FieldPath(field_path) => Some(Ok(())),
         },
     }
 }
 
 #[cfg(test)]
 mod test {
+    use std::collections::BTreeMap;
+
     use crate::value::Value;
 
     use super::{compare, Operand, OperandValue, Operation};
@@ -740,17 +763,21 @@ mod test {
     }
 
     #[test]
-    fn test_compare_field_path() {
-        let root = Value::None;
-        assert_eq!(compare(&Operation::Eq(Operand::FieldPath(String::from("info"))), &OperandValue::U64(41), &root), Some(Ok(())));
-        assert_eq!(compare(&Operation::Ne(Operand::FieldPath(String::from("info"))), &OperandValue::I64(41), &root), Some(Ok(())));
-        assert_eq!(compare(&Operation::Gt(Operand::FieldPath(String::from("info"))), &OperandValue::F64(41.5), &root), Some(Ok(())));
-        assert_eq!(compare(&Operation::Ge(Operand::FieldPath(String::from("info"))), &OperandValue::USize(41), &root), Some(Ok(())));
-        assert_eq!(compare(&Operation::Lt(Operand::FieldPath(String::from("info"))), &OperandValue::Bool(false), &root), Some(Ok(())));
-    }
-
-    #[test]
     fn test_compare_field_path_bool() {
-
+        let v = Operation::Eq(Operand::FieldPath(String::from("values.3.value")));
+        let root = Value::Obj(BTreeMap::from([
+            (
+                String::from("values"),
+                Value::Arr(vec![
+                    Value::Obj(BTreeMap::from([(String::from("value"), Value::U64(12))])),
+                    Value::Obj(BTreeMap::from([(String::from("value"), Value::U64(22))])),
+                    Value::Obj(BTreeMap::from([(String::from("value"), Value::U64(32))])),
+                    Value::Obj(BTreeMap::from([(String::from("value"), Value::U64(42))])),
+                ])
+            ),
+        ]));
+       assert_eq!(compare(&v, &OperandValue::U64(41), &root), Some(Err(())));
+        assert_eq!(compare(&v, &OperandValue::U64(42), &root), Some(Ok(())));
+       assert_eq!(compare(&v, &OperandValue::U64(43), &root), Some(Err(())));
     }
 }
