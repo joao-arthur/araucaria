@@ -1,6 +1,6 @@
 use crate::value::Value;
 
-pub fn resolve_path(value: &Value, field_path: String) -> Option<Value> {
+pub fn resolve_path(value: &Value, field_path: &String) -> Option<Value> {
     let mut current = value;
     for key in field_path.split('.') {
         current = match current {
@@ -28,71 +28,71 @@ mod test {
 
     #[test]
     fn test_resolve_path_empty_path() {
-        assert_eq!(resolve_path(&num_u_stub(), String::from("")), None);
-        assert_eq!(resolve_path(&num_i_stub(), String::from("")), None);
-        assert_eq!(resolve_path(&num_f_stub(), String::from("")), None);
-        assert_eq!(resolve_path(&bool_stub(), String::from("")), None);
-        assert_eq!(resolve_path(&str_stub(), String::from("")), None);
-        assert_eq!(resolve_path(&str_stub(), String::from("")), None);
-        assert_eq!(resolve_path(&arr_bool_stub(), String::from("")), None);
-        assert_eq!(resolve_path(&arr_num_u_stub(), String::from("")), None);
-        assert_eq!(resolve_path(&arr_num_i_stub(), String::from("")), None);
-        assert_eq!(resolve_path(&arr_num_f_stub(), String::from("")), None);
-        assert_eq!(resolve_path(&arr_num_stub(), String::from("")), None);
-        assert_eq!(resolve_path(&arr_str_stub(), String::from("")), None);
-        assert_eq!(resolve_path(&obj_stub(), String::from("")), None);
+        assert_eq!(resolve_path(&num_u_stub(), &String::from("")), None);
+        assert_eq!(resolve_path(&num_i_stub(), &String::from("")), None);
+        assert_eq!(resolve_path(&num_f_stub(), &String::from("")), None);
+        assert_eq!(resolve_path(&bool_stub(), &String::from("")), None);
+        assert_eq!(resolve_path(&str_stub(), &String::from("")), None);
+        assert_eq!(resolve_path(&str_stub(), &String::from("")), None);
+        assert_eq!(resolve_path(&arr_bool_stub(), &String::from("")), None);
+        assert_eq!(resolve_path(&arr_num_u_stub(), &String::from("")), None);
+        assert_eq!(resolve_path(&arr_num_i_stub(), &String::from("")), None);
+        assert_eq!(resolve_path(&arr_num_f_stub(), &String::from("")), None);
+        assert_eq!(resolve_path(&arr_num_stub(), &String::from("")), None);
+        assert_eq!(resolve_path(&arr_str_stub(), &String::from("")), None);
+        assert_eq!(resolve_path(&obj_stub(), &String::from("")), None);
     }
 
     #[test]
     fn test_resolve_path_dot_path() {
-        assert_eq!(resolve_path(&num_u_stub(), String::from(".")), None);
-        assert_eq!(resolve_path(&num_i_stub(), String::from(".")), None);
-        assert_eq!(resolve_path(&num_f_stub(), String::from(".")), None);
-        assert_eq!(resolve_path(&bool_stub(), String::from(".")), None);
-        assert_eq!(resolve_path(&str_stub(), String::from(".")), None);
-        assert_eq!(resolve_path(&str_stub(), String::from(".")), None);
-        assert_eq!(resolve_path(&arr_bool_stub(), String::from(".")), None);
-        assert_eq!(resolve_path(&arr_num_u_stub(), String::from(".")), None);
-        assert_eq!(resolve_path(&arr_num_i_stub(), String::from(".")), None);
-        assert_eq!(resolve_path(&arr_num_f_stub(), String::from(".")), None);
-        assert_eq!(resolve_path(&arr_num_stub(), String::from(".")), None);
-        assert_eq!(resolve_path(&arr_str_stub(), String::from(".")), None);
-        assert_eq!(resolve_path(&obj_stub(), String::from(".")), None);
+        assert_eq!(resolve_path(&num_u_stub(), &String::from(".")), None);
+        assert_eq!(resolve_path(&num_i_stub(), &String::from(".")), None);
+        assert_eq!(resolve_path(&num_f_stub(), &String::from(".")), None);
+        assert_eq!(resolve_path(&bool_stub(), &String::from(".")), None);
+        assert_eq!(resolve_path(&str_stub(), &String::from(".")), None);
+        assert_eq!(resolve_path(&str_stub(), &String::from(".")), None);
+        assert_eq!(resolve_path(&arr_bool_stub(), &String::from(".")), None);
+        assert_eq!(resolve_path(&arr_num_u_stub(), &String::from(".")), None);
+        assert_eq!(resolve_path(&arr_num_i_stub(), &String::from(".")), None);
+        assert_eq!(resolve_path(&arr_num_f_stub(), &String::from(".")), None);
+        assert_eq!(resolve_path(&arr_num_stub(), &String::from(".")), None);
+        assert_eq!(resolve_path(&arr_str_stub(), &String::from(".")), None);
+        assert_eq!(resolve_path(&obj_stub(), &String::from(".")), None);
     }
 
     #[test]
     fn test_resolve_path_obj_other_values() {
-        assert_eq!(resolve_path(&num_u_stub(), String::from("name")), None);
-        assert_eq!(resolve_path(&num_i_stub(), String::from("name")), None);
-        assert_eq!(resolve_path(&num_f_stub(), String::from("name")), None);
-        assert_eq!(resolve_path(&bool_stub(), String::from("name")), None);
-        assert_eq!(resolve_path(&str_stub(), String::from("name")), None);
-        assert_eq!(resolve_path(&str_stub(), String::from("name")), None);
-        assert_eq!(resolve_path(&arr_bool_stub(), String::from("name")), None);
-        assert_eq!(resolve_path(&arr_num_u_stub(), String::from("name")), None);
-        assert_eq!(resolve_path(&arr_num_i_stub(), String::from("name")), None);
-        assert_eq!(resolve_path(&arr_num_f_stub(), String::from("name")), None);
-        assert_eq!(resolve_path(&arr_num_stub(), String::from("name")), None);
-        assert_eq!(resolve_path(&arr_str_stub(), String::from("name")), None);
+        assert_eq!(resolve_path(&num_u_stub(), &String::from("name")), None);
+        assert_eq!(resolve_path(&num_i_stub(), &String::from("name")), None);
+        assert_eq!(resolve_path(&num_f_stub(), &String::from("name")), None);
+        assert_eq!(resolve_path(&bool_stub(), &String::from("name")), None);
+        assert_eq!(resolve_path(&str_stub(), &String::from("name")), None);
+        assert_eq!(resolve_path(&str_stub(), &String::from("name")), None);
+        assert_eq!(resolve_path(&arr_bool_stub(), &String::from("name")), None);
+        assert_eq!(resolve_path(&arr_num_u_stub(), &String::from("name")), None);
+        assert_eq!(resolve_path(&arr_num_i_stub(), &String::from("name")), None);
+        assert_eq!(resolve_path(&arr_num_f_stub(), &String::from("name")), None);
+        assert_eq!(resolve_path(&arr_num_stub(), &String::from("name")), None);
+        assert_eq!(resolve_path(&arr_str_stub(), &String::from("name")), None);
     }
 
     #[test]
     fn test_resolve_path_arr_other_values() {
-        assert_eq!(resolve_path(&num_u_stub(), String::from("0")), None);
-        assert_eq!(resolve_path(&num_i_stub(), String::from("0")), None);
-        assert_eq!(resolve_path(&num_f_stub(), String::from("0")), None);
-        assert_eq!(resolve_path(&bool_stub(), String::from("0")), None);
-        assert_eq!(resolve_path(&obj_stub(), String::from("0")), None);
+        assert_eq!(resolve_path(&num_u_stub(), &String::from("0")), None);
+        assert_eq!(resolve_path(&num_i_stub(), &String::from("0")), None);
+        assert_eq!(resolve_path(&num_f_stub(), &String::from("0")), None);
+        assert_eq!(resolve_path(&bool_stub(), &String::from("0")), None);
+        assert_eq!(resolve_path(&obj_stub(), &String::from("0")), None);
     }
 
     #[test]
     fn test_resolve_path_obj_existent() {
-        assert_eq!(resolve_path(&obj_stub(), String::from("name")), Some(Value::from("The Beatles")));
+        assert_eq!(resolve_path(&obj_stub(), &String::from("name")), Some(Value::from("The Beatles")));
     }
 
     #[test]
     fn test_resolve_path_obj_not_found() {
-        assert_eq!(resolve_path(&obj_stub(), String::from("name.name")), None);
+        assert_eq!(resolve_path(&obj_stub(), &String::from("name.name")), None);
     }
 
     #[test]
@@ -107,23 +107,23 @@ mod test {
                 )])),
             )])),
         )]));
-        assert_eq!(resolve_path(&obj, String::from("user.account.details.birthdate")), Some(Value::from("2000-08-22")));
+        assert_eq!(resolve_path(&obj, &String::from("user.account.details.birthdate")), Some(Value::from("2000-08-22")));
     }
 
     #[test]
     fn test_resolve_path_arr() {
-        assert_eq!(resolve_path(&arr_num_f_stub(), String::from("one")), None);
-        assert_eq!(resolve_path(&arr_num_f_stub(), String::from("two")), None);
-        assert_eq!(resolve_path(&arr_num_f_stub(), String::from("0x0")), None);
-        assert_eq!(resolve_path(&arr_num_f_stub(), String::from("0b0")), None);
-        assert_eq!(resolve_path(&arr_num_f_stub(), String::from("-2")), None);
-        assert_eq!(resolve_path(&arr_num_f_stub(), String::from("-1")), None);
-        assert_eq!(resolve_path(&arr_num_f_stub(), String::from("00")), Some(Value::F64(-10.5)));
-        assert_eq!(resolve_path(&arr_num_f_stub(), String::from("01")), Some(Value::F64(0.5)));
-        assert_eq!(resolve_path(&arr_num_f_stub(), String::from("0")), Some(Value::F64(-10.5)));
-        assert_eq!(resolve_path(&arr_num_f_stub(), String::from("1")), Some(Value::F64(0.5)));
-        assert_eq!(resolve_path(&arr_num_f_stub(), String::from("2")), Some(Value::F64(10.5)));
-        assert_eq!(resolve_path(&arr_num_f_stub(), String::from("3")), None);
+        assert_eq!(resolve_path(&arr_num_f_stub(), &String::from("one")), None);
+        assert_eq!(resolve_path(&arr_num_f_stub(), &String::from("two")), None);
+        assert_eq!(resolve_path(&arr_num_f_stub(), &String::from("0x0")), None);
+        assert_eq!(resolve_path(&arr_num_f_stub(), &String::from("0b0")), None);
+        assert_eq!(resolve_path(&arr_num_f_stub(), &String::from("-2")), None);
+        assert_eq!(resolve_path(&arr_num_f_stub(), &String::from("-1")), None);
+        assert_eq!(resolve_path(&arr_num_f_stub(), &String::from("00")), Some(Value::F64(-10.5)));
+        assert_eq!(resolve_path(&arr_num_f_stub(), &String::from("01")), Some(Value::F64(0.5)));
+        assert_eq!(resolve_path(&arr_num_f_stub(), &String::from("0")), Some(Value::F64(-10.5)));
+        assert_eq!(resolve_path(&arr_num_f_stub(), &String::from("1")), Some(Value::F64(0.5)));
+        assert_eq!(resolve_path(&arr_num_f_stub(), &String::from("2")), Some(Value::F64(10.5)));
+        assert_eq!(resolve_path(&arr_num_f_stub(), &String::from("3")), None);
     }
 
     #[test]
@@ -137,7 +137,7 @@ mod test {
                 Value::from([Value::U64(100), Value::U64(200), Value::from([Value::U64(1000), Value::U64(2000), Value::U64(3000)])]),
             ]),
         ]);
-        assert_eq!(resolve_path(&arr, String::from("2.2.2.2")), Some(Value::U64(3000)));
+        assert_eq!(resolve_path(&arr, &String::from("2.2.2.2")), Some(Value::U64(3000)));
     }
 
     #[test]
@@ -160,6 +160,6 @@ mod test {
                 ]),
             ]),
         )]));
-        assert_eq!(resolve_path(&value, String::from("0.2.2.user.account.details.1")), Some(Value::U64(222)));
+        assert_eq!(resolve_path(&value, &String::from("0.2.2.user.account.details.1")), Some(Value::U64(222)));
     }
 }
