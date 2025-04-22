@@ -1021,4 +1021,126 @@ mod test {
         assert_eq!(compare(&v, &OperandValue::I64(32), &root), Some(Ok(())));
         assert_eq!(compare(&v, &OperandValue::I64(33), &root), Some(Err(())));
     }
+
+    #[test]
+    fn test_compare_f64_eq_field() {
+        let v = Operation::Eq(Operand::FieldPath(String::from("values.3.value")));
+        let root = Value::Obj(BTreeMap::from([(
+            String::from("values"),
+            Value::Arr(vec![
+                Value::Obj(BTreeMap::from([(String::from("value"), Value::F64(12.5))])),
+                Value::Obj(BTreeMap::from([(String::from("value"), Value::F64(22.5))])),
+                Value::Obj(BTreeMap::from([(String::from("value"), Value::F64(32.5))])),
+                Value::Obj(BTreeMap::from([(String::from("value"), Value::F64(42.5))])),
+            ]),
+        )]));
+        assert_eq!(compare(&v, &OperandValue::F64(41.5), &root), Some(Err(())));
+        assert_eq!(compare(&v, &OperandValue::F64(42.5), &root), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::F64(43.5), &root), Some(Err(())));
+    }
+
+    #[test]
+    fn test_compare_f64_ne_field() {
+        let v = Operation::Ne(Operand::FieldPath(String::from("values.3.value")));
+        let root = Value::Obj(BTreeMap::from([(
+            String::from("values"),
+            Value::Arr(vec![
+                Value::Obj(BTreeMap::from([(String::from("value"), Value::F64(12.5))])),
+                Value::Obj(BTreeMap::from([(String::from("value"), Value::F64(22.5))])),
+                Value::Obj(BTreeMap::from([(String::from("value"), Value::F64(32.5))])),
+                Value::Obj(BTreeMap::from([(String::from("value"), Value::F64(42.5))])),
+            ]),
+        )]));
+        assert_eq!(compare(&v, &OperandValue::F64(41.5), &root), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::F64(42.5), &root), Some(Err(())));
+        assert_eq!(compare(&v, &OperandValue::F64(43.5), &root), Some(Ok(())));
+    }
+
+    #[test]
+    fn test_compare_f64_gt_field() {
+        let v = Operation::Gt(Operand::FieldPath(String::from("values.3.value")));
+        let root = Value::Obj(BTreeMap::from([(
+            String::from("values"),
+            Value::Arr(vec![
+                Value::Obj(BTreeMap::from([(String::from("value"), Value::F64(12.5))])),
+                Value::Obj(BTreeMap::from([(String::from("value"), Value::F64(22.5))])),
+                Value::Obj(BTreeMap::from([(String::from("value"), Value::F64(32.5))])),
+                Value::Obj(BTreeMap::from([(String::from("value"), Value::F64(42.5))])),
+            ]),
+        )]));
+        assert_eq!(compare(&v, &OperandValue::F64(41.5), &root), Some(Err(())));
+        assert_eq!(compare(&v, &OperandValue::F64(42.5), &root), Some(Err(())));
+        assert_eq!(compare(&v, &OperandValue::F64(43.5), &root), Some(Ok(())));
+    }
+
+    #[test]
+    fn test_compare_f64_ge_field() {
+        let v = Operation::Ge(Operand::FieldPath(String::from("values.3.value")));
+        let root = Value::Obj(BTreeMap::from([(
+            String::from("values"),
+            Value::Arr(vec![
+                Value::Obj(BTreeMap::from([(String::from("value"), Value::F64(12.5))])),
+                Value::Obj(BTreeMap::from([(String::from("value"), Value::F64(22.5))])),
+                Value::Obj(BTreeMap::from([(String::from("value"), Value::F64(32.5))])),
+                Value::Obj(BTreeMap::from([(String::from("value"), Value::F64(42.5))])),
+            ]),
+        )]));
+        assert_eq!(compare(&v, &OperandValue::F64(41.5), &root), Some(Err(())));
+        assert_eq!(compare(&v, &OperandValue::F64(42.5), &root), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::F64(43.5), &root), Some(Ok(())));
+    }
+
+    #[test]
+    fn test_compare_f64_lt_field() {
+        let v = Operation::Lt(Operand::FieldPath(String::from("values.3.value")));
+        let root = Value::Obj(BTreeMap::from([(
+            String::from("values"),
+            Value::Arr(vec![
+                Value::Obj(BTreeMap::from([(String::from("value"), Value::F64(12.5))])),
+                Value::Obj(BTreeMap::from([(String::from("value"), Value::F64(22.5))])),
+                Value::Obj(BTreeMap::from([(String::from("value"), Value::F64(32.5))])),
+                Value::Obj(BTreeMap::from([(String::from("value"), Value::F64(42.5))])),
+            ]),
+        )]));
+        assert_eq!(compare(&v, &OperandValue::F64(41.5), &root), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::F64(42.5), &root), Some(Err(())));
+        assert_eq!(compare(&v, &OperandValue::F64(43.5), &root), Some(Err(())));
+    }
+
+    #[test]
+    fn test_compare_f64_le_field() {
+        let v = Operation::Le(Operand::FieldPath(String::from("values.3.value")));
+        let root = Value::Obj(BTreeMap::from([(
+            String::from("values"),
+            Value::Arr(vec![
+                Value::Obj(BTreeMap::from([(String::from("value"), Value::F64(12.5))])),
+                Value::Obj(BTreeMap::from([(String::from("value"), Value::F64(22.5))])),
+                Value::Obj(BTreeMap::from([(String::from("value"), Value::F64(32.5))])),
+                Value::Obj(BTreeMap::from([(String::from("value"), Value::F64(42.5))])),
+            ]),
+        )]));
+        assert_eq!(compare(&v, &OperandValue::F64(41.5), &root), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::F64(42.5), &root), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::F64(43.5), &root), Some(Err(())));
+    }
+
+    #[test]
+    fn test_compare_f64_btwn_field() {
+        let v = Operation::Btwn(Operand::FieldPath(String::from("values.1.value")), Operand::FieldPath(String::from("values.2.value")));
+        let root = Value::Obj(BTreeMap::from([(
+            String::from("values"),
+            Value::Arr(vec![
+                Value::Obj(BTreeMap::from([(String::from("value"), Value::F64(12.5))])),
+                Value::Obj(BTreeMap::from([(String::from("value"), Value::F64(22.5))])),
+                Value::Obj(BTreeMap::from([(String::from("value"), Value::F64(32.5))])),
+                Value::Obj(BTreeMap::from([(String::from("value"), Value::F64(42.5))])),
+            ]),
+        )]));
+        assert_eq!(compare(&v, &OperandValue::F64(21.5), &root), Some(Err(())));
+        assert_eq!(compare(&v, &OperandValue::F64(22.5), &root), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::F64(23.5), &root), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::F64(31.5), &root), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::F64(32.5), &root), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::F64(33.5), &root), Some(Err(())));
+    }
 }
