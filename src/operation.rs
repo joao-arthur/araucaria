@@ -1255,4 +1255,125 @@ mod test {
         assert_eq!(compare(&v, &OperandValue::Bool(false), &root), Some(Ok(())));
         assert_eq!(compare(&v, &OperandValue::Bool(true), &root), Some(Ok(())));
     }
+
+    #[test]
+    fn test_compare_string_eq_field() {
+        let v = Operation::Eq(Operand::FieldPath(String::from("values.3.value")));
+        let root = Value::Obj(BTreeMap::from([(
+            String::from("values"),
+            Value::Arr(vec![
+                Value::Obj(BTreeMap::from([(String::from("value"), Value::Str(String::from("g")))])),
+                Value::Obj(BTreeMap::from([(String::from("value"), Value::Str(String::from("h")))])),
+                Value::Obj(BTreeMap::from([(String::from("value"), Value::Str(String::from("i")))])),
+                Value::Obj(BTreeMap::from([(String::from("value"), Value::Str(String::from("j")))])),
+            ]),
+        )]));
+        assert_eq!(compare(&v, &OperandValue::Str(String::from("i")), &root), Some(Err(())));
+        assert_eq!(compare(&v, &OperandValue::Str(String::from("j")), &root), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::Str(String::from("k")), &root), Some(Err(())));
+    }
+
+    #[test]
+    fn test_compare_string_ne_field() {
+        let v = Operation::Ne(Operand::FieldPath(String::from("values.3.value")));
+        let root = Value::Obj(BTreeMap::from([(
+            String::from("values"),
+            Value::Arr(vec![
+                Value::Obj(BTreeMap::from([(String::from("value"), Value::Str(String::from("g")))])),
+                Value::Obj(BTreeMap::from([(String::from("value"), Value::Str(String::from("h")))])),
+                Value::Obj(BTreeMap::from([(String::from("value"), Value::Str(String::from("i")))])),
+                Value::Obj(BTreeMap::from([(String::from("value"), Value::Str(String::from("j")))])),
+            ]),
+        )]));
+        assert_eq!(compare(&v, &OperandValue::Str(String::from("i")), &root), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::Str(String::from("j")), &root), Some(Err(())));
+        assert_eq!(compare(&v, &OperandValue::Str(String::from("k")), &root), Some(Ok(())));
+    }
+
+    #[test]
+    fn test_compare_string_gt_field() {
+        let v = Operation::Gt(Operand::FieldPath(String::from("values.3.value")));
+        let root = Value::Obj(BTreeMap::from([(
+            String::from("values"),
+            Value::Arr(vec![
+                Value::Obj(BTreeMap::from([(String::from("value"), Value::Str(String::from("g")))])),
+                Value::Obj(BTreeMap::from([(String::from("value"), Value::Str(String::from("h")))])),
+                Value::Obj(BTreeMap::from([(String::from("value"), Value::Str(String::from("i")))])),
+                Value::Obj(BTreeMap::from([(String::from("value"), Value::Str(String::from("j")))])),
+            ]),
+        )]));
+        assert_eq!(compare(&v, &OperandValue::Str(String::from("i")), &root), Some(Err(())));
+        assert_eq!(compare(&v, &OperandValue::Str(String::from("j")), &root), Some(Err(())));
+        assert_eq!(compare(&v, &OperandValue::Str(String::from("k")), &root), Some(Ok(())));
+    }
+
+    #[test]
+    fn test_compare_string_ge_field() {
+        let v = Operation::Ge(Operand::FieldPath(String::from("values.3.value")));
+        let root = Value::Obj(BTreeMap::from([(
+            String::from("values"),
+            Value::Arr(vec![
+                Value::Obj(BTreeMap::from([(String::from("value"), Value::Str(String::from("g")))])),
+                Value::Obj(BTreeMap::from([(String::from("value"), Value::Str(String::from("h")))])),
+                Value::Obj(BTreeMap::from([(String::from("value"), Value::Str(String::from("i")))])),
+                Value::Obj(BTreeMap::from([(String::from("value"), Value::Str(String::from("j")))])),
+            ]),
+        )]));
+        assert_eq!(compare(&v, &OperandValue::Str(String::from("i")), &root), Some(Err(())));
+        assert_eq!(compare(&v, &OperandValue::Str(String::from("j")), &root), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::Str(String::from("k")), &root), Some(Ok(())));
+    }
+
+    #[test]
+    fn test_compare_string_lt_field() {
+        let v = Operation::Lt(Operand::FieldPath(String::from("values.3.value")));
+        let root = Value::Obj(BTreeMap::from([(
+            String::from("values"),
+            Value::Arr(vec![
+                Value::Obj(BTreeMap::from([(String::from("value"), Value::Str(String::from("g")))])),
+                Value::Obj(BTreeMap::from([(String::from("value"), Value::Str(String::from("h")))])),
+                Value::Obj(BTreeMap::from([(String::from("value"), Value::Str(String::from("i")))])),
+                Value::Obj(BTreeMap::from([(String::from("value"), Value::Str(String::from("j")))])),
+            ]),
+        )]));
+        assert_eq!(compare(&v, &OperandValue::Str(String::from("i")), &root), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::Str(String::from("j")), &root), Some(Err(())));
+        assert_eq!(compare(&v, &OperandValue::Str(String::from("k")), &root), Some(Err(())));
+    }
+
+    #[test]
+    fn test_compare_string_le_field() {
+        let v = Operation::Le(Operand::FieldPath(String::from("values.3.value")));
+        let root = Value::Obj(BTreeMap::from([(
+            String::from("values"),
+            Value::Arr(vec![
+                Value::Obj(BTreeMap::from([(String::from("value"), Value::Str(String::from("g")))])),
+                Value::Obj(BTreeMap::from([(String::from("value"), Value::Str(String::from("h")))])),
+                Value::Obj(BTreeMap::from([(String::from("value"), Value::Str(String::from("i")))])),
+                Value::Obj(BTreeMap::from([(String::from("value"), Value::Str(String::from("j")))])),
+            ]),
+        )]));
+        assert_eq!(compare(&v, &OperandValue::Str(String::from("i")), &root), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::Str(String::from("j")), &root), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::Str(String::from("k")), &root), Some(Err(())));
+    }
+
+    #[test]
+    fn test_compare_string_btwn_field() {
+        let v = Operation::Btwn(Operand::FieldPath(String::from("values.0.value")), Operand::FieldPath(String::from("values.3.value")));
+        let root = Value::Obj(BTreeMap::from([(
+            String::from("values"),
+            Value::Arr(vec![
+                Value::Obj(BTreeMap::from([(String::from("value"), Value::Str(String::from("g")))])),
+                Value::Obj(BTreeMap::from([(String::from("value"), Value::Str(String::from("h")))])),
+                Value::Obj(BTreeMap::from([(String::from("value"), Value::Str(String::from("i")))])),
+                Value::Obj(BTreeMap::from([(String::from("value"), Value::Str(String::from("j")))])),
+            ]),
+        )]));
+        assert_eq!(compare(&v, &OperandValue::Str(String::from("f")), &root), Some(Err(())));
+        assert_eq!(compare(&v, &OperandValue::Str(String::from("g")), &root), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::Str(String::from("i")), &root), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::Str(String::from("j")), &root), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::Str(String::from("k")), &root), Some(Err(())));
+    }
 }
