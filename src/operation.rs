@@ -118,59 +118,45 @@ fn value_to_operand_value(value: &Value) -> Option<OperandValue> {
     }
 }
 
+fn resolve_operand(root: &Value, operation: &Operand) -> Option<OperandValue> {
+    match operation {
+        Operand::Value(value) => Some(value.clone()),
+        Operand::FieldPath(field_path) => {
+            let field = resolve_path(root, field_path)?;
+            value_to_operand_value(&field)
+        }
+    }
+}
+
 pub fn compare(operation: &Operation, value_a: &OperandValue, root: &Value) -> Option<Result<(), ()>> {
     match operation {
         Operation::Eq(operand) => {
-            let value_b = match operand {
-                Operand::Value(value) => Some(value.clone()),
-                Operand::FieldPath(field_path) => Some(value_to_operand_value(&resolve_path(root, field_path)?)?),
-            }?;
+            let value_b = resolve_operand(root, operand)?;
             compare_eq(&value_a, &value_b)
         }
         Operation::Ne(operand) => {
-            let value_b = match operand {
-                Operand::Value(value) => Some(value.clone()),
-                Operand::FieldPath(field_path) => Some(value_to_operand_value(&resolve_path(root, field_path)?)?),
-            }?;
+            let value_b = resolve_operand(root, operand)?;
             compare_ne(&value_a, &value_b)
         }
         Operation::Gt(operand) => {
-            let value_b = match operand {
-                Operand::Value(value) => Some(value.clone()),
-                Operand::FieldPath(field_path) => Some(value_to_operand_value(&resolve_path(root, field_path)?)?),
-            }?;
+            let value_b = resolve_operand(root, operand)?;
             compare_gt(&value_a, &value_b)
         }
         Operation::Ge(operand) => {
-            let value_b = match operand {
-                Operand::Value(value) => Some(value.clone()),
-                Operand::FieldPath(field_path) => Some(value_to_operand_value(&resolve_path(root, field_path)?)?),
-            }?;
+            let value_b = resolve_operand(root, operand)?;
             compare_ge(&value_a, &value_b)
         }
         Operation::Lt(operand) => {
-            let value_b = match operand {
-                Operand::Value(value) => Some(value.clone()),
-                Operand::FieldPath(field_path) => Some(value_to_operand_value(&resolve_path(root, field_path)?)?),
-            }?;
+            let value_b = resolve_operand(root, operand)?;
             compare_lt(&value_a, &value_b)
         }
         Operation::Le(operand) => {
-            let value_b = match operand {
-                Operand::Value(value) => Some(value.clone()),
-                Operand::FieldPath(field_path) => Some(value_to_operand_value(&resolve_path(root, field_path)?)?),
-            }?;
+            let value_b = resolve_operand(root, operand)?;
             compare_le(&value_a, &value_b)
         }
         Operation::Btwn(operand_a, operand_b) => {
-            let value_operand_a = match operand_a {
-                Operand::Value(value) => Some(value.clone()),
-                Operand::FieldPath(field_path) => Some(value_to_operand_value(&resolve_path(root, field_path)?)?),
-            }?;
-            let value_operand_b = match operand_b {
-                Operand::Value(value) => Some(value.clone()),
-                Operand::FieldPath(field_path) => Some(value_to_operand_value(&resolve_path(root, field_path)?)?),
-            }?;
+            let value_operand_a = resolve_operand(root, operand_a)?;
+            let value_operand_b = resolve_operand(root, operand_b)?;
             if let Some(Ok(())) = compare_ge(&value_a, &value_operand_a) {
                 if let Some(Ok(())) = compare_le(&value_a, &value_operand_b) {
                     Some(Ok(()))
