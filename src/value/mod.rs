@@ -110,7 +110,7 @@ pub fn value_to_string(value: &Value) -> String {
 mod test {
     use std::collections::BTreeMap;
 
-    use super::{value_to_string, Value};
+    use super::{Value, value_to_string};
 
     #[test]
     fn test_value_from() {
