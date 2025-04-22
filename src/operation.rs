@@ -120,71 +120,67 @@ fn value_to_operand_value(value: &Value) -> Option<OperandValue> {
 
 pub fn compare(operation: &Operation, value_a: &OperandValue, root: &Value) -> Option<Result<(), ()>> {
     match operation {
-        Operation::Eq(operand) => match operand {
-            Operand::Value(value_b) => compare_eq(&value_a, &value_b),
-            Operand::FieldPath(field_path) => {
-                let field = resolve_path(root, field_path)?;
-                let value_b = value_to_operand_value(&field)?;
-                compare_eq(&value_a, &value_b)
-            }
-        },
-        Operation::Ne(operand) => match operand {
-            Operand::Value(value_b) => compare_ne(&value_a, &value_b),
-            Operand::FieldPath(field_path) => {
-                let field = resolve_path(root, field_path)?;
-                let value_b = value_to_operand_value(&field)?;
-                compare_ne(&value_a, &value_b)
-            }
-        },
-        Operation::Gt(operand) => match operand {
-            Operand::Value(value_b) => compare_gt(&value_a, &value_b),
-            Operand::FieldPath(field_path) => {
-                let field = resolve_path(root, field_path)?;
-                let value_b = value_to_operand_value(&field)?;
-                compare_gt(&value_a, &value_b)
-            }
-        },
-        Operation::Ge(operand) => match operand {
-            Operand::Value(value_b) => compare_ge(&value_a, &value_b),
-            Operand::FieldPath(field_path) => {
-                let field = resolve_path(root, field_path)?;
-                let value_b = value_to_operand_value(&field)?;
-                compare_ge(&value_a, &value_b)
-            }
-        },
-        Operation::Lt(operand) => match operand {
-            Operand::Value(value_b) => compare_lt(&value_a, &value_b),
-            Operand::FieldPath(field_path) => {
-                let field = resolve_path(root, field_path)?;
-                let value_b = value_to_operand_value(&field)?;
-                compare_lt(&value_a, &value_b)
-            }
-        },
-        Operation::Le(operand) => match operand {
-            Operand::Value(value_b) => compare_le(&value_a, &value_b),
-            Operand::FieldPath(field_path) => {
-                let field = resolve_path(root, field_path)?;
-                let value_b = value_to_operand_value(&field)?;
-                compare_le(&value_a, &value_b)
-            }
-        },
-        Operation::Btwn(operand_a, operand_b) => match operand_a {
-            Operand::Value(value_operand_a) => match operand_b {
-                Operand::Value(value_operand_b) => {
-                    if let Some(Ok(_)) = compare_ge(&value_a, &value_operand_a) {
-                        if let Some(Ok(())) = compare_le(&value_a, &value_operand_b) {
-                            Some(Ok(()))
-                        } else {
-                            Some(Err(()))
-                        }
-                    } else {
-                        Some(Err(()))
-                    }
+        Operation::Eq(operand) => {
+            let value_b = match operand {
+                Operand::Value(value) => Some(value.clone()),
+                Operand::FieldPath(field_path) => Some(value_to_operand_value(&resolve_path(root, field_path)?)?),
+            }?;
+            compare_eq(&value_a, &value_b)
+        }
+        Operation::Ne(operand) => {
+            let value_b = match operand {
+                Operand::Value(value) => Some(value.clone()),
+                Operand::FieldPath(field_path) => Some(value_to_operand_value(&resolve_path(root, field_path)?)?),
+            }?;
+            compare_ne(&value_a, &value_b)
+        }
+        Operation::Gt(operand) => {
+            let value_b = match operand {
+                Operand::Value(value) => Some(value.clone()),
+                Operand::FieldPath(field_path) => Some(value_to_operand_value(&resolve_path(root, field_path)?)?),
+            }?;
+            compare_gt(&value_a, &value_b)
+        }
+        Operation::Ge(operand) => {
+            let value_b = match operand {
+                Operand::Value(value) => Some(value.clone()),
+                Operand::FieldPath(field_path) => Some(value_to_operand_value(&resolve_path(root, field_path)?)?),
+            }?;
+            compare_ge(&value_a, &value_b)
+        }
+        Operation::Lt(operand) => {
+            let value_b = match operand {
+                Operand::Value(value) => Some(value.clone()),
+                Operand::FieldPath(field_path) => Some(value_to_operand_value(&resolve_path(root, field_path)?)?),
+            }?;
+            compare_lt(&value_a, &value_b)
+        }
+        Operation::Le(operand) => {
+            let value_b = match operand {
+                Operand::Value(value) => Some(value.clone()),
+                Operand::FieldPath(field_path) => Some(value_to_operand_value(&resolve_path(root, field_path)?)?),
+            }?;
+            compare_le(&value_a, &value_b)
+        }
+        Operation::Btwn(operand_a, operand_b) => {
+            let value_operand_a = match operand_a {
+                Operand::Value(value) => Some(value.clone()),
+                Operand::FieldPath(field_path) => Some(value_to_operand_value(&resolve_path(root, field_path)?)?),
+            }?;
+            let value_operand_b = match operand_b {
+                Operand::Value(value) => Some(value.clone()),
+                Operand::FieldPath(field_path) => Some(value_to_operand_value(&resolve_path(root, field_path)?)?),
+            }?;
+            if let Some(Ok(())) = compare_ge(&value_a, &value_operand_a) {
+                if let Some(Ok(())) = compare_le(&value_a, &value_operand_b) {
+                    Some(Ok(()))
+                } else {
+                    Some(Err(()))
                 }
-                Operand::FieldPath(field_path) => Some(Ok(())),
-            },
-            Operand::FieldPath(field_path) => Some(Ok(())),
-        },
+            } else {
+                Some(Err(()))
+            }
+        }
     }
 }
 
@@ -783,7 +779,7 @@ mod test {
     }
 
     #[test]
-    fn test_compare_u64_eq() {
+    fn test_compare_u64_eq_field() {
         let v = Operation::Eq(Operand::FieldPath(String::from("values.3.value")));
         let root = Value::Obj(BTreeMap::from([(
             String::from("values"),
@@ -902,5 +898,127 @@ mod test {
         assert_eq!(compare(&v, &OperandValue::U64(31), &root), Some(Ok(())));
         assert_eq!(compare(&v, &OperandValue::U64(32), &root), Some(Ok(())));
         assert_eq!(compare(&v, &OperandValue::U64(33), &root), Some(Err(())));
+    }
+
+    #[test]
+    fn test_compare_i64_eq_field() {
+        let v = Operation::Eq(Operand::FieldPath(String::from("values.3.value")));
+        let root = Value::Obj(BTreeMap::from([(
+            String::from("values"),
+            Value::Arr(vec![
+                Value::Obj(BTreeMap::from([(String::from("value"), Value::I64(12))])),
+                Value::Obj(BTreeMap::from([(String::from("value"), Value::I64(22))])),
+                Value::Obj(BTreeMap::from([(String::from("value"), Value::I64(32))])),
+                Value::Obj(BTreeMap::from([(String::from("value"), Value::I64(42))])),
+            ]),
+        )]));
+        assert_eq!(compare(&v, &OperandValue::I64(41), &root), Some(Err(())));
+        assert_eq!(compare(&v, &OperandValue::I64(42), &root), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::I64(43), &root), Some(Err(())));
+    }
+
+    #[test]
+    fn test_compare_i64_ne_field() {
+        let v = Operation::Ne(Operand::FieldPath(String::from("values.3.value")));
+        let root = Value::Obj(BTreeMap::from([(
+            String::from("values"),
+            Value::Arr(vec![
+                Value::Obj(BTreeMap::from([(String::from("value"), Value::I64(12))])),
+                Value::Obj(BTreeMap::from([(String::from("value"), Value::I64(22))])),
+                Value::Obj(BTreeMap::from([(String::from("value"), Value::I64(32))])),
+                Value::Obj(BTreeMap::from([(String::from("value"), Value::I64(42))])),
+            ]),
+        )]));
+        assert_eq!(compare(&v, &OperandValue::I64(41), &root), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::I64(42), &root), Some(Err(())));
+        assert_eq!(compare(&v, &OperandValue::I64(43), &root), Some(Ok(())));
+    }
+
+    #[test]
+    fn test_compare_i64_gt_field() {
+        let v = Operation::Gt(Operand::FieldPath(String::from("values.3.value")));
+        let root = Value::Obj(BTreeMap::from([(
+            String::from("values"),
+            Value::Arr(vec![
+                Value::Obj(BTreeMap::from([(String::from("value"), Value::I64(12))])),
+                Value::Obj(BTreeMap::from([(String::from("value"), Value::I64(22))])),
+                Value::Obj(BTreeMap::from([(String::from("value"), Value::I64(32))])),
+                Value::Obj(BTreeMap::from([(String::from("value"), Value::I64(42))])),
+            ]),
+        )]));
+        assert_eq!(compare(&v, &OperandValue::I64(41), &root), Some(Err(())));
+        assert_eq!(compare(&v, &OperandValue::I64(42), &root), Some(Err(())));
+        assert_eq!(compare(&v, &OperandValue::I64(43), &root), Some(Ok(())));
+    }
+
+    #[test]
+    fn test_compare_i64_ge_field() {
+        let v = Operation::Ge(Operand::FieldPath(String::from("values.3.value")));
+        let root = Value::Obj(BTreeMap::from([(
+            String::from("values"),
+            Value::Arr(vec![
+                Value::Obj(BTreeMap::from([(String::from("value"), Value::I64(12))])),
+                Value::Obj(BTreeMap::from([(String::from("value"), Value::I64(22))])),
+                Value::Obj(BTreeMap::from([(String::from("value"), Value::I64(32))])),
+                Value::Obj(BTreeMap::from([(String::from("value"), Value::I64(42))])),
+            ]),
+        )]));
+        assert_eq!(compare(&v, &OperandValue::I64(41), &root), Some(Err(())));
+        assert_eq!(compare(&v, &OperandValue::I64(42), &root), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::I64(43), &root), Some(Ok(())));
+    }
+
+    #[test]
+    fn test_compare_i64_lt_field() {
+        let v = Operation::Lt(Operand::FieldPath(String::from("values.3.value")));
+        let root = Value::Obj(BTreeMap::from([(
+            String::from("values"),
+            Value::Arr(vec![
+                Value::Obj(BTreeMap::from([(String::from("value"), Value::I64(12))])),
+                Value::Obj(BTreeMap::from([(String::from("value"), Value::I64(22))])),
+                Value::Obj(BTreeMap::from([(String::from("value"), Value::I64(32))])),
+                Value::Obj(BTreeMap::from([(String::from("value"), Value::I64(42))])),
+            ]),
+        )]));
+        assert_eq!(compare(&v, &OperandValue::I64(41), &root), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::I64(42), &root), Some(Err(())));
+        assert_eq!(compare(&v, &OperandValue::I64(43), &root), Some(Err(())));
+    }
+
+    #[test]
+    fn test_compare_i64_le_field() {
+        let v = Operation::Le(Operand::FieldPath(String::from("values.3.value")));
+        let root = Value::Obj(BTreeMap::from([(
+            String::from("values"),
+            Value::Arr(vec![
+                Value::Obj(BTreeMap::from([(String::from("value"), Value::I64(12))])),
+                Value::Obj(BTreeMap::from([(String::from("value"), Value::I64(22))])),
+                Value::Obj(BTreeMap::from([(String::from("value"), Value::I64(32))])),
+                Value::Obj(BTreeMap::from([(String::from("value"), Value::I64(42))])),
+            ]),
+        )]));
+        assert_eq!(compare(&v, &OperandValue::I64(41), &root), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::I64(42), &root), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::I64(43), &root), Some(Err(())));
+    }
+
+    #[test]
+    fn test_compare_i64_btwn_field() {
+        let v = Operation::Btwn(Operand::FieldPath(String::from("values.1.value")), Operand::FieldPath(String::from("values.2.value")));
+        let root = Value::Obj(BTreeMap::from([(
+            String::from("values"),
+            Value::Arr(vec![
+                Value::Obj(BTreeMap::from([(String::from("value"), Value::I64(12))])),
+                Value::Obj(BTreeMap::from([(String::from("value"), Value::I64(22))])),
+                Value::Obj(BTreeMap::from([(String::from("value"), Value::I64(32))])),
+                Value::Obj(BTreeMap::from([(String::from("value"), Value::I64(42))])),
+            ]),
+        )]));
+        assert_eq!(compare(&v, &OperandValue::I64(21), &root), Some(Err(())));
+        assert_eq!(compare(&v, &OperandValue::I64(22), &root), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::I64(23), &root), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::I64(31), &root), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::I64(32), &root), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::I64(33), &root), Some(Err(())));
     }
 }
