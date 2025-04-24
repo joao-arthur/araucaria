@@ -1244,10 +1244,10 @@ mod test {
         let root = Value::Obj(BTreeMap::from([(
             "values".into(),
             Value::Arr(vec![
-                Value::Obj(BTreeMap::from([("value".into(), Value::Str("g".into()))])),
-                Value::Obj(BTreeMap::from([("value".into(), Value::Str("h".into()))])),
-                Value::Obj(BTreeMap::from([("value".into(), Value::Str("i".into()))])),
-                Value::Obj(BTreeMap::from([("value".into(), Value::Str("j".into()))])),
+                Value::Obj(BTreeMap::from([("value".into(), Value::from("g"))])),
+                Value::Obj(BTreeMap::from([("value".into(), Value::from("h"))])),
+                Value::Obj(BTreeMap::from([("value".into(), Value::from("i"))])),
+                Value::Obj(BTreeMap::from([("value".into(), Value::from("j"))])),
             ]),
         )]));
         assert_eq!(compare(&v, &OperandValue::Str("i".into()), &root), Some(Err(())));
@@ -1261,10 +1261,10 @@ mod test {
         let root = Value::Obj(BTreeMap::from([(
             "values".into(),
             Value::Arr(vec![
-                Value::Obj(BTreeMap::from([("value".into(), Value::Str("g".into()))])),
-                Value::Obj(BTreeMap::from([("value".into(), Value::Str("h".into()))])),
-                Value::Obj(BTreeMap::from([("value".into(), Value::Str("i".into()))])),
-                Value::Obj(BTreeMap::from([("value".into(), Value::Str("j".into()))])),
+                Value::Obj(BTreeMap::from([("value".into(), Value::from("g"))])),
+                Value::Obj(BTreeMap::from([("value".into(), Value::from("h"))])),
+                Value::Obj(BTreeMap::from([("value".into(), Value::from("i"))])),
+                Value::Obj(BTreeMap::from([("value".into(), Value::from("j"))])),
             ]),
         )]));
         assert_eq!(compare(&v, &OperandValue::Str("i".into()), &root), Some(Ok(())));
@@ -1278,10 +1278,10 @@ mod test {
         let root = Value::Obj(BTreeMap::from([(
             "values".into(),
             Value::Arr(vec![
-                Value::Obj(BTreeMap::from([("value".into(), Value::Str("g".into()))])),
-                Value::Obj(BTreeMap::from([("value".into(), Value::Str("h".into()))])),
-                Value::Obj(BTreeMap::from([("value".into(), Value::Str("i".into()))])),
-                Value::Obj(BTreeMap::from([("value".into(), Value::Str("j".into()))])),
+                Value::Obj(BTreeMap::from([("value".into(), Value::from("g"))])),
+                Value::Obj(BTreeMap::from([("value".into(), Value::from("h"))])),
+                Value::Obj(BTreeMap::from([("value".into(), Value::from("i"))])),
+                Value::Obj(BTreeMap::from([("value".into(), Value::from("j"))])),
             ]),
         )]));
         assert_eq!(compare(&v, &OperandValue::Str("i".into()), &root), Some(Err(())));
@@ -1295,10 +1295,10 @@ mod test {
         let root = Value::Obj(BTreeMap::from([(
             "values".into(),
             Value::Arr(vec![
-                Value::Obj(BTreeMap::from([("value".into(), Value::Str("g".into()))])),
-                Value::Obj(BTreeMap::from([("value".into(), Value::Str("h".into()))])),
-                Value::Obj(BTreeMap::from([("value".into(), Value::Str("i".into()))])),
-                Value::Obj(BTreeMap::from([("value".into(), Value::Str("j".into()))])),
+                Value::Obj(BTreeMap::from([("value".into(), Value::from("g"))])),
+                Value::Obj(BTreeMap::from([("value".into(), Value::from("h"))])),
+                Value::Obj(BTreeMap::from([("value".into(), Value::from("i"))])),
+                Value::Obj(BTreeMap::from([("value".into(), Value::from("j"))])),
             ]),
         )]));
         assert_eq!(compare(&v, &OperandValue::Str("i".into()), &root), Some(Err(())));
@@ -1312,10 +1312,10 @@ mod test {
         let root = Value::Obj(BTreeMap::from([(
             "values".into(),
             Value::Arr(vec![
-                Value::Obj(BTreeMap::from([("value".into(), Value::Str("g".into()))])),
-                Value::Obj(BTreeMap::from([("value".into(), Value::Str("h".into()))])),
-                Value::Obj(BTreeMap::from([("value".into(), Value::Str("i".into()))])),
-                Value::Obj(BTreeMap::from([("value".into(), Value::Str("j".into()))])),
+                Value::Obj(BTreeMap::from([("value".into(), Value::from("g"))])),
+                Value::Obj(BTreeMap::from([("value".into(), Value::from("h"))])),
+                Value::Obj(BTreeMap::from([("value".into(), Value::from("i"))])),
+                Value::Obj(BTreeMap::from([("value".into(), Value::from("j"))])),
             ]),
         )]));
         assert_eq!(compare(&v, &OperandValue::Str("i".into()), &root), Some(Ok(())));
@@ -1329,10 +1329,10 @@ mod test {
         let root = Value::Obj(BTreeMap::from([(
             "values".into(),
             Value::Arr(vec![
-                Value::Obj(BTreeMap::from([("value".into(), Value::Str("g".into()))])),
-                Value::Obj(BTreeMap::from([("value".into(), Value::Str("h".into()))])),
-                Value::Obj(BTreeMap::from([("value".into(), Value::Str("i".into()))])),
-                Value::Obj(BTreeMap::from([("value".into(), Value::Str("j".into()))])),
+                Value::Obj(BTreeMap::from([("value".into(), Value::from("g"))])),
+                Value::Obj(BTreeMap::from([("value".into(), Value::from("h"))])),
+                Value::Obj(BTreeMap::from([("value".into(), Value::from("i"))])),
+                Value::Obj(BTreeMap::from([("value".into(), Value::from("j"))])),
             ]),
         )]));
         assert_eq!(compare(&v, &OperandValue::Str("i".into()), &root), Some(Ok(())));
@@ -1346,10 +1346,10 @@ mod test {
         let root = Value::Obj(BTreeMap::from([(
             "values".into(),
             Value::Arr(vec![
-                Value::Obj(BTreeMap::from([("value".into(), Value::Str("g".into()))])),
-                Value::Obj(BTreeMap::from([("value".into(), Value::Str("h".into()))])),
-                Value::Obj(BTreeMap::from([("value".into(), Value::Str("i".into()))])),
-                Value::Obj(BTreeMap::from([("value".into(), Value::Str("j".into()))])),
+                Value::Obj(BTreeMap::from([("value".into(), Value::from("g"))])),
+                Value::Obj(BTreeMap::from([("value".into(), Value::from("h"))])),
+                Value::Obj(BTreeMap::from([("value".into(), Value::from("i"))])),
+                Value::Obj(BTreeMap::from([("value".into(), Value::from("j"))])),
             ]),
         )]));
         assert_eq!(compare(&v, &OperandValue::Str("f".into()), &root), Some(Err(())));
