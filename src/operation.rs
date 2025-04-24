@@ -12,6 +12,42 @@ pub enum OperandValue {
     Str(String),
 }
 
+impl From<u64> for OperandValue {
+    fn from(value: u64) -> Self {
+        OperandValue::U64(value)
+    }
+}
+
+impl From<i64> for OperandValue {
+    fn from(value: i64) -> Self {
+        OperandValue::I64(value)
+    }
+}
+
+impl From<f64> for OperandValue {
+    fn from(value: f64) -> Self {
+        OperandValue::F64(value)
+    }
+}
+
+impl From<usize> for OperandValue {
+    fn from(value: usize) -> Self {
+        OperandValue::USize(value)
+    }
+}
+
+impl From<bool> for OperandValue {
+    fn from(value: bool) -> Self {
+        OperandValue::Bool(value)
+    }
+}
+
+impl From<&str> for OperandValue {
+    fn from(value: &str) -> Self {
+        OperandValue::Str(value.into())
+    }
+}
+
 impl PartialOrd for OperandValue {
     fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
         if let OperandValue::U64(a) = self {
@@ -175,6 +211,16 @@ mod test {
     use super::{Operand, OperandValue, Operation, compare};
 
     #[test]
+    fn test_operand_value_from() {
+        assert_eq!(OperandValue::from(8_u64), OperandValue::U64(8));
+        assert_eq!(OperandValue::from(-3_i64), OperandValue::I64(-3));
+        assert_eq!(OperandValue::from(-9.8), OperandValue::F64(-9.8));
+        assert_eq!(OperandValue::from(183_usize), OperandValue::USize(183));
+        assert_eq!(OperandValue::from(false), OperandValue::Bool(false));
+        assert_eq!(OperandValue::from("in vino veritas"), OperandValue::Str("in vino veritas".into()));
+    }
+
+    #[test]
     fn test_operand_value_u64() {
         assert_eq!(OperandValue::U64(42) == OperandValue::U64(41), false);
         assert!(OperandValue::U64(42) == OperandValue::U64(42));
@@ -280,24 +326,24 @@ mod test {
 
     #[test]
     fn test_operand_value_string() {
-        assert_eq!(OperandValue::Str("j".into()) == OperandValue::Str("i".into()), false);
-        assert!(OperandValue::Str("j".into()) == OperandValue::Str("j".into()));
-        assert_eq!(OperandValue::Str("j".into()) == OperandValue::Str("k".into()), false);
-        assert!(OperandValue::Str("j".into()) != OperandValue::Str("i".into()));
-        assert_eq!(OperandValue::Str("j".into()) != OperandValue::Str("j".into()), false);
-        assert!(OperandValue::Str("j".into()) != OperandValue::Str("k".into()));
-        assert!(OperandValue::Str("j".into()) > OperandValue::Str("i".into()));
-        assert_eq!(OperandValue::Str("j".into()) > OperandValue::Str("j".into()), false);
-        assert_eq!(OperandValue::Str("j".into()) > OperandValue::Str("k".into()), false);
-        assert!(OperandValue::Str("j".into()) >= OperandValue::Str("i".into()));
-        assert!(OperandValue::Str("j".into()) >= OperandValue::Str("j".into()));
-        assert_eq!(OperandValue::Str("j".into()) >= OperandValue::Str("k".into()), false);
-        assert_eq!(OperandValue::Str("j".into()) < OperandValue::Str("i".into()), false);
-        assert_eq!(OperandValue::Str("j".into()) < OperandValue::Str("j".into()), false);
-        assert!(OperandValue::Str("j".into()) < OperandValue::Str("k".into()));
-        assert_eq!(OperandValue::Str("j".into()) <= OperandValue::Str("i".into()), false);
-        assert!(OperandValue::Str("j".into()) <= OperandValue::Str("j".into()));
-        assert!(OperandValue::Str("j".into()) <= OperandValue::Str("k".into()));
+        assert_eq!(OperandValue::from("j") == OperandValue::from("i"), false);
+        assert!(OperandValue::from("j") == OperandValue::from("j"));
+        assert_eq!(OperandValue::from("j") == OperandValue::from("k"), false);
+        assert!(OperandValue::from("j") != OperandValue::from("i"));
+        assert_eq!(OperandValue::from("j") != OperandValue::from("j"), false);
+        assert!(OperandValue::from("j") != OperandValue::from("k"));
+        assert!(OperandValue::from("j") > OperandValue::from("i"));
+        assert_eq!(OperandValue::from("j") > OperandValue::from("j"), false);
+        assert_eq!(OperandValue::from("j") > OperandValue::from("k"), false);
+        assert!(OperandValue::from("j") >= OperandValue::from("i"));
+        assert!(OperandValue::from("j") >= OperandValue::from("j"));
+        assert_eq!(OperandValue::from("j") >= OperandValue::from("k"), false);
+        assert_eq!(OperandValue::from("j") < OperandValue::from("i"), false);
+        assert_eq!(OperandValue::from("j") < OperandValue::from("j"), false);
+        assert!(OperandValue::from("j") < OperandValue::from("k"));
+        assert_eq!(OperandValue::from("j") <= OperandValue::from("i"), false);
+        assert!(OperandValue::from("j") <= OperandValue::from("j"));
+        assert!(OperandValue::from("j") <= OperandValue::from("k"));
     }
 
     #[test]
@@ -305,13 +351,13 @@ mod test {
         assert_eq!(OperandValue::U64(42).partial_cmp(&OperandValue::I64(-42)), None);
         assert_eq!(OperandValue::U64(42).partial_cmp(&OperandValue::F64(-4.2)), None);
         assert_eq!(OperandValue::U64(42).partial_cmp(&OperandValue::Bool(false)), None);
-        assert_eq!(OperandValue::U64(42).partial_cmp(&OperandValue::Str("a b c".into())), None);
+        assert_eq!(OperandValue::U64(42).partial_cmp(&OperandValue::from("a b c")), None);
         assert_eq!(OperandValue::I64(-42).partial_cmp(&OperandValue::F64(-4.2)), None);
         assert_eq!(OperandValue::I64(-42).partial_cmp(&OperandValue::Bool(false)), None);
-        assert_eq!(OperandValue::I64(-42).partial_cmp(&OperandValue::Str("a b c".into())), None);
+        assert_eq!(OperandValue::I64(-42).partial_cmp(&OperandValue::from("a b c")), None);
         assert_eq!(OperandValue::F64(-4.2).partial_cmp(&OperandValue::Bool(false)), None);
-        assert_eq!(OperandValue::F64(-4.2).partial_cmp(&OperandValue::Str("a b c".into())), None);
-        assert_eq!(OperandValue::Bool(false).partial_cmp(&OperandValue::Str("a b c".into())), None);
+        assert_eq!(OperandValue::F64(-4.2).partial_cmp(&OperandValue::from("a b c")), None);
+        assert_eq!(OperandValue::Bool(false).partial_cmp(&OperandValue::from("a b c")), None);
     }
 
     #[test]
@@ -636,68 +682,68 @@ mod test {
 
     #[test]
     fn test_compare_string_eq_value() {
-        let v = Operation::Eq(Operand::Value(OperandValue::Str("j".into())));
+        let v = Operation::Eq(Operand::Value(OperandValue::from("j")));
         let root = Value::None;
-        assert_eq!(compare(&v, &OperandValue::Str("i".into()), &root), Some(Err(())));
-        assert_eq!(compare(&v, &OperandValue::Str("j".into()), &root), Some(Ok(())));
-        assert_eq!(compare(&v, &OperandValue::Str("k".into()), &root), Some(Err(())));
+        assert_eq!(compare(&v, &OperandValue::from("i"), &root), Some(Err(())));
+        assert_eq!(compare(&v, &OperandValue::from("j"), &root), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::from("k"), &root), Some(Err(())));
     }
 
     #[test]
     fn test_compare_string_ne_value() {
-        let v = Operation::Ne(Operand::Value(OperandValue::Str("j".into())));
+        let v = Operation::Ne(Operand::Value(OperandValue::from("j")));
         let root = Value::None;
-        assert_eq!(compare(&v, &OperandValue::Str("i".into()), &root), Some(Ok(())));
-        assert_eq!(compare(&v, &OperandValue::Str("j".into()), &root), Some(Err(())));
-        assert_eq!(compare(&v, &OperandValue::Str("k".into()), &root), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::from("i"), &root), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::from("j"), &root), Some(Err(())));
+        assert_eq!(compare(&v, &OperandValue::from("k"), &root), Some(Ok(())));
     }
 
     #[test]
     fn test_compare_string_gt_value() {
-        let v = Operation::Gt(Operand::Value(OperandValue::Str("j".into())));
+        let v = Operation::Gt(Operand::Value(OperandValue::from("j")));
         let root = Value::None;
-        assert_eq!(compare(&v, &OperandValue::Str("i".into()), &root), Some(Err(())));
-        assert_eq!(compare(&v, &OperandValue::Str("j".into()), &root), Some(Err(())));
-        assert_eq!(compare(&v, &OperandValue::Str("k".into()), &root), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::from("i"), &root), Some(Err(())));
+        assert_eq!(compare(&v, &OperandValue::from("j"), &root), Some(Err(())));
+        assert_eq!(compare(&v, &OperandValue::from("k"), &root), Some(Ok(())));
     }
 
     #[test]
     fn test_compare_string_ge_value() {
-        let v = Operation::Ge(Operand::Value(OperandValue::Str("j".into())));
+        let v = Operation::Ge(Operand::Value(OperandValue::from("j")));
         let root = Value::None;
-        assert_eq!(compare(&v, &OperandValue::Str("i".into()), &root), Some(Err(())));
-        assert_eq!(compare(&v, &OperandValue::Str("j".into()), &root), Some(Ok(())));
-        assert_eq!(compare(&v, &OperandValue::Str("k".into()), &root), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::from("i"), &root), Some(Err(())));
+        assert_eq!(compare(&v, &OperandValue::from("j"), &root), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::from("k"), &root), Some(Ok(())));
     }
 
     #[test]
     fn test_compare_string_lt_value() {
-        let v = Operation::Lt(Operand::Value(OperandValue::Str("j".into())));
+        let v = Operation::Lt(Operand::Value(OperandValue::from("j")));
         let root = Value::None;
-        assert_eq!(compare(&v, &OperandValue::Str("i".into()), &root), Some(Ok(())));
-        assert_eq!(compare(&v, &OperandValue::Str("j".into()), &root), Some(Err(())));
-        assert_eq!(compare(&v, &OperandValue::Str("k".into()), &root), Some(Err(())));
+        assert_eq!(compare(&v, &OperandValue::from("i"), &root), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::from("j"), &root), Some(Err(())));
+        assert_eq!(compare(&v, &OperandValue::from("k"), &root), Some(Err(())));
     }
 
     #[test]
     fn test_compare_string_le_value() {
-        let v = Operation::Le(Operand::Value(OperandValue::Str("j".into())));
+        let v = Operation::Le(Operand::Value(OperandValue::from("j")));
         let root = Value::None;
-        assert_eq!(compare(&v, &OperandValue::Str("i".into()), &root), Some(Ok(())));
-        assert_eq!(compare(&v, &OperandValue::Str("j".into()), &root), Some(Ok(())));
-        assert_eq!(compare(&v, &OperandValue::Str("k".into()), &root), Some(Err(())));
+        assert_eq!(compare(&v, &OperandValue::from("i"), &root), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::from("j"), &root), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::from("k"), &root), Some(Err(())));
     }
 
     #[test]
     fn test_compare_string_btwn_value() {
-        let v = Operation::Btwn(Operand::Value(OperandValue::Str("f".into())), Operand::Value(OperandValue::Str("j".into())));
+        let v = Operation::Btwn(Operand::Value(OperandValue::from("f")), Operand::Value(OperandValue::from("j")));
         let root = Value::None;
-        assert_eq!(compare(&v, &OperandValue::Str("e".into()), &root), Some(Err(())));
-        assert_eq!(compare(&v, &OperandValue::Str("f".into()), &root), Some(Ok(())));
-        assert_eq!(compare(&v, &OperandValue::Str("g".into()), &root), Some(Ok(())));
-        assert_eq!(compare(&v, &OperandValue::Str("i".into()), &root), Some(Ok(())));
-        assert_eq!(compare(&v, &OperandValue::Str("j".into()), &root), Some(Ok(())));
-        assert_eq!(compare(&v, &OperandValue::Str("k".into()), &root), Some(Err(())));
+        assert_eq!(compare(&v, &OperandValue::from("e"), &root), Some(Err(())));
+        assert_eq!(compare(&v, &OperandValue::from("f"), &root), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::from("g"), &root), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::from("i"), &root), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::from("j"), &root), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::from("k"), &root), Some(Err(())));
     }
 
     #[test]
@@ -707,7 +753,7 @@ mod test {
         assert_eq!(compare(&Operation::Ne(Operand::Value(OperandValue::U64(42))), &OperandValue::F64(41.5), &root), None);
         assert_eq!(compare(&Operation::Gt(Operand::Value(OperandValue::U64(42))), &OperandValue::USize(41), &root), None);
         assert_eq!(compare(&Operation::Ge(Operand::Value(OperandValue::U64(42))), &OperandValue::Bool(false), &root), None);
-        assert_eq!(compare(&Operation::Lt(Operand::Value(OperandValue::U64(42))), &OperandValue::Str("abc".into()), &root), None);
+        assert_eq!(compare(&Operation::Lt(Operand::Value(OperandValue::U64(42))), &OperandValue::from("abc"), &root), None);
     }
 
     #[test]
@@ -717,7 +763,7 @@ mod test {
         assert_eq!(compare(&Operation::Ne(Operand::Value(OperandValue::I64(42))), &OperandValue::F64(41.5), &root), None);
         assert_eq!(compare(&Operation::Gt(Operand::Value(OperandValue::I64(42))), &OperandValue::USize(41), &root), None);
         assert_eq!(compare(&Operation::Ge(Operand::Value(OperandValue::I64(42))), &OperandValue::Bool(false), &root), None);
-        assert_eq!(compare(&Operation::Lt(Operand::Value(OperandValue::I64(42))), &OperandValue::Str("abc".into()), &root), None);
+        assert_eq!(compare(&Operation::Lt(Operand::Value(OperandValue::I64(42))), &OperandValue::from("abc"), &root), None);
     }
 
     #[test]
@@ -727,7 +773,7 @@ mod test {
         assert_eq!(compare(&Operation::Ne(Operand::Value(OperandValue::F64(42.0))), &OperandValue::I64(41), &root), None);
         assert_eq!(compare(&Operation::Gt(Operand::Value(OperandValue::F64(42.0))), &OperandValue::USize(41), &root), None);
         assert_eq!(compare(&Operation::Ge(Operand::Value(OperandValue::F64(42.0))), &OperandValue::Bool(false), &root), None);
-        assert_eq!(compare(&Operation::Lt(Operand::Value(OperandValue::F64(42.0))), &OperandValue::Str("abc".into()), &root), None);
+        assert_eq!(compare(&Operation::Lt(Operand::Value(OperandValue::F64(42.0))), &OperandValue::from("abc"), &root), None);
     }
 
     #[test]
@@ -737,7 +783,7 @@ mod test {
         assert_eq!(compare(&Operation::Ne(Operand::Value(OperandValue::USize(42))), &OperandValue::I64(41), &root), None);
         assert_eq!(compare(&Operation::Gt(Operand::Value(OperandValue::USize(42))), &OperandValue::F64(41.5), &root), None);
         assert_eq!(compare(&Operation::Ge(Operand::Value(OperandValue::USize(42))), &OperandValue::Bool(false), &root), None);
-        assert_eq!(compare(&Operation::Lt(Operand::Value(OperandValue::USize(42))), &OperandValue::Str("abc".into()), &root), None);
+        assert_eq!(compare(&Operation::Lt(Operand::Value(OperandValue::USize(42))), &OperandValue::from("abc"), &root), None);
     }
 
     #[test]
@@ -747,17 +793,17 @@ mod test {
         assert_eq!(compare(&Operation::Ne(Operand::Value(OperandValue::Bool(true))), &OperandValue::I64(41), &root), None);
         assert_eq!(compare(&Operation::Gt(Operand::Value(OperandValue::Bool(true))), &OperandValue::F64(41.5), &root), None);
         assert_eq!(compare(&Operation::Ge(Operand::Value(OperandValue::Bool(true))), &OperandValue::USize(41), &root), None);
-        assert_eq!(compare(&Operation::Lt(Operand::Value(OperandValue::Bool(true))), &OperandValue::Str("abc".into()), &root), None);
+        assert_eq!(compare(&Operation::Lt(Operand::Value(OperandValue::Bool(true))), &OperandValue::from("abc"), &root), None);
     }
 
     #[test]
     fn test_compare_string_other_types() {
         let root = Value::None;
-        assert_eq!(compare(&Operation::Eq(Operand::Value(OperandValue::Str("abc".into()))), &OperandValue::U64(41), &root), None);
-        assert_eq!(compare(&Operation::Ne(Operand::Value(OperandValue::Str("abc".into()))), &OperandValue::I64(41), &root), None);
-        assert_eq!(compare(&Operation::Gt(Operand::Value(OperandValue::Str("abc".into()))), &OperandValue::F64(41.5), &root), None);
-        assert_eq!(compare(&Operation::Ge(Operand::Value(OperandValue::Str("abc".into()))), &OperandValue::USize(41), &root), None);
-        assert_eq!(compare(&Operation::Lt(Operand::Value(OperandValue::Str("abc".into()))), &OperandValue::Bool(false), &root), None);
+        assert_eq!(compare(&Operation::Eq(Operand::Value(OperandValue::from("abc"))), &OperandValue::U64(41), &root), None);
+        assert_eq!(compare(&Operation::Ne(Operand::Value(OperandValue::from("abc"))), &OperandValue::I64(41), &root), None);
+        assert_eq!(compare(&Operation::Gt(Operand::Value(OperandValue::from("abc"))), &OperandValue::F64(41.5), &root), None);
+        assert_eq!(compare(&Operation::Ge(Operand::Value(OperandValue::from("abc"))), &OperandValue::USize(41), &root), None);
+        assert_eq!(compare(&Operation::Lt(Operand::Value(OperandValue::from("abc"))), &OperandValue::Bool(false), &root), None);
     }
 
     #[test]
@@ -1250,9 +1296,9 @@ mod test {
                 Value::Obj(BTreeMap::from([("value".into(), Value::from("j"))])),
             ]),
         )]));
-        assert_eq!(compare(&v, &OperandValue::Str("i".into()), &root), Some(Err(())));
-        assert_eq!(compare(&v, &OperandValue::Str("j".into()), &root), Some(Ok(())));
-        assert_eq!(compare(&v, &OperandValue::Str("k".into()), &root), Some(Err(())));
+        assert_eq!(compare(&v, &OperandValue::from("i"), &root), Some(Err(())));
+        assert_eq!(compare(&v, &OperandValue::from("j"), &root), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::from("k"), &root), Some(Err(())));
     }
 
     #[test]
@@ -1267,9 +1313,9 @@ mod test {
                 Value::Obj(BTreeMap::from([("value".into(), Value::from("j"))])),
             ]),
         )]));
-        assert_eq!(compare(&v, &OperandValue::Str("i".into()), &root), Some(Ok(())));
-        assert_eq!(compare(&v, &OperandValue::Str("j".into()), &root), Some(Err(())));
-        assert_eq!(compare(&v, &OperandValue::Str("k".into()), &root), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::from("i"), &root), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::from("j"), &root), Some(Err(())));
+        assert_eq!(compare(&v, &OperandValue::from("k"), &root), Some(Ok(())));
     }
 
     #[test]
@@ -1284,9 +1330,9 @@ mod test {
                 Value::Obj(BTreeMap::from([("value".into(), Value::from("j"))])),
             ]),
         )]));
-        assert_eq!(compare(&v, &OperandValue::Str("i".into()), &root), Some(Err(())));
-        assert_eq!(compare(&v, &OperandValue::Str("j".into()), &root), Some(Err(())));
-        assert_eq!(compare(&v, &OperandValue::Str("k".into()), &root), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::from("i"), &root), Some(Err(())));
+        assert_eq!(compare(&v, &OperandValue::from("j"), &root), Some(Err(())));
+        assert_eq!(compare(&v, &OperandValue::from("k"), &root), Some(Ok(())));
     }
 
     #[test]
@@ -1301,9 +1347,9 @@ mod test {
                 Value::Obj(BTreeMap::from([("value".into(), Value::from("j"))])),
             ]),
         )]));
-        assert_eq!(compare(&v, &OperandValue::Str("i".into()), &root), Some(Err(())));
-        assert_eq!(compare(&v, &OperandValue::Str("j".into()), &root), Some(Ok(())));
-        assert_eq!(compare(&v, &OperandValue::Str("k".into()), &root), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::from("i"), &root), Some(Err(())));
+        assert_eq!(compare(&v, &OperandValue::from("j"), &root), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::from("k"), &root), Some(Ok(())));
     }
 
     #[test]
@@ -1318,9 +1364,9 @@ mod test {
                 Value::Obj(BTreeMap::from([("value".into(), Value::from("j"))])),
             ]),
         )]));
-        assert_eq!(compare(&v, &OperandValue::Str("i".into()), &root), Some(Ok(())));
-        assert_eq!(compare(&v, &OperandValue::Str("j".into()), &root), Some(Err(())));
-        assert_eq!(compare(&v, &OperandValue::Str("k".into()), &root), Some(Err(())));
+        assert_eq!(compare(&v, &OperandValue::from("i"), &root), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::from("j"), &root), Some(Err(())));
+        assert_eq!(compare(&v, &OperandValue::from("k"), &root), Some(Err(())));
     }
 
     #[test]
@@ -1335,9 +1381,9 @@ mod test {
                 Value::Obj(BTreeMap::from([("value".into(), Value::from("j"))])),
             ]),
         )]));
-        assert_eq!(compare(&v, &OperandValue::Str("i".into()), &root), Some(Ok(())));
-        assert_eq!(compare(&v, &OperandValue::Str("j".into()), &root), Some(Ok(())));
-        assert_eq!(compare(&v, &OperandValue::Str("k".into()), &root), Some(Err(())));
+        assert_eq!(compare(&v, &OperandValue::from("i"), &root), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::from("j"), &root), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::from("k"), &root), Some(Err(())));
     }
 
     #[test]
@@ -1352,10 +1398,10 @@ mod test {
                 Value::Obj(BTreeMap::from([("value".into(), Value::from("j"))])),
             ]),
         )]));
-        assert_eq!(compare(&v, &OperandValue::Str("f".into()), &root), Some(Err(())));
-        assert_eq!(compare(&v, &OperandValue::Str("g".into()), &root), Some(Ok(())));
-        assert_eq!(compare(&v, &OperandValue::Str("i".into()), &root), Some(Ok(())));
-        assert_eq!(compare(&v, &OperandValue::Str("j".into()), &root), Some(Ok(())));
-        assert_eq!(compare(&v, &OperandValue::Str("k".into()), &root), Some(Err(())));
+        assert_eq!(compare(&v, &OperandValue::from("f"), &root), Some(Err(())));
+        assert_eq!(compare(&v, &OperandValue::from("g"), &root), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::from("i"), &root), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::from("j"), &root), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::from("k"), &root), Some(Err(())));
     }
 }

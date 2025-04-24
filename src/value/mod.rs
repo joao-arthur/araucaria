@@ -14,12 +14,6 @@ pub enum Value {
     Obj(BTreeMap<String, Value>),
 }
 
-impl From<bool> for Value {
-    fn from(value: bool) -> Self {
-        Value::Bool(value)
-    }
-}
-
 impl From<u64> for Value {
     fn from(value: u64) -> Self {
         Value::U64(value)
@@ -38,6 +32,12 @@ impl From<f64> for Value {
     }
 }
 
+impl From<bool> for Value {
+    fn from(value: bool) -> Self {
+        Value::Bool(value)
+    }
+}
+
 impl From<&str> for Value {
     fn from(value: &str) -> Self {
         Value::Str(value.into())
@@ -47,12 +47,6 @@ impl From<&str> for Value {
 impl<const N: usize> From<[Value; N]> for Value {
     fn from(value: [Value; N]) -> Self {
         Value::Arr(value.to_vec())
-    }
-}
-
-impl<const N: usize> From<[bool; N]> for Value {
-    fn from(value: [bool; N]) -> Self {
-        Value::Arr(value.to_vec().iter().map(|v| Value::Bool(*v)).collect())
     }
 }
 
@@ -71,6 +65,12 @@ impl<const N: usize> From<[i64; N]> for Value {
 impl<const N: usize> From<[f64; N]> for Value {
     fn from(value: [f64; N]) -> Self {
         Value::Arr(value.to_vec().iter().map(|v| Value::F64(*v)).collect())
+    }
+}
+
+impl<const N: usize> From<[bool; N]> for Value {
+    fn from(value: [bool; N]) -> Self {
+        Value::Arr(value.to_vec().iter().map(|v| Value::Bool(*v)).collect())
     }
 }
 

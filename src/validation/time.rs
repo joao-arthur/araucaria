@@ -89,36 +89,33 @@ mod test {
         assert_eq!(TimeValidation::default().optional(), TimeValidation { required: false, operation: None });
         assert_eq!(
             TimeValidation::default().eq("08:10".into()),
-            TimeValidation { required: true, operation: Some(Operation::Eq(Operand::Value(OperandValue::Str("08:10".into())))) }
+            TimeValidation { required: true, operation: Some(Operation::Eq(Operand::Value(OperandValue::from("08:10")))) }
         );
         assert_eq!(
             TimeValidation::default().ne("10:27".into()),
-            TimeValidation { required: true, operation: Some(Operation::Ne(Operand::Value(OperandValue::Str("10:27".into())))) }
+            TimeValidation { required: true, operation: Some(Operation::Ne(Operand::Value(OperandValue::from("10:27")))) }
         );
         assert_eq!(
             TimeValidation::default().gt("19:41".into()),
-            TimeValidation { required: true, operation: Some(Operation::Gt(Operand::Value(OperandValue::Str("19:41".into())))) }
+            TimeValidation { required: true, operation: Some(Operation::Gt(Operand::Value(OperandValue::from("19:41")))) }
         );
         assert_eq!(
             TimeValidation::default().ge("03:01".into()),
-            TimeValidation { required: true, operation: Some(Operation::Ge(Operand::Value(OperandValue::Str("03:01".into())))) }
+            TimeValidation { required: true, operation: Some(Operation::Ge(Operand::Value(OperandValue::from("03:01")))) }
         );
         assert_eq!(
             TimeValidation::default().lt("00:00".into()),
-            TimeValidation { required: true, operation: Some(Operation::Lt(Operand::Value(OperandValue::Str("00:00".into())))) }
+            TimeValidation { required: true, operation: Some(Operation::Lt(Operand::Value(OperandValue::from("00:00")))) }
         );
         assert_eq!(
             TimeValidation::default().le("01:01".into()),
-            TimeValidation { required: true, operation: Some(Operation::Le(Operand::Value(OperandValue::Str("01:01".into())))) }
+            TimeValidation { required: true, operation: Some(Operation::Le(Operand::Value(OperandValue::from("01:01")))) }
         );
         assert_eq!(
             TimeValidation::default().btwn("00:00".into(), "23:59".into()),
             TimeValidation {
                 required: true,
-                operation: Some(Operation::Btwn(
-                    Operand::Value(OperandValue::Str("00:00".into())),
-                    Operand::Value(OperandValue::Str("23:59".into()))
-                ))
+                operation: Some(Operation::Btwn(Operand::Value(OperandValue::from("00:00")), Operand::Value(OperandValue::from("23:59"))))
             }
         );
         assert_eq!(

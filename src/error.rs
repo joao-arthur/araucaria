@@ -61,8 +61,8 @@ mod test {
         assert_eq!(SchemaErr::validation([ValidationErr::Time]), SchemaErr::Validation(vec![ValidationErr::Time]));
         assert_eq!(SchemaErr::validation([ValidationErr::DateTime]), SchemaErr::Validation(vec![ValidationErr::DateTime]));
         assert_eq!(
-            SchemaErr::validation([ValidationErr::Operation(Operation::Eq(Operand::Value(OperandValue::Str("Swords".into()))))]),
-            SchemaErr::Validation(vec![ValidationErr::Operation(Operation::Eq(Operand::Value(OperandValue::Str("Swords".into()))))])
+            SchemaErr::validation([ValidationErr::Operation(Operation::Eq(Operand::Value(OperandValue::from("Swords"))))]),
+            SchemaErr::Validation(vec![ValidationErr::Operation(Operation::Eq(Operand::Value(OperandValue::from("Swords"))))])
         );
         assert_eq!(
             SchemaErr::validation([ValidationErr::BytesLen(Operation::Eq(Operand::Value(OperandValue::USize(1))))]),

@@ -89,35 +89,35 @@ mod test {
         assert_eq!(DateTimeValidation::default().optional(), DateTimeValidation { required: false, operation: None });
         assert_eq!(
             DateTimeValidation::default().eq("2026-08-12T08:10Z".into()),
-            DateTimeValidation { required: true, operation: Some(Operation::Eq(Operand::Value(OperandValue::Str("2026-08-12T08:10Z".into())))) }
+            DateTimeValidation { required: true, operation: Some(Operation::Eq(Operand::Value(OperandValue::from("2026-08-12T08:10Z")))) }
         );
         assert_eq!(
             DateTimeValidation::default().ne("2027-08-02T10:27Z".into()),
-            DateTimeValidation { required: true, operation: Some(Operation::Ne(Operand::Value(OperandValue::Str("2027-08-02T10:27Z".into())))) }
+            DateTimeValidation { required: true, operation: Some(Operation::Ne(Operand::Value(OperandValue::from("2027-08-02T10:27Z")))) }
         );
         assert_eq!(
             DateTimeValidation::default().gt("2028-07-22T19:41Z".into()),
-            DateTimeValidation { required: true, operation: Some(Operation::Gt(Operand::Value(OperandValue::Str("2028-07-22T19:41Z".into())))) }
+            DateTimeValidation { required: true, operation: Some(Operation::Gt(Operand::Value(OperandValue::from("2028-07-22T19:41Z")))) }
         );
         assert_eq!(
             DateTimeValidation::default().ge("2030-11-25T03:01Z".into()),
-            DateTimeValidation { required: true, operation: Some(Operation::Ge(Operand::Value(OperandValue::Str("2030-11-25T03:01Z".into())))) }
+            DateTimeValidation { required: true, operation: Some(Operation::Ge(Operand::Value(OperandValue::from("2030-11-25T03:01Z")))) }
         );
         assert_eq!(
             DateTimeValidation::default().lt("2031-11-14T00:00Z".into()),
-            DateTimeValidation { required: true, operation: Some(Operation::Lt(Operand::Value(OperandValue::Str("2031-11-14T00:00Z".into())))) }
+            DateTimeValidation { required: true, operation: Some(Operation::Lt(Operand::Value(OperandValue::from("2031-11-14T00:00Z")))) }
         );
         assert_eq!(
             DateTimeValidation::default().le("2033-03-30T01:01Z".into()),
-            DateTimeValidation { required: true, operation: Some(Operation::Le(Operand::Value(OperandValue::Str("2033-03-30T01:01Z".into())))) }
+            DateTimeValidation { required: true, operation: Some(Operation::Le(Operand::Value(OperandValue::from("2033-03-30T01:01Z")))) }
         );
         assert_eq!(
             DateTimeValidation::default().btwn("2031-11-14T00:00Z".into(), "2033-03-30T01:01Z".into()),
             DateTimeValidation {
                 required: true,
                 operation: Some(Operation::Btwn(
-                    Operand::Value(OperandValue::Str("2031-11-14T00:00Z".into())),
-                    Operand::Value(OperandValue::Str("2033-03-30T01:01Z".into()))
+                    Operand::Value(OperandValue::from("2031-11-14T00:00Z")),
+                    Operand::Value(OperandValue::from("2033-03-30T01:01Z"))
                 ))
             }
         );

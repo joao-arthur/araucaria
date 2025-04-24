@@ -532,32 +532,32 @@ mod test {
         assert_eq!(StrValidation::default().optional(), StrValidation { required: false, ..Default::default() });
         assert_eq!(
             StrValidation::default().eq("Avalon".into()),
-            StrValidation { operation: Some(Operation::Eq(Operand::Value(OperandValue::Str("Avalon".into())))), ..Default::default() }
+            StrValidation { operation: Some(Operation::Eq(Operand::Value(OperandValue::from("Avalon")))), ..Default::default() }
         );
         assert_eq!(
             StrValidation::default().ne("Avalon".into()),
-            StrValidation { operation: Some(Operation::Ne(Operand::Value(OperandValue::Str("Avalon".into())))), ..Default::default() }
+            StrValidation { operation: Some(Operation::Ne(Operand::Value(OperandValue::from("Avalon")))), ..Default::default() }
         );
         assert_eq!(
             StrValidation::default().gt("Avalon".into()),
-            StrValidation { operation: Some(Operation::Gt(Operand::Value(OperandValue::Str("Avalon".into())))), ..Default::default() }
+            StrValidation { operation: Some(Operation::Gt(Operand::Value(OperandValue::from("Avalon")))), ..Default::default() }
         );
         assert_eq!(
             StrValidation::default().ge("Avalon".into()),
-            StrValidation { operation: Some(Operation::Ge(Operand::Value(OperandValue::Str("Avalon".into())))), ..Default::default() }
+            StrValidation { operation: Some(Operation::Ge(Operand::Value(OperandValue::from("Avalon")))), ..Default::default() }
         );
         assert_eq!(
             StrValidation::default().lt("Avalon".into()),
-            StrValidation { operation: Some(Operation::Lt(Operand::Value(OperandValue::Str("Avalon".into())))), ..Default::default() }
+            StrValidation { operation: Some(Operation::Lt(Operand::Value(OperandValue::from("Avalon")))), ..Default::default() }
         );
         assert_eq!(
             StrValidation::default().le("Avalon".into()),
-            StrValidation { operation: Some(Operation::Le(Operand::Value(OperandValue::Str("Avalon".into())))), ..Default::default() }
+            StrValidation { operation: Some(Operation::Le(Operand::Value(OperandValue::from("Avalon")))), ..Default::default() }
         );
         assert_eq!(
             StrValidation::default().btwn("Avalon".into(), "Mu".into()),
             StrValidation {
-                operation: Some(Operation::Btwn(Operand::Value(OperandValue::Str("Avalon".into())), Operand::Value(OperandValue::Str("Mu".into())))),
+                operation: Some(Operation::Btwn(Operand::Value(OperandValue::from("Avalon")), Operand::Value(OperandValue::from("Mu")))),
                 ..Default::default()
             }
         );
