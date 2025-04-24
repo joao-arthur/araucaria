@@ -88,70 +88,70 @@ mod test {
         assert_eq!(TimeValidation::default(), TimeValidation { required: true, operation: None });
         assert_eq!(TimeValidation::default().optional(), TimeValidation { required: false, operation: None });
         assert_eq!(
-            TimeValidation::default().eq(String::from("08:10")),
-            TimeValidation { required: true, operation: Some(Operation::Eq(Operand::Value(OperandValue::Str(String::from("08:10"))))) }
+            TimeValidation::default().eq("08:10".into()),
+            TimeValidation { required: true, operation: Some(Operation::Eq(Operand::Value(OperandValue::Str("08:10".into())))) }
         );
         assert_eq!(
-            TimeValidation::default().ne(String::from("10:27")),
-            TimeValidation { required: true, operation: Some(Operation::Ne(Operand::Value(OperandValue::Str(String::from("10:27"))))) }
+            TimeValidation::default().ne("10:27".into()),
+            TimeValidation { required: true, operation: Some(Operation::Ne(Operand::Value(OperandValue::Str("10:27".into())))) }
         );
         assert_eq!(
-            TimeValidation::default().gt(String::from("19:41")),
-            TimeValidation { required: true, operation: Some(Operation::Gt(Operand::Value(OperandValue::Str(String::from("19:41"))))) }
+            TimeValidation::default().gt("19:41".into()),
+            TimeValidation { required: true, operation: Some(Operation::Gt(Operand::Value(OperandValue::Str("19:41".into())))) }
         );
         assert_eq!(
-            TimeValidation::default().ge(String::from("03:01")),
-            TimeValidation { required: true, operation: Some(Operation::Ge(Operand::Value(OperandValue::Str(String::from("03:01"))))) }
+            TimeValidation::default().ge("03:01".into()),
+            TimeValidation { required: true, operation: Some(Operation::Ge(Operand::Value(OperandValue::Str("03:01".into())))) }
         );
         assert_eq!(
-            TimeValidation::default().lt(String::from("00:00")),
-            TimeValidation { required: true, operation: Some(Operation::Lt(Operand::Value(OperandValue::Str(String::from("00:00"))))) }
+            TimeValidation::default().lt("00:00".into()),
+            TimeValidation { required: true, operation: Some(Operation::Lt(Operand::Value(OperandValue::Str("00:00".into())))) }
         );
         assert_eq!(
-            TimeValidation::default().le(String::from("01:01")),
-            TimeValidation { required: true, operation: Some(Operation::Le(Operand::Value(OperandValue::Str(String::from("01:01"))))) }
+            TimeValidation::default().le("01:01".into()),
+            TimeValidation { required: true, operation: Some(Operation::Le(Operand::Value(OperandValue::Str("01:01".into())))) }
         );
         assert_eq!(
-            TimeValidation::default().btwn(String::from("00:00"), String::from("23:59")),
+            TimeValidation::default().btwn("00:00".into(), "23:59".into()),
             TimeValidation {
                 required: true,
                 operation: Some(Operation::Btwn(
-                    Operand::Value(OperandValue::Str(String::from("00:00"))),
-                    Operand::Value(OperandValue::Str(String::from("23:59")))
+                    Operand::Value(OperandValue::Str("00:00".into())),
+                    Operand::Value(OperandValue::Str("23:59".into()))
                 ))
             }
         );
         assert_eq!(
-            TimeValidation::default().eq_field(String::from("user.info.details.last_login")),
-            TimeValidation { required: true, operation: Some(Operation::Eq(Operand::FieldPath(String::from("user.info.details.last_login")))) }
+            TimeValidation::default().eq_field("user.info.details.last_login".into()),
+            TimeValidation { required: true, operation: Some(Operation::Eq(Operand::FieldPath("user.info.details.last_login".into()))) }
         );
         assert_eq!(
-            TimeValidation::default().ne_field(String::from("user.info.details.last_login")),
-            TimeValidation { required: true, operation: Some(Operation::Ne(Operand::FieldPath(String::from("user.info.details.last_login")))) }
+            TimeValidation::default().ne_field("user.info.details.last_login".into()),
+            TimeValidation { required: true, operation: Some(Operation::Ne(Operand::FieldPath("user.info.details.last_login".into()))) }
         );
         assert_eq!(
-            TimeValidation::default().gt_field(String::from("user.info.details.last_login")),
-            TimeValidation { required: true, operation: Some(Operation::Gt(Operand::FieldPath(String::from("user.info.details.last_login")))) }
+            TimeValidation::default().gt_field("user.info.details.last_login".into()),
+            TimeValidation { required: true, operation: Some(Operation::Gt(Operand::FieldPath("user.info.details.last_login".into()))) }
         );
         assert_eq!(
-            TimeValidation::default().ge_field(String::from("user.info.details.last_login")),
-            TimeValidation { required: true, operation: Some(Operation::Ge(Operand::FieldPath(String::from("user.info.details.last_login")))) }
+            TimeValidation::default().ge_field("user.info.details.last_login".into()),
+            TimeValidation { required: true, operation: Some(Operation::Ge(Operand::FieldPath("user.info.details.last_login".into()))) }
         );
         assert_eq!(
-            TimeValidation::default().lt_field(String::from("user.info.details.last_login")),
-            TimeValidation { required: true, operation: Some(Operation::Lt(Operand::FieldPath(String::from("user.info.details.last_login")))) }
+            TimeValidation::default().lt_field("user.info.details.last_login".into()),
+            TimeValidation { required: true, operation: Some(Operation::Lt(Operand::FieldPath("user.info.details.last_login".into()))) }
         );
         assert_eq!(
-            TimeValidation::default().le_field(String::from("user.info.details.last_login")),
-            TimeValidation { required: true, operation: Some(Operation::Le(Operand::FieldPath(String::from("user.info.details.last_login")))) }
+            TimeValidation::default().le_field("user.info.details.last_login".into()),
+            TimeValidation { required: true, operation: Some(Operation::Le(Operand::FieldPath("user.info.details.last_login".into()))) }
         );
         assert_eq!(
-            TimeValidation::default().btwn_field(String::from("user.info.details.last_login"), String::from("user.info.details.last_logout")),
+            TimeValidation::default().btwn_field("user.info.details.last_login".into(), "user.info.details.last_logout".into()),
             TimeValidation {
                 required: true,
                 operation: Some(Operation::Btwn(
-                    Operand::FieldPath(String::from("user.info.details.last_login")),
-                    Operand::FieldPath(String::from("user.info.details.last_logout"))
+                    Operand::FieldPath("user.info.details.last_login".into()),
+                    Operand::FieldPath("user.info.details.last_logout".into())
                 ))
             }
         );

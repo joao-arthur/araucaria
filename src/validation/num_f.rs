@@ -119,37 +119,34 @@ mod test {
             }
         );
         assert_eq!(
-            NumFValidation::default().eq_field(String::from("user.balance.value")),
-            NumFValidation { required: true, operation: Some(Operation::Eq(Operand::FieldPath(String::from("user.balance.value")))) }
+            NumFValidation::default().eq_field("user.balance.value".into()),
+            NumFValidation { required: true, operation: Some(Operation::Eq(Operand::FieldPath("user.balance.value".into()))) }
         );
         assert_eq!(
-            NumFValidation::default().ne_field(String::from("user.balance.value")),
-            NumFValidation { required: true, operation: Some(Operation::Ne(Operand::FieldPath(String::from("user.balance.value")))) }
+            NumFValidation::default().ne_field("user.balance.value".into()),
+            NumFValidation { required: true, operation: Some(Operation::Ne(Operand::FieldPath("user.balance.value".into()))) }
         );
         assert_eq!(
-            NumFValidation::default().gt_field(String::from("user.balance.value")),
-            NumFValidation { required: true, operation: Some(Operation::Gt(Operand::FieldPath(String::from("user.balance.value")))) }
+            NumFValidation::default().gt_field("user.balance.value".into()),
+            NumFValidation { required: true, operation: Some(Operation::Gt(Operand::FieldPath("user.balance.value".into()))) }
         );
         assert_eq!(
-            NumFValidation::default().ge_field(String::from("user.balance.value")),
-            NumFValidation { required: true, operation: Some(Operation::Ge(Operand::FieldPath(String::from("user.balance.value")))) }
+            NumFValidation::default().ge_field("user.balance.value".into()),
+            NumFValidation { required: true, operation: Some(Operation::Ge(Operand::FieldPath("user.balance.value".into()))) }
         );
         assert_eq!(
-            NumFValidation::default().lt_field(String::from("user.balance.value")),
-            NumFValidation { required: true, operation: Some(Operation::Lt(Operand::FieldPath(String::from("user.balance.value")))) }
+            NumFValidation::default().lt_field("user.balance.value".into()),
+            NumFValidation { required: true, operation: Some(Operation::Lt(Operand::FieldPath("user.balance.value".into()))) }
         );
         assert_eq!(
-            NumFValidation::default().le_field(String::from("user.balance.value")),
-            NumFValidation { required: true, operation: Some(Operation::Le(Operand::FieldPath(String::from("user.balance.value")))) }
+            NumFValidation::default().le_field("user.balance.value".into()),
+            NumFValidation { required: true, operation: Some(Operation::Le(Operand::FieldPath("user.balance.value".into()))) }
         );
         assert_eq!(
-            NumFValidation::default().btwn_field(String::from("user.balance.value"), String::from("user.balance.limit")),
+            NumFValidation::default().btwn_field("user.balance.value".into(), "user.balance.limit".into()),
             NumFValidation {
                 required: true,
-                operation: Some(Operation::Btwn(
-                    Operand::FieldPath(String::from("user.balance.value")),
-                    Operand::FieldPath(String::from("user.balance.limit"))
-                ))
+                operation: Some(Operation::Btwn(Operand::FieldPath("user.balance.value".into()), Operand::FieldPath("user.balance.limit".into())))
             }
         );
     }

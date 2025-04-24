@@ -119,36 +119,36 @@ mod test {
             }
         );
         assert_eq!(
-            BoolValidation::default().eq_field(String::from("user.info.details.is_alive")),
-            BoolValidation { required: true, operation: Some(Operation::Eq(Operand::FieldPath(String::from("user.info.details.is_alive")))) }
+            BoolValidation::default().eq_field("user.info.details.is_alive".into()),
+            BoolValidation { required: true, operation: Some(Operation::Eq(Operand::FieldPath("user.info.details.is_alive".into()))) }
         );
         assert_eq!(
-            BoolValidation::default().ne_field(String::from("user.info.details.is_alive")),
-            BoolValidation { required: true, operation: Some(Operation::Ne(Operand::FieldPath(String::from("user.info.details.is_alive")))) }
+            BoolValidation::default().ne_field("user.info.details.is_alive".into()),
+            BoolValidation { required: true, operation: Some(Operation::Ne(Operand::FieldPath("user.info.details.is_alive".into()))) }
         );
         assert_eq!(
-            BoolValidation::default().gt_field(String::from("user.info.details.is_alive")),
-            BoolValidation { required: true, operation: Some(Operation::Gt(Operand::FieldPath(String::from("user.info.details.is_alive")))) }
+            BoolValidation::default().gt_field("user.info.details.is_alive".into()),
+            BoolValidation { required: true, operation: Some(Operation::Gt(Operand::FieldPath("user.info.details.is_alive".into()))) }
         );
         assert_eq!(
-            BoolValidation::default().ge_field(String::from("user.info.details.is_alive")),
-            BoolValidation { required: true, operation: Some(Operation::Ge(Operand::FieldPath(String::from("user.info.details.is_alive")))) }
+            BoolValidation::default().ge_field("user.info.details.is_alive".into()),
+            BoolValidation { required: true, operation: Some(Operation::Ge(Operand::FieldPath("user.info.details.is_alive".into()))) }
         );
         assert_eq!(
-            BoolValidation::default().lt_field(String::from("user.info.details.is_alive")),
-            BoolValidation { required: true, operation: Some(Operation::Lt(Operand::FieldPath(String::from("user.info.details.is_alive")))) }
+            BoolValidation::default().lt_field("user.info.details.is_alive".into()),
+            BoolValidation { required: true, operation: Some(Operation::Lt(Operand::FieldPath("user.info.details.is_alive".into()))) }
         );
         assert_eq!(
-            BoolValidation::default().le_field(String::from("user.info.details.is_alive")),
-            BoolValidation { required: true, operation: Some(Operation::Le(Operand::FieldPath(String::from("user.info.details.is_alive")))) }
+            BoolValidation::default().le_field("user.info.details.is_alive".into()),
+            BoolValidation { required: true, operation: Some(Operation::Le(Operand::FieldPath("user.info.details.is_alive".into()))) }
         );
         assert_eq!(
-            BoolValidation::default().btwn_field(String::from("user.info.details.is_alive"), String::from("user.info.details.is_dead")),
+            BoolValidation::default().btwn_field("user.info.details.is_alive".into(), "user.info.details.is_dead".into()),
             BoolValidation {
                 required: true,
                 operation: Some(Operation::Btwn(
-                    Operand::FieldPath(String::from("user.info.details.is_alive")),
-                    Operand::FieldPath(String::from("user.info.details.is_dead"))
+                    Operand::FieldPath("user.info.details.is_alive".into()),
+                    Operand::FieldPath("user.info.details.is_dead".into())
                 ))
             }
         );

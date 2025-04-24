@@ -119,36 +119,36 @@ mod test {
             }
         );
         assert_eq!(
-            NumIValidation::default().eq_field(String::from("user.data.info.score_change")),
-            NumIValidation { required: true, operation: Some(Operation::Eq(Operand::FieldPath(String::from("user.data.info.score_change")))) }
+            NumIValidation::default().eq_field("user.data.info.score_change".into()),
+            NumIValidation { required: true, operation: Some(Operation::Eq(Operand::FieldPath("user.data.info.score_change".into()))) }
         );
         assert_eq!(
-            NumIValidation::default().ne_field(String::from("user.data.info.score_change")),
-            NumIValidation { required: true, operation: Some(Operation::Ne(Operand::FieldPath(String::from("user.data.info.score_change")))) }
+            NumIValidation::default().ne_field("user.data.info.score_change".into()),
+            NumIValidation { required: true, operation: Some(Operation::Ne(Operand::FieldPath("user.data.info.score_change".into()))) }
         );
         assert_eq!(
-            NumIValidation::default().gt_field(String::from("user.data.info.score_change")),
-            NumIValidation { required: true, operation: Some(Operation::Gt(Operand::FieldPath(String::from("user.data.info.score_change")))) }
+            NumIValidation::default().gt_field("user.data.info.score_change".into()),
+            NumIValidation { required: true, operation: Some(Operation::Gt(Operand::FieldPath("user.data.info.score_change".into()))) }
         );
         assert_eq!(
-            NumIValidation::default().ge_field(String::from("user.data.info.score_change")),
-            NumIValidation { required: true, operation: Some(Operation::Ge(Operand::FieldPath(String::from("user.data.info.score_change")))) }
+            NumIValidation::default().ge_field("user.data.info.score_change".into()),
+            NumIValidation { required: true, operation: Some(Operation::Ge(Operand::FieldPath("user.data.info.score_change".into()))) }
         );
         assert_eq!(
-            NumIValidation::default().lt_field(String::from("user.data.info.score_change")),
-            NumIValidation { required: true, operation: Some(Operation::Lt(Operand::FieldPath(String::from("user.data.info.score_change")))) }
+            NumIValidation::default().lt_field("user.data.info.score_change".into()),
+            NumIValidation { required: true, operation: Some(Operation::Lt(Operand::FieldPath("user.data.info.score_change".into()))) }
         );
         assert_eq!(
-            NumIValidation::default().le_field(String::from("user.data.info.score_change")),
-            NumIValidation { required: true, operation: Some(Operation::Le(Operand::FieldPath(String::from("user.data.info.score_change")))) }
+            NumIValidation::default().le_field("user.data.info.score_change".into()),
+            NumIValidation { required: true, operation: Some(Operation::Le(Operand::FieldPath("user.data.info.score_change".into()))) }
         );
         assert_eq!(
-            NumIValidation::default().btwn_field(String::from("user.data.info.min_score"), String::from("user.data.info.max_score")),
+            NumIValidation::default().btwn_field("user.data.info.min_score".into(), "user.data.info.max_score".into()),
             NumIValidation {
                 required: true,
                 operation: Some(Operation::Btwn(
-                    Operand::FieldPath(String::from("user.data.info.min_score")),
-                    Operand::FieldPath(String::from("user.data.info.max_score"))
+                    Operand::FieldPath("user.data.info.min_score".into()),
+                    Operand::FieldPath("user.data.info.max_score".into())
                 ))
             }
         );

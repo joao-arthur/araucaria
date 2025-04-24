@@ -61,8 +61,8 @@ mod test {
         assert_eq!(SchemaErr::validation([ValidationErr::Time]), SchemaErr::Validation(vec![ValidationErr::Time]));
         assert_eq!(SchemaErr::validation([ValidationErr::DateTime]), SchemaErr::Validation(vec![ValidationErr::DateTime]));
         assert_eq!(
-            SchemaErr::validation([ValidationErr::Operation(Operation::Eq(Operand::Value(OperandValue::Str(String::from("Swords")))))]),
-            SchemaErr::Validation(vec![ValidationErr::Operation(Operation::Eq(Operand::Value(OperandValue::Str(String::from("Swords")))))])
+            SchemaErr::validation([ValidationErr::Operation(Operation::Eq(Operand::Value(OperandValue::Str("Swords".into()))))]),
+            SchemaErr::Validation(vec![ValidationErr::Operation(Operation::Eq(Operand::Value(OperandValue::Str("Swords".into()))))])
         );
         assert_eq!(
             SchemaErr::validation([ValidationErr::BytesLen(Operation::Eq(Operand::Value(OperandValue::USize(1))))]),
@@ -103,24 +103,24 @@ mod test {
     #[test]
     fn test_obj() {
         assert_eq!(
-            SchemaErr::obj([(String::from("is"), SchemaErr::validation([ValidationErr::Required]))]),
-            SchemaErr::Obj(BTreeMap::from([(String::from("is"), SchemaErr::Validation(vec![ValidationErr::Required]))]))
+            SchemaErr::obj([("is".into(), SchemaErr::validation([ValidationErr::Required]))]),
+            SchemaErr::Obj(BTreeMap::from([("is".into(), SchemaErr::Validation(vec![ValidationErr::Required]))]))
         );
         assert_eq!(
-            SchemaErr::obj([(String::from("is"), SchemaErr::validation([ValidationErr::Required]))]),
-            SchemaErr::Obj(BTreeMap::from([(String::from("is"), SchemaErr::Validation(vec![ValidationErr::Required]))]))
+            SchemaErr::obj([("is".into(), SchemaErr::validation([ValidationErr::Required]))]),
+            SchemaErr::Obj(BTreeMap::from([("is".into(), SchemaErr::Validation(vec![ValidationErr::Required]))]))
         );
         assert_eq!(
-            SchemaErr::obj([(String::from("is"), SchemaErr::validation([ValidationErr::Required]))]),
-            SchemaErr::Obj(BTreeMap::from([(String::from("is"), SchemaErr::Validation(vec![ValidationErr::Required]))]))
+            SchemaErr::obj([("is".into(), SchemaErr::validation([ValidationErr::Required]))]),
+            SchemaErr::Obj(BTreeMap::from([("is".into(), SchemaErr::Validation(vec![ValidationErr::Required]))]))
         );
         assert_eq!(
-            SchemaErr::obj([(String::from("is"), SchemaErr::validation([ValidationErr::Required]))]),
-            SchemaErr::Obj(BTreeMap::from([(String::from("is"), SchemaErr::Validation(vec![ValidationErr::Required]))]))
+            SchemaErr::obj([("is".into(), SchemaErr::validation([ValidationErr::Required]))]),
+            SchemaErr::Obj(BTreeMap::from([("is".into(), SchemaErr::Validation(vec![ValidationErr::Required]))]))
         );
         assert_eq!(
-            SchemaErr::obj([(String::from("is"), SchemaErr::validation([ValidationErr::Required]))]),
-            SchemaErr::Obj(BTreeMap::from([(String::from("is"), SchemaErr::Validation(vec![ValidationErr::Required]))]))
+            SchemaErr::obj([("is".into(), SchemaErr::validation([ValidationErr::Required]))]),
+            SchemaErr::Obj(BTreeMap::from([("is".into(), SchemaErr::Validation(vec![ValidationErr::Required]))]))
         );
     }
 }

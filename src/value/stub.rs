@@ -19,7 +19,7 @@ pub fn bool_stub() -> Value {
 }
 
 pub fn str_stub() -> Value {
-    Value::Str(String::from("Lorem ipsum"))
+    Value::Str("Lorem ipsum".into())
 }
 
 pub fn arr_bool_stub() -> Value {
@@ -48,12 +48,12 @@ pub fn arr_str_stub() -> Value {
 
 pub fn obj_stub() -> Value {
     Value::Obj(BTreeMap::from([
-        (String::from("name"), Value::from("The Beatles")),
-        (String::from("members"), Value::from(["George Harrison", "John Lennon", "Paul McCartney", "Ringo Starr"])),
-        (String::from("start_year"), Value::U64(1960)),
-        (String::from("end_year"), Value::U64(1960)),
-        (String::from("number_of_albums"), Value::U64(13)),
-        (String::from("greatest_band"), Value::Bool(true)),
+        ("name".into(), Value::from("The Beatles")),
+        ("members".into(), Value::from(["George Harrison", "John Lennon", "Paul McCartney", "Ringo Starr"])),
+        ("start_year".into(), Value::U64(1960)),
+        ("end_year".into(), Value::U64(1960)),
+        ("number_of_albums".into(), Value::U64(13)),
+        ("greatest_band".into(), Value::Bool(true)),
     ]))
 }
 
@@ -74,7 +74,7 @@ mod test {
         assert_eq!(num_u_stub(), Value::U64(42));
         assert_eq!(num_i_stub(), Value::I64(-42));
         assert_eq!(num_f_stub(), Value::F64(-21.5));
-        assert_eq!(str_stub(), Value::Str(String::from("Lorem ipsum")));
+        assert_eq!(str_stub(), Value::Str("Lorem ipsum".into()));
         assert_eq!(arr_bool_stub(), Value::Arr(vec![Value::Bool(false), Value::Bool(true), Value::Bool(false), Value::Bool(true)]));
         assert_eq!(arr_num_u_stub(), Value::Arr(vec![Value::U64(1), Value::U64(10), Value::U64(100)]));
         assert_eq!(arr_num_i_stub(), Value::Arr(vec![Value::I64(-100), Value::I64(0), Value::I64(100)]));
@@ -83,29 +83,29 @@ mod test {
         assert_eq!(
             arr_str_stub(),
             Value::Arr(vec![
-                Value::Str(String::from("George Harrison")),
-                Value::Str(String::from("John Lennon")),
-                Value::Str(String::from("Paul McCartney")),
-                Value::Str(String::from("Ringo Starr")),
+                Value::Str("George Harrison".into()),
+                Value::Str("John Lennon".into()),
+                Value::Str("Paul McCartney".into()),
+                Value::Str("Ringo Starr".into()),
             ])
         );
         assert_eq!(
             obj_stub(),
             Value::Obj(BTreeMap::from([
-                (String::from("name"), Value::Str(String::from("The Beatles"))),
+                ("name".into(), Value::Str("The Beatles".into())),
                 (
-                    String::from("members"),
+                    "members".into(),
                     Value::Arr(vec![
-                        Value::Str(String::from("George Harrison")),
-                        Value::Str(String::from("John Lennon")),
-                        Value::Str(String::from("Paul McCartney")),
-                        Value::Str(String::from("Ringo Starr")),
+                        Value::Str("George Harrison".into()),
+                        Value::Str("John Lennon".into()),
+                        Value::Str("Paul McCartney".into()),
+                        Value::Str("Ringo Starr".into()),
                     ]),
                 ),
-                (String::from("start_year"), Value::U64(1960)),
-                (String::from("end_year"), Value::U64(1960)),
-                (String::from("number_of_albums"), Value::U64(13)),
-                (String::from("greatest_band"), Value::Bool(true)),
+                ("start_year".into(), Value::U64(1960)),
+                ("end_year".into(), Value::U64(1960)),
+                ("number_of_albums".into(), Value::U64(13)),
+                ("greatest_band".into(), Value::Bool(true)),
             ]))
         );
     }

@@ -88,88 +88,70 @@ mod test {
         assert_eq!(DateTimeValidation::default(), DateTimeValidation { required: true, operation: None });
         assert_eq!(DateTimeValidation::default().optional(), DateTimeValidation { required: false, operation: None });
         assert_eq!(
-            DateTimeValidation::default().eq(String::from("2026-08-12T08:10Z")),
-            DateTimeValidation {
-                required: true,
-                operation: Some(Operation::Eq(Operand::Value(OperandValue::Str(String::from("2026-08-12T08:10Z")))))
-            }
+            DateTimeValidation::default().eq("2026-08-12T08:10Z".into()),
+            DateTimeValidation { required: true, operation: Some(Operation::Eq(Operand::Value(OperandValue::Str("2026-08-12T08:10Z".into())))) }
         );
         assert_eq!(
-            DateTimeValidation::default().ne(String::from("2027-08-02T10:27Z")),
-            DateTimeValidation {
-                required: true,
-                operation: Some(Operation::Ne(Operand::Value(OperandValue::Str(String::from("2027-08-02T10:27Z")))))
-            }
+            DateTimeValidation::default().ne("2027-08-02T10:27Z".into()),
+            DateTimeValidation { required: true, operation: Some(Operation::Ne(Operand::Value(OperandValue::Str("2027-08-02T10:27Z".into())))) }
         );
         assert_eq!(
-            DateTimeValidation::default().gt(String::from("2028-07-22T19:41Z")),
-            DateTimeValidation {
-                required: true,
-                operation: Some(Operation::Gt(Operand::Value(OperandValue::Str(String::from("2028-07-22T19:41Z")))))
-            }
+            DateTimeValidation::default().gt("2028-07-22T19:41Z".into()),
+            DateTimeValidation { required: true, operation: Some(Operation::Gt(Operand::Value(OperandValue::Str("2028-07-22T19:41Z".into())))) }
         );
         assert_eq!(
-            DateTimeValidation::default().ge(String::from("2030-11-25T03:01Z")),
-            DateTimeValidation {
-                required: true,
-                operation: Some(Operation::Ge(Operand::Value(OperandValue::Str(String::from("2030-11-25T03:01Z")))))
-            }
+            DateTimeValidation::default().ge("2030-11-25T03:01Z".into()),
+            DateTimeValidation { required: true, operation: Some(Operation::Ge(Operand::Value(OperandValue::Str("2030-11-25T03:01Z".into())))) }
         );
         assert_eq!(
-            DateTimeValidation::default().lt(String::from("2031-11-14T00:00Z")),
-            DateTimeValidation {
-                required: true,
-                operation: Some(Operation::Lt(Operand::Value(OperandValue::Str(String::from("2031-11-14T00:00Z")))))
-            }
+            DateTimeValidation::default().lt("2031-11-14T00:00Z".into()),
+            DateTimeValidation { required: true, operation: Some(Operation::Lt(Operand::Value(OperandValue::Str("2031-11-14T00:00Z".into())))) }
         );
         assert_eq!(
-            DateTimeValidation::default().le(String::from("2033-03-30T01:01Z")),
-            DateTimeValidation {
-                required: true,
-                operation: Some(Operation::Le(Operand::Value(OperandValue::Str(String::from("2033-03-30T01:01Z")))))
-            }
+            DateTimeValidation::default().le("2033-03-30T01:01Z".into()),
+            DateTimeValidation { required: true, operation: Some(Operation::Le(Operand::Value(OperandValue::Str("2033-03-30T01:01Z".into())))) }
         );
         assert_eq!(
-            DateTimeValidation::default().btwn(String::from("2031-11-14T00:00Z"), String::from("2033-03-30T01:01Z")),
+            DateTimeValidation::default().btwn("2031-11-14T00:00Z".into(), "2033-03-30T01:01Z".into()),
             DateTimeValidation {
                 required: true,
                 operation: Some(Operation::Btwn(
-                    Operand::Value(OperandValue::Str(String::from("2031-11-14T00:00Z"))),
-                    Operand::Value(OperandValue::Str(String::from("2033-03-30T01:01Z")))
+                    Operand::Value(OperandValue::Str("2031-11-14T00:00Z".into())),
+                    Operand::Value(OperandValue::Str("2033-03-30T01:01Z".into()))
                 ))
             }
         );
         assert_eq!(
-            DateTimeValidation::default().eq_field(String::from("user.info.details.birthdate")),
-            DateTimeValidation { required: true, operation: Some(Operation::Eq(Operand::FieldPath(String::from("user.info.details.birthdate")))) }
+            DateTimeValidation::default().eq_field("user.info.details.birthdate".into()),
+            DateTimeValidation { required: true, operation: Some(Operation::Eq(Operand::FieldPath("user.info.details.birthdate".into()))) }
         );
         assert_eq!(
-            DateTimeValidation::default().ne_field(String::from("user.info.details.birthdate")),
-            DateTimeValidation { required: true, operation: Some(Operation::Ne(Operand::FieldPath(String::from("user.info.details.birthdate")))) }
+            DateTimeValidation::default().ne_field("user.info.details.birthdate".into()),
+            DateTimeValidation { required: true, operation: Some(Operation::Ne(Operand::FieldPath("user.info.details.birthdate".into()))) }
         );
         assert_eq!(
-            DateTimeValidation::default().gt_field(String::from("user.info.details.birthdate")),
-            DateTimeValidation { required: true, operation: Some(Operation::Gt(Operand::FieldPath(String::from("user.info.details.birthdate")))) }
+            DateTimeValidation::default().gt_field("user.info.details.birthdate".into()),
+            DateTimeValidation { required: true, operation: Some(Operation::Gt(Operand::FieldPath("user.info.details.birthdate".into()))) }
         );
         assert_eq!(
-            DateTimeValidation::default().ge_field(String::from("user.info.details.birthdate")),
-            DateTimeValidation { required: true, operation: Some(Operation::Ge(Operand::FieldPath(String::from("user.info.details.birthdate")))) }
+            DateTimeValidation::default().ge_field("user.info.details.birthdate".into()),
+            DateTimeValidation { required: true, operation: Some(Operation::Ge(Operand::FieldPath("user.info.details.birthdate".into()))) }
         );
         assert_eq!(
-            DateTimeValidation::default().lt_field(String::from("user.info.details.birthdate")),
-            DateTimeValidation { required: true, operation: Some(Operation::Lt(Operand::FieldPath(String::from("user.info.details.birthdate")))) }
+            DateTimeValidation::default().lt_field("user.info.details.birthdate".into()),
+            DateTimeValidation { required: true, operation: Some(Operation::Lt(Operand::FieldPath("user.info.details.birthdate".into()))) }
         );
         assert_eq!(
-            DateTimeValidation::default().le_field(String::from("user.info.details.birthdate")),
-            DateTimeValidation { required: true, operation: Some(Operation::Le(Operand::FieldPath(String::from("user.info.details.birthdate")))) }
+            DateTimeValidation::default().le_field("user.info.details.birthdate".into()),
+            DateTimeValidation { required: true, operation: Some(Operation::Le(Operand::FieldPath("user.info.details.birthdate".into()))) }
         );
         assert_eq!(
-            DateTimeValidation::default().btwn_field(String::from("user.info.details.birthdate"), String::from("user.info.details.ripdate")),
+            DateTimeValidation::default().btwn_field("user.info.details.birthdate".into(), "user.info.details.deathdate".into()),
             DateTimeValidation {
                 required: true,
                 operation: Some(Operation::Btwn(
-                    Operand::FieldPath(String::from("user.info.details.birthdate")),
-                    Operand::FieldPath(String::from("user.info.details.ripdate"))
+                    Operand::FieldPath("user.info.details.birthdate".into()),
+                    Operand::FieldPath("user.info.details.deathdate".into())
                 ))
             }
         );

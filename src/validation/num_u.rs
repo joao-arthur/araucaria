@@ -119,36 +119,36 @@ mod test {
             }
         );
         assert_eq!(
-            NumUValidation::default().eq_field(String::from("user.personal.info.height")),
-            NumUValidation { required: true, operation: Some(Operation::Eq(Operand::FieldPath(String::from("user.personal.info.height")))) }
+            NumUValidation::default().eq_field("user.personal.info.height".into()),
+            NumUValidation { required: true, operation: Some(Operation::Eq(Operand::FieldPath("user.personal.info.height".into()))) }
         );
         assert_eq!(
-            NumUValidation::default().ne_field(String::from("user.personal.info.height")),
-            NumUValidation { required: true, operation: Some(Operation::Ne(Operand::FieldPath(String::from("user.personal.info.height")))) }
+            NumUValidation::default().ne_field("user.personal.info.height".into()),
+            NumUValidation { required: true, operation: Some(Operation::Ne(Operand::FieldPath("user.personal.info.height".into()))) }
         );
         assert_eq!(
-            NumUValidation::default().gt_field(String::from("user.personal.info.height")),
-            NumUValidation { required: true, operation: Some(Operation::Gt(Operand::FieldPath(String::from("user.personal.info.height")))) }
+            NumUValidation::default().gt_field("user.personal.info.height".into()),
+            NumUValidation { required: true, operation: Some(Operation::Gt(Operand::FieldPath("user.personal.info.height".into()))) }
         );
         assert_eq!(
-            NumUValidation::default().ge_field(String::from("user.personal.info.height")),
-            NumUValidation { required: true, operation: Some(Operation::Ge(Operand::FieldPath(String::from("user.personal.info.height")))) }
+            NumUValidation::default().ge_field("user.personal.info.height".into()),
+            NumUValidation { required: true, operation: Some(Operation::Ge(Operand::FieldPath("user.personal.info.height".into()))) }
         );
         assert_eq!(
-            NumUValidation::default().lt_field(String::from("user.personal.info.height")),
-            NumUValidation { required: true, operation: Some(Operation::Lt(Operand::FieldPath(String::from("user.personal.info.height")))) }
+            NumUValidation::default().lt_field("user.personal.info.height".into()),
+            NumUValidation { required: true, operation: Some(Operation::Lt(Operand::FieldPath("user.personal.info.height".into()))) }
         );
         assert_eq!(
-            NumUValidation::default().le_field(String::from("user.personal.info.height")),
-            NumUValidation { required: true, operation: Some(Operation::Le(Operand::FieldPath(String::from("user.personal.info.height")))) }
+            NumUValidation::default().le_field("user.personal.info.height".into()),
+            NumUValidation { required: true, operation: Some(Operation::Le(Operand::FieldPath("user.personal.info.height".into()))) }
         );
         assert_eq!(
-            NumUValidation::default().btwn_field(String::from("user.personal.info.min_height"), String::from("user.personal.info.max_height")),
+            NumUValidation::default().btwn_field("user.personal.info.min_height".into(), "user.personal.info.max_height".into()),
             NumUValidation {
                 required: true,
                 operation: Some(Operation::Btwn(
-                    Operand::FieldPath(String::from("user.personal.info.min_height")),
-                    Operand::FieldPath(String::from("user.personal.info.max_height"))
+                    Operand::FieldPath("user.personal.info.min_height".into()),
+                    Operand::FieldPath("user.personal.info.max_height".into())
                 ))
             }
         );

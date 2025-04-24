@@ -149,11 +149,8 @@ mod test {
         assert_eq!(ObjValidation::default(), ObjValidation { required: true, validation: BTreeMap::new() });
         assert_eq!(ObjValidation::default().optional(), ObjValidation { required: false, validation: BTreeMap::new() });
         assert_eq!(
-            ObjValidation::default().validation(BTreeMap::from([(String::from("is"), Validation::Bool(BoolValidation::default().eq(false)))])),
-            ObjValidation {
-                required: true,
-                validation: BTreeMap::from([(String::from("is"), Validation::Bool(BoolValidation::default().eq(false)))])
-            }
+            ObjValidation::default().validation(BTreeMap::from([("is".into(), Validation::Bool(BoolValidation::default().eq(false)))])),
+            ObjValidation { required: true, validation: BTreeMap::from([("is".into(), Validation::Bool(BoolValidation::default().eq(false)))]) }
         );
     }
 

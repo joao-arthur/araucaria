@@ -40,7 +40,7 @@ impl From<f64> for Value {
 
 impl From<&str> for Value {
     fn from(value: &str) -> Self {
-        Value::Str(String::from(value))
+        Value::Str(value.into())
     }
 }
 
@@ -76,7 +76,7 @@ impl<const N: usize> From<[f64; N]> for Value {
 
 impl<const N: usize> From<[&str; N]> for Value {
     fn from(value: [&str; N]) -> Self {
-        Value::Arr(value.to_vec().iter().map(|v| Value::Str(String::from(*v))).collect())
+        Value::Arr(value.to_vec().iter().map(|v| Value::Str((*v).into())).collect())
     }
 }
 
@@ -88,20 +88,20 @@ impl<const N: usize> From<[(String, Value); N]> for Value {
 
 pub fn value_to_string(value: &Value) -> String {
     match value {
-        Value::None => String::from(""),
+        Value::None => "".into(),
         Value::U64(val) => val.to_string(),
         Value::I64(val) => val.to_string(),
         Value::F64(val) => val.to_string(),
         Value::Bool(val) => val.to_string(),
-        Value::Str(val) => String::from("\"") + val + "\"",
+        Value::Str(val) => "\"".to_string() + val + "\"",
         Value::Arr(val) => {
             let parts: Vec<String> = val.iter().map(value_to_string).collect();
-            String::from("[") + &parts.join(", ") + "]"
+            "[".to_string() + &parts.join(", ") + "]"
         }
         Value::Obj(val) => {
             let mut parts: Vec<String> = val.iter().map(|(k, v)| k.clone() + ": " + &value_to_string(v)).collect();
             parts.sort();
-            String::from("{ ") + &parts.join(", ") + " }"
+            "{ ".to_string() + &parts.join(", ") + " }"
         }
     }
 }
@@ -118,16 +118,10 @@ mod test {
         assert_eq!(Value::from(-3_i64), Value::I64(-3));
         assert_eq!(Value::from(-9.8), Value::F64(-9.8));
         assert_eq!(Value::from(false), Value::Bool(false));
-        assert_eq!(Value::from("in vino veritas"), Value::Str(String::from("in vino veritas")));
+        assert_eq!(Value::from("in vino veritas"), Value::Str("in vino veritas".into()));
         assert_eq!(
             Value::from([Value::from("veni"), Value::from("vidi"), Value::from("vici"), Value::Bool(false), Value::F64(-5.1)]),
-            Value::Arr(vec![
-                Value::Str(String::from("veni")),
-                Value::Str(String::from("vidi")),
-                Value::Str(String::from("vici")),
-                Value::Bool(false),
-                Value::F64(-5.1),
-            ])
+            Value::Arr(vec![Value::Str("veni".into()), Value::Str("vidi".into()), Value::Str("vici".into()), Value::Bool(false), Value::F64(-5.1)])
         );
         assert_eq!(Value::from([false, true, true]), Value::Arr(vec![Value::Bool(false), Value::Bool(true), Value::Bool(true)]));
         assert_eq!(Value::from([9_u64, 213897_u64, 2394_u64]), Value::Arr(vec![Value::U64(9), Value::U64(213897), Value::U64(2394)]));
@@ -138,48 +132,41 @@ mod test {
         );
         assert_eq!(
             Value::from(["veni", "vidi", "vici"]),
-            Value::Arr(vec![Value::Str(String::from("veni")), Value::Str(String::from("vidi")), Value::Str(String::from("vici")),])
+            Value::Arr(vec![Value::Str("veni".into()), Value::Str("vidi".into()), Value::Str("vici".into())])
         );
         assert_eq!(
-            Value::from([
-                (String::from("age"), Value::from(82_u64)),
-                (String::from("name"), Value::from("Paul")),
-                (String::from("alive"), Value::from(true)),
-            ]),
+            Value::from([("age".into(), Value::from(82_u64)), ("name".into(), Value::from("Paul")), ("alive".into(), Value::from(true))]),
             Value::Obj(BTreeMap::from([
-                (String::from("age"), Value::U64(82)),
-                (String::from("name"), Value::Str(String::from("Paul"))),
-                (String::from("alive"), Value::Bool(true)),
+                ("age".into(), Value::U64(82)),
+                ("name".into(), Value::Str("Paul".into())),
+                ("alive".into(), Value::Bool(true)),
             ]))
         );
     }
 
     #[test]
     fn test_value_to_string() {
-        assert_eq!(value_to_string(&Value::None), String::from(""));
-        assert_eq!(value_to_string(&Value::U64(4)), String::from("4"));
-        assert_eq!(value_to_string(&Value::I64(-22)), String::from("-22"));
-        assert_eq!(value_to_string(&Value::F64(-3.65)), String::from("-3.65"));
-        assert_eq!(value_to_string(&Value::Bool(true)), String::from("true"));
-        assert_eq!(value_to_string(&Value::from("Non sequitur")), String::from(r#""Non sequitur""#));
+        assert_eq!(value_to_string(&Value::None), "".to_string());
+        assert_eq!(value_to_string(&Value::U64(4)), "4".to_string());
+        assert_eq!(value_to_string(&Value::I64(-22)), "-22".to_string());
+        assert_eq!(value_to_string(&Value::F64(-3.65)), "-3.65".to_string());
+        assert_eq!(value_to_string(&Value::Bool(true)), "true".to_string());
+        assert_eq!(value_to_string(&Value::from("Non sequitur")), r#""Non sequitur""#.to_string());
         assert_eq!(
             value_to_string(&Value::from([Value::from("Ad nauseam"), Value::from("Ad ignorantiam"), Value::from(["Ad hominem", "Ad verecundiam"])])),
-            String::from(r#"["Ad nauseam", "Ad ignorantiam", ["Ad hominem", "Ad verecundiam"]]"#)
+            r#"["Ad nauseam", "Ad ignorantiam", ["Ad hominem", "Ad verecundiam"]]"#.to_string()
         );
         assert_eq!(
             value_to_string(&Value::from([
-                (String::from("k_num"), Value::U64(837)),
-                (String::from("k_bool"), Value::Bool(false)),
-                (String::from("k_str"), Value::from("Augustus")),
+                ("k_num".into(), Value::U64(837)),
+                ("k_bool".into(), Value::Bool(false)),
+                ("k_str".into(), Value::from("Augustus")),
                 (
-                    String::from("k_nested"),
-                    Value::from([(
-                        String::from("l_1"),
-                        Value::from([(String::from("l_2"), Value::from([Value::from([(String::from("id"), Value::U64(0))])]))])
-                    )])
+                    "k_nested".into(),
+                    Value::from([("l_1".into(), Value::from([("l_2".into(), Value::from([Value::from([("id".into(), Value::U64(0))])]))]))])
                 ),
             ])),
-            String::from(r#"{ k_bool: false, k_nested: { l_1: { l_2: [{ id: 0 }] } }, k_num: 837, k_str: "Augustus" }"#)
+            r#"{ k_bool: false, k_nested: { l_1: { l_2: [{ id: 0 }] } }, k_num: 837, k_str: "Augustus" }"#.to_string()
         );
     }
 }

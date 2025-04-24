@@ -88,70 +88,70 @@ mod test {
         assert_eq!(DateValidation::default(), DateValidation { required: true, operation: None });
         assert_eq!(DateValidation::default().optional(), DateValidation { required: false, operation: None });
         assert_eq!(
-            DateValidation::default().eq(String::from("2026-08-12")),
-            DateValidation { required: true, operation: Some(Operation::Eq(Operand::Value(OperandValue::Str(String::from("2026-08-12"))))) }
+            DateValidation::default().eq("2026-08-12".into()),
+            DateValidation { required: true, operation: Some(Operation::Eq(Operand::Value(OperandValue::Str("2026-08-12".into())))) }
         );
         assert_eq!(
-            DateValidation::default().ne(String::from("2027-08-02")),
-            DateValidation { required: true, operation: Some(Operation::Ne(Operand::Value(OperandValue::Str(String::from("2027-08-02"))))) }
+            DateValidation::default().ne("2027-08-02".into()),
+            DateValidation { required: true, operation: Some(Operation::Ne(Operand::Value(OperandValue::Str("2027-08-02".into())))) }
         );
         assert_eq!(
-            DateValidation::default().gt(String::from("2028-07-22")),
-            DateValidation { required: true, operation: Some(Operation::Gt(Operand::Value(OperandValue::Str(String::from("2028-07-22"))))) }
+            DateValidation::default().gt("2028-07-22".into()),
+            DateValidation { required: true, operation: Some(Operation::Gt(Operand::Value(OperandValue::Str("2028-07-22".into())))) }
         );
         assert_eq!(
-            DateValidation::default().ge(String::from("2030-11-25")),
-            DateValidation { required: true, operation: Some(Operation::Ge(Operand::Value(OperandValue::Str(String::from("2030-11-25"))))) }
+            DateValidation::default().ge("2030-11-25".into()),
+            DateValidation { required: true, operation: Some(Operation::Ge(Operand::Value(OperandValue::Str("2030-11-25".into())))) }
         );
         assert_eq!(
-            DateValidation::default().lt(String::from("2031-11-14")),
-            DateValidation { required: true, operation: Some(Operation::Lt(Operand::Value(OperandValue::Str(String::from("2031-11-14"))))) }
+            DateValidation::default().lt("2031-11-14".into()),
+            DateValidation { required: true, operation: Some(Operation::Lt(Operand::Value(OperandValue::Str("2031-11-14".into())))) }
         );
         assert_eq!(
-            DateValidation::default().le(String::from("2033-03-30")),
-            DateValidation { required: true, operation: Some(Operation::Le(Operand::Value(OperandValue::Str(String::from("2033-03-30"))))) }
+            DateValidation::default().le("2033-03-30".into()),
+            DateValidation { required: true, operation: Some(Operation::Le(Operand::Value(OperandValue::Str("2033-03-30".into())))) }
         );
         assert_eq!(
-            DateValidation::default().btwn(String::from("2031-11-14"), String::from("2033-03-30")),
+            DateValidation::default().btwn("2031-11-14".into(), "2033-03-30".into()),
             DateValidation {
                 required: true,
                 operation: Some(Operation::Btwn(
-                    Operand::Value(OperandValue::Str(String::from("2031-11-14"))),
-                    Operand::Value(OperandValue::Str(String::from("2033-03-30")))
+                    Operand::Value(OperandValue::Str("2031-11-14".into())),
+                    Operand::Value(OperandValue::Str("2033-03-30".into()))
                 ))
             }
         );
         assert_eq!(
-            DateValidation::default().eq_field(String::from("user.info.details.birthdate")),
-            DateValidation { required: true, operation: Some(Operation::Eq(Operand::FieldPath(String::from("user.info.details.birthdate")))) }
+            DateValidation::default().eq_field("user.info.details.birthdate".into()),
+            DateValidation { required: true, operation: Some(Operation::Eq(Operand::FieldPath("user.info.details.birthdate".into()))) }
         );
         assert_eq!(
-            DateValidation::default().ne_field(String::from("user.info.details.birthdate")),
-            DateValidation { required: true, operation: Some(Operation::Ne(Operand::FieldPath(String::from("user.info.details.birthdate")))) }
+            DateValidation::default().ne_field("user.info.details.birthdate".into()),
+            DateValidation { required: true, operation: Some(Operation::Ne(Operand::FieldPath("user.info.details.birthdate".into()))) }
         );
         assert_eq!(
-            DateValidation::default().gt_field(String::from("user.info.details.birthdate")),
-            DateValidation { required: true, operation: Some(Operation::Gt(Operand::FieldPath(String::from("user.info.details.birthdate")))) }
+            DateValidation::default().gt_field("user.info.details.birthdate".into()),
+            DateValidation { required: true, operation: Some(Operation::Gt(Operand::FieldPath("user.info.details.birthdate".into()))) }
         );
         assert_eq!(
-            DateValidation::default().ge_field(String::from("user.info.details.birthdate")),
-            DateValidation { required: true, operation: Some(Operation::Ge(Operand::FieldPath(String::from("user.info.details.birthdate")))) }
+            DateValidation::default().ge_field("user.info.details.birthdate".into()),
+            DateValidation { required: true, operation: Some(Operation::Ge(Operand::FieldPath("user.info.details.birthdate".into()))) }
         );
         assert_eq!(
-            DateValidation::default().lt_field(String::from("user.info.details.birthdate")),
-            DateValidation { required: true, operation: Some(Operation::Lt(Operand::FieldPath(String::from("user.info.details.birthdate")))) }
+            DateValidation::default().lt_field("user.info.details.birthdate".into()),
+            DateValidation { required: true, operation: Some(Operation::Lt(Operand::FieldPath("user.info.details.birthdate".into()))) }
         );
         assert_eq!(
-            DateValidation::default().le_field(String::from("user.info.details.birthdate")),
-            DateValidation { required: true, operation: Some(Operation::Le(Operand::FieldPath(String::from("user.info.details.birthdate")))) }
+            DateValidation::default().le_field("user.info.details.birthdate".into()),
+            DateValidation { required: true, operation: Some(Operation::Le(Operand::FieldPath("user.info.details.birthdate".into()))) }
         );
         assert_eq!(
-            DateValidation::default().btwn_field(String::from("user.info.details.birthdate"), String::from("user.info.details.ripdate")),
+            DateValidation::default().btwn_field("user.info.details.birthdate".into(), "user.info.details.deathdate".into()),
             DateValidation {
                 required: true,
                 operation: Some(Operation::Btwn(
-                    Operand::FieldPath(String::from("user.info.details.birthdate")),
-                    Operand::FieldPath(String::from("user.info.details.ripdate"))
+                    Operand::FieldPath("user.info.details.birthdate".into()),
+                    Operand::FieldPath("user.info.details.deathdate".into())
                 ))
             }
         );
