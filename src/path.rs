@@ -17,27 +17,27 @@ mod test {
     use std::collections::BTreeMap;
 
     use crate::value::{
-        Value,
         stub::{
-            arr_bool_stub, arr_num_f_stub, arr_num_i_stub, arr_num_stub, arr_num_u_stub, arr_str_stub, bool_stub, num_f_stub, num_i_stub, num_u_stub,
-            obj_stub, str_stub,
-        },
+            arr_bool_stub, arr_f64_stub, arr_i64_stub, arr_num_stub, arr_u64_stub, arr_str_stub, bool_stub, f64_stub, i64_stub, isize_stub, obj_stub, str_stub, u64_stub, usize_stub
+        }, Value
     };
 
     use super::resolve_path;
 
     #[test]
     fn test_resolve_path_empty_path() {
-        assert_eq!(resolve_path(&num_u_stub(), ""), None);
-        assert_eq!(resolve_path(&num_i_stub(), ""), None);
-        assert_eq!(resolve_path(&num_f_stub(), ""), None);
+        assert_eq!(resolve_path(&u64_stub(), ""), None);
+        assert_eq!(resolve_path(&i64_stub(), ""), None);
+        assert_eq!(resolve_path(&f64_stub(), ""), None);
         assert_eq!(resolve_path(&bool_stub(), ""), None);
         assert_eq!(resolve_path(&str_stub(), ""), None);
         assert_eq!(resolve_path(&str_stub(), ""), None);
+        assert_eq!(resolve_path(&usize_stub(), ""), None);
+        assert_eq!(resolve_path(&isize_stub(), ""), None);
         assert_eq!(resolve_path(&arr_bool_stub(), ""), None);
-        assert_eq!(resolve_path(&arr_num_u_stub(), ""), None);
-        assert_eq!(resolve_path(&arr_num_i_stub(), ""), None);
-        assert_eq!(resolve_path(&arr_num_f_stub(), ""), None);
+        assert_eq!(resolve_path(&arr_u64_stub(), ""), None);
+        assert_eq!(resolve_path(&arr_i64_stub(), ""), None);
+        assert_eq!(resolve_path(&arr_f64_stub(), ""), None);
         assert_eq!(resolve_path(&arr_num_stub(), ""), None);
         assert_eq!(resolve_path(&arr_str_stub(), ""), None);
         assert_eq!(resolve_path(&obj_stub(), ""), None);
@@ -45,16 +45,16 @@ mod test {
 
     #[test]
     fn test_resolve_path_dot_path() {
-        assert_eq!(resolve_path(&num_u_stub(), "."), None);
-        assert_eq!(resolve_path(&num_i_stub(), "."), None);
-        assert_eq!(resolve_path(&num_f_stub(), "."), None);
+        assert_eq!(resolve_path(&u64_stub(), "."), None);
+        assert_eq!(resolve_path(&i64_stub(), "."), None);
+        assert_eq!(resolve_path(&f64_stub(), "."), None);
         assert_eq!(resolve_path(&bool_stub(), "."), None);
         assert_eq!(resolve_path(&str_stub(), "."), None);
         assert_eq!(resolve_path(&str_stub(), "."), None);
         assert_eq!(resolve_path(&arr_bool_stub(), "."), None);
-        assert_eq!(resolve_path(&arr_num_u_stub(), "."), None);
-        assert_eq!(resolve_path(&arr_num_i_stub(), "."), None);
-        assert_eq!(resolve_path(&arr_num_f_stub(), "."), None);
+        assert_eq!(resolve_path(&arr_u64_stub(), "."), None);
+        assert_eq!(resolve_path(&arr_i64_stub(), "."), None);
+        assert_eq!(resolve_path(&arr_f64_stub(), "."), None);
         assert_eq!(resolve_path(&arr_num_stub(), "."), None);
         assert_eq!(resolve_path(&arr_str_stub(), "."), None);
         assert_eq!(resolve_path(&obj_stub(), "."), None);
@@ -62,25 +62,25 @@ mod test {
 
     #[test]
     fn test_resolve_path_obj_other_values() {
-        assert_eq!(resolve_path(&num_u_stub(), "name"), None);
-        assert_eq!(resolve_path(&num_i_stub(), "name"), None);
-        assert_eq!(resolve_path(&num_f_stub(), "name"), None);
+        assert_eq!(resolve_path(&u64_stub(), "name"), None);
+        assert_eq!(resolve_path(&i64_stub(), "name"), None);
+        assert_eq!(resolve_path(&f64_stub(), "name"), None);
         assert_eq!(resolve_path(&bool_stub(), "name"), None);
         assert_eq!(resolve_path(&str_stub(), "name"), None);
         assert_eq!(resolve_path(&str_stub(), "name"), None);
         assert_eq!(resolve_path(&arr_bool_stub(), "name"), None);
-        assert_eq!(resolve_path(&arr_num_u_stub(), "name"), None);
-        assert_eq!(resolve_path(&arr_num_i_stub(), "name"), None);
-        assert_eq!(resolve_path(&arr_num_f_stub(), "name"), None);
+        assert_eq!(resolve_path(&arr_u64_stub(), "name"), None);
+        assert_eq!(resolve_path(&arr_i64_stub(), "name"), None);
+        assert_eq!(resolve_path(&arr_f64_stub(), "name"), None);
         assert_eq!(resolve_path(&arr_num_stub(), "name"), None);
         assert_eq!(resolve_path(&arr_str_stub(), "name"), None);
     }
 
     #[test]
     fn test_resolve_path_arr_other_values() {
-        assert_eq!(resolve_path(&num_u_stub(), "0"), None);
-        assert_eq!(resolve_path(&num_i_stub(), "0"), None);
-        assert_eq!(resolve_path(&num_f_stub(), "0"), None);
+        assert_eq!(resolve_path(&u64_stub(), "0"), None);
+        assert_eq!(resolve_path(&i64_stub(), "0"), None);
+        assert_eq!(resolve_path(&f64_stub(), "0"), None);
         assert_eq!(resolve_path(&bool_stub(), "0"), None);
         assert_eq!(resolve_path(&obj_stub(), "0"), None);
     }
@@ -109,18 +109,18 @@ mod test {
 
     #[test]
     fn test_resolve_path_arr() {
-        assert_eq!(resolve_path(&arr_num_f_stub(), "one"), None);
-        assert_eq!(resolve_path(&arr_num_f_stub(), "two"), None);
-        assert_eq!(resolve_path(&arr_num_f_stub(), "0x0"), None);
-        assert_eq!(resolve_path(&arr_num_f_stub(), "0b0"), None);
-        assert_eq!(resolve_path(&arr_num_f_stub(), "-2"), None);
-        assert_eq!(resolve_path(&arr_num_f_stub(), "-1"), None);
-        assert_eq!(resolve_path(&arr_num_f_stub(), "00"), Some(Value::F64(-10.5)));
-        assert_eq!(resolve_path(&arr_num_f_stub(), "01"), Some(Value::F64(0.5)));
-        assert_eq!(resolve_path(&arr_num_f_stub(), "0"), Some(Value::F64(-10.5)));
-        assert_eq!(resolve_path(&arr_num_f_stub(), "1"), Some(Value::F64(0.5)));
-        assert_eq!(resolve_path(&arr_num_f_stub(), "2"), Some(Value::F64(10.5)));
-        assert_eq!(resolve_path(&arr_num_f_stub(), "3"), None);
+        assert_eq!(resolve_path(&arr_f64_stub(), "one"), None);
+        assert_eq!(resolve_path(&arr_f64_stub(), "two"), None);
+        assert_eq!(resolve_path(&arr_f64_stub(), "0x0"), None);
+        assert_eq!(resolve_path(&arr_f64_stub(), "0b0"), None);
+        assert_eq!(resolve_path(&arr_f64_stub(), "-2"), None);
+        assert_eq!(resolve_path(&arr_f64_stub(), "-1"), None);
+        assert_eq!(resolve_path(&arr_f64_stub(), "00"), Some(Value::F64(-10.5)));
+        assert_eq!(resolve_path(&arr_f64_stub(), "01"), Some(Value::F64(0.5)));
+        assert_eq!(resolve_path(&arr_f64_stub(), "0"), Some(Value::F64(-10.5)));
+        assert_eq!(resolve_path(&arr_f64_stub(), "1"), Some(Value::F64(0.5)));
+        assert_eq!(resolve_path(&arr_f64_stub(), "2"), Some(Value::F64(10.5)));
+        assert_eq!(resolve_path(&arr_f64_stub(), "3"), None);
     }
 
     #[test]

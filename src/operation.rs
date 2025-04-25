@@ -8,6 +8,7 @@ pub enum OperandValue {
     I64(i64),
     F64(f64),
     USize(usize),
+    ISize(isize),
     Bool(bool),
     Str(String),
 }
@@ -33,6 +34,12 @@ impl From<f64> for OperandValue {
 impl From<usize> for OperandValue {
     fn from(value: usize) -> Self {
         OperandValue::USize(value)
+    }
+}
+
+impl From<isize> for OperandValue {
+    fn from(value: isize) -> Self {
+        OperandValue::ISize(value)
     }
 }
 
@@ -67,6 +74,11 @@ impl PartialOrd for OperandValue {
         }
         if let OperandValue::USize(a) = self {
             if let OperandValue::USize(b) = other {
+                return a.partial_cmp(b);
+            }
+        }
+        if let OperandValue::ISize(a) = self {
+            if let OperandValue::ISize(b) = other {
                 return a.partial_cmp(b);
             }
         }
@@ -148,6 +160,8 @@ fn value_to_operand_value(value: &Value) -> Option<OperandValue> {
         Value::U64(val) => Some(OperandValue::U64(*val)),
         Value::I64(val) => Some(OperandValue::I64(*val)),
         Value::F64(val) => Some(OperandValue::F64(*val)),
+        Value::USize(val) => Some(OperandValue::USize(*val)),
+        Value::ISize(val) => Some(OperandValue::ISize(*val)),
         Value::Bool(val) => Some(OperandValue::Bool(*val)),
         Value::Str(val) => Some(OperandValue::Str(val.clone())),
         _ => None,
@@ -216,6 +230,7 @@ mod test {
         assert_eq!(OperandValue::from(-3_i64), OperandValue::I64(-3));
         assert_eq!(OperandValue::from(-9.8), OperandValue::F64(-9.8));
         assert_eq!(OperandValue::from(183_usize), OperandValue::USize(183));
+        assert_eq!(OperandValue::from(-892_isize), OperandValue::ISize(-892));
         assert_eq!(OperandValue::from(false), OperandValue::Bool(false));
         assert_eq!(OperandValue::from("in vino veritas"), OperandValue::Str("in vino veritas".into()));
     }
@@ -306,6 +321,28 @@ mod test {
         assert_eq!(OperandValue::USize(42) <= OperandValue::USize(41), false);
         assert!(OperandValue::USize(42) <= OperandValue::USize(42));
         assert!(OperandValue::USize(42) <= OperandValue::USize(43));
+    }
+
+    #[test]
+    fn test_operand_value_isize() {
+        assert_eq!(OperandValue::ISize(-42) == OperandValue::ISize(-43), false);
+        assert!(OperandValue::ISize(-42) == OperandValue::ISize(-42));
+        assert_eq!(OperandValue::ISize(-42) == OperandValue::ISize(-41), false);
+        assert!(OperandValue::ISize(-42) != OperandValue::ISize(-43));
+        assert_eq!(OperandValue::ISize(-42) != OperandValue::ISize(-42), false);
+        assert!(OperandValue::ISize(-42) != OperandValue::ISize(-41));
+        assert!(OperandValue::ISize(-42) > OperandValue::ISize(-43));
+        assert_eq!(OperandValue::ISize(-42) > OperandValue::ISize(-42), false);
+        assert_eq!(OperandValue::ISize(-42) > OperandValue::ISize(-41), false);
+        assert!(OperandValue::ISize(-42) >= OperandValue::ISize(-43));
+        assert!(OperandValue::ISize(-42) >= OperandValue::ISize(-42));
+        assert_eq!(OperandValue::ISize(-42) >= OperandValue::ISize(-41), false);
+        assert_eq!(OperandValue::ISize(-42) < OperandValue::ISize(-43), false);
+        assert_eq!(OperandValue::ISize(-42) < OperandValue::ISize(-42), false);
+        assert!(OperandValue::ISize(-42) < OperandValue::ISize(-41));
+        assert_eq!(OperandValue::ISize(-42) <= OperandValue::ISize(-43), false);
+        assert!(OperandValue::ISize(-42) <= OperandValue::ISize(-42));
+        assert!(OperandValue::ISize(-42) <= OperandValue::ISize(-41));
     }
 
     #[test]
@@ -625,6 +662,72 @@ mod test {
     }
 
     #[test]
+    fn test_compare_isize_eq_value() {
+        let v = Operation::Eq(Operand::Value(OperandValue::ISize(42)));
+        let root = Value::None;
+        assert_eq!(compare(&v, &OperandValue::ISize(41), &root), Some(Err(())));
+        assert_eq!(compare(&v, &OperandValue::ISize(42), &root), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::ISize(43), &root), Some(Err(())));
+    }
+
+    #[test]
+    fn test_compare_isize_ne_value() {
+        let v = Operation::Ne(Operand::Value(OperandValue::ISize(42)));
+        let root = Value::None;
+        assert_eq!(compare(&v, &OperandValue::ISize(41), &root), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::ISize(42), &root), Some(Err(())));
+        assert_eq!(compare(&v, &OperandValue::ISize(43), &root), Some(Ok(())));
+    }
+
+    #[test]
+    fn test_compare_isize_gt_value() {
+        let v = Operation::Gt(Operand::Value(OperandValue::ISize(42)));
+        let root = Value::None;
+        assert_eq!(compare(&v, &OperandValue::ISize(41), &root), Some(Err(())));
+        assert_eq!(compare(&v, &OperandValue::ISize(42), &root), Some(Err(())));
+        assert_eq!(compare(&v, &OperandValue::ISize(43), &root), Some(Ok(())));
+    }
+
+    #[test]
+    fn test_compare_isize_ge_value() {
+        let v = Operation::Ge(Operand::Value(OperandValue::ISize(42)));
+        let root = Value::None;
+        assert_eq!(compare(&v, &OperandValue::ISize(41), &root), Some(Err(())));
+        assert_eq!(compare(&v, &OperandValue::ISize(42), &root), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::ISize(43), &root), Some(Ok(())));
+    }
+
+    #[test]
+    fn test_compare_isize_lt_value() {
+        let v = Operation::Lt(Operand::Value(OperandValue::ISize(42)));
+        let root = Value::None;
+        assert_eq!(compare(&v, &OperandValue::ISize(41), &root), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::ISize(42), &root), Some(Err(())));
+        assert_eq!(compare(&v, &OperandValue::ISize(43), &root), Some(Err(())));
+    }
+
+    #[test]
+    fn test_compare_isize_le_value() {
+        let v = Operation::Le(Operand::Value(OperandValue::ISize(42)));
+        let root = Value::None;
+        assert_eq!(compare(&v, &OperandValue::ISize(41), &root), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::ISize(42), &root), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::ISize(43), &root), Some(Err(())));
+    }
+
+    #[test]
+    fn test_compare_isize_btwn_value() {
+        let v = Operation::Btwn(Operand::Value(OperandValue::ISize(24)), Operand::Value(OperandValue::ISize(42)));
+        let root = Value::None;
+        assert_eq!(compare(&v, &OperandValue::ISize(23), &root), Some(Err(())));
+        assert_eq!(compare(&v, &OperandValue::ISize(24), &root), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::ISize(25), &root), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::ISize(41), &root), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::ISize(42), &root), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::ISize(43), &root), Some(Err(())));
+    }
+
+    #[test]
     fn test_compare_bool_eq_value() {
         let v = Operation::Eq(Operand::Value(OperandValue::Bool(true)));
         let root = Value::None;
@@ -752,6 +855,7 @@ mod test {
         assert_eq!(compare(&Operation::Eq(Operand::Value(OperandValue::U64(42))), &OperandValue::I64(41), &root), None);
         assert_eq!(compare(&Operation::Ne(Operand::Value(OperandValue::U64(42))), &OperandValue::F64(41.5), &root), None);
         assert_eq!(compare(&Operation::Gt(Operand::Value(OperandValue::U64(42))), &OperandValue::USize(41), &root), None);
+        assert_eq!(compare(&Operation::Ne(Operand::Value(OperandValue::U64(42))), &OperandValue::ISize(41), &root), None);
         assert_eq!(compare(&Operation::Ge(Operand::Value(OperandValue::U64(42))), &OperandValue::Bool(false), &root), None);
         assert_eq!(compare(&Operation::Lt(Operand::Value(OperandValue::U64(42))), &OperandValue::from("abc"), &root), None);
     }
@@ -762,6 +866,7 @@ mod test {
         assert_eq!(compare(&Operation::Eq(Operand::Value(OperandValue::I64(42))), &OperandValue::U64(41), &root), None);
         assert_eq!(compare(&Operation::Ne(Operand::Value(OperandValue::I64(42))), &OperandValue::F64(41.5), &root), None);
         assert_eq!(compare(&Operation::Gt(Operand::Value(OperandValue::I64(42))), &OperandValue::USize(41), &root), None);
+        assert_eq!(compare(&Operation::Gt(Operand::Value(OperandValue::I64(42))), &OperandValue::ISize(41), &root), None);
         assert_eq!(compare(&Operation::Ge(Operand::Value(OperandValue::I64(42))), &OperandValue::Bool(false), &root), None);
         assert_eq!(compare(&Operation::Lt(Operand::Value(OperandValue::I64(42))), &OperandValue::from("abc"), &root), None);
     }
@@ -772,6 +877,7 @@ mod test {
         assert_eq!(compare(&Operation::Eq(Operand::Value(OperandValue::F64(42.0))), &OperandValue::U64(41), &root), None);
         assert_eq!(compare(&Operation::Ne(Operand::Value(OperandValue::F64(42.0))), &OperandValue::I64(41), &root), None);
         assert_eq!(compare(&Operation::Gt(Operand::Value(OperandValue::F64(42.0))), &OperandValue::USize(41), &root), None);
+        assert_eq!(compare(&Operation::Gt(Operand::Value(OperandValue::F64(42.0))), &OperandValue::ISize(41), &root), None);
         assert_eq!(compare(&Operation::Ge(Operand::Value(OperandValue::F64(42.0))), &OperandValue::Bool(false), &root), None);
         assert_eq!(compare(&Operation::Lt(Operand::Value(OperandValue::F64(42.0))), &OperandValue::from("abc"), &root), None);
     }
@@ -782,8 +888,20 @@ mod test {
         assert_eq!(compare(&Operation::Eq(Operand::Value(OperandValue::USize(42))), &OperandValue::U64(41), &root), None);
         assert_eq!(compare(&Operation::Ne(Operand::Value(OperandValue::USize(42))), &OperandValue::I64(41), &root), None);
         assert_eq!(compare(&Operation::Gt(Operand::Value(OperandValue::USize(42))), &OperandValue::F64(41.5), &root), None);
+        assert_eq!(compare(&Operation::Ne(Operand::Value(OperandValue::USize(42))), &OperandValue::ISize(41), &root), None);
         assert_eq!(compare(&Operation::Ge(Operand::Value(OperandValue::USize(42))), &OperandValue::Bool(false), &root), None);
         assert_eq!(compare(&Operation::Lt(Operand::Value(OperandValue::USize(42))), &OperandValue::from("abc"), &root), None);
+    }
+
+    #[test]
+    fn test_compare_isize_other_types() {
+        let root = Value::None;
+        assert_eq!(compare(&Operation::Eq(Operand::Value(OperandValue::ISize(42))), &OperandValue::U64(41), &root), None);
+        assert_eq!(compare(&Operation::Ne(Operand::Value(OperandValue::ISize(42))), &OperandValue::I64(41), &root), None);
+        assert_eq!(compare(&Operation::Gt(Operand::Value(OperandValue::ISize(42))), &OperandValue::F64(41.5), &root), None);
+        assert_eq!(compare(&Operation::Ne(Operand::Value(OperandValue::ISize(42))), &OperandValue::USize(41), &root), None);
+        assert_eq!(compare(&Operation::Ge(Operand::Value(OperandValue::ISize(42))), &OperandValue::Bool(false), &root), None);
+        assert_eq!(compare(&Operation::Lt(Operand::Value(OperandValue::ISize(42))), &OperandValue::from("abc"), &root), None);
     }
 
     #[test]
@@ -793,6 +911,7 @@ mod test {
         assert_eq!(compare(&Operation::Ne(Operand::Value(OperandValue::Bool(true))), &OperandValue::I64(41), &root), None);
         assert_eq!(compare(&Operation::Gt(Operand::Value(OperandValue::Bool(true))), &OperandValue::F64(41.5), &root), None);
         assert_eq!(compare(&Operation::Ge(Operand::Value(OperandValue::Bool(true))), &OperandValue::USize(41), &root), None);
+        assert_eq!(compare(&Operation::Ge(Operand::Value(OperandValue::Bool(true))), &OperandValue::ISize(41), &root), None);
         assert_eq!(compare(&Operation::Lt(Operand::Value(OperandValue::Bool(true))), &OperandValue::from("abc"), &root), None);
     }
 
@@ -803,6 +922,7 @@ mod test {
         assert_eq!(compare(&Operation::Ne(Operand::Value(OperandValue::from("abc"))), &OperandValue::I64(41), &root), None);
         assert_eq!(compare(&Operation::Gt(Operand::Value(OperandValue::from("abc"))), &OperandValue::F64(41.5), &root), None);
         assert_eq!(compare(&Operation::Ge(Operand::Value(OperandValue::from("abc"))), &OperandValue::USize(41), &root), None);
+        assert_eq!(compare(&Operation::Ge(Operand::Value(OperandValue::from("abc"))), &OperandValue::ISize(41), &root), None);
         assert_eq!(compare(&Operation::Lt(Operand::Value(OperandValue::from("abc"))), &OperandValue::Bool(false), &root), None);
     }
 
@@ -1170,6 +1290,250 @@ mod test {
         assert_eq!(compare(&v, &OperandValue::F64(31.5), &root), Some(Ok(())));
         assert_eq!(compare(&v, &OperandValue::F64(32.5), &root), Some(Ok(())));
         assert_eq!(compare(&v, &OperandValue::F64(33.5), &root), Some(Err(())));
+    }
+
+    #[test]
+    fn test_compare_usize_eq_field() {
+        let v = Operation::Eq(Operand::FieldPath("values.3.value".into()));
+        let root = Value::Obj(BTreeMap::from([(
+            "values".into(),
+            Value::Arr(vec![
+                Value::Obj(BTreeMap::from([("value".into(), Value::USize(12))])),
+                Value::Obj(BTreeMap::from([("value".into(), Value::USize(22))])),
+                Value::Obj(BTreeMap::from([("value".into(), Value::USize(32))])),
+                Value::Obj(BTreeMap::from([("value".into(), Value::USize(42))])),
+            ]),
+        )]));
+        assert_eq!(compare(&v, &OperandValue::USize(41), &root), Some(Err(())));
+        assert_eq!(compare(&v, &OperandValue::USize(42), &root), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::USize(43), &root), Some(Err(())));
+    }
+
+    #[test]
+    fn test_compare_usize_ne_field() {
+        let v = Operation::Ne(Operand::FieldPath("values.3.value".into()));
+        let root = Value::Obj(BTreeMap::from([(
+            "values".into(),
+            Value::Arr(vec![
+                Value::Obj(BTreeMap::from([("value".into(), Value::USize(12))])),
+                Value::Obj(BTreeMap::from([("value".into(), Value::USize(22))])),
+                Value::Obj(BTreeMap::from([("value".into(), Value::USize(32))])),
+                Value::Obj(BTreeMap::from([("value".into(), Value::USize(42))])),
+            ]),
+        )]));
+        assert_eq!(compare(&v, &OperandValue::USize(41), &root), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::USize(42), &root), Some(Err(())));
+        assert_eq!(compare(&v, &OperandValue::USize(43), &root), Some(Ok(())));
+    }
+
+    #[test]
+    fn test_compare_usize_gt_field() {
+        let v = Operation::Gt(Operand::FieldPath("values.3.value".into()));
+        let root = Value::Obj(BTreeMap::from([(
+            "values".into(),
+            Value::Arr(vec![
+                Value::Obj(BTreeMap::from([("value".into(), Value::USize(12))])),
+                Value::Obj(BTreeMap::from([("value".into(), Value::USize(22))])),
+                Value::Obj(BTreeMap::from([("value".into(), Value::USize(32))])),
+                Value::Obj(BTreeMap::from([("value".into(), Value::USize(42))])),
+            ]),
+        )]));
+        assert_eq!(compare(&v, &OperandValue::USize(41), &root), Some(Err(())));
+        assert_eq!(compare(&v, &OperandValue::USize(42), &root), Some(Err(())));
+        assert_eq!(compare(&v, &OperandValue::USize(43), &root), Some(Ok(())));
+    }
+
+    #[test]
+    fn test_compare_usize_ge_field() {
+        let v = Operation::Ge(Operand::FieldPath("values.3.value".into()));
+        let root = Value::Obj(BTreeMap::from([(
+            "values".into(),
+            Value::Arr(vec![
+                Value::Obj(BTreeMap::from([("value".into(), Value::USize(12))])),
+                Value::Obj(BTreeMap::from([("value".into(), Value::USize(22))])),
+                Value::Obj(BTreeMap::from([("value".into(), Value::USize(32))])),
+                Value::Obj(BTreeMap::from([("value".into(), Value::USize(42))])),
+            ]),
+        )]));
+        assert_eq!(compare(&v, &OperandValue::USize(41), &root), Some(Err(())));
+        assert_eq!(compare(&v, &OperandValue::USize(42), &root), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::USize(43), &root), Some(Ok(())));
+    }
+
+    #[test]
+    fn test_compare_usize_lt_field() {
+        let v = Operation::Lt(Operand::FieldPath("values.3.value".into()));
+        let root = Value::Obj(BTreeMap::from([(
+            "values".into(),
+            Value::Arr(vec![
+                Value::Obj(BTreeMap::from([("value".into(), Value::USize(12))])),
+                Value::Obj(BTreeMap::from([("value".into(), Value::USize(22))])),
+                Value::Obj(BTreeMap::from([("value".into(), Value::USize(32))])),
+                Value::Obj(BTreeMap::from([("value".into(), Value::USize(42))])),
+            ]),
+        )]));
+        assert_eq!(compare(&v, &OperandValue::USize(41), &root), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::USize(42), &root), Some(Err(())));
+        assert_eq!(compare(&v, &OperandValue::USize(43), &root), Some(Err(())));
+    }
+
+    #[test]
+    fn test_compare_usize_le_field() {
+        let v = Operation::Le(Operand::FieldPath("values.3.value".into()));
+        let root = Value::Obj(BTreeMap::from([(
+            "values".into(),
+            Value::Arr(vec![
+                Value::Obj(BTreeMap::from([("value".into(), Value::USize(12))])),
+                Value::Obj(BTreeMap::from([("value".into(), Value::USize(22))])),
+                Value::Obj(BTreeMap::from([("value".into(), Value::USize(32))])),
+                Value::Obj(BTreeMap::from([("value".into(), Value::USize(42))])),
+            ]),
+        )]));
+        assert_eq!(compare(&v, &OperandValue::USize(41), &root), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::USize(42), &root), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::USize(43), &root), Some(Err(())));
+    }
+
+    #[test]
+    fn test_compare_usize_btwn_field() {
+        let v = Operation::Btwn(Operand::FieldPath("values.1.value".into()), Operand::FieldPath("values.2.value".into()));
+        let root = Value::Obj(BTreeMap::from([(
+            "values".into(),
+            Value::Arr(vec![
+                Value::Obj(BTreeMap::from([("value".into(), Value::USize(12))])),
+                Value::Obj(BTreeMap::from([("value".into(), Value::USize(22))])),
+                Value::Obj(BTreeMap::from([("value".into(), Value::USize(32))])),
+                Value::Obj(BTreeMap::from([("value".into(), Value::USize(42))])),
+            ]),
+        )]));
+        assert_eq!(compare(&v, &OperandValue::USize(21), &root), Some(Err(())));
+        assert_eq!(compare(&v, &OperandValue::USize(22), &root), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::USize(23), &root), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::USize(31), &root), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::USize(32), &root), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::USize(33), &root), Some(Err(())));
+    }
+
+    #[test]
+    fn test_compare_isize_eq_field() {
+        let v = Operation::Eq(Operand::FieldPath("values.3.value".into()));
+        let root = Value::Obj(BTreeMap::from([(
+            "values".into(),
+            Value::Arr(vec![
+                Value::Obj(BTreeMap::from([("value".into(), Value::ISize(12))])),
+                Value::Obj(BTreeMap::from([("value".into(), Value::ISize(22))])),
+                Value::Obj(BTreeMap::from([("value".into(), Value::ISize(32))])),
+                Value::Obj(BTreeMap::from([("value".into(), Value::ISize(42))])),
+            ]),
+        )]));
+        assert_eq!(compare(&v, &OperandValue::ISize(41), &root), Some(Err(())));
+        assert_eq!(compare(&v, &OperandValue::ISize(42), &root), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::ISize(43), &root), Some(Err(())));
+    }
+
+    #[test]
+    fn test_compare_isize_ne_field() {
+        let v = Operation::Ne(Operand::FieldPath("values.3.value".into()));
+        let root = Value::Obj(BTreeMap::from([(
+            "values".into(),
+            Value::Arr(vec![
+                Value::Obj(BTreeMap::from([("value".into(), Value::ISize(12))])),
+                Value::Obj(BTreeMap::from([("value".into(), Value::ISize(22))])),
+                Value::Obj(BTreeMap::from([("value".into(), Value::ISize(32))])),
+                Value::Obj(BTreeMap::from([("value".into(), Value::ISize(42))])),
+            ]),
+        )]));
+        assert_eq!(compare(&v, &OperandValue::ISize(41), &root), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::ISize(42), &root), Some(Err(())));
+        assert_eq!(compare(&v, &OperandValue::ISize(43), &root), Some(Ok(())));
+    }
+
+    #[test]
+    fn test_compare_isize_gt_field() {
+        let v = Operation::Gt(Operand::FieldPath("values.3.value".into()));
+        let root = Value::Obj(BTreeMap::from([(
+            "values".into(),
+            Value::Arr(vec![
+                Value::Obj(BTreeMap::from([("value".into(), Value::ISize(12))])),
+                Value::Obj(BTreeMap::from([("value".into(), Value::ISize(22))])),
+                Value::Obj(BTreeMap::from([("value".into(), Value::ISize(32))])),
+                Value::Obj(BTreeMap::from([("value".into(), Value::ISize(42))])),
+            ]),
+        )]));
+        assert_eq!(compare(&v, &OperandValue::ISize(41), &root), Some(Err(())));
+        assert_eq!(compare(&v, &OperandValue::ISize(42), &root), Some(Err(())));
+        assert_eq!(compare(&v, &OperandValue::ISize(43), &root), Some(Ok(())));
+    }
+
+    #[test]
+    fn test_compare_isize_ge_field() {
+        let v = Operation::Ge(Operand::FieldPath("values.3.value".into()));
+        let root = Value::Obj(BTreeMap::from([(
+            "values".into(),
+            Value::Arr(vec![
+                Value::Obj(BTreeMap::from([("value".into(), Value::ISize(12))])),
+                Value::Obj(BTreeMap::from([("value".into(), Value::ISize(22))])),
+                Value::Obj(BTreeMap::from([("value".into(), Value::ISize(32))])),
+                Value::Obj(BTreeMap::from([("value".into(), Value::ISize(42))])),
+            ]),
+        )]));
+        assert_eq!(compare(&v, &OperandValue::ISize(41), &root), Some(Err(())));
+        assert_eq!(compare(&v, &OperandValue::ISize(42), &root), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::ISize(43), &root), Some(Ok(())));
+    }
+
+    #[test]
+    fn test_compare_isize_lt_field() {
+        let v = Operation::Lt(Operand::FieldPath("values.3.value".into()));
+        let root = Value::Obj(BTreeMap::from([(
+            "values".into(),
+            Value::Arr(vec![
+                Value::Obj(BTreeMap::from([("value".into(), Value::ISize(12))])),
+                Value::Obj(BTreeMap::from([("value".into(), Value::ISize(22))])),
+                Value::Obj(BTreeMap::from([("value".into(), Value::ISize(32))])),
+                Value::Obj(BTreeMap::from([("value".into(), Value::ISize(42))])),
+            ]),
+        )]));
+        assert_eq!(compare(&v, &OperandValue::ISize(41), &root), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::ISize(42), &root), Some(Err(())));
+        assert_eq!(compare(&v, &OperandValue::ISize(43), &root), Some(Err(())));
+    }
+
+    #[test]
+    fn test_compare_isize_le_field() {
+        let v = Operation::Le(Operand::FieldPath("values.3.value".into()));
+        let root = Value::Obj(BTreeMap::from([(
+            "values".into(),
+            Value::Arr(vec![
+                Value::Obj(BTreeMap::from([("value".into(), Value::ISize(12))])),
+                Value::Obj(BTreeMap::from([("value".into(), Value::ISize(22))])),
+                Value::Obj(BTreeMap::from([("value".into(), Value::ISize(32))])),
+                Value::Obj(BTreeMap::from([("value".into(), Value::ISize(42))])),
+            ]),
+        )]));
+        assert_eq!(compare(&v, &OperandValue::ISize(41), &root), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::ISize(42), &root), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::ISize(43), &root), Some(Err(())));
+    }
+
+    #[test]
+    fn test_compare_isize_btwn_field() {
+        let v = Operation::Btwn(Operand::FieldPath("values.1.value".into()), Operand::FieldPath("values.2.value".into()));
+        let root = Value::Obj(BTreeMap::from([(
+            "values".into(),
+            Value::Arr(vec![
+                Value::Obj(BTreeMap::from([("value".into(), Value::ISize(12))])),
+                Value::Obj(BTreeMap::from([("value".into(), Value::ISize(22))])),
+                Value::Obj(BTreeMap::from([("value".into(), Value::ISize(32))])),
+                Value::Obj(BTreeMap::from([("value".into(), Value::ISize(42))])),
+            ]),
+        )]));
+        assert_eq!(compare(&v, &OperandValue::ISize(21), &root), Some(Err(())));
+        assert_eq!(compare(&v, &OperandValue::ISize(22), &root), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::ISize(23), &root), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::ISize(31), &root), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::ISize(32), &root), Some(Ok(())));
+        assert_eq!(compare(&v, &OperandValue::ISize(33), &root), Some(Err(())));
     }
 
     #[test]
