@@ -8,9 +8,11 @@ pub use validation_enumerated::EnumValidation;
 pub use validation_enumerated::EnumValues;
 pub use validation_f64::F64Validation;
 pub use validation_i64::I64Validation;
+pub use validation_isize::ISizeValidation;
 pub use validation_str::StrValidation;
 pub use validation_time::TimeValidation;
 pub use validation_u64::U64Validation;
+pub use validation_usize::USizeValidation;
 
 mod validation_bool;
 mod validation_date;
@@ -19,9 +21,11 @@ mod validation_email;
 mod validation_enumerated;
 mod validation_f64;
 mod validation_i64;
+mod validation_isize;
 mod validation_str;
 mod validation_time;
 mod validation_u64;
+mod validation_usize;
 
 #[derive(Debug, PartialEq, Clone)]
 pub struct ObjValidation {
@@ -50,6 +54,8 @@ pub enum Validation {
     U64(U64Validation),
     I64(I64Validation),
     F64(F64Validation),
+    USize(USizeValidation),
+    ISize(ISizeValidation),
     Bool(BoolValidation),
     Str(StrValidation),
     Email(EmailValidation),
@@ -75,6 +81,18 @@ impl From<I64Validation> for Validation {
 impl From<F64Validation> for Validation {
     fn from(validation: F64Validation) -> Self {
         Validation::F64(validation)
+    }
+}
+
+impl From<USizeValidation> for Validation {
+    fn from(validation: USizeValidation) -> Self {
+        Validation::USize(validation)
+    }
+}
+
+impl From<ISizeValidation> for Validation {
+    fn from(validation: ISizeValidation) -> Self {
+        Validation::ISize(validation)
     }
 }
 
@@ -131,8 +149,8 @@ mod test {
     use std::collections::BTreeMap;
 
     use super::{
-        BoolValidation, DateTimeValidation, DateValidation, EmailValidation, EnumValidation, EnumValues, F64Validation, I64Validation, ObjValidation,
-        StrValidation, TimeValidation, U64Validation, Validation,
+        BoolValidation, DateTimeValidation, DateValidation, EmailValidation, EnumValidation, EnumValues, F64Validation, I64Validation,
+        ISizeValidation, ObjValidation, StrValidation, TimeValidation, U64Validation, USizeValidation, Validation,
     };
 
     #[test]
@@ -150,6 +168,8 @@ mod test {
         assert_eq!(Validation::from(U64Validation::default()), Validation::U64(U64Validation { required: true, operation: None }));
         assert_eq!(Validation::from(I64Validation::default()), Validation::I64(I64Validation { required: true, operation: None }));
         assert_eq!(Validation::from(F64Validation::default()), Validation::F64(F64Validation { required: true, operation: None }));
+        assert_eq!(Validation::from(USizeValidation::default()), Validation::USize(USizeValidation { required: true, operation: None }));
+        assert_eq!(Validation::from(ISizeValidation::default()), Validation::ISize(ISizeValidation { required: true, operation: None }));
         assert_eq!(Validation::from(BoolValidation::default()), Validation::Bool(BoolValidation { required: true, operation: None }));
         assert_eq!(
             Validation::from(StrValidation::default()),
