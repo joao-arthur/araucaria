@@ -31,11 +31,10 @@ mod test {
         assert_eq!(resolve_path(&u64_stub(), ""), None);
         assert_eq!(resolve_path(&i64_stub(), ""), None);
         assert_eq!(resolve_path(&f64_stub(), ""), None);
-        assert_eq!(resolve_path(&bool_stub(), ""), None);
-        assert_eq!(resolve_path(&str_stub(), ""), None);
-        assert_eq!(resolve_path(&str_stub(), ""), None);
         assert_eq!(resolve_path(&usize_stub(), ""), None);
         assert_eq!(resolve_path(&isize_stub(), ""), None);
+        assert_eq!(resolve_path(&bool_stub(), ""), None);
+        assert_eq!(resolve_path(&str_stub(), ""), None);
         assert_eq!(resolve_path(&arr_bool_stub(), ""), None);
         assert_eq!(resolve_path(&arr_u64_stub(), ""), None);
         assert_eq!(resolve_path(&arr_i64_stub(), ""), None);
@@ -50,8 +49,9 @@ mod test {
         assert_eq!(resolve_path(&u64_stub(), "."), None);
         assert_eq!(resolve_path(&i64_stub(), "."), None);
         assert_eq!(resolve_path(&f64_stub(), "."), None);
+        assert_eq!(resolve_path(&usize_stub(), "."), None);
+        assert_eq!(resolve_path(&isize_stub(), "."), None);
         assert_eq!(resolve_path(&bool_stub(), "."), None);
-        assert_eq!(resolve_path(&str_stub(), "."), None);
         assert_eq!(resolve_path(&str_stub(), "."), None);
         assert_eq!(resolve_path(&arr_bool_stub(), "."), None);
         assert_eq!(resolve_path(&arr_u64_stub(), "."), None);
@@ -67,8 +67,9 @@ mod test {
         assert_eq!(resolve_path(&u64_stub(), "name"), None);
         assert_eq!(resolve_path(&i64_stub(), "name"), None);
         assert_eq!(resolve_path(&f64_stub(), "name"), None);
+        assert_eq!(resolve_path(&usize_stub(), "name"), None);
+        assert_eq!(resolve_path(&isize_stub(), "name"), None);
         assert_eq!(resolve_path(&bool_stub(), "name"), None);
-        assert_eq!(resolve_path(&str_stub(), "name"), None);
         assert_eq!(resolve_path(&str_stub(), "name"), None);
         assert_eq!(resolve_path(&arr_bool_stub(), "name"), None);
         assert_eq!(resolve_path(&arr_u64_stub(), "name"), None);
@@ -83,6 +84,8 @@ mod test {
         assert_eq!(resolve_path(&u64_stub(), "0"), None);
         assert_eq!(resolve_path(&i64_stub(), "0"), None);
         assert_eq!(resolve_path(&f64_stub(), "0"), None);
+        assert_eq!(resolve_path(&usize_stub(), "0"), None);
+        assert_eq!(resolve_path(&isize_stub(), "0"), None);
         assert_eq!(resolve_path(&bool_stub(), "0"), None);
         assert_eq!(resolve_path(&obj_stub(), "0"), None);
     }
