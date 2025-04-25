@@ -197,7 +197,10 @@ mod test {
             ("k_num".into(), Value::U64(837)),
             ("k_bool".into(), Value::Bool(false)),
             ("k_str".into(), Value::from("Augustus")),
-            ("k_nested".into(), Value::from([("l_1".into(), Value::from([("l_2".into(), Value::from([Value::from([("id".into(), Value::U64(0))])]))]))])),
+            (
+                "k_nested".into(),
+                Value::from([("l_1".into(), Value::from([("l_2".into(), Value::from([Value::from([("id".into(), Value::U64(0))])]))]))]),
+            ),
         ]);
         assert_eq!(value_to_string(&Value::None), "".to_string());
         assert_eq!(value_to_string(&Value::U64(4)), "4".to_string());
@@ -208,6 +211,9 @@ mod test {
         assert_eq!(value_to_string(&Value::ISize(-47)), "-47".to_string());
         assert_eq!(value_to_string(&Value::from("Non sequitur")), r#""Non sequitur""#.to_string());
         assert_eq!(value_to_string(&arr), r#"[ "Ad nauseam", "Ad ignorantiam", [ "Ad hominem", "Ad verecundiam" ] ]"#.to_string());
-        assert_eq!(value_to_string(&obj), r#"{ k_bool: false, k_nested: { l_1: { l_2: [ { id: 0 } ] } }, k_num: 837, k_str: "Augustus" }"#.to_string());
+        assert_eq!(
+            value_to_string(&obj),
+            r#"{ k_bool: false, k_nested: { l_1: { l_2: [ { id: 0 } ] } }, k_num: 837, k_str: "Augustus" }"#.to_string()
+        );
     }
 }

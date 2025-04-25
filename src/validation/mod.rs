@@ -1,26 +1,27 @@
 use std::collections::BTreeMap;
 
-use bool::BoolValidation;
-use date::DateValidation;
-use date_time::DateTimeValidation;
-use email::EmailValidation;
-use enumerated::EnumValidation;
-use num_f::NumFValidation;
-use num_i::NumIValidation;
-use num_u::NumUValidation;
-use str::StrValidation;
-use time::TimeValidation;
+pub use validation_bool::BoolValidation;
+pub use validation_date::DateValidation;
+pub use validation_date_time::DateTimeValidation;
+pub use validation_email::EmailValidation;
+pub use validation_enumerated::EnumValidation;
+pub use validation_enumerated::EnumValues;
+pub use validation_f64::NumFValidation;
+pub use validation_i64::NumIValidation;
+pub use validation_str::StrValidation;
+pub use validation_time::TimeValidation;
+pub use validation_u64::NumUValidation;
 
-pub mod bool;
-pub mod date;
-pub mod date_time;
-pub mod email;
-pub mod enumerated;
-pub mod num_f;
-pub mod num_i;
-pub mod num_u;
-pub mod str;
-pub mod time;
+mod validation_bool;
+mod validation_date;
+mod validation_date_time;
+mod validation_email;
+mod validation_enumerated;
+mod validation_f64;
+mod validation_i64;
+mod validation_str;
+mod validation_time;
+mod validation_u64;
 
 #[derive(Debug, PartialEq, Clone)]
 pub struct ObjValidation {
@@ -129,20 +130,10 @@ impl From<EnumValidation> for Validation {
 mod test {
     use std::collections::BTreeMap;
 
-    use crate::validation::{
-        bool::BoolValidation,
-        date::DateValidation,
-        date_time::DateTimeValidation,
-        email::EmailValidation,
-        enumerated::{EnumValidation, EnumValues},
-        num_f::NumFValidation,
-        num_i::NumIValidation,
-        num_u::NumUValidation,
-        str::StrValidation,
-        time::TimeValidation,
+    use super::{
+        BoolValidation, DateTimeValidation, DateValidation, EmailValidation, EnumValidation, EnumValues, NumFValidation, NumIValidation,
+        NumUValidation, ObjValidation, StrValidation, TimeValidation, Validation,
     };
-
-    use super::{ObjValidation, Validation};
 
     #[test]
     fn test_obj_validation() {

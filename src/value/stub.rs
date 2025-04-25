@@ -80,8 +80,8 @@ mod test {
     use crate::value::Value;
 
     use super::{
-        arr_bool_stub, arr_f64_stub, arr_i64_stub, arr_num_stub, arr_u64_stub, arr_str_stub, bool_stub, f64_stub, i64_stub, u64_stub,
-        obj_stub, str_stub,isize_stub, usize_stub, arr_usize_stub, arr_isize_stub
+        arr_bool_stub, arr_f64_stub, arr_i64_stub, arr_isize_stub, arr_num_stub, arr_str_stub, arr_u64_stub, arr_usize_stub, bool_stub, f64_stub,
+        i64_stub, isize_stub, obj_stub, str_stub, u64_stub, usize_stub,
     };
 
     #[test]

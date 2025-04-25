@@ -17,9 +17,11 @@ mod test {
     use std::collections::BTreeMap;
 
     use crate::value::{
+        Value,
         stub::{
-            arr_bool_stub, arr_f64_stub, arr_i64_stub, arr_num_stub, arr_u64_stub, arr_str_stub, bool_stub, f64_stub, i64_stub, isize_stub, obj_stub, str_stub, u64_stub, usize_stub
-        }, Value
+            arr_bool_stub, arr_f64_stub, arr_i64_stub, arr_num_stub, arr_str_stub, arr_u64_stub, bool_stub, f64_stub, i64_stub, isize_stub, obj_stub,
+            str_stub, u64_stub, usize_stub,
+        },
     };
 
     use super::resolve_path;
