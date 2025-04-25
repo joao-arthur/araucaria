@@ -8,6 +8,8 @@ pub enum ValidationErr {
     U64,
     I64,
     F64,
+    USize,
+    ISize,
     Bool,
     Str,
     Email,
@@ -54,6 +56,8 @@ mod test {
         assert_eq!(SchemaErr::validation([ValidationErr::U64]), SchemaErr::Validation(vec![ValidationErr::U64]));
         assert_eq!(SchemaErr::validation([ValidationErr::I64]), SchemaErr::Validation(vec![ValidationErr::I64]));
         assert_eq!(SchemaErr::validation([ValidationErr::F64]), SchemaErr::Validation(vec![ValidationErr::F64]));
+        assert_eq!(SchemaErr::validation([ValidationErr::USize]), SchemaErr::Validation(vec![ValidationErr::USize]));
+        assert_eq!(SchemaErr::validation([ValidationErr::ISize]), SchemaErr::Validation(vec![ValidationErr::ISize]));
         assert_eq!(SchemaErr::validation([ValidationErr::Bool]), SchemaErr::Validation(vec![ValidationErr::Bool]));
         assert_eq!(SchemaErr::validation([ValidationErr::Str]), SchemaErr::Validation(vec![ValidationErr::Str]));
         assert_eq!(SchemaErr::validation([ValidationErr::Email]), SchemaErr::Validation(vec![ValidationErr::Email]));
