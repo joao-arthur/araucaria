@@ -4,47 +4,19 @@ use crate::value::Value;
 
 use super::{OperandValue, Operation, resolve_operand_value};
 
-fn compare_eq(value_a: &OperandValue, value_b: &OperandValue) -> Option<Result<(), ()>> {
-    match value_a.partial_cmp(value_b)? {
-        Ordering::Less | Ordering::Greater => Some(Err(())),
-        Ordering::Equal => Some(Ok(())),
-    }
-}
+use compare_eq::compare_eq;
+use compare_ne::compare_ne;
+use compare_gt::compare_gt;
+use compare_ge::compare_ge;
+use compare_lt::compare_lt;
+use compare_le::compare_le;
 
-fn compare_ne(value_a: &OperandValue, value_b: &OperandValue) -> Option<Result<(), ()>> {
-    match value_a.partial_cmp(value_b)? {
-        Ordering::Less | Ordering::Greater => Some(Ok(())),
-        Ordering::Equal => Some(Err(())),
-    }
-}
-
-fn compare_gt(value_a: &OperandValue, value_b: &OperandValue) -> Option<Result<(), ()>> {
-    match value_a.partial_cmp(value_b)? {
-        Ordering::Less | Ordering::Equal => Some(Err(())),
-        Ordering::Greater => Some(Ok(())),
-    }
-}
-
-fn compare_ge(value_a: &OperandValue, value_b: &OperandValue) -> Option<Result<(), ()>> {
-    match value_a.partial_cmp(value_b)? {
-        Ordering::Less => Some(Err(())),
-        Ordering::Equal | Ordering::Greater => Some(Ok(())),
-    }
-}
-
-fn compare_lt(value_a: &OperandValue, value_b: &OperandValue) -> Option<Result<(), ()>> {
-    match value_a.partial_cmp(value_b)? {
-        Ordering::Less => Some(Ok(())),
-        Ordering::Equal | Ordering::Greater => Some(Err(())),
-    }
-}
-
-fn compare_le(value_a: &OperandValue, value_b: &OperandValue) -> Option<Result<(), ()>> {
-    match value_a.partial_cmp(value_b)? {
-        Ordering::Less | Ordering::Equal => Some(Ok(())),
-        Ordering::Greater => Some(Err(())),
-    }
-}
+mod compare_eq;
+mod compare_ne;
+mod compare_gt;
+mod compare_ge;
+mod compare_lt;
+mod compare_le;
 
 pub fn compare(operation: &Operation, value_a: &OperandValue, root: &Value) -> Option<Result<(), ()>> {
     match operation {

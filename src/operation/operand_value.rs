@@ -262,21 +262,21 @@ mod test {
     }
 
     #[test]
-    fn test_operand_value_string_smaller() {
+    fn test_operand_value_str_smaller() {
         assert!(OperandValue::from("rock lee") != OperandValue::from("neji"));
         assert!(OperandValue::from("rock lee") > OperandValue::from("neji"));
         assert!(OperandValue::from("rock lee") >= OperandValue::from("neji"));
     }
 
     #[test]
-    fn test_operand_value_string_equals() {
+    fn test_operand_value_str_equals() {
         assert!(OperandValue::from("rock lee") == OperandValue::from("rock lee"));
         assert!(OperandValue::from("rock lee") >= OperandValue::from("rock lee"));
         assert!(OperandValue::from("rock lee") <= OperandValue::from("rock lee"));
     }
 
     #[test]
-    fn test_operand_value_string_greter() {
+    fn test_operand_value_str_greter() {
         assert!(OperandValue::from("rock lee") != OperandValue::from("tenten"));
         assert!(OperandValue::from("rock lee") < OperandValue::from("tenten"));
         assert!(OperandValue::from("rock lee") <= OperandValue::from("tenten"));
