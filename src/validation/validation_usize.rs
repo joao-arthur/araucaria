@@ -78,13 +78,13 @@ impl USizeValidation {
 }
 
 #[cfg(test)]
-mod test {
+mod tests {
     use crate::operation::{Operand, OperandValue, Operation};
 
     use super::USizeValidation;
 
     #[test]
-    fn test_usize_validation() {
+    fn usize_validation() {
         assert_eq!(USizeValidation::default(), USizeValidation { required: true, operation: None });
         assert_eq!(USizeValidation::default().optional(), USizeValidation { required: false, operation: None });
         assert_eq!(

@@ -1,6 +1,6 @@
 use crate::{path::resolve_path, value::Value};
 
-use super::{OperandValue, value_to_operand_value};
+use super::{OperandValue, operand_value_from_value};
 
 #[derive(Debug, PartialEq, Clone)]
 pub enum Operand {
@@ -24,13 +24,13 @@ pub fn resolve_operand_value(operation: &Operand, root: &Value) -> Option<Operan
         Operand::Value(value) => Some(value.clone()),
         Operand::FieldPath(field_path) => {
             let field = resolve_path(root, field_path)?;
-            value_to_operand_value(&field)
+            operand_value_from_value(&field)
         }
     }
 }
 
 #[cfg(test)]
-mod test {
+mod tests {
     use std::{collections::BTreeMap, sync::LazyLock};
 
     use crate::value::Value;
@@ -52,7 +52,7 @@ mod test {
     });
 
     #[test]
-    fn test_resolve_operand_value_value() {
+    fn resolve_operand_value_value() {
         assert_eq!(resolve_operand_value(&Operand::Value(OperandValue::U64(42)), &ROOT), Some(OperandValue::U64(42)));
         assert_eq!(resolve_operand_value(&Operand::Value(OperandValue::I64(-42)), &ROOT), Some(OperandValue::I64(-42)));
         assert_eq!(resolve_operand_value(&Operand::Value(OperandValue::F64(-42.5)), &ROOT), Some(OperandValue::F64(-42.5)));
@@ -63,7 +63,7 @@ mod test {
     }
 
     #[test]
-    fn test_resolve_operand_value_field() {
+    fn resolve_operand_value_field() {
         assert_eq!(resolve_operand_value(&Operand::FieldPath("u64".into()), &ROOT), Some(OperandValue::U64(42)));
         assert_eq!(resolve_operand_value(&Operand::FieldPath("i64".into()), &ROOT), Some(OperandValue::I64(-42)));
         assert_eq!(resolve_operand_value(&Operand::FieldPath("f64".into()), &ROOT), Some(OperandValue::F64(-42.5)));
@@ -74,7 +74,7 @@ mod test {
     }
 
     #[test]
-    fn test_resolve_operand_value_field_not_found() {
+    fn resolve_operand_value_field_not_found() {
         assert_eq!(resolve_operand_value(&Operand::FieldPath("field.value.some.foo.bar".into()), &ROOT), None);
         assert_eq!(resolve_operand_value(&Operand::FieldPath("field.value.some.foo.bar".into()), &ROOT), None);
         assert_eq!(resolve_operand_value(&Operand::FieldPath("field.value.some.foo.bar".into()), &ROOT), None);

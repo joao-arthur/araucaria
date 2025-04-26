@@ -74,7 +74,7 @@ pub fn obj_stub() -> Value {
 }
 
 #[cfg(test)]
-mod test {
+mod tests {
     use std::collections::BTreeMap;
 
     use crate::value::Value;
@@ -85,7 +85,7 @@ mod test {
     };
 
     #[test]
-    fn test_stub() {
+    fn stub() {
         assert_eq!(u64_stub(), Value::U64(42));
         assert_eq!(i64_stub(), Value::I64(-42));
         assert_eq!(f64_stub(), Value::F64(-21.5));

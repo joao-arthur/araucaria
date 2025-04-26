@@ -53,7 +53,7 @@ pub fn compare(operation: &Operation, value: &OperandValue, root: &Value) -> Opt
 }
 
 #[cfg(test)]
-mod test {
+mod tests {
     use std::{collections::BTreeMap, sync::LazyLock};
 
     use crate::value::Value;
@@ -76,7 +76,7 @@ mod test {
     });
 
     #[test]
-    fn test_compare_eq() {
+    fn compare_eq() {
         let v_value = Operation::Eq(Operand::Value(OperandValue::U64(42)));
         let v_field = Operation::Eq(Operand::FieldPath("u64".into()));
         let v_field_not_found = Operation::Eq(Operand::FieldPath("fa.fe.fi.fo.fu".into()));
@@ -88,7 +88,7 @@ mod test {
     }
 
     #[test]
-    fn test_compare_ne() {
+    fn compare_ne() {
         let v_value = Operation::Ne(Operand::Value(OperandValue::I64(-42)));
         let v_field = Operation::Ne(Operand::FieldPath("i64".into()));
         let v_field_not_found = Operation::Ne(Operand::FieldPath("fa.fe.fi.fo.fu".into()));
@@ -100,7 +100,7 @@ mod test {
     }
 
     #[test]
-    fn test_compare_gt() {
+    fn compare_gt() {
         let v_value = Operation::Gt(Operand::Value(OperandValue::F64(-42.5)));
         let v_field = Operation::Gt(Operand::FieldPath("f64".into()));
         let v_field_not_found = Operation::Gt(Operand::FieldPath("fa.fe.fi.fo.fu".into()));
@@ -112,7 +112,7 @@ mod test {
     }
 
     #[test]
-    fn test_compare_ge() {
+    fn compare_ge() {
         let v_value = Operation::Ge(Operand::Value(OperandValue::USize(42)));
         let v_field = Operation::Ge(Operand::FieldPath("usize".into()));
         let v_field_not_found = Operation::Ge(Operand::FieldPath("fa.fe.fi.fo.fu".into()));
@@ -124,7 +124,7 @@ mod test {
     }
 
     #[test]
-    fn test_compare_lt() {
+    fn compare_lt() {
         let v_value = Operation::Lt(Operand::Value(OperandValue::ISize(-42)));
         let v_field = Operation::Lt(Operand::FieldPath("isize".into()));
         let v_field_not_found = Operation::Lt(Operand::FieldPath("fa.fe.fi.fo.fu".into()));
@@ -136,7 +136,7 @@ mod test {
     }
 
     #[test]
-    fn test_compare_le() {
+    fn compare_le() {
         let v_value = Operation::Le(Operand::Value(OperandValue::Str("Lemouria".into())));
         let v_field = Operation::Le(Operand::FieldPath("str".into()));
         let v_field_not_found = Operation::Le(Operand::FieldPath("fa.fe.fi.fo.fu".into()));
@@ -148,7 +148,7 @@ mod test {
     }
 
     #[test]
-    fn test_compare_btwn() {
+    fn compare_btwn() {
         let v_value = Operation::Btwn(Operand::Value(OperandValue::U64(22)), Operand::Value(OperandValue::U64(24)));
         let v_field = Operation::Btwn(Operand::FieldPath("u64_btwn.0".into()), Operand::FieldPath("u64_btwn.1".into()));
         let v_field_not_found_a = Operation::Btwn(Operand::FieldPath("fa.fe.fi.fo.fu".into()), Operand::FieldPath("u64_btwn.1".into()));

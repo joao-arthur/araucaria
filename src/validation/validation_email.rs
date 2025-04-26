@@ -16,11 +16,11 @@ impl EmailValidation {
 }
 
 #[cfg(test)]
-mod test {
+mod tests {
     use super::EmailValidation;
 
     #[test]
-    fn test_email_validation() {
+    fn email_validation() {
         assert_eq!(EmailValidation::default(), EmailValidation { required: true });
         assert_eq!(EmailValidation::default().optional(), EmailValidation { required: false });
     }

@@ -135,13 +135,13 @@ pub fn value_to_string(value: &Value) -> String {
 }
 
 #[cfg(test)]
-mod test {
+mod tests {
     use std::collections::BTreeMap;
 
     use super::{Value, value_to_string};
 
     #[test]
-    fn test_value_from() {
+    fn value_from() {
         assert_eq!(Value::from(8_u64), Value::U64(8));
         assert_eq!(Value::from(-3_i64), Value::I64(-3));
         assert_eq!(Value::from(-9.8), Value::F64(-9.8));
@@ -164,7 +164,7 @@ mod test {
     }
 
     #[test]
-    fn test_value_from_slice() {
+    fn value_from_slice() {
         let bool_slice: [bool; 3] = [false, true, true];
         let u64_slice: [u64; 3] = [9, 213897, 2394];
         let i64_slice: [i64; 3] = [-9, -213897, -2394];
@@ -191,7 +191,7 @@ mod test {
     }
 
     #[test]
-    fn test_value_to_string() {
+    fn value_to_string_all_types() {
         let arr = Value::from([Value::from("Ad nauseam"), Value::from("Ad ignorantiam"), Value::from(["Ad hominem", "Ad verecundiam"])]);
         let obj = Value::from([
             ("k_num".into(), Value::U64(837)),
@@ -206,9 +206,9 @@ mod test {
         assert_eq!(value_to_string(&Value::U64(4)), "4".to_string());
         assert_eq!(value_to_string(&Value::I64(-22)), "-22".to_string());
         assert_eq!(value_to_string(&Value::F64(-3.65)), "-3.65".to_string());
-        assert_eq!(value_to_string(&Value::Bool(true)), "true".to_string());
         assert_eq!(value_to_string(&Value::USize(19)), "19".to_string());
         assert_eq!(value_to_string(&Value::ISize(-47)), "-47".to_string());
+        assert_eq!(value_to_string(&Value::Bool(true)), "true".to_string());
         assert_eq!(value_to_string(&Value::from("Non sequitur")), r#""Non sequitur""#.to_string());
         assert_eq!(value_to_string(&arr), r#"[ "Ad nauseam", "Ad ignorantiam", [ "Ad hominem", "Ad verecundiam" ] ]"#.to_string());
         assert_eq!(

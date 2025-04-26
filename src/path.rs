@@ -13,7 +13,7 @@ pub fn resolve_path(value: &Value, field_path: &str) -> Option<Value> {
 }
 
 #[cfg(test)]
-mod test {
+mod tests {
     use std::collections::BTreeMap;
 
     use crate::value::{
@@ -27,7 +27,7 @@ mod test {
     use super::resolve_path;
 
     #[test]
-    fn test_resolve_path_empty_path_not_applyable_types() {
+    fn resolve_path_empty_path_not_applyable_types() {
         assert_eq!(resolve_path(&u64_stub(), ""), None);
         assert_eq!(resolve_path(&i64_stub(), ""), None);
         assert_eq!(resolve_path(&f64_stub(), ""), None);
@@ -38,7 +38,7 @@ mod test {
     }
 
     #[test]
-    fn test_resolve_path_dot_path_not_applyable_types() {
+    fn resolve_path_dot_path_not_applyable_types() {
         assert_eq!(resolve_path(&u64_stub(), "."), None);
         assert_eq!(resolve_path(&i64_stub(), "."), None);
         assert_eq!(resolve_path(&f64_stub(), "."), None);
@@ -49,7 +49,7 @@ mod test {
     }
 
     #[test]
-    fn test_resolve_path_zero_path_not_applyable_types() {
+    fn resolve_path_zero_path_not_applyable_types() {
         assert_eq!(resolve_path(&u64_stub(), "0"), None);
         assert_eq!(resolve_path(&i64_stub(), "0"), None);
         assert_eq!(resolve_path(&f64_stub(), "0"), None);
@@ -60,7 +60,7 @@ mod test {
     }
 
     #[test]
-    fn test_resolve_path_name_path_not_applyable_types() {
+    fn resolve_path_name_path_not_applyable_types() {
         assert_eq!(resolve_path(&u64_stub(), "name"), None);
         assert_eq!(resolve_path(&i64_stub(), "name"), None);
         assert_eq!(resolve_path(&f64_stub(), "name"), None);
@@ -71,31 +71,31 @@ mod test {
     }
 
     #[test]
-    fn test_resolve_path_empty_path() {
+    fn resolve_path_empty_path() {
         assert_eq!(resolve_path(&arr_str_stub(), ""), None);
         assert_eq!(resolve_path(&obj_stub(), ""), None);
         assert_eq!(resolve_path(&Value::Obj(BTreeMap::from([("".into(), Value::from(true))])), ""), Some(Value::from(true)));
     }
 
     #[test]
-    fn test_resolve_path_dot_path() {
+    fn resolve_path_dot_path() {
         assert_eq!(resolve_path(&arr_str_stub(), "."), None);
         assert_eq!(resolve_path(&obj_stub(), "."), None);
         assert_eq!(resolve_path(&Value::Obj(BTreeMap::from([("".into(), Value::from(true))])), "."), None);
     }
 
     #[test]
-    fn test_resolve_path_obj_some() {
+    fn resolve_path_obj_some() {
         assert_eq!(resolve_path(&obj_stub(), "name"), Some(Value::from("The Beatles")));
     }
 
     #[test]
-    fn test_resolve_path_obj_none() {
+    fn resolve_path_obj_none() {
         assert_eq!(resolve_path(&obj_stub(), "name.name"), None);
     }
 
     #[test]
-    fn test_resolve_path_arr_some() {
+    fn resolve_path_arr_some() {
         assert_eq!(resolve_path(&arr_u64_stub(), "0"), Some(Value::U64(1)));
         assert_eq!(resolve_path(&arr_i64_stub(), "1"), Some(Value::I64(0)));
         assert_eq!(resolve_path(&arr_f64_stub(), "2"), Some(Value::F64(10.5)));
@@ -107,7 +107,7 @@ mod test {
     }
 
     #[test]
-    fn test_resolve_path_arr_none() {
+    fn resolve_path_arr_none() {
         assert_eq!(resolve_path(&arr_u64_stub(), "zero"), None);
         assert_eq!(resolve_path(&arr_i64_stub(), "one"), None);
         assert_eq!(resolve_path(&arr_f64_stub(), "two"), None);
@@ -116,7 +116,7 @@ mod test {
     }
 
     #[test]
-    fn test_resolve_path_arr_zero_padding() {
+    fn resolve_path_arr_zero_padding() {
         assert_eq!(resolve_path(&arr_u64_stub(), "00"), Some(Value::U64(1)));
         assert_eq!(resolve_path(&arr_i64_stub(), "001"), Some(Value::I64(0)));
         assert_eq!(resolve_path(&arr_f64_stub(), "0002"), Some(Value::F64(10.5)));
@@ -128,7 +128,7 @@ mod test {
     }
 
     #[test]
-    fn test_resolve_path_arr_other_notations() {
+    fn resolve_path_arr_other_notations() {
         assert_eq!(resolve_path(&arr_u64_stub(), "0x1"), None);
         assert_eq!(resolve_path(&arr_i64_stub(), "0X1"), None);
         assert_eq!(resolve_path(&arr_f64_stub(), "0b1"), None);
@@ -138,7 +138,7 @@ mod test {
     }
 
     #[test]
-    fn test_resolve_path_arr_out_of_bounds() {
+    fn resolve_path_arr_out_of_bounds() {
         assert_eq!(resolve_path(&arr_num_stub(), "-2"), None);
         assert_eq!(resolve_path(&arr_num_stub(), "-1"), None);
         assert_eq!(resolve_path(&arr_num_stub(), "5"), None);
@@ -146,7 +146,7 @@ mod test {
     }
 
     #[test]
-    fn test_resolve_path_obj_nested() {
+    fn resolve_path_obj_nested() {
         let obj = Value::Obj(BTreeMap::from([(
             "user".into(),
             Value::Obj(BTreeMap::from([(
@@ -158,7 +158,7 @@ mod test {
     }
 
     #[test]
-    fn test_resolve_path_arr_nested() {
+    fn resolve_path_arr_nested() {
         let arr = Value::from([
             Value::U64(1),
             Value::U64(2),
@@ -172,7 +172,7 @@ mod test {
     }
 
     #[test]
-    fn test_resolve_path_nested() {
+    fn resolve_path_nested() {
         let value = Value::Obj(BTreeMap::from([(
             "0".into(),
             Value::from([

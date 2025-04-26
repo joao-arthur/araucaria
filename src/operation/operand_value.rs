@@ -108,7 +108,7 @@ pub fn operand_value_from_value(value: &Value) -> Option<OperandValue> {
 }
 
 #[cfg(test)]
-mod test {
+mod tests {
     use crate::value::{
         Value,
         stub::{arr_bool_stub, arr_f64_stub, arr_i64_stub, arr_isize_stub, arr_str_stub, arr_u64_stub, arr_usize_stub, obj_stub},
@@ -117,7 +117,7 @@ mod test {
     use super::{OperandValue, operand_value_from_value};
 
     #[test]
-    fn test_operand_value_from() {
+    fn operand_value_from() {
         let u64_num: u64 = 8;
         let i64_num: i64 = -3;
         let f64_num: f64 = -9.8;
@@ -133,119 +133,119 @@ mod test {
     }
 
     #[test]
-    fn test_operand_value_u64_smaller() {
+    fn operand_value_u64_smaller() {
         assert!(OperandValue::U64(42) != OperandValue::U64(41));
         assert!(OperandValue::U64(42) > OperandValue::U64(41));
         assert!(OperandValue::U64(42) >= OperandValue::U64(41));
     }
 
     #[test]
-    fn test_operand_value_u64_equals() {
+    fn operand_value_u64_equals() {
         assert!(OperandValue::U64(42) == OperandValue::U64(42));
         assert!(OperandValue::U64(42) >= OperandValue::U64(42));
         assert!(OperandValue::U64(42) <= OperandValue::U64(42));
     }
 
     #[test]
-    fn test_operand_value_u64_greater() {
+    fn operand_value_u64_greater() {
         assert!(OperandValue::U64(42) != OperandValue::U64(43));
         assert!(OperandValue::U64(42) < OperandValue::U64(43));
         assert!(OperandValue::U64(42) <= OperandValue::U64(43));
     }
 
     #[test]
-    fn test_operand_value_i64_smaller() {
+    fn operand_value_i64_smaller() {
         assert!(OperandValue::I64(-42) != OperandValue::I64(-43));
         assert!(OperandValue::I64(-42) > OperandValue::I64(-43));
         assert!(OperandValue::I64(-42) >= OperandValue::I64(-43));
     }
 
     #[test]
-    fn test_operand_value_i64_equals() {
+    fn operand_value_i64_equals() {
         assert!(OperandValue::I64(-42) == OperandValue::I64(-42));
         assert!(OperandValue::I64(-42) >= OperandValue::I64(-42));
         assert!(OperandValue::I64(-42) <= OperandValue::I64(-42));
     }
 
     #[test]
-    fn test_operand_value_i64_greater() {
+    fn operand_value_i64_greater() {
         assert!(OperandValue::I64(-42) != OperandValue::I64(-41));
         assert!(OperandValue::I64(-42) < OperandValue::I64(-41));
         assert!(OperandValue::I64(-42) <= OperandValue::I64(-41));
     }
 
     #[test]
-    fn test_operand_value_f64_smaller() {
+    fn operand_value_f64_smaller() {
         assert!(OperandValue::F64(-42.5) != OperandValue::F64(-43.5));
         assert!(OperandValue::F64(-42.5) > OperandValue::F64(-43.5));
         assert!(OperandValue::F64(-42.5) >= OperandValue::F64(-43.5));
     }
 
     #[test]
-    fn test_operand_value_f64_equals() {
+    fn operand_value_f64_equals() {
         assert!(OperandValue::F64(-42.5) == OperandValue::F64(-42.5));
         assert!(OperandValue::F64(-42.5) >= OperandValue::F64(-42.5));
         assert!(OperandValue::F64(-42.5) <= OperandValue::F64(-42.5));
     }
 
     #[test]
-    fn test_operand_value_f64_greater() {
+    fn operand_value_f64_greater() {
         assert!(OperandValue::F64(-42.5) != OperandValue::F64(-41.5));
         assert!(OperandValue::F64(-42.5) < OperandValue::F64(-41.5));
         assert!(OperandValue::F64(-42.5) <= OperandValue::F64(-41.5));
     }
 
     #[test]
-    fn test_operand_value_usize_smaller() {
+    fn operand_value_usize_smaller() {
         assert!(OperandValue::USize(42) != OperandValue::USize(41));
         assert!(OperandValue::USize(42) > OperandValue::USize(41));
         assert!(OperandValue::USize(42) >= OperandValue::USize(41));
     }
 
     #[test]
-    fn test_operand_value_usize_equals() {
+    fn operand_value_usize_equals() {
         assert!(OperandValue::USize(42) == OperandValue::USize(42));
         assert!(OperandValue::USize(42) >= OperandValue::USize(42));
         assert!(OperandValue::USize(42) <= OperandValue::USize(42));
     }
 
     #[test]
-    fn test_operand_value_usize_greater() {
+    fn operand_value_usize_greater() {
         assert!(OperandValue::USize(42) != OperandValue::USize(43));
         assert!(OperandValue::USize(42) < OperandValue::USize(43));
         assert!(OperandValue::USize(42) <= OperandValue::USize(43));
     }
 
     #[test]
-    fn test_operand_value_isize_smaller() {
+    fn operand_value_isize_smaller() {
         assert!(OperandValue::ISize(-42) != OperandValue::ISize(-43));
         assert!(OperandValue::ISize(-42) > OperandValue::ISize(-43));
         assert!(OperandValue::ISize(-42) >= OperandValue::ISize(-43));
     }
 
     #[test]
-    fn test_operand_value_isize_equals() {
+    fn operand_value_isize_equals() {
         assert!(OperandValue::ISize(-42) == OperandValue::ISize(-42));
         assert!(OperandValue::ISize(-42) >= OperandValue::ISize(-42));
         assert!(OperandValue::ISize(-42) <= OperandValue::ISize(-42));
     }
 
     #[test]
-    fn test_operand_value_isize_greater() {
+    fn operand_value_isize_greater() {
         assert!(OperandValue::ISize(-42) != OperandValue::ISize(-41));
         assert!(OperandValue::ISize(-42) < OperandValue::ISize(-41));
         assert!(OperandValue::ISize(-42) <= OperandValue::ISize(-41));
     }
 
     #[test]
-    fn test_operand_value_bool_smaller() {
+    fn operand_value_bool_smaller() {
         assert!(OperandValue::Bool(true) != OperandValue::Bool(false));
         assert!(OperandValue::Bool(true) > OperandValue::Bool(false));
         assert!(OperandValue::Bool(true) >= OperandValue::Bool(false));
     }
 
     #[test]
-    fn test_operand_value_bool_equals() {
+    fn operand_value_bool_equals() {
         assert!(OperandValue::Bool(true) == OperandValue::Bool(true));
         assert!(OperandValue::Bool(true) >= OperandValue::Bool(true));
         assert!(OperandValue::Bool(true) <= OperandValue::Bool(true));
@@ -255,35 +255,35 @@ mod test {
     }
 
     #[test]
-    fn test_operand_value_bool_greater() {
+    fn operand_value_bool_greater() {
         assert!(OperandValue::Bool(false) != OperandValue::Bool(true));
         assert!(OperandValue::Bool(false) < OperandValue::Bool(true));
         assert!(OperandValue::Bool(false) <= OperandValue::Bool(true));
     }
 
     #[test]
-    fn test_operand_value_str_smaller() {
+    fn operand_value_str_smaller() {
         assert!(OperandValue::from("rock lee") != OperandValue::from("neji"));
         assert!(OperandValue::from("rock lee") > OperandValue::from("neji"));
         assert!(OperandValue::from("rock lee") >= OperandValue::from("neji"));
     }
 
     #[test]
-    fn test_operand_value_str_equals() {
+    fn operand_value_str_equals() {
         assert!(OperandValue::from("rock lee") == OperandValue::from("rock lee"));
         assert!(OperandValue::from("rock lee") >= OperandValue::from("rock lee"));
         assert!(OperandValue::from("rock lee") <= OperandValue::from("rock lee"));
     }
 
     #[test]
-    fn test_operand_value_str_greter() {
+    fn operand_value_str_greter() {
         assert!(OperandValue::from("rock lee") != OperandValue::from("tenten"));
         assert!(OperandValue::from("rock lee") < OperandValue::from("tenten"));
         assert!(OperandValue::from("rock lee") <= OperandValue::from("tenten"));
     }
 
     #[test]
-    fn test_operand_value_different_type() {
+    fn operand_value_different_type() {
         assert_eq!(OperandValue::U64(42).partial_cmp(&OperandValue::I64(-42)), None);
         assert_eq!(OperandValue::U64(42).partial_cmp(&OperandValue::F64(-4.2)), None);
         assert_eq!(OperandValue::U64(42).partial_cmp(&OperandValue::USize(42)), None);
@@ -313,7 +313,7 @@ mod test {
     }
 
     #[test]
-    fn test_value_to_operand_value_some() {
+    fn operand_value_from_value_some() {
         assert_eq!(operand_value_from_value(&Value::U64(42)), Some(OperandValue::U64(42)));
         assert_eq!(operand_value_from_value(&Value::I64(-42)), Some(OperandValue::I64(-42)));
         assert_eq!(operand_value_from_value(&Value::F64(-42.5)), Some(OperandValue::F64(-42.5)));
@@ -324,7 +324,7 @@ mod test {
     }
 
     #[test]
-    fn test_value_to_operand_value_none() {
+    fn operand_value_from_value_none() {
         assert_eq!(operand_value_from_value(&Value::None), None);
         assert_eq!(operand_value_from_value(&arr_u64_stub()), None);
         assert_eq!(operand_value_from_value(&arr_i64_stub()), None);

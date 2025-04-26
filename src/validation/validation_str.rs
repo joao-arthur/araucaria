@@ -508,13 +508,13 @@ impl StrValidation {
 }
 
 #[cfg(test)]
-mod test {
+mod tests {
     use crate::operation::{Operand, OperandValue, Operation};
 
     use super::StrValidation;
 
     #[test]
-    fn test_str_validation() {
+    fn str_validation() {
         assert_eq!(
             StrValidation::default(),
             StrValidation {

@@ -145,7 +145,7 @@ impl From<EnumValidation> for Validation {
 }
 
 #[cfg(test)]
-mod test {
+mod tests {
     use std::collections::BTreeMap;
 
     use super::{
@@ -154,7 +154,7 @@ mod test {
     };
 
     #[test]
-    fn test_obj_validation() {
+    fn obj_validation() {
         assert_eq!(ObjValidation::default(), ObjValidation { required: true, validation: BTreeMap::new() });
         assert_eq!(ObjValidation::default().optional(), ObjValidation { required: false, validation: BTreeMap::new() });
         assert_eq!(
@@ -164,7 +164,7 @@ mod test {
     }
 
     #[test]
-    fn test_validation_from() {
+    fn validation_from() {
         assert_eq!(Validation::from(U64Validation::default()), Validation::U64(U64Validation { required: true, operation: None }));
         assert_eq!(Validation::from(I64Validation::default()), Validation::I64(I64Validation { required: true, operation: None }));
         assert_eq!(Validation::from(F64Validation::default()), Validation::F64(F64Validation { required: true, operation: None }));

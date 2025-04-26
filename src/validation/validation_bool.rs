@@ -78,13 +78,13 @@ impl BoolValidation {
 }
 
 #[cfg(test)]
-mod test {
+mod tests {
     use crate::operation::{Operand, OperandValue, Operation};
 
     use super::BoolValidation;
 
     #[test]
-    fn test_bool_validation() {
+    fn bool_validation() {
         assert_eq!(BoolValidation::default(), BoolValidation { required: true, operation: None });
         assert_eq!(BoolValidation::default().optional(), BoolValidation { required: false, operation: None });
         assert_eq!(

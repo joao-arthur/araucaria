@@ -78,13 +78,13 @@ impl TimeValidation {
 }
 
 #[cfg(test)]
-mod test {
+mod tests {
     use crate::operation::{Operand, OperandValue, Operation};
 
     use super::TimeValidation;
 
     #[test]
-    fn test_time_validation() {
+    fn time_validation() {
         assert_eq!(TimeValidation::default(), TimeValidation { required: true, operation: None });
         assert_eq!(TimeValidation::default().optional(), TimeValidation { required: false, operation: None });
         assert_eq!(

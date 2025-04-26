@@ -78,13 +78,13 @@ impl DateValidation {
 }
 
 #[cfg(test)]
-mod test {
+mod tests {
     use crate::operation::{Operand, OperandValue, Operation};
 
     use super::DateValidation;
 
     #[test]
-    fn test_date_validation() {
+    fn date_validation() {
         assert_eq!(DateValidation::default(), DateValidation { required: true, operation: None });
         assert_eq!(DateValidation::default().optional(), DateValidation { required: false, operation: None });
         assert_eq!(

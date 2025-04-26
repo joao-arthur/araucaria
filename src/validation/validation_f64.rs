@@ -78,13 +78,13 @@ impl F64Validation {
 }
 
 #[cfg(test)]
-mod test {
+mod tests {
     use crate::operation::{Operand, OperandValue, Operation};
 
     use super::F64Validation;
 
     #[test]
-    fn test_num_f_validation() {
+    fn num_f_validation() {
         assert_eq!(F64Validation::default(), F64Validation { required: true, operation: None });
         assert_eq!(F64Validation::default().optional(), F64Validation { required: false, operation: None });
         assert_eq!(

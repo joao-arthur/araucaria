@@ -36,11 +36,11 @@ impl From<Vec<String>> for EnumValidation {
 }
 
 #[cfg(test)]
-mod test {
+mod tests {
     use super::{EnumValidation, EnumValues};
 
     #[test]
-    fn test_enum_validation() {
+    fn enum_validation() {
         let value_u: Vec<usize> = vec![0, 1, 2, 3, 4, 5];
         let value_i: Vec<isize> = vec![-2, -1, 0, 1, 2];
         let value_str: Vec<String> = vec!["APPLE".into(), "GRAPE".into(), "PEAR".into()];
@@ -50,7 +50,7 @@ mod test {
     }
 
     #[test]
-    fn test_enum_validation_optional() {
+    fn enum_validation_optional() {
         let value_u: Vec<usize> = vec![0, 1, 2, 3, 4, 5];
         let value_i: Vec<isize> = vec![-2, -1, 0, 1, 2];
         let value_str: Vec<String> = vec!["APPLE".into(), "GRAPE".into(), "PEAR".into()];

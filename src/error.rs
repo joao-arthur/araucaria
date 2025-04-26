@@ -43,7 +43,7 @@ impl SchemaErr {
 }
 
 #[cfg(test)]
-mod test {
+mod tests {
     use std::collections::BTreeMap;
 
     use crate::operation::{Operand, OperandValue, Operation};
@@ -51,7 +51,7 @@ mod test {
     use super::{SchemaErr, ValidationErr};
 
     #[test]
-    fn test_arr() {
+    fn schema_err_validation() {
         assert_eq!(SchemaErr::validation([ValidationErr::Required]), SchemaErr::Validation(vec![ValidationErr::Required]));
         assert_eq!(SchemaErr::validation([ValidationErr::U64]), SchemaErr::Validation(vec![ValidationErr::U64]));
         assert_eq!(SchemaErr::validation([ValidationErr::I64]), SchemaErr::Validation(vec![ValidationErr::I64]));
@@ -105,7 +105,7 @@ mod test {
     }
 
     #[test]
-    fn test_obj() {
+    fn schema_err_obj() {
         assert_eq!(
             SchemaErr::obj([("is".into(), SchemaErr::validation([ValidationErr::Required]))]),
             SchemaErr::Obj(BTreeMap::from([("is".into(), SchemaErr::Validation(vec![ValidationErr::Required]))]))

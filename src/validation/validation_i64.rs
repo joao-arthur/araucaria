@@ -78,13 +78,13 @@ impl I64Validation {
 }
 
 #[cfg(test)]
-mod test {
+mod tests {
     use crate::operation::{Operand, OperandValue, Operation};
 
     use super::I64Validation;
 
     #[test]
-    fn test_i64_validation() {
+    fn i64_validation() {
         assert_eq!(I64Validation::default(), I64Validation { required: true, operation: None });
         assert_eq!(I64Validation::default().optional(), I64Validation { required: false, operation: None });
         assert_eq!(
