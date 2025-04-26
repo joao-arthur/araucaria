@@ -84,7 +84,7 @@ mod test {
     use super::USizeValidation;
 
     #[test]
-    fn test_num_u_validation() {
+    fn test_usize_validation() {
         assert_eq!(USizeValidation::default(), USizeValidation { required: true, operation: None });
         assert_eq!(USizeValidation::default().optional(), USizeValidation { required: false, operation: None });
         assert_eq!(

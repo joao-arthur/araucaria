@@ -84,7 +84,7 @@ mod test {
     use super::U64Validation;
 
     #[test]
-    fn test_num_u_validation() {
+    fn test_u64_validation() {
         assert_eq!(U64Validation::default(), U64Validation { required: true, operation: None });
         assert_eq!(U64Validation::default().optional(), U64Validation { required: false, operation: None });
         assert_eq!(

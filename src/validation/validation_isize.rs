@@ -84,7 +84,7 @@ mod test {
     use super::ISizeValidation;
 
     #[test]
-    fn test_num_i_validation() {
+    fn test_isize_validation() {
         assert_eq!(ISizeValidation::default(), ISizeValidation { required: true, operation: None });
         assert_eq!(ISizeValidation::default().optional(), ISizeValidation { required: false, operation: None });
         assert_eq!(
