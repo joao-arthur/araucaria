@@ -72,4 +72,15 @@ mod test {
         assert_eq!(resolve_operand_value(&Operand::FieldPath("bool".into()), &ROOT), Some(OperandValue::Bool(false)));
         assert_eq!(resolve_operand_value(&Operand::FieldPath("str".into()), &ROOT), Some(OperandValue::Str("Lemouria".into())));
     }
+
+    #[test]
+    fn test_resolve_operand_value_field_not_found() {
+        assert_eq!(resolve_operand_value(&Operand::FieldPath("field.value.some.foo.bar".into()), &ROOT), None);
+        assert_eq!(resolve_operand_value(&Operand::FieldPath("field.value.some.foo.bar".into()), &ROOT), None);
+        assert_eq!(resolve_operand_value(&Operand::FieldPath("field.value.some.foo.bar".into()), &ROOT), None);
+        assert_eq!(resolve_operand_value(&Operand::FieldPath("field.value.some.foo.bar".into()), &ROOT), None);
+        assert_eq!(resolve_operand_value(&Operand::FieldPath("field.value.some.foo.bar".into()), &ROOT), None);
+        assert_eq!(resolve_operand_value(&Operand::FieldPath("field.value.some.foo.bar".into()), &ROOT), None);
+        assert_eq!(resolve_operand_value(&Operand::FieldPath("field.value.some.foo.bar".into()), &ROOT), None);
+    }
 }

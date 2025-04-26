@@ -2,8 +2,8 @@ use std::cmp::Ordering;
 
 use super::OperandValue;
 
-pub fn compare_eq(value_a: &OperandValue, value_b: &OperandValue) -> Option<Result<(), ()>> {
-    match value_a.partial_cmp(value_b)? {
+pub fn compare_eq(value: &OperandValue, operand: &OperandValue) -> Option<Result<(), ()>> {
+    match value.partial_cmp(operand)? {
         Ordering::Less | Ordering::Greater => Some(Err(())),
         Ordering::Equal => Some(Ok(())),
     }
@@ -73,7 +73,6 @@ mod test {
         assert_eq!(compare_eq(&OperandValue::U64(42), &OperandValue::ISize(-42)), None);
         assert_eq!(compare_eq(&OperandValue::U64(42), &OperandValue::Bool(false)), None);
         assert_eq!(compare_eq(&OperandValue::U64(42), &OperandValue::from("j")), None);
-
     }
 
     #[test]
