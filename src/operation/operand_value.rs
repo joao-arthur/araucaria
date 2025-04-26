@@ -94,7 +94,7 @@ impl PartialOrd for OperandValue {
     }
 }
 
-pub fn value_to_operand_value(value: &Value) -> Option<OperandValue> {
+pub fn operand_value_from_value(value: &Value) -> Option<OperandValue> {
     match value {
         Value::U64(val) => Some(OperandValue::U64(*val)),
         Value::I64(val) => Some(OperandValue::I64(*val)),
@@ -114,7 +114,7 @@ mod test {
         stub::{arr_bool_stub, arr_f64_stub, arr_i64_stub, arr_isize_stub, arr_str_stub, arr_u64_stub, arr_usize_stub, obj_stub},
     };
 
-    use super::{OperandValue, value_to_operand_value};
+    use super::{OperandValue, operand_value_from_value};
 
     #[test]
     fn test_operand_value_from() {
@@ -314,25 +314,25 @@ mod test {
 
     #[test]
     fn test_value_to_operand_value_some() {
-        assert_eq!(value_to_operand_value(&Value::U64(42)), Some(OperandValue::U64(42)));
-        assert_eq!(value_to_operand_value(&Value::I64(-42)), Some(OperandValue::I64(-42)));
-        assert_eq!(value_to_operand_value(&Value::F64(-42.5)), Some(OperandValue::F64(-42.5)));
-        assert_eq!(value_to_operand_value(&Value::USize(42)), Some(OperandValue::USize(42)));
-        assert_eq!(value_to_operand_value(&Value::ISize(-42)), Some(OperandValue::ISize(-42)));
-        assert_eq!(value_to_operand_value(&Value::Bool(false)), Some(OperandValue::Bool(false)));
-        assert_eq!(value_to_operand_value(&Value::Str("Naruto".into())), Some(OperandValue::Str("Naruto".into())));
+        assert_eq!(operand_value_from_value(&Value::U64(42)), Some(OperandValue::U64(42)));
+        assert_eq!(operand_value_from_value(&Value::I64(-42)), Some(OperandValue::I64(-42)));
+        assert_eq!(operand_value_from_value(&Value::F64(-42.5)), Some(OperandValue::F64(-42.5)));
+        assert_eq!(operand_value_from_value(&Value::USize(42)), Some(OperandValue::USize(42)));
+        assert_eq!(operand_value_from_value(&Value::ISize(-42)), Some(OperandValue::ISize(-42)));
+        assert_eq!(operand_value_from_value(&Value::Bool(false)), Some(OperandValue::Bool(false)));
+        assert_eq!(operand_value_from_value(&Value::Str("Naruto".into())), Some(OperandValue::Str("Naruto".into())));
     }
 
     #[test]
     fn test_value_to_operand_value_none() {
-        assert_eq!(value_to_operand_value(&Value::None), None);
-        assert_eq!(value_to_operand_value(&arr_u64_stub()), None);
-        assert_eq!(value_to_operand_value(&arr_i64_stub()), None);
-        assert_eq!(value_to_operand_value(&arr_f64_stub()), None);
-        assert_eq!(value_to_operand_value(&arr_usize_stub()), None);
-        assert_eq!(value_to_operand_value(&arr_isize_stub()), None);
-        assert_eq!(value_to_operand_value(&arr_bool_stub()), None);
-        assert_eq!(value_to_operand_value(&arr_str_stub()), None);
-        assert_eq!(value_to_operand_value(&obj_stub()), None);
+        assert_eq!(operand_value_from_value(&Value::None), None);
+        assert_eq!(operand_value_from_value(&arr_u64_stub()), None);
+        assert_eq!(operand_value_from_value(&arr_i64_stub()), None);
+        assert_eq!(operand_value_from_value(&arr_f64_stub()), None);
+        assert_eq!(operand_value_from_value(&arr_usize_stub()), None);
+        assert_eq!(operand_value_from_value(&arr_isize_stub()), None);
+        assert_eq!(operand_value_from_value(&arr_bool_stub()), None);
+        assert_eq!(operand_value_from_value(&arr_str_stub()), None);
+        assert_eq!(operand_value_from_value(&obj_stub()), None);
     }
 }
