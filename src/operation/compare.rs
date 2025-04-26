@@ -2,7 +2,7 @@ use std::cmp::Ordering;
 
 use crate::value::Value;
 
-use super::{OperandValue, Operation, resolve_operand};
+use super::{OperandValue, Operation, resolve_operand_value};
 
 fn compare_eq(value_a: &OperandValue, value_b: &OperandValue) -> Option<Result<(), ()>> {
     match value_a.partial_cmp(value_b)? {
@@ -49,32 +49,32 @@ fn compare_le(value_a: &OperandValue, value_b: &OperandValue) -> Option<Result<(
 pub fn compare(operation: &Operation, value_a: &OperandValue, root: &Value) -> Option<Result<(), ()>> {
     match operation {
         Operation::Eq(operand) => {
-            let value_b = resolve_operand(root, operand)?;
+            let value_b = resolve_operand_value(operand, root)?;
             compare_eq(value_a, &value_b)
         }
         Operation::Ne(operand) => {
-            let value_b = resolve_operand(root, operand)?;
+            let value_b = resolve_operand_value(operand, root)?;
             compare_ne(value_a, &value_b)
         }
         Operation::Gt(operand) => {
-            let value_b = resolve_operand(root, operand)?;
+            let value_b = resolve_operand_value(operand, root)?;
             compare_gt(value_a, &value_b)
         }
         Operation::Ge(operand) => {
-            let value_b = resolve_operand(root, operand)?;
+            let value_b = resolve_operand_value(operand, root)?;
             compare_ge(value_a, &value_b)
         }
         Operation::Lt(operand) => {
-            let value_b = resolve_operand(root, operand)?;
+            let value_b = resolve_operand_value(operand, root)?;
             compare_lt(value_a, &value_b)
         }
         Operation::Le(operand) => {
-            let value_b = resolve_operand(root, operand)?;
+            let value_b = resolve_operand_value(operand, root)?;
             compare_le(value_a, &value_b)
         }
         Operation::Btwn(operand_a, operand_b) => {
-            let value_operand_a = resolve_operand(root, operand_a)?;
-            let value_operand_b = resolve_operand(root, operand_b)?;
+            let value_operand_a = resolve_operand_value(operand_a, root)?;
+            let value_operand_b = resolve_operand_value(operand_b, root)?;
             if let Some(Ok(())) = compare_ge(value_a, &value_operand_a) {
                 if let Some(Ok(())) = compare_le(value_a, &value_operand_b) { Some(Ok(())) } else { Some(Err(())) }
             } else {

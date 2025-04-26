@@ -30,10 +30,6 @@ pub fn str_stub() -> Value {
     Value::Str("Lorem ipsum".into())
 }
 
-pub fn arr_bool_stub() -> Value {
-    Value::from([Value::Bool(false), Value::Bool(true), Value::Bool(false), Value::Bool(true)])
-}
-
 pub fn arr_u64_stub() -> Value {
     Value::from([Value::U64(1), Value::U64(10), Value::U64(100)])
 }
@@ -47,15 +43,19 @@ pub fn arr_f64_stub() -> Value {
 }
 
 pub fn arr_usize_stub() -> Value {
-    Value::from([Value::U64(1), Value::U64(10), Value::U64(100)])
+    Value::from([Value::USize(1), Value::USize(10), Value::USize(100)])
 }
 
 pub fn arr_isize_stub() -> Value {
-    Value::from([Value::I64(-100), Value::I64(0), Value::I64(100)])
+    Value::from([Value::ISize(-100), Value::ISize(0), Value::ISize(100)])
 }
 
 pub fn arr_num_stub() -> Value {
     Value::from([Value::U64(83), Value::I64(-19), Value::F64(1.25), Value::USize(28), Value::ISize(-378)])
+}
+
+pub fn arr_bool_stub() -> Value {
+    Value::from([Value::Bool(false), Value::Bool(true), Value::Bool(false), Value::Bool(true)])
 }
 
 pub fn arr_str_stub() -> Value {
@@ -86,20 +86,20 @@ mod test {
 
     #[test]
     fn test_stub() {
-        assert_eq!(bool_stub(), Value::Bool(true));
         assert_eq!(u64_stub(), Value::U64(42));
         assert_eq!(i64_stub(), Value::I64(-42));
         assert_eq!(f64_stub(), Value::F64(-21.5));
         assert_eq!(usize_stub(), Value::USize(42));
         assert_eq!(isize_stub(), Value::ISize(-42));
+        assert_eq!(bool_stub(), Value::Bool(true));
         assert_eq!(str_stub(), Value::Str("Lorem ipsum".into()));
-        assert_eq!(arr_bool_stub(), Value::Arr(vec![Value::Bool(false), Value::Bool(true), Value::Bool(false), Value::Bool(true)]));
         assert_eq!(arr_u64_stub(), Value::Arr(vec![Value::U64(1), Value::U64(10), Value::U64(100)]));
         assert_eq!(arr_i64_stub(), Value::Arr(vec![Value::I64(-100), Value::I64(0), Value::I64(100)]));
         assert_eq!(arr_f64_stub(), Value::Arr(vec![Value::F64(-10.5), Value::F64(0.5), Value::F64(10.5)]));
-        assert_eq!(arr_usize_stub(), Value::Arr(vec![Value::U64(1), Value::U64(10), Value::U64(100)]));
-        assert_eq!(arr_isize_stub(), Value::Arr(vec![Value::I64(-100), Value::I64(0), Value::I64(100)]));
+        assert_eq!(arr_usize_stub(), Value::Arr(vec![Value::USize(1), Value::USize(10), Value::USize(100)]));
+        assert_eq!(arr_isize_stub(), Value::Arr(vec![Value::ISize(-100), Value::ISize(0), Value::ISize(100)]));
         assert_eq!(arr_num_stub(), Value::Arr(vec![Value::U64(83), Value::I64(-19), Value::F64(1.25), Value::USize(28), Value::ISize(-378)]));
+        assert_eq!(arr_bool_stub(), Value::Arr(vec![Value::Bool(false), Value::Bool(true), Value::Bool(false), Value::Bool(true)]));
         assert_eq!(
             arr_str_stub(),
             Value::Arr(vec![

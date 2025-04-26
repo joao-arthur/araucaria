@@ -109,7 +109,12 @@ pub fn value_to_operand_value(value: &Value) -> Option<OperandValue> {
 
 #[cfg(test)]
 mod test {
-    use super::OperandValue;
+    use crate::value::{
+        Value,
+        stub::{arr_bool_stub, arr_f64_stub, arr_i64_stub, arr_isize_stub, arr_str_stub, arr_u64_stub, arr_usize_stub, obj_stub},
+    };
+
+    use super::{OperandValue, value_to_operand_value};
 
     #[test]
     fn test_operand_value_from() {
@@ -118,174 +123,216 @@ mod test {
         let f64_num: f64 = -9.8;
         let usize_num: usize = 183;
         let isize_num: isize = -892;
-        assert_eq!(OperandValue::from(8_u64), OperandValue::U64(8));
-        assert_eq!(OperandValue::from(-3_i64), OperandValue::I64(-3));
-        assert_eq!(OperandValue::from(-9.8), OperandValue::F64(-9.8));
-        assert_eq!(OperandValue::from(183_usize), OperandValue::USize(183));
-        assert_eq!(OperandValue::from(-892_isize), OperandValue::ISize(-892));
+        assert_eq!(OperandValue::from(u64_num), OperandValue::U64(u64_num));
+        assert_eq!(OperandValue::from(i64_num), OperandValue::I64(i64_num));
+        assert_eq!(OperandValue::from(f64_num), OperandValue::F64(f64_num));
+        assert_eq!(OperandValue::from(usize_num), OperandValue::USize(usize_num));
+        assert_eq!(OperandValue::from(isize_num), OperandValue::ISize(isize_num));
         assert_eq!(OperandValue::from(false), OperandValue::Bool(false));
         assert_eq!(OperandValue::from("in vino veritas"), OperandValue::Str("in vino veritas".into()));
     }
 
     #[test]
-    fn test_operand_value_u64() {
-        assert_eq!(OperandValue::U64(42) == OperandValue::U64(41), false);
-        assert!(OperandValue::U64(42) == OperandValue::U64(42));
-        assert_eq!(OperandValue::U64(42) == OperandValue::U64(43), false);
+    fn test_operand_value_u64_smaller() {
         assert!(OperandValue::U64(42) != OperandValue::U64(41));
-        assert_eq!(OperandValue::U64(42) != OperandValue::U64(42), false);
-        assert!(OperandValue::U64(42) != OperandValue::U64(43));
         assert!(OperandValue::U64(42) > OperandValue::U64(41));
-        assert_eq!(OperandValue::U64(42) > OperandValue::U64(42), false);
-        assert_eq!(OperandValue::U64(42) > OperandValue::U64(43), false);
         assert!(OperandValue::U64(42) >= OperandValue::U64(41));
+    }
+
+    #[test]
+    fn test_operand_value_u64_equals() {
+        assert!(OperandValue::U64(42) == OperandValue::U64(42));
         assert!(OperandValue::U64(42) >= OperandValue::U64(42));
-        assert_eq!(OperandValue::U64(42) >= OperandValue::U64(43), false);
-        assert_eq!(OperandValue::U64(42) < OperandValue::U64(41), false);
-        assert_eq!(OperandValue::U64(42) < OperandValue::U64(42), false);
-        assert!(OperandValue::U64(42) < OperandValue::U64(43));
-        assert_eq!(OperandValue::U64(42) <= OperandValue::U64(41), false);
         assert!(OperandValue::U64(42) <= OperandValue::U64(42));
+    }
+
+    #[test]
+    fn test_operand_value_u64_greater() {
+        assert!(OperandValue::U64(42) != OperandValue::U64(43));
+        assert!(OperandValue::U64(42) < OperandValue::U64(43));
         assert!(OperandValue::U64(42) <= OperandValue::U64(43));
     }
 
     #[test]
-    fn test_operand_value_i64() {
-        assert_eq!(OperandValue::I64(-42) == OperandValue::I64(-43), false);
-        assert!(OperandValue::I64(-42) == OperandValue::I64(-42));
-        assert_eq!(OperandValue::I64(-42) == OperandValue::I64(-41), false);
+    fn test_operand_value_i64_smaller() {
         assert!(OperandValue::I64(-42) != OperandValue::I64(-43));
-        assert_eq!(OperandValue::I64(-42) != OperandValue::I64(-42), false);
-        assert!(OperandValue::I64(-42) != OperandValue::I64(-41));
         assert!(OperandValue::I64(-42) > OperandValue::I64(-43));
-        assert_eq!(OperandValue::I64(-42) > OperandValue::I64(-42), false);
-        assert_eq!(OperandValue::I64(-42) > OperandValue::I64(-41), false);
         assert!(OperandValue::I64(-42) >= OperandValue::I64(-43));
+    }
+
+    #[test]
+    fn test_operand_value_i64_equals() {
+        assert!(OperandValue::I64(-42) == OperandValue::I64(-42));
         assert!(OperandValue::I64(-42) >= OperandValue::I64(-42));
-        assert_eq!(OperandValue::I64(-42) >= OperandValue::I64(-41), false);
-        assert_eq!(OperandValue::I64(-42) < OperandValue::I64(-43), false);
-        assert_eq!(OperandValue::I64(-42) < OperandValue::I64(-42), false);
-        assert!(OperandValue::I64(-42) < OperandValue::I64(-41));
-        assert_eq!(OperandValue::I64(-42) <= OperandValue::I64(-43), false);
         assert!(OperandValue::I64(-42) <= OperandValue::I64(-42));
+    }
+
+    #[test]
+    fn test_operand_value_i64_greater() {
+        assert!(OperandValue::I64(-42) != OperandValue::I64(-41));
+        assert!(OperandValue::I64(-42) < OperandValue::I64(-41));
         assert!(OperandValue::I64(-42) <= OperandValue::I64(-41));
     }
 
     #[test]
-    fn test_operand_value_f64() {
-        assert_eq!(OperandValue::F64(-42.0) == OperandValue::F64(-43.0), false);
-        assert!(OperandValue::F64(-42.0) == OperandValue::F64(-42.0));
-        assert_eq!(OperandValue::F64(-42.0) == OperandValue::F64(41.0), false);
-        assert!(OperandValue::F64(-42.0) != OperandValue::F64(-43.0));
-        assert_eq!(OperandValue::F64(-42.0) != OperandValue::F64(-42.0), false);
-        assert!(OperandValue::F64(-42.0) != OperandValue::F64(41.0));
-        assert!(OperandValue::F64(-42.0) > OperandValue::F64(-43.0));
-        assert_eq!(OperandValue::F64(-42.0) > OperandValue::F64(-42.0), false);
-        assert_eq!(OperandValue::F64(-42.0) > OperandValue::F64(41.0), false);
-        assert!(OperandValue::F64(-42.0) >= OperandValue::F64(-43.0));
-        assert!(OperandValue::F64(-42.0) >= OperandValue::F64(-42.0));
-        assert_eq!(OperandValue::F64(-42.0) >= OperandValue::F64(41.0), false);
-        assert_eq!(OperandValue::F64(-42.0) < OperandValue::F64(-43.0), false);
-        assert_eq!(OperandValue::F64(-42.0) < OperandValue::F64(-42.0), false);
-        assert!(OperandValue::F64(-42.0) < OperandValue::F64(41.0));
-        assert_eq!(OperandValue::F64(-42.0) <= OperandValue::F64(-43.0), false);
-        assert!(OperandValue::F64(-42.0) <= OperandValue::F64(-42.0));
-        assert!(OperandValue::F64(-42.0) <= OperandValue::F64(41.0));
+    fn test_operand_value_f64_smaller() {
+        assert!(OperandValue::F64(-42.5) != OperandValue::F64(-43.5));
+        assert!(OperandValue::F64(-42.5) > OperandValue::F64(-43.5));
+        assert!(OperandValue::F64(-42.5) >= OperandValue::F64(-43.5));
     }
 
     #[test]
-    fn test_operand_value_usize() {
-        assert_eq!(OperandValue::USize(42) == OperandValue::USize(41), false);
-        assert!(OperandValue::USize(42) == OperandValue::USize(42));
-        assert_eq!(OperandValue::USize(42) == OperandValue::USize(43), false);
+    fn test_operand_value_f64_equals() {
+        assert!(OperandValue::F64(-42.5) == OperandValue::F64(-42.5));
+        assert!(OperandValue::F64(-42.5) >= OperandValue::F64(-42.5));
+        assert!(OperandValue::F64(-42.5) <= OperandValue::F64(-42.5));
+    }
+
+    #[test]
+    fn test_operand_value_f64_greater() {
+        assert!(OperandValue::F64(-42.5) != OperandValue::F64(-41.5));
+        assert!(OperandValue::F64(-42.5) < OperandValue::F64(-41.5));
+        assert!(OperandValue::F64(-42.5) <= OperandValue::F64(-41.5));
+    }
+
+    #[test]
+    fn test_operand_value_usize_smaller() {
         assert!(OperandValue::USize(42) != OperandValue::USize(41));
-        assert_eq!(OperandValue::USize(42) != OperandValue::USize(42), false);
-        assert!(OperandValue::USize(42) != OperandValue::USize(43));
         assert!(OperandValue::USize(42) > OperandValue::USize(41));
-        assert_eq!(OperandValue::USize(42) > OperandValue::USize(42), false);
-        assert_eq!(OperandValue::USize(42) > OperandValue::USize(43), false);
         assert!(OperandValue::USize(42) >= OperandValue::USize(41));
+    }
+
+    #[test]
+    fn test_operand_value_usize_equals() {
+        assert!(OperandValue::USize(42) == OperandValue::USize(42));
         assert!(OperandValue::USize(42) >= OperandValue::USize(42));
-        assert_eq!(OperandValue::USize(42) >= OperandValue::USize(43), false);
-        assert_eq!(OperandValue::USize(42) < OperandValue::USize(41), false);
-        assert_eq!(OperandValue::USize(42) < OperandValue::USize(42), false);
-        assert!(OperandValue::USize(42) < OperandValue::USize(43));
-        assert_eq!(OperandValue::USize(42) <= OperandValue::USize(41), false);
         assert!(OperandValue::USize(42) <= OperandValue::USize(42));
+    }
+
+    #[test]
+    fn test_operand_value_usize_greater() {
+        assert!(OperandValue::USize(42) != OperandValue::USize(43));
+        assert!(OperandValue::USize(42) < OperandValue::USize(43));
         assert!(OperandValue::USize(42) <= OperandValue::USize(43));
     }
 
     #[test]
-    fn test_operand_value_isize() {
-        assert_eq!(OperandValue::ISize(-42) == OperandValue::ISize(-43), false);
-        assert!(OperandValue::ISize(-42) == OperandValue::ISize(-42));
-        assert_eq!(OperandValue::ISize(-42) == OperandValue::ISize(-41), false);
+    fn test_operand_value_isize_smaller() {
         assert!(OperandValue::ISize(-42) != OperandValue::ISize(-43));
-        assert_eq!(OperandValue::ISize(-42) != OperandValue::ISize(-42), false);
-        assert!(OperandValue::ISize(-42) != OperandValue::ISize(-41));
         assert!(OperandValue::ISize(-42) > OperandValue::ISize(-43));
-        assert_eq!(OperandValue::ISize(-42) > OperandValue::ISize(-42), false);
-        assert_eq!(OperandValue::ISize(-42) > OperandValue::ISize(-41), false);
         assert!(OperandValue::ISize(-42) >= OperandValue::ISize(-43));
+    }
+
+    #[test]
+    fn test_operand_value_isize_equals() {
+        assert!(OperandValue::ISize(-42) == OperandValue::ISize(-42));
         assert!(OperandValue::ISize(-42) >= OperandValue::ISize(-42));
-        assert_eq!(OperandValue::ISize(-42) >= OperandValue::ISize(-41), false);
-        assert_eq!(OperandValue::ISize(-42) < OperandValue::ISize(-43), false);
-        assert_eq!(OperandValue::ISize(-42) < OperandValue::ISize(-42), false);
-        assert!(OperandValue::ISize(-42) < OperandValue::ISize(-41));
-        assert_eq!(OperandValue::ISize(-42) <= OperandValue::ISize(-43), false);
         assert!(OperandValue::ISize(-42) <= OperandValue::ISize(-42));
+    }
+
+    #[test]
+    fn test_operand_value_isize_greater() {
+        assert!(OperandValue::ISize(-42) != OperandValue::ISize(-41));
+        assert!(OperandValue::ISize(-42) < OperandValue::ISize(-41));
         assert!(OperandValue::ISize(-42) <= OperandValue::ISize(-41));
     }
 
     #[test]
-    fn test_operand_value_bool() {
-        assert_eq!(OperandValue::Bool(true) == OperandValue::Bool(false), false);
-        assert!(OperandValue::Bool(true) == OperandValue::Bool(true));
+    fn test_operand_value_bool_smaller() {
         assert!(OperandValue::Bool(true) != OperandValue::Bool(false));
-        assert_eq!(OperandValue::Bool(true) != OperandValue::Bool(true), false);
         assert!(OperandValue::Bool(true) > OperandValue::Bool(false));
-        assert_eq!(OperandValue::Bool(true) > OperandValue::Bool(true), false);
         assert!(OperandValue::Bool(true) >= OperandValue::Bool(false));
-        assert!(OperandValue::Bool(true) >= OperandValue::Bool(true));
-        assert_eq!(OperandValue::Bool(true) < OperandValue::Bool(false), false);
-        assert_eq!(OperandValue::Bool(true) < OperandValue::Bool(true), false);
-        assert_eq!(OperandValue::Bool(true) <= OperandValue::Bool(false), false);
-        assert!(OperandValue::Bool(true) <= OperandValue::Bool(true));
     }
 
     #[test]
-    fn test_operand_value_string() {
-        assert_eq!(OperandValue::from("j") == OperandValue::from("i"), false);
-        assert!(OperandValue::from("j") == OperandValue::from("j"));
-        assert_eq!(OperandValue::from("j") == OperandValue::from("k"), false);
-        assert!(OperandValue::from("j") != OperandValue::from("i"));
-        assert_eq!(OperandValue::from("j") != OperandValue::from("j"), false);
-        assert!(OperandValue::from("j") != OperandValue::from("k"));
-        assert!(OperandValue::from("j") > OperandValue::from("i"));
-        assert_eq!(OperandValue::from("j") > OperandValue::from("j"), false);
-        assert_eq!(OperandValue::from("j") > OperandValue::from("k"), false);
-        assert!(OperandValue::from("j") >= OperandValue::from("i"));
-        assert!(OperandValue::from("j") >= OperandValue::from("j"));
-        assert_eq!(OperandValue::from("j") >= OperandValue::from("k"), false);
-        assert_eq!(OperandValue::from("j") < OperandValue::from("i"), false);
-        assert_eq!(OperandValue::from("j") < OperandValue::from("j"), false);
-        assert!(OperandValue::from("j") < OperandValue::from("k"));
-        assert_eq!(OperandValue::from("j") <= OperandValue::from("i"), false);
-        assert!(OperandValue::from("j") <= OperandValue::from("j"));
-        assert!(OperandValue::from("j") <= OperandValue::from("k"));
+    fn test_operand_value_bool_equals() {
+        assert!(OperandValue::Bool(true) == OperandValue::Bool(true));
+        assert!(OperandValue::Bool(true) >= OperandValue::Bool(true));
+        assert!(OperandValue::Bool(true) <= OperandValue::Bool(true));
+        assert!(OperandValue::Bool(false) == OperandValue::Bool(false));
+        assert!(OperandValue::Bool(false) >= OperandValue::Bool(false));
+        assert!(OperandValue::Bool(false) <= OperandValue::Bool(false));
+    }
+
+    #[test]
+    fn test_operand_value_bool_greater() {
+        assert!(OperandValue::Bool(false) != OperandValue::Bool(true));
+        assert!(OperandValue::Bool(false) < OperandValue::Bool(true));
+        assert!(OperandValue::Bool(false) <= OperandValue::Bool(true));
+    }
+
+    #[test]
+    fn test_operand_value_string_smaller() {
+        assert!(OperandValue::from("rock lee") != OperandValue::from("neji"));
+        assert!(OperandValue::from("rock lee") > OperandValue::from("neji"));
+        assert!(OperandValue::from("rock lee") >= OperandValue::from("neji"));
+    }
+
+    #[test]
+    fn test_operand_value_string_equals() {
+        assert!(OperandValue::from("rock lee") == OperandValue::from("rock lee"));
+        assert!(OperandValue::from("rock lee") >= OperandValue::from("rock lee"));
+        assert!(OperandValue::from("rock lee") <= OperandValue::from("rock lee"));
+    }
+
+    #[test]
+    fn test_operand_value_string_greter() {
+        assert!(OperandValue::from("rock lee") != OperandValue::from("tenten"));
+        assert!(OperandValue::from("rock lee") < OperandValue::from("tenten"));
+        assert!(OperandValue::from("rock lee") <= OperandValue::from("tenten"));
     }
 
     #[test]
     fn test_operand_value_different_type() {
         assert_eq!(OperandValue::U64(42).partial_cmp(&OperandValue::I64(-42)), None);
         assert_eq!(OperandValue::U64(42).partial_cmp(&OperandValue::F64(-4.2)), None);
+        assert_eq!(OperandValue::U64(42).partial_cmp(&OperandValue::USize(42)), None);
+        assert_eq!(OperandValue::U64(42).partial_cmp(&OperandValue::ISize(-42)), None);
         assert_eq!(OperandValue::U64(42).partial_cmp(&OperandValue::Bool(false)), None);
         assert_eq!(OperandValue::U64(42).partial_cmp(&OperandValue::from("a b c")), None);
+
         assert_eq!(OperandValue::I64(-42).partial_cmp(&OperandValue::F64(-4.2)), None);
+        assert_eq!(OperandValue::I64(-42).partial_cmp(&OperandValue::USize(42)), None);
+        assert_eq!(OperandValue::I64(-42).partial_cmp(&OperandValue::ISize(-42)), None);
         assert_eq!(OperandValue::I64(-42).partial_cmp(&OperandValue::Bool(false)), None);
         assert_eq!(OperandValue::I64(-42).partial_cmp(&OperandValue::from("a b c")), None);
+
+        assert_eq!(OperandValue::F64(-4.2).partial_cmp(&OperandValue::USize(42)), None);
+        assert_eq!(OperandValue::F64(-4.2).partial_cmp(&OperandValue::ISize(-42)), None);
         assert_eq!(OperandValue::F64(-4.2).partial_cmp(&OperandValue::Bool(false)), None);
         assert_eq!(OperandValue::F64(-4.2).partial_cmp(&OperandValue::from("a b c")), None);
+
+        assert_eq!(OperandValue::USize(42).partial_cmp(&OperandValue::ISize(-42)), None);
+        assert_eq!(OperandValue::USize(42).partial_cmp(&OperandValue::Bool(false)), None);
+        assert_eq!(OperandValue::USize(42).partial_cmp(&OperandValue::from("a b c")), None);
+
+        assert_eq!(OperandValue::ISize(-42).partial_cmp(&OperandValue::Bool(false)), None);
+        assert_eq!(OperandValue::ISize(-42).partial_cmp(&OperandValue::from("a b c")), None);
+
         assert_eq!(OperandValue::Bool(false).partial_cmp(&OperandValue::from("a b c")), None);
+    }
+
+    #[test]
+    fn test_value_to_operand_value_some() {
+        assert_eq!(value_to_operand_value(&Value::U64(42)), Some(OperandValue::U64(42)));
+        assert_eq!(value_to_operand_value(&Value::I64(-42)), Some(OperandValue::I64(-42)));
+        assert_eq!(value_to_operand_value(&Value::F64(-42.5)), Some(OperandValue::F64(-42.5)));
+        assert_eq!(value_to_operand_value(&Value::USize(42)), Some(OperandValue::USize(42)));
+        assert_eq!(value_to_operand_value(&Value::ISize(-42)), Some(OperandValue::ISize(-42)));
+        assert_eq!(value_to_operand_value(&Value::Bool(false)), Some(OperandValue::Bool(false)));
+        assert_eq!(value_to_operand_value(&Value::Str("Naruto".into())), Some(OperandValue::Str("Naruto".into())));
+    }
+
+    #[test]
+    fn test_value_to_operand_value_none() {
+        assert_eq!(value_to_operand_value(&Value::None), None);
+        assert_eq!(value_to_operand_value(&arr_u64_stub()), None);
+        assert_eq!(value_to_operand_value(&arr_i64_stub()), None);
+        assert_eq!(value_to_operand_value(&arr_f64_stub()), None);
+        assert_eq!(value_to_operand_value(&arr_usize_stub()), None);
+        assert_eq!(value_to_operand_value(&arr_isize_stub()), None);
+        assert_eq!(value_to_operand_value(&arr_bool_stub()), None);
+        assert_eq!(value_to_operand_value(&arr_str_stub()), None);
+        assert_eq!(value_to_operand_value(&obj_stub()), None);
     }
 }
