@@ -24,6 +24,9 @@ pub enum ValidationErr {
     UppercaseLen(Operation),
     NumbersLen(Operation),
     SymbolsLen(Operation),
+    USizeEnum(Vec<usize>),
+    ISizeEnum(Vec<isize>),
+    StrEnum(Vec<String>),
 }
 
 #[derive(Debug, PartialEq, Clone)]
@@ -52,76 +55,57 @@ mod tests {
 
     #[test]
     fn schema_err_validation() {
-        assert_eq!(SchemaErr::validation([ValidationErr::Required]), SchemaErr::Validation(vec![ValidationErr::Required]));
-        assert_eq!(SchemaErr::validation([ValidationErr::U64]), SchemaErr::Validation(vec![ValidationErr::U64]));
-        assert_eq!(SchemaErr::validation([ValidationErr::I64]), SchemaErr::Validation(vec![ValidationErr::I64]));
-        assert_eq!(SchemaErr::validation([ValidationErr::F64]), SchemaErr::Validation(vec![ValidationErr::F64]));
-        assert_eq!(SchemaErr::validation([ValidationErr::USize]), SchemaErr::Validation(vec![ValidationErr::USize]));
-        assert_eq!(SchemaErr::validation([ValidationErr::ISize]), SchemaErr::Validation(vec![ValidationErr::ISize]));
-        assert_eq!(SchemaErr::validation([ValidationErr::Bool]), SchemaErr::Validation(vec![ValidationErr::Bool]));
-        assert_eq!(SchemaErr::validation([ValidationErr::Str]), SchemaErr::Validation(vec![ValidationErr::Str]));
-        assert_eq!(SchemaErr::validation([ValidationErr::Email]), SchemaErr::Validation(vec![ValidationErr::Email]));
-        assert_eq!(SchemaErr::validation([ValidationErr::Date]), SchemaErr::Validation(vec![ValidationErr::Date]));
-        assert_eq!(SchemaErr::validation([ValidationErr::Time]), SchemaErr::Validation(vec![ValidationErr::Time]));
-        assert_eq!(SchemaErr::validation([ValidationErr::DateTime]), SchemaErr::Validation(vec![ValidationErr::DateTime]));
-        assert_eq!(
-            SchemaErr::validation([ValidationErr::Operation(Operation::Eq(Operand::Value(OperandValue::from("Swords"))))]),
-            SchemaErr::Validation(vec![ValidationErr::Operation(Operation::Eq(Operand::Value(OperandValue::from("Swords"))))])
-        );
-        assert_eq!(
-            SchemaErr::validation([ValidationErr::BytesLen(Operation::Eq(Operand::Value(OperandValue::USize(1))))]),
-            SchemaErr::Validation(vec![ValidationErr::BytesLen(Operation::Eq(Operand::Value(OperandValue::USize(1))))])
-        );
-        assert_eq!(
-            SchemaErr::validation([ValidationErr::CharsLen(Operation::Ne(Operand::Value(OperandValue::USize(2))))]),
-            SchemaErr::Validation(vec![ValidationErr::CharsLen(Operation::Ne(Operand::Value(OperandValue::USize(2))))])
-        );
-        assert_eq!(
-            SchemaErr::validation([ValidationErr::GraphemesLen(Operation::Gt(Operand::Value(OperandValue::USize(3))))]),
-            SchemaErr::Validation(vec![ValidationErr::GraphemesLen(Operation::Gt(Operand::Value(OperandValue::USize(3))))])
-        );
-        assert_eq!(
-            SchemaErr::validation([ValidationErr::LowercaseLen(Operation::Ge(Operand::Value(OperandValue::USize(4))))]),
-            SchemaErr::Validation(vec![ValidationErr::LowercaseLen(Operation::Ge(Operand::Value(OperandValue::USize(4))))])
-        );
-        assert_eq!(
-            SchemaErr::validation([ValidationErr::UppercaseLen(Operation::Lt(Operand::Value(OperandValue::USize(5))))]),
-            SchemaErr::Validation(vec![ValidationErr::UppercaseLen(Operation::Lt(Operand::Value(OperandValue::USize(5))))])
-        );
-        assert_eq!(
-            SchemaErr::validation([ValidationErr::NumbersLen(Operation::Le(Operand::Value(OperandValue::USize(6))))]),
-            SchemaErr::Validation(vec![ValidationErr::NumbersLen(Operation::Le(Operand::Value(OperandValue::USize(6))))])
-        );
-        assert_eq!(
-            SchemaErr::validation([ValidationErr::SymbolsLen(Operation::Btwn(
-                Operand::Value(OperandValue::USize(7)),
-                Operand::Value(OperandValue::USize(8))
-            ))]),
-            SchemaErr::Validation(vec![ValidationErr::SymbolsLen(Operation::Btwn(
-                Operand::Value(OperandValue::USize(7)),
-                Operand::Value(OperandValue::USize(8))
-            ))])
-        );
+        let required = ValidationErr::Required;
+        let u64 = ValidationErr::U64;
+        let i64 = ValidationErr::I64;
+        let f64 = ValidationErr::F64;
+        let usize = ValidationErr::USize;
+        let isize = ValidationErr::ISize;
+        let bool = ValidationErr::Bool;
+        let str = ValidationErr::Str;
+        let email = ValidationErr::Email;
+        let date = ValidationErr::Date;
+        let time = ValidationErr::Time;
+        let date_time = ValidationErr::DateTime;
+        let operation = ValidationErr::Operation(Operation::Eq(Operand::Value(OperandValue::from("Swords"))));
+        let bytes_len = ValidationErr::BytesLen(Operation::Eq(Operand::Value(OperandValue::USize(1))));
+        let chars_len = ValidationErr::CharsLen(Operation::Ne(Operand::Value(OperandValue::USize(2))));
+        let graphemes_len = ValidationErr::GraphemesLen(Operation::Gt(Operand::Value(OperandValue::USize(3))));
+        let lowercase_len = ValidationErr::LowercaseLen(Operation::Ge(Operand::Value(OperandValue::USize(4))));
+        let uppercase_len = ValidationErr::UppercaseLen(Operation::Lt(Operand::Value(OperandValue::USize(5))));
+        let numbers_len = ValidationErr::NumbersLen(Operation::Le(Operand::Value(OperandValue::USize(6))));
+        let symbols_len = ValidationErr::SymbolsLen(Operation::Btwn(Operand::Value(OperandValue::USize(7)), Operand::Value(OperandValue::USize(8))));
+        let usize_enum = ValidationErr::USizeEnum(vec![10, 20, 30, 40, 50]);
+        let isize_enum = ValidationErr::ISizeEnum(vec![0, -1, -2, -3, -4, -5]);
+        let str_enum = ValidationErr::StrEnum(vec!["APPLE".into(), "BANANA".into(), "GRAPE".into(), "ORANGE".into(), "PEACH".into()]);
+
+        assert_eq!(SchemaErr::validation([required.clone()]), SchemaErr::Validation(vec![required.clone()]));
+        assert_eq!(SchemaErr::validation([u64.clone()]), SchemaErr::Validation(vec![u64.clone()]));
+        assert_eq!(SchemaErr::validation([i64.clone()]), SchemaErr::Validation(vec![i64.clone()]));
+        assert_eq!(SchemaErr::validation([f64.clone()]), SchemaErr::Validation(vec![f64.clone()]));
+        assert_eq!(SchemaErr::validation([usize.clone()]), SchemaErr::Validation(vec![usize.clone()]));
+        assert_eq!(SchemaErr::validation([isize.clone()]), SchemaErr::Validation(vec![isize.clone()]));
+        assert_eq!(SchemaErr::validation([bool.clone()]), SchemaErr::Validation(vec![bool.clone()]));
+        assert_eq!(SchemaErr::validation([str.clone()]), SchemaErr::Validation(vec![str.clone()]));
+        assert_eq!(SchemaErr::validation([email.clone()]), SchemaErr::Validation(vec![email.clone()]));
+        assert_eq!(SchemaErr::validation([date.clone()]), SchemaErr::Validation(vec![date.clone()]));
+        assert_eq!(SchemaErr::validation([time.clone()]), SchemaErr::Validation(vec![time.clone()]));
+        assert_eq!(SchemaErr::validation([date_time.clone()]), SchemaErr::Validation(vec![date_time.clone()]));
+        assert_eq!(SchemaErr::validation([operation.clone()]), SchemaErr::Validation(vec![operation.clone()]));
+        assert_eq!(SchemaErr::validation([bytes_len.clone()]), SchemaErr::Validation(vec![bytes_len.clone()]));
+        assert_eq!(SchemaErr::validation([chars_len.clone()]), SchemaErr::Validation(vec![chars_len.clone()]));
+        assert_eq!(SchemaErr::validation([graphemes_len.clone()]), SchemaErr::Validation(vec![graphemes_len.clone()]));
+        assert_eq!(SchemaErr::validation([lowercase_len.clone()]), SchemaErr::Validation(vec![lowercase_len.clone()]));
+        assert_eq!(SchemaErr::validation([uppercase_len.clone()]), SchemaErr::Validation(vec![uppercase_len.clone()]));
+        assert_eq!(SchemaErr::validation([numbers_len.clone()]), SchemaErr::Validation(vec![numbers_len.clone()]));
+        assert_eq!(SchemaErr::validation([symbols_len.clone()]), SchemaErr::Validation(vec![symbols_len.clone()]));
+        assert_eq!(SchemaErr::validation([usize_enum.clone()]), SchemaErr::Validation(vec![usize_enum.clone()]));
+        assert_eq!(SchemaErr::validation([isize_enum.clone()]), SchemaErr::Validation(vec![isize_enum.clone()]));
+        assert_eq!(SchemaErr::validation([str_enum.clone()]), SchemaErr::Validation(vec![str_enum.clone()]));
     }
 
     #[test]
     fn schema_err_obj() {
-        assert_eq!(
-            SchemaErr::obj([("is".into(), SchemaErr::validation([ValidationErr::Required]))]),
-            SchemaErr::Obj(BTreeMap::from([("is".into(), SchemaErr::Validation(vec![ValidationErr::Required]))]))
-        );
-        assert_eq!(
-            SchemaErr::obj([("is".into(), SchemaErr::validation([ValidationErr::Required]))]),
-            SchemaErr::Obj(BTreeMap::from([("is".into(), SchemaErr::Validation(vec![ValidationErr::Required]))]))
-        );
-        assert_eq!(
-            SchemaErr::obj([("is".into(), SchemaErr::validation([ValidationErr::Required]))]),
-            SchemaErr::Obj(BTreeMap::from([("is".into(), SchemaErr::Validation(vec![ValidationErr::Required]))]))
-        );
-        assert_eq!(
-            SchemaErr::obj([("is".into(), SchemaErr::validation([ValidationErr::Required]))]),
-            SchemaErr::Obj(BTreeMap::from([("is".into(), SchemaErr::Validation(vec![ValidationErr::Required]))]))
-        );
         assert_eq!(
             SchemaErr::obj([("is".into(), SchemaErr::validation([ValidationErr::Required]))]),
             SchemaErr::Obj(BTreeMap::from([("is".into(), SchemaErr::Validation(vec![ValidationErr::Required]))]))

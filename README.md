@@ -17,7 +17,13 @@ araucaria = { git = "https://github.com/joao-arthur/araucaria", rev = "0cc2ef275
 ```rust
 use std::{collections::BTreeMap, sync::LazyLock};
 
-use araucaria::validation::{DateValidation, EmailValidation, StrValidation, ObjValidation, Validation};
+use araucaria::validation::{
+    DateValidation,
+    EmailValidation,
+    StrValidation,
+    ObjValidation,
+    Validation
+};
 
 pub static CREATE_USER_SCHEMA: LazyLock<Validation> = LazyLock::new(|| {
     Validation::Obj(ObjValidation::default().validation(BTreeMap::from([
@@ -60,7 +66,13 @@ use std::{collections::BTreeMap, sync::LazyLock};
 
 use araucaria::{
     operation::{Operand, OperandValue, Operation},
-    validation::{DateValidation, EmailValidation, ObjValidation, StrValidation, Validation}
+    validation::{
+        DateValidation,
+        EmailValidation,
+        ObjValidation,
+        StrValidation,
+        Validation
+    }
 };
 
 pub static CREATE_USER_SCHEMA: LazyLock<Validation> = LazyLock::new(|| {
@@ -148,11 +160,7 @@ pub static CREATE_USER_SCHEMA: LazyLock<Validation> = LazyLock::new(|| {
 
 - `Validation::Arr`
 - `validate_arr`
-- `validate_enum`
-- `validate_string` normalize strings
 - `validate` should not fail when only optional fields are missing
-- `Validation::Date`, `Validation::Time`, `Validation::DateTime` replace regex
-  with chrono
 - Segregate `araucaria_plugins` modules by features
 - Create a function that receives `serde_json::Value` and `T: Deserialize`, and
   returns a `T` instance
