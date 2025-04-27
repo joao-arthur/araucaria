@@ -31,13 +31,13 @@ pub enum ValidationErr {
 
 #[derive(Debug, PartialEq, Clone)]
 pub enum SchemaErr {
-    Validation(Vec<ValidationErr>),
+    Arr(Vec<ValidationErr>),
     Obj(BTreeMap<String, SchemaErr>),
 }
 
 impl SchemaErr {
-    pub fn validation<const N: usize>(value: [ValidationErr; N]) -> SchemaErr {
-        SchemaErr::Validation(value.to_vec())
+    pub fn arr<const N: usize>(value: [ValidationErr; N]) -> SchemaErr {
+        SchemaErr::Arr(value.to_vec())
     }
 
     pub fn obj<const N: usize>(value: [(String, SchemaErr); N]) -> SchemaErr {
@@ -79,36 +79,36 @@ mod tests {
         let isize_enum = ValidationErr::ISizeEnum(vec![0, -1, -2, -3, -4, -5]);
         let str_enum = ValidationErr::StrEnum(vec!["APPLE".into(), "BANANA".into(), "GRAPE".into(), "ORANGE".into(), "PEACH".into()]);
 
-        assert_eq!(SchemaErr::validation([required.clone()]), SchemaErr::Validation(vec![required.clone()]));
-        assert_eq!(SchemaErr::validation([u64.clone()]), SchemaErr::Validation(vec![u64.clone()]));
-        assert_eq!(SchemaErr::validation([i64.clone()]), SchemaErr::Validation(vec![i64.clone()]));
-        assert_eq!(SchemaErr::validation([f64.clone()]), SchemaErr::Validation(vec![f64.clone()]));
-        assert_eq!(SchemaErr::validation([usize.clone()]), SchemaErr::Validation(vec![usize.clone()]));
-        assert_eq!(SchemaErr::validation([isize.clone()]), SchemaErr::Validation(vec![isize.clone()]));
-        assert_eq!(SchemaErr::validation([bool.clone()]), SchemaErr::Validation(vec![bool.clone()]));
-        assert_eq!(SchemaErr::validation([str.clone()]), SchemaErr::Validation(vec![str.clone()]));
-        assert_eq!(SchemaErr::validation([email.clone()]), SchemaErr::Validation(vec![email.clone()]));
-        assert_eq!(SchemaErr::validation([date.clone()]), SchemaErr::Validation(vec![date.clone()]));
-        assert_eq!(SchemaErr::validation([time.clone()]), SchemaErr::Validation(vec![time.clone()]));
-        assert_eq!(SchemaErr::validation([date_time.clone()]), SchemaErr::Validation(vec![date_time.clone()]));
-        assert_eq!(SchemaErr::validation([operation.clone()]), SchemaErr::Validation(vec![operation.clone()]));
-        assert_eq!(SchemaErr::validation([bytes_len.clone()]), SchemaErr::Validation(vec![bytes_len.clone()]));
-        assert_eq!(SchemaErr::validation([chars_len.clone()]), SchemaErr::Validation(vec![chars_len.clone()]));
-        assert_eq!(SchemaErr::validation([graphemes_len.clone()]), SchemaErr::Validation(vec![graphemes_len.clone()]));
-        assert_eq!(SchemaErr::validation([lowercase_len.clone()]), SchemaErr::Validation(vec![lowercase_len.clone()]));
-        assert_eq!(SchemaErr::validation([uppercase_len.clone()]), SchemaErr::Validation(vec![uppercase_len.clone()]));
-        assert_eq!(SchemaErr::validation([numbers_len.clone()]), SchemaErr::Validation(vec![numbers_len.clone()]));
-        assert_eq!(SchemaErr::validation([symbols_len.clone()]), SchemaErr::Validation(vec![symbols_len.clone()]));
-        assert_eq!(SchemaErr::validation([usize_enum.clone()]), SchemaErr::Validation(vec![usize_enum.clone()]));
-        assert_eq!(SchemaErr::validation([isize_enum.clone()]), SchemaErr::Validation(vec![isize_enum.clone()]));
-        assert_eq!(SchemaErr::validation([str_enum.clone()]), SchemaErr::Validation(vec![str_enum.clone()]));
+        assert_eq!(SchemaErr::arr([required.clone()]), SchemaErr::Arr(vec![required.clone()]));
+        assert_eq!(SchemaErr::arr([u64.clone()]), SchemaErr::Arr(vec![u64.clone()]));
+        assert_eq!(SchemaErr::arr([i64.clone()]), SchemaErr::Arr(vec![i64.clone()]));
+        assert_eq!(SchemaErr::arr([f64.clone()]), SchemaErr::Arr(vec![f64.clone()]));
+        assert_eq!(SchemaErr::arr([usize.clone()]), SchemaErr::Arr(vec![usize.clone()]));
+        assert_eq!(SchemaErr::arr([isize.clone()]), SchemaErr::Arr(vec![isize.clone()]));
+        assert_eq!(SchemaErr::arr([bool.clone()]), SchemaErr::Arr(vec![bool.clone()]));
+        assert_eq!(SchemaErr::arr([str.clone()]), SchemaErr::Arr(vec![str.clone()]));
+        assert_eq!(SchemaErr::arr([email.clone()]), SchemaErr::Arr(vec![email.clone()]));
+        assert_eq!(SchemaErr::arr([date.clone()]), SchemaErr::Arr(vec![date.clone()]));
+        assert_eq!(SchemaErr::arr([time.clone()]), SchemaErr::Arr(vec![time.clone()]));
+        assert_eq!(SchemaErr::arr([date_time.clone()]), SchemaErr::Arr(vec![date_time.clone()]));
+        assert_eq!(SchemaErr::arr([operation.clone()]), SchemaErr::Arr(vec![operation.clone()]));
+        assert_eq!(SchemaErr::arr([bytes_len.clone()]), SchemaErr::Arr(vec![bytes_len.clone()]));
+        assert_eq!(SchemaErr::arr([chars_len.clone()]), SchemaErr::Arr(vec![chars_len.clone()]));
+        assert_eq!(SchemaErr::arr([graphemes_len.clone()]), SchemaErr::Arr(vec![graphemes_len.clone()]));
+        assert_eq!(SchemaErr::arr([lowercase_len.clone()]), SchemaErr::Arr(vec![lowercase_len.clone()]));
+        assert_eq!(SchemaErr::arr([uppercase_len.clone()]), SchemaErr::Arr(vec![uppercase_len.clone()]));
+        assert_eq!(SchemaErr::arr([numbers_len.clone()]), SchemaErr::Arr(vec![numbers_len.clone()]));
+        assert_eq!(SchemaErr::arr([symbols_len.clone()]), SchemaErr::Arr(vec![symbols_len.clone()]));
+        assert_eq!(SchemaErr::arr([usize_enum.clone()]), SchemaErr::Arr(vec![usize_enum.clone()]));
+        assert_eq!(SchemaErr::arr([isize_enum.clone()]), SchemaErr::Arr(vec![isize_enum.clone()]));
+        assert_eq!(SchemaErr::arr([str_enum.clone()]), SchemaErr::Arr(vec![str_enum.clone()]));
     }
 
     #[test]
     fn schema_err_obj() {
         assert_eq!(
-            SchemaErr::obj([("is".into(), SchemaErr::validation([ValidationErr::Required]))]),
-            SchemaErr::Obj(BTreeMap::from([("is".into(), SchemaErr::Validation(vec![ValidationErr::Required]))]))
+            SchemaErr::obj([("is".into(), SchemaErr::arr([ValidationErr::Required]))]),
+            SchemaErr::Obj(BTreeMap::from([("is".into(), SchemaErr::Arr(vec![ValidationErr::Required]))]))
         );
     }
 }
