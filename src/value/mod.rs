@@ -112,7 +112,13 @@ impl<const N: usize> From<[(String, Value); N]> for Value {
     }
 }
 
-pub fn value_to_string(value: &Value) -> String {
+impl std::fmt::Display for Value {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        write!(f, "{}", value_to_string(self))
+    }
+}
+
+fn value_to_string(value: &Value) -> String {
     match value {
         Value::None => "".into(),
         Value::U64(val) => val.to_string(),
@@ -138,7 +144,7 @@ pub fn value_to_string(value: &Value) -> String {
 mod tests {
     use std::collections::BTreeMap;
 
-    use super::{Value, value_to_string};
+    use super::Value;
 
     #[test]
     fn value_from() {
@@ -202,18 +208,15 @@ mod tests {
                 Value::from([("l_1".into(), Value::from([("l_2".into(), Value::from([Value::from([("id".into(), Value::U64(0))])]))]))]),
             ),
         ]);
-        assert_eq!(value_to_string(&Value::None), "".to_string());
-        assert_eq!(value_to_string(&Value::U64(4)), "4".to_string());
-        assert_eq!(value_to_string(&Value::I64(-22)), "-22".to_string());
-        assert_eq!(value_to_string(&Value::F64(-3.65)), "-3.65".to_string());
-        assert_eq!(value_to_string(&Value::USize(19)), "19".to_string());
-        assert_eq!(value_to_string(&Value::ISize(-47)), "-47".to_string());
-        assert_eq!(value_to_string(&Value::Bool(true)), "true".to_string());
-        assert_eq!(value_to_string(&Value::from("Non sequitur")), r#""Non sequitur""#.to_string());
-        assert_eq!(value_to_string(&arr), r#"[ "Ad nauseam", "Ad ignorantiam", [ "Ad hominem", "Ad verecundiam" ] ]"#.to_string());
-        assert_eq!(
-            value_to_string(&obj),
-            r#"{ k_bool: false, k_nested: { l_1: { l_2: [ { id: 0 } ] } }, k_num: 837, k_str: "Augustus" }"#.to_string()
-        );
+        assert_eq!(Value::None.to_string(), "".to_string());
+        assert_eq!(Value::U64(4).to_string(), "4".to_string());
+        assert_eq!(Value::I64(-22).to_string(), "-22".to_string());
+        assert_eq!(Value::F64(-3.65).to_string(), "-3.65".to_string());
+        assert_eq!(Value::USize(19).to_string(), "19".to_string());
+        assert_eq!(Value::ISize(-47).to_string(), "-47".to_string());
+        assert_eq!(Value::Bool(true).to_string(), "true".to_string());
+        assert_eq!(Value::from("Non sequitur").to_string(), r#""Non sequitur""#.to_string());
+        assert_eq!(arr.to_string(), r#"[ "Ad nauseam", "Ad ignorantiam", [ "Ad hominem", "Ad verecundiam" ] ]"#.to_string());
+        assert_eq!(obj.to_string(), r#"{ k_bool: false, k_nested: { l_1: { l_2: [ { id: 0 } ] } }, k_num: 837, k_str: "Augustus" }"#.to_string());
     }
 }

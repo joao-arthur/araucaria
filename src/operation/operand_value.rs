@@ -94,6 +94,21 @@ impl PartialOrd for OperandValue {
     }
 }
 
+impl std::fmt::Display for OperandValue {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        let str = match self {
+            OperandValue::U64(val) => val.to_string(),
+            OperandValue::I64(val) => val.to_string(),
+            OperandValue::F64(val) => val.to_string(),
+            OperandValue::USize(val) => val.to_string(),
+            OperandValue::ISize(val) => val.to_string(),
+            OperandValue::Bool(val) => val.to_string(),
+            OperandValue::Str(val) => "\"".to_string() + val + "\"",
+        };
+        write!(f, "{}", str)
+    }
+}
+
 pub fn operand_value_from_value(value: &Value) -> Option<OperandValue> {
     match value {
         Value::U64(val) => Some(OperandValue::U64(*val)),
@@ -107,18 +122,6 @@ pub fn operand_value_from_value(value: &Value) -> Option<OperandValue> {
     }
 }
 
-pub fn operand_value_to_string(value: &OperandValue) -> String {
-    match value {
-        OperandValue::U64(val) => val.to_string(),
-        OperandValue::I64(val) => val.to_string(),
-        OperandValue::F64(val) => val.to_string(),
-        OperandValue::USize(val) => val.to_string(),
-        OperandValue::ISize(val) => val.to_string(),
-        OperandValue::Bool(val) => val.to_string(),
-        OperandValue::Str(val) => "\"".to_string() + val + "\"",
-    }
-}
-
 #[cfg(test)]
 mod tests {
     use crate::value::{
@@ -126,7 +129,7 @@ mod tests {
         stub::{arr_bool_stub, arr_f64_stub, arr_i64_stub, arr_isize_stub, arr_str_stub, arr_u64_stub, arr_usize_stub, obj_stub},
     };
 
-    use super::{OperandValue, operand_value_from_value, operand_value_to_string};
+    use super::{OperandValue, operand_value_from_value};
 
     #[test]
     fn operand_value_from() {
@@ -350,12 +353,12 @@ mod tests {
 
     #[test]
     fn test_operand_value_to_string() {
-        assert_eq!(operand_value_to_string(&OperandValue::U64(4)), "4".to_string());
-        assert_eq!(operand_value_to_string(&OperandValue::I64(-22)), "-22".to_string());
-        assert_eq!(operand_value_to_string(&OperandValue::F64(-3.65)), "-3.65".to_string());
-        assert_eq!(operand_value_to_string(&OperandValue::USize(19)), "19".to_string());
-        assert_eq!(operand_value_to_string(&OperandValue::ISize(-47)), "-47".to_string());
-        assert_eq!(operand_value_to_string(&OperandValue::Bool(true)), "true".to_string());
-        assert_eq!(operand_value_to_string(&OperandValue::from("Non sequitur")), r#""Non sequitur""#.to_string());
+        assert_eq!(OperandValue::U64(4).to_string(), "4".to_string());
+        assert_eq!(OperandValue::I64(-22).to_string(), "-22".to_string());
+        assert_eq!(OperandValue::F64(-3.65).to_string(), "-3.65".to_string());
+        assert_eq!(OperandValue::USize(19).to_string(), "19".to_string());
+        assert_eq!(OperandValue::ISize(-47).to_string(), "-47".to_string());
+        assert_eq!(OperandValue::Bool(true).to_string(), "true".to_string());
+        assert_eq!(OperandValue::from("Non sequitur").to_string(), r#""Non sequitur""#.to_string());
     }
 }

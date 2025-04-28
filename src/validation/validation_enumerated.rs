@@ -73,7 +73,7 @@ mod tests {
     fn enum_from() {
         let slice_u: [usize; 6] = [0, 1, 2, 3, 4, 5];
         let slice_i: [isize; 5] = [-2, -1, 0, 1, 2];
-        let slice_string: [String; 3] = ["APPLE".to_string(), "GRAPE".to_string(), "PEAR".to_string()];
+        let slice_string: [String; 3] = ["APPLE".into(), "GRAPE".into(), "PEAR".into()];
         let slice_str: [&str; 3] = ["APPLE", "GRAPE", "PEAR"];
 
         let vec_u: Vec<usize> = vec![0, 1, 2, 3, 4, 5];
