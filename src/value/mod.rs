@@ -191,7 +191,7 @@ mod tests {
     }
 
     #[test]
-    fn value_to_string_all_types() {
+    fn test_value_to_string() {
         let arr = Value::from([Value::from("Ad nauseam"), Value::from("Ad ignorantiam"), Value::from(["Ad hominem", "Ad verecundiam"])]);
         let obj = Value::from([
             ("k_num".into(), Value::U64(837)),
