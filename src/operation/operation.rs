@@ -8,6 +8,16 @@ pub enum Operand {
     FieldPath(String),
 }
 
+impl std::fmt::Display for Operand {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        let str = match self {
+            Operand::Value(value) => value.to_string(),
+            Operand::FieldPath(path) => "\"".to_string() + path + "\"",
+        };
+        write!(f, "{}", str)
+    }
+}
+
 #[derive(Debug, PartialEq, Clone)]
 pub enum Operation {
     Eq(Operand),
@@ -82,5 +92,11 @@ mod tests {
         assert_eq!(resolve_operand_value(&Operand::FieldPath("field.value.some.foo.bar".into()), &ROOT), None);
         assert_eq!(resolve_operand_value(&Operand::FieldPath("field.value.some.foo.bar".into()), &ROOT), None);
         assert_eq!(resolve_operand_value(&Operand::FieldPath("field.value.some.foo.bar".into()), &ROOT), None);
+    }
+
+    #[test]
+    fn test_to_string() {
+        assert_eq!(Operand::Value(OperandValue::U64(4)).to_string(), "4".to_string());
+        assert_eq!(Operand::FieldPath("user.info.details.name".into()).to_string(), r#""user.info.details.name""#.to_string());
     }
 }
