@@ -53,20 +53,21 @@ mod tests {
 
     use super::{SchemaErr, ValidationErr};
 
+    const REQUIRED: ValidationErr = ValidationErr::Required;
+    const U64: ValidationErr = ValidationErr::U64;
+    const I64: ValidationErr = ValidationErr::I64;
+    const F64: ValidationErr = ValidationErr::F64;
+    const USIZE: ValidationErr = ValidationErr::USize;
+    const ISIZE: ValidationErr = ValidationErr::ISize;
+    const BOOL: ValidationErr = ValidationErr::Bool;
+    const STR: ValidationErr = ValidationErr::Str;
+    const EMAIL: ValidationErr = ValidationErr::Email;
+    const DATE: ValidationErr = ValidationErr::Date;
+    const TIME: ValidationErr = ValidationErr::Time;
+    const DATE_TIME: ValidationErr = ValidationErr::DateTime;
+
     #[test]
     fn schema_err_validation() {
-        let required = ValidationErr::Required;
-        let u64 = ValidationErr::U64;
-        let i64 = ValidationErr::I64;
-        let f64 = ValidationErr::F64;
-        let usize = ValidationErr::USize;
-        let isize = ValidationErr::ISize;
-        let bool = ValidationErr::Bool;
-        let str = ValidationErr::Str;
-        let email = ValidationErr::Email;
-        let date = ValidationErr::Date;
-        let time = ValidationErr::Time;
-        let date_time = ValidationErr::DateTime;
         let operation = ValidationErr::Operation(Operation::Eq(Operand::Value(OperandValue::from("Swords"))));
         let bytes_len = ValidationErr::BytesLen(Operation::Eq(Operand::Value(OperandValue::USize(1))));
         let chars_len = ValidationErr::CharsLen(Operation::Ne(Operand::Value(OperandValue::USize(2))));
@@ -79,18 +80,18 @@ mod tests {
         let isize_enum = ValidationErr::ISizeEnum(vec![0, -1, -2, -3, -4, -5]);
         let str_enum = ValidationErr::StrEnum(vec!["APPLE".into(), "BANANA".into(), "GRAPE".into(), "ORANGE".into(), "PEACH".into()]);
 
-        assert_eq!(SchemaErr::arr([required.clone()]), SchemaErr::Arr(vec![required.clone()]));
-        assert_eq!(SchemaErr::arr([u64.clone()]), SchemaErr::Arr(vec![u64.clone()]));
-        assert_eq!(SchemaErr::arr([i64.clone()]), SchemaErr::Arr(vec![i64.clone()]));
-        assert_eq!(SchemaErr::arr([f64.clone()]), SchemaErr::Arr(vec![f64.clone()]));
-        assert_eq!(SchemaErr::arr([usize.clone()]), SchemaErr::Arr(vec![usize.clone()]));
-        assert_eq!(SchemaErr::arr([isize.clone()]), SchemaErr::Arr(vec![isize.clone()]));
-        assert_eq!(SchemaErr::arr([bool.clone()]), SchemaErr::Arr(vec![bool.clone()]));
-        assert_eq!(SchemaErr::arr([str.clone()]), SchemaErr::Arr(vec![str.clone()]));
-        assert_eq!(SchemaErr::arr([email.clone()]), SchemaErr::Arr(vec![email.clone()]));
-        assert_eq!(SchemaErr::arr([date.clone()]), SchemaErr::Arr(vec![date.clone()]));
-        assert_eq!(SchemaErr::arr([time.clone()]), SchemaErr::Arr(vec![time.clone()]));
-        assert_eq!(SchemaErr::arr([date_time.clone()]), SchemaErr::Arr(vec![date_time.clone()]));
+        assert_eq!(SchemaErr::arr([REQUIRED]), SchemaErr::Arr(vec![REQUIRED]));
+        assert_eq!(SchemaErr::arr([U64]), SchemaErr::Arr(vec![U64]));
+        assert_eq!(SchemaErr::arr([I64]), SchemaErr::Arr(vec![I64]));
+        assert_eq!(SchemaErr::arr([F64]), SchemaErr::Arr(vec![F64]));
+        assert_eq!(SchemaErr::arr([USIZE]), SchemaErr::Arr(vec![USIZE]));
+        assert_eq!(SchemaErr::arr([ISIZE]), SchemaErr::Arr(vec![ISIZE]));
+        assert_eq!(SchemaErr::arr([BOOL]), SchemaErr::Arr(vec![BOOL]));
+        assert_eq!(SchemaErr::arr([STR]), SchemaErr::Arr(vec![STR]));
+        assert_eq!(SchemaErr::arr([EMAIL]), SchemaErr::Arr(vec![EMAIL]));
+        assert_eq!(SchemaErr::arr([DATE]), SchemaErr::Arr(vec![DATE]));
+        assert_eq!(SchemaErr::arr([TIME]), SchemaErr::Arr(vec![TIME]));
+        assert_eq!(SchemaErr::arr([DATE_TIME]), SchemaErr::Arr(vec![DATE_TIME]));
         assert_eq!(SchemaErr::arr([operation.clone()]), SchemaErr::Arr(vec![operation.clone()]));
         assert_eq!(SchemaErr::arr([bytes_len.clone()]), SchemaErr::Arr(vec![bytes_len.clone()]));
         assert_eq!(SchemaErr::arr([chars_len.clone()]), SchemaErr::Arr(vec![chars_len.clone()]));
