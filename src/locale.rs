@@ -74,6 +74,7 @@ pub struct Locale {
     symbols_lt: String,
     symbols_le: String,
     symbols_btwn: String,
+    enumerated: String,
 }
 
 #[derive(Debug, PartialEq, Clone)]
@@ -168,7 +169,7 @@ pub fn localize_validation_err(error: &ValidationErr, locale: &Locale) -> String
             Operation::Le(v) => locale.symbols_le.replace("%value%", &v.to_string()),
             Operation::Btwn(a, b) => locale.symbols_btwn.replace("%value_a%", &a.to_string()).replace("%value_b%", &b.to_string()),
         },
-        _ => "".into(),
+        ValidationErr::Enumerated(values) => locale.enumerated.replace("%value%", &values.to_string()),
     }
 }
 
@@ -192,6 +193,7 @@ mod tests {
     use crate::{
         error::{SchemaErr, ValidationErr},
         operation::{Operand, OperandValue, Operation},
+        validation::EnumValues,
     };
 
     use super::{Locale, SchemaLocalizedErr, localize_schema_err, localize_validation_err};
@@ -384,6 +386,7 @@ mod tests {
             symbols_lt: "symbols < %value%".into(),
             symbols_le: "symbols <= %value%".into(),
             symbols_btwn: "%value_a% <= symbols <= %value_b%".into(),
+            enumerated: "enum %value%".into(),
         }
     }
 
@@ -401,6 +404,10 @@ mod tests {
         let operation_str_lt = ValidationErr::Operation(Operation::Lt(str_value_a.clone()));
         let operation_str_le = ValidationErr::Operation(Operation::Le(str_value_a.clone()));
         let operation_str_btwn = ValidationErr::Operation(Operation::Btwn(str_value_a, str_value_b));
+
+        let enum_usize = ValidationErr::Enumerated(EnumValues::USize(vec![0, 1, 2, 3, 4, 5]));
+        let enum_isize = ValidationErr::Enumerated(EnumValues::ISize(vec![-2, -1, 0, 1, 2]));
+        let enum_str = ValidationErr::Enumerated(EnumValues::Str(vec!["APPLE".into(), "GRAPE".into(), "PEAR".into()]));
 
         assert_eq!(localize_validation_err(&REQUIRED, &l), "required".to_string());
         assert_eq!(localize_validation_err(&U64, &l), "u64".to_string());
@@ -526,6 +533,10 @@ mod tests {
         assert_eq!(localize_validation_err(&SYMBOLS_LEN_LT, &l), "symbols < 27".to_string());
         assert_eq!(localize_validation_err(&SYMBOLS_LEN_LE, &l), "symbols <= 27".to_string());
         assert_eq!(localize_validation_err(&SYMBOLS_LEN_BTWN, &l), "27 <= symbols <= 39".to_string());
+
+        assert_eq!(localize_validation_err(&enum_usize, &l), "enum [ 0, 1, 2, 3, 4, 5 ]".to_string());
+        assert_eq!(localize_validation_err(&enum_isize, &l), "enum [ -2, -1, 0, 1, 2 ]".to_string());
+        assert_eq!(localize_validation_err(&enum_str, &l), r#"enum [ "APPLE", "GRAPE", "PEAR" ]"#.to_string());
     }
 
     #[test]

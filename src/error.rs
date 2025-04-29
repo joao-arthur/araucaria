@@ -1,6 +1,6 @@
 use std::collections::BTreeMap;
 
-use crate::operation::Operation;
+use crate::{operation::Operation, validation::EnumValues};
 
 #[derive(Debug, PartialEq, Clone)]
 pub enum ValidationErr {
@@ -24,9 +24,7 @@ pub enum ValidationErr {
     UppercaseLen(Operation),
     NumbersLen(Operation),
     SymbolsLen(Operation),
-    USizeEnum(Vec<usize>),
-    ISizeEnum(Vec<isize>),
-    StrEnum(Vec<String>),
+    Enumerated(EnumValues),
 }
 
 #[derive(Debug, PartialEq, Clone)]
@@ -49,7 +47,10 @@ impl SchemaErr {
 mod tests {
     use std::collections::BTreeMap;
 
-    use crate::operation::{Operand, OperandValue, Operation};
+    use crate::{
+        operation::{Operand, OperandValue, Operation},
+        validation::EnumValues,
+    };
 
     use super::{SchemaErr, ValidationErr};
 
@@ -68,6 +69,10 @@ mod tests {
 
     #[test]
     fn schema_err_validation() {
+        let vec_usize: Vec<usize> = vec![10, 20, 30, 40, 50];
+        let vec_isize: Vec<isize> = vec![0, -1, -2, -3, -4, -5];
+        let vec_string: Vec<String> = vec!["APPLE".into(), "GRAPE".into(), "PEAR".into()];
+
         let operation = ValidationErr::Operation(Operation::Eq(Operand::Value(OperandValue::from("Swords"))));
         let bytes_len = ValidationErr::BytesLen(Operation::Eq(Operand::Value(OperandValue::USize(1))));
         let chars_len = ValidationErr::CharsLen(Operation::Ne(Operand::Value(OperandValue::USize(2))));
@@ -76,9 +81,9 @@ mod tests {
         let uppercase_len = ValidationErr::UppercaseLen(Operation::Lt(Operand::Value(OperandValue::USize(5))));
         let numbers_len = ValidationErr::NumbersLen(Operation::Le(Operand::Value(OperandValue::USize(6))));
         let symbols_len = ValidationErr::SymbolsLen(Operation::Btwn(Operand::Value(OperandValue::USize(7)), Operand::Value(OperandValue::USize(8))));
-        let usize_enum = ValidationErr::USizeEnum(vec![10, 20, 30, 40, 50]);
-        let isize_enum = ValidationErr::ISizeEnum(vec![0, -1, -2, -3, -4, -5]);
-        let str_enum = ValidationErr::StrEnum(vec!["APPLE".into(), "BANANA".into(), "GRAPE".into(), "ORANGE".into(), "PEACH".into()]);
+        let usize_enum = ValidationErr::Enumerated(EnumValues::USize(vec_usize));
+        let isize_enum = ValidationErr::Enumerated(EnumValues::ISize(vec_isize));
+        let str_enum = ValidationErr::Enumerated(EnumValues::Str(vec_string));
 
         assert_eq!(SchemaErr::arr([REQUIRED]), SchemaErr::Arr(vec![REQUIRED]));
         assert_eq!(SchemaErr::arr([U64]), SchemaErr::Arr(vec![U64]));
