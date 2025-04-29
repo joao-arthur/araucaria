@@ -64,10 +64,10 @@ mod tests {
     fn compare_btwn_bool() {
         assert_eq!(compare_btwn(&OperandValue::Bool(false), &OperandValue::Bool(false), &OperandValue::Bool(true)), Some(Ok(())));
         assert_eq!(compare_btwn(&OperandValue::Bool(true), &OperandValue::Bool(false), &OperandValue::Bool(true)), Some(Ok(())));
-        //
+
         assert_eq!(compare_btwn(&OperandValue::Bool(false), &OperandValue::Bool(false), &OperandValue::Bool(false)), Some(Ok(())));
         assert_eq!(compare_btwn(&OperandValue::Bool(true), &OperandValue::Bool(false), &OperandValue::Bool(false)), Some(Err(())));
-        //
+
         assert_eq!(compare_btwn(&OperandValue::Bool(false), &OperandValue::Bool(true), &OperandValue::Bool(true)), Some(Err(())));
         assert_eq!(compare_btwn(&OperandValue::Bool(true), &OperandValue::Bool(true), &OperandValue::Bool(true)), Some(Ok(())));
     }

@@ -5,6 +5,54 @@ pub enum EnumValues {
     Str(Vec<String>),
 }
 
+impl From<Vec<usize>> for EnumValues {
+    fn from(values: Vec<usize>) -> Self {
+        EnumValues::USize(values)
+    }
+}
+
+impl From<Vec<isize>> for EnumValues {
+    fn from(values: Vec<isize>) -> Self {
+        EnumValues::ISize(values)
+    }
+}
+
+impl From<Vec<String>> for EnumValues {
+    fn from(values: Vec<String>) -> Self {
+        EnumValues::Str(values)
+    }
+}
+
+impl From<Vec<&str>> for EnumValues {
+    fn from(values: Vec<&str>) -> Self {
+        EnumValues::Str(values.iter().map(|value| value.to_string()).collect())
+    }
+}
+
+impl<const N: usize> From<[usize; N]> for EnumValues {
+    fn from(values: [usize; N]) -> Self {
+        EnumValues::USize(values.to_vec())
+    }
+}
+
+impl<const N: usize> From<[isize; N]> for EnumValues {
+    fn from(values: [isize; N]) -> Self {
+        EnumValues::ISize(values.to_vec())
+    }
+}
+
+impl<const N: usize> From<[String; N]> for EnumValues {
+    fn from(values: [String; N]) -> Self {
+        EnumValues::Str(values.to_vec())
+    }
+}
+
+impl<const N: usize> From<[&str; N]> for EnumValues {
+    fn from(values: [&str; N]) -> Self {
+        EnumValues::Str(values.iter().map(|value| value.to_string()).collect())
+    }
+}
+
 #[derive(Debug, PartialEq, Clone)]
 pub struct EnumValidation {
     pub required: bool,
@@ -19,49 +67,49 @@ impl EnumValidation {
 
 impl From<Vec<usize>> for EnumValidation {
     fn from(values: Vec<usize>) -> Self {
-        EnumValidation { required: true, values: EnumValues::USize(values) }
+        EnumValidation { required: true, values: EnumValues::from(values) }
     }
 }
 
 impl From<Vec<isize>> for EnumValidation {
     fn from(values: Vec<isize>) -> Self {
-        EnumValidation { required: true, values: EnumValues::ISize(values) }
+        EnumValidation { required: true, values: EnumValues::from(values) }
     }
 }
 
 impl From<Vec<String>> for EnumValidation {
     fn from(values: Vec<String>) -> Self {
-        EnumValidation { required: true, values: EnumValues::Str(values) }
+        EnumValidation { required: true, values: EnumValues::from(values) }
     }
 }
 
 impl From<Vec<&str>> for EnumValidation {
     fn from(values: Vec<&str>) -> Self {
-        EnumValidation { required: true, values: EnumValues::Str(values.iter().map(|value| value.to_string()).collect()) }
+        EnumValidation { required: true, values: EnumValues::from(values) }
     }
 }
 
 impl<const N: usize> From<[usize; N]> for EnumValidation {
     fn from(values: [usize; N]) -> Self {
-        EnumValidation { required: true, values: EnumValues::USize(values.to_vec()) }
+        EnumValidation { required: true, values: EnumValues::from(values) }
     }
 }
 
 impl<const N: usize> From<[isize; N]> for EnumValidation {
     fn from(values: [isize; N]) -> Self {
-        EnumValidation { required: true, values: EnumValues::ISize(values.to_vec()) }
+        EnumValidation { required: true, values: EnumValues::from(values) }
     }
 }
 
 impl<const N: usize> From<[String; N]> for EnumValidation {
     fn from(values: [String; N]) -> Self {
-        EnumValidation { required: true, values: EnumValues::Str(values.to_vec()) }
+        EnumValidation { required: true, values: EnumValues::from(values) }
     }
 }
 
 impl<const N: usize> From<[&str; N]> for EnumValidation {
     fn from(values: [&str; N]) -> Self {
-        EnumValidation { required: true, values: EnumValues::Str(values.iter().map(|value| value.to_string()).collect()) }
+        EnumValidation { required: true, values: EnumValues::from(values) }
     }
 }
 
@@ -90,6 +138,29 @@ mod tests {
     use super::{EnumValidation, EnumValues};
 
     #[test]
+    fn enum_values_from() {
+        let slice_u: [usize; 6] = [0, 1, 2, 3, 4, 5];
+        let slice_i: [isize; 5] = [-2, -1, 0, 1, 2];
+        let slice_string: [String; 3] = ["APPLE".into(), "GRAPE".into(), "PEAR".into()];
+        let slice_str: [&str; 3] = ["APPLE", "GRAPE", "PEAR"];
+
+        let vec_u: Vec<usize> = vec![0, 1, 2, 3, 4, 5];
+        let vec_i: Vec<isize> = vec![-2, -1, 0, 1, 2];
+        let vec_string: Vec<String> = vec!["APPLE".into(), "GRAPE".into(), "PEAR".into()];
+        let vec_str: Vec<&str> = vec!["APPLE", "GRAPE", "PEAR"];
+
+        assert_eq!(EnumValues::from(slice_u), EnumValues::USize(vec_u.clone()));
+        assert_eq!(EnumValues::from(slice_i), EnumValues::ISize(vec_i.clone()));
+        assert_eq!(EnumValues::from(slice_string), EnumValues::Str(vec_string.clone()));
+        assert_eq!(EnumValues::from(slice_str), EnumValues::Str(vec_string.clone()));
+
+        assert_eq!(EnumValues::from(vec_u.clone()), EnumValues::USize(vec_u.clone()));
+        assert_eq!(EnumValues::from(vec_i.clone()), EnumValues::ISize(vec_i.clone()));
+        assert_eq!(EnumValues::from(vec_string.clone()), EnumValues::Str(vec_string.clone()));
+        assert_eq!(EnumValues::from(vec_str), EnumValues::Str(vec_string.clone()));
+    }
+
+    #[test]
     fn enum_values_to_string() {
         let vec_u: Vec<usize> = vec![0, 1, 2, 3, 4, 5];
         let vec_i: Vec<isize> = vec![-2, -1, 0, 1, 2];
@@ -101,7 +172,7 @@ mod tests {
     }
 
     #[test]
-    fn enum_from() {
+    fn enum_validation_from() {
         let slice_u: [usize; 6] = [0, 1, 2, 3, 4, 5];
         let slice_i: [isize; 5] = [-2, -1, 0, 1, 2];
         let slice_string: [String; 3] = ["APPLE".into(), "GRAPE".into(), "PEAR".into()];

@@ -2,7 +2,7 @@ use std::collections::BTreeMap;
 
 use crate::{
     error::{SchemaErr, ValidationErr},
-    operation::Operation,
+    operation::{Operand, Operation},
 };
 
 pub struct Locale {
@@ -25,6 +25,12 @@ pub struct Locale {
     ge: String,
     le: String,
     btwn: String,
+    eq_field: String,
+    ne_field: String,
+    gt_field: String,
+    lt_field: String,
+    ge_field: String,
+    le_field: String,
     bytes_len_eq: String,
     bytes_len_ne: String,
     bytes_len_gt: String,
@@ -98,12 +104,30 @@ pub fn localize_validation_err(error: &ValidationErr, locale: &Locale) -> String
         ValidationErr::Time => locale.time.clone(),
         ValidationErr::DateTime => locale.date_time.clone(),
         ValidationErr::Operation(operation) => match operation {
-            Operation::Eq(v) => locale.eq.replace("%value%", &v.to_string()),
-            Operation::Ne(v) => locale.ne.replace("%value%", &v.to_string()),
-            Operation::Gt(v) => locale.gt.replace("%value%", &v.to_string()),
-            Operation::Ge(v) => locale.ge.replace("%value%", &v.to_string()),
-            Operation::Lt(v) => locale.lt.replace("%value%", &v.to_string()),
-            Operation::Le(v) => locale.le.replace("%value%", &v.to_string()),
+            Operation::Eq(operand) => match operand {
+                Operand::Value(value) => locale.eq.replace("%value%", &value.to_string()),
+                Operand::FieldPath(field) => locale.eq_field.replace("%value%", &("\"".to_string() + field + "\"")),
+            },
+            Operation::Ne(operand) => match operand {
+                Operand::Value(value) => locale.ne.replace("%value%", &value.to_string()),
+                Operand::FieldPath(field) => locale.ne_field.replace("%value%", &("\"".to_string() + field + "\"")),
+            },
+            Operation::Gt(operand) => match operand {
+                Operand::Value(value) => locale.gt.replace("%value%", &value.to_string()),
+                Operand::FieldPath(field) => locale.gt_field.replace("%value%", &("\"".to_string() + field + "\"")),
+            },
+            Operation::Ge(operand) => match operand {
+                Operand::Value(value) => locale.ge.replace("%value%", &value.to_string()),
+                Operand::FieldPath(field) => locale.ge_field.replace("%value%", &("\"".to_string() + field + "\"")),
+            },
+            Operation::Lt(operand) => match operand {
+                Operand::Value(value) => locale.lt.replace("%value%", &value.to_string()),
+                Operand::FieldPath(field) => locale.lt_field.replace("%value%", &("\"".to_string() + field + "\"")),
+            },
+            Operation::Le(operand) => match operand {
+                Operand::Value(value) => locale.le.replace("%value%", &value.to_string()),
+                Operand::FieldPath(field) => locale.le_field.replace("%value%", &("\"".to_string() + field + "\"")),
+            },
             Operation::Btwn(a, b) => locale.btwn.replace("%value_a%", &a.to_string()).replace("%value_b%", &b.to_string()),
         },
         ValidationErr::BytesLen(operation) => match operation {
@@ -337,6 +361,12 @@ mod tests {
             lt: "< %value%".into(),
             le: "<= %value%".into(),
             btwn: "%value_a% <= <= %value_b%".into(),
+            eq_field: "== field %value%".into(),
+            ne_field: "!= field %value%".into(),
+            gt_field: "> field %value%".into(),
+            ge_field: ">= field %value%".into(),
+            lt_field: "< field %value%".into(),
+            le_field: "<= field %value%".into(),
             bytes_len_eq: "bytes_len == %value%".into(),
             bytes_len_ne: "bytes_len != %value%".into(),
             bytes_len_gt: "bytes_len > %value%".into(),
@@ -409,6 +439,14 @@ mod tests {
         let enum_isize = ValidationErr::Enumerated(EnumValues::ISize(vec![-2, -1, 0, 1, 2]));
         let enum_str = ValidationErr::Enumerated(EnumValues::Str(vec!["APPLE".into(), "GRAPE".into(), "PEAR".into()]));
 
+        let field_path = Operand::FieldPath("user.account.info.details.user_name".into());
+        let op_field_eq: ValidationErr = ValidationErr::Operation(Operation::Eq(field_path.clone()));
+        let op_field_ne: ValidationErr = ValidationErr::Operation(Operation::Ne(field_path.clone()));
+        let op_field_gt: ValidationErr = ValidationErr::Operation(Operation::Gt(field_path.clone()));
+        let op_field_ge: ValidationErr = ValidationErr::Operation(Operation::Ge(field_path.clone()));
+        let op_field_lt: ValidationErr = ValidationErr::Operation(Operation::Lt(field_path.clone()));
+        let op_field_le: ValidationErr = ValidationErr::Operation(Operation::Le(field_path.clone()));
+
         assert_eq!(localize_validation_err(&REQUIRED, &l), "required".to_string());
         assert_eq!(localize_validation_err(&U64, &l), "u64".to_string());
         assert_eq!(localize_validation_err(&I64, &l), "i64".to_string());
@@ -477,6 +515,13 @@ mod tests {
         assert_eq!(localize_validation_err(&operation_str_lt, &l), r#"< "aurorae""#.to_string());
         assert_eq!(localize_validation_err(&operation_str_le, &l), r#"<= "aurorae""#.to_string());
         assert_eq!(localize_validation_err(&operation_str_btwn, &l), r#""aurorae" <= <= "crespúculum""#.to_string());
+
+        assert_eq!(localize_validation_err(&op_field_eq, &l), r#"== field "user.account.info.details.user_name""#.to_string());
+        assert_eq!(localize_validation_err(&op_field_ne, &l), r#"!= field "user.account.info.details.user_name""#.to_string());
+        assert_eq!(localize_validation_err(&op_field_gt, &l), r#"> field "user.account.info.details.user_name""#.to_string());
+        assert_eq!(localize_validation_err(&op_field_ge, &l), r#">= field "user.account.info.details.user_name""#.to_string());
+        assert_eq!(localize_validation_err(&op_field_lt, &l), r#"< field "user.account.info.details.user_name""#.to_string());
+        assert_eq!(localize_validation_err(&op_field_le, &l), r#"<= field "user.account.info.details.user_name""#.to_string());
 
         assert_eq!(localize_validation_err(&BYTES_LEN_EQ, &l), "bytes_len == 27".to_string());
         assert_eq!(localize_validation_err(&BYTES_LEN_NE, &l), "bytes_len != 27".to_string());

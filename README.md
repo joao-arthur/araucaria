@@ -160,7 +160,6 @@ pub static CREATE_USER_SCHEMA: LazyLock<Validation> = LazyLock::new(|| {
 
 - `Validation::Arr`
 - `validate_arr`
-- `validate` should not fail when only optional fields are missing
 - Segregate `araucaria_plugins` modules by features
 - Create a function that receives `serde_json::Value` and `T: Deserialize`, and
   returns a `T` instance
