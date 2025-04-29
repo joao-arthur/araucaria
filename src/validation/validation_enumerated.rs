@@ -65,9 +65,40 @@ impl<const N: usize> From<[&str; N]> for EnumValidation {
     }
 }
 
+impl std::fmt::Display for EnumValues {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        let str = match self {
+            EnumValues::USize(values) => {
+                let parts: Vec<String> = values.iter().map(|value| value.to_string()).collect();
+                "[ ".to_string() + &parts.join(", ") + " ]"
+            }
+            EnumValues::ISize(values) => {
+                let parts: Vec<String> = values.iter().map(|value| value.to_string()).collect();
+                "[ ".to_string() + &parts.join(", ") + " ]"
+            }
+            EnumValues::Str(values) => {
+                let parts: Vec<String> = values.iter().map(|value| "\"".to_string() + value + "\"").collect();
+                "[ ".to_string() + &parts.join(", ") + " ]"
+            }
+        };
+        write!(f, "{}", str)
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::{EnumValidation, EnumValues};
+
+    #[test]
+    fn enum_values_to_string() {
+        let vec_u: Vec<usize> = vec![0, 1, 2, 3, 4, 5];
+        let vec_i: Vec<isize> = vec![-2, -1, 0, 1, 2];
+        let vec_str: Vec<String> = vec!["APPLE".into(), "GRAPE".into(), "PEAR".into()];
+
+        assert_eq!(EnumValues::USize(vec_u).to_string(), r#"[ 0, 1, 2, 3, 4, 5 ]"#.to_string());
+        assert_eq!(EnumValues::ISize(vec_i).to_string(), r#"[ -2, -1, 0, 1, 2 ]"#.to_string());
+        assert_eq!(EnumValues::Str(vec_str).to_string(), r#"[ "APPLE", "GRAPE", "PEAR" ]"#.to_string());
+    }
 
     #[test]
     fn enum_from() {
