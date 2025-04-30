@@ -212,7 +212,7 @@ pub fn localize_schema_err(err: &SchemaErr, locale: &Locale) -> SchemaLocalizedE
 
 #[cfg(test)]
 mod tests {
-    use std::collections::BTreeMap;
+    use std::{collections::BTreeMap, sync::LazyLock};
 
     use crate::{
         error::{SchemaErr, ValidationErr},
@@ -221,6 +221,26 @@ mod tests {
     };
 
     use super::{Locale, SchemaLocalizedErr, localize_schema_err, localize_validation_err};
+
+    const STR_VALUES: [&str; 3] = ["APPLE", "GRAPE", "PEAR"];
+    const USIZE_VALUES: [usize; 6] = [0, 1, 2, 3, 4, 5];
+    const ISIZE_VALUES: [isize; 5] = [-2, -1, 0, 1, 2];
+
+    const U64_VALUE: Operand = Operand::Value(OperandValue::U64(34));
+    const U64_VALUE_B: Operand = Operand::Value(OperandValue::U64(43));
+    const I64_VALUE: Operand = Operand::Value(OperandValue::I64(-4));
+    const I64_VALUE_B: Operand = Operand::Value(OperandValue::I64(4));
+    const F64_VALUE: Operand = Operand::Value(OperandValue::F64(-4.6));
+    const F64_VALUE_B: Operand = Operand::Value(OperandValue::F64(-2.4));
+    const USIZE_VALUE: Operand = Operand::Value(OperandValue::USize(27));
+    const USIZE_VALUE_B: Operand = Operand::Value(OperandValue::USize(39));
+    const ISIZE_VALUE: Operand = Operand::Value(OperandValue::ISize(-93));
+    const ISIZE_VALUE_B: Operand = Operand::Value(OperandValue::ISize(-72));
+    const BOOL_VALUE: Operand = Operand::Value(OperandValue::Bool(false));
+    const BOOL_VALUE_B: Operand = Operand::Value(OperandValue::Bool(true));
+    const STR_VALUE: LazyLock<Operand> = LazyLock::new(|| Operand::Value(OperandValue::from("aurorae")));
+    const STR_VALUE_B: LazyLock<Operand> = LazyLock::new(|| Operand::Value(OperandValue::from("crespúculum")));
+    const FIELD_PATH: LazyLock<Operand> = LazyLock::new(|| Operand::FieldPath("user.account.info.details.user_name".into()));
 
     const REQUIRED: ValidationErr = ValidationErr::Required;
     const U64: ValidationErr = ValidationErr::U64;
@@ -235,110 +255,129 @@ mod tests {
     const TIME: ValidationErr = ValidationErr::Time;
     const DATE_TIME: ValidationErr = ValidationErr::DateTime;
 
-    const U64_VALUE_A: Operand = Operand::Value(OperandValue::U64(34));
-    const U64_VALUE_B: Operand = Operand::Value(OperandValue::U64(43));
-    const I64_VALUE_A: Operand = Operand::Value(OperandValue::I64(-4));
-    const I64_VALUE_B: Operand = Operand::Value(OperandValue::I64(4));
-    const F64_VALUE_A: Operand = Operand::Value(OperandValue::F64(-4.6));
-    const F64_VALUE_B: Operand = Operand::Value(OperandValue::F64(-2.4));
-    const USIZE_VALUE_A: Operand = Operand::Value(OperandValue::USize(27));
-    const USIZE_VALUE_B: Operand = Operand::Value(OperandValue::USize(39));
-    const ISIZE_VALUE_A: Operand = Operand::Value(OperandValue::ISize(-93));
-    const ISIZE_VALUE_B: Operand = Operand::Value(OperandValue::ISize(-72));
-    const BOOL_VALUE_A: Operand = Operand::Value(OperandValue::Bool(false));
-    const BOOL_VALUE_B: Operand = Operand::Value(OperandValue::Bool(true));
+    const OPERATION_U64_EQ: ValidationErr = ValidationErr::Operation(Operation::Eq(U64_VALUE));
+    const OPERATION_U64_NE: ValidationErr = ValidationErr::Operation(Operation::Ne(U64_VALUE));
+    const OPERATION_U64_GT: ValidationErr = ValidationErr::Operation(Operation::Gt(U64_VALUE));
+    const OPERATION_U64_GE: ValidationErr = ValidationErr::Operation(Operation::Ge(U64_VALUE));
+    const OPERATION_U64_LT: ValidationErr = ValidationErr::Operation(Operation::Lt(U64_VALUE));
+    const OPERATION_U64_LE: ValidationErr = ValidationErr::Operation(Operation::Le(U64_VALUE));
+    const OPERATION_U64_BTWN: ValidationErr = ValidationErr::Operation(Operation::Btwn(U64_VALUE, U64_VALUE_B));
 
-    const OP_U64_EQ: ValidationErr = ValidationErr::Operation(Operation::Eq(U64_VALUE_A));
-    const OP_U64_NE: ValidationErr = ValidationErr::Operation(Operation::Ne(U64_VALUE_A));
-    const OP_U64_GT: ValidationErr = ValidationErr::Operation(Operation::Gt(U64_VALUE_A));
-    const OP_U64_GE: ValidationErr = ValidationErr::Operation(Operation::Ge(U64_VALUE_A));
-    const OP_U64_LT: ValidationErr = ValidationErr::Operation(Operation::Lt(U64_VALUE_A));
-    const OP_U64_LE: ValidationErr = ValidationErr::Operation(Operation::Le(U64_VALUE_A));
-    const OP_U64_BTWN: ValidationErr = ValidationErr::Operation(Operation::Btwn(U64_VALUE_A, U64_VALUE_B));
-    const OP_I64_EQ: ValidationErr = ValidationErr::Operation(Operation::Eq(I64_VALUE_A));
-    const OP_I64_NE: ValidationErr = ValidationErr::Operation(Operation::Ne(I64_VALUE_A));
-    const OP_I64_GT: ValidationErr = ValidationErr::Operation(Operation::Gt(I64_VALUE_A));
-    const OP_I64_GE: ValidationErr = ValidationErr::Operation(Operation::Ge(I64_VALUE_A));
-    const OP_I64_LT: ValidationErr = ValidationErr::Operation(Operation::Lt(I64_VALUE_A));
-    const OP_I64_LE: ValidationErr = ValidationErr::Operation(Operation::Le(I64_VALUE_A));
-    const OP_I64_BTWN: ValidationErr = ValidationErr::Operation(Operation::Btwn(I64_VALUE_A, I64_VALUE_B));
-    const OP_F64_EQ: ValidationErr = ValidationErr::Operation(Operation::Eq(F64_VALUE_A));
-    const OP_F64_NE: ValidationErr = ValidationErr::Operation(Operation::Ne(F64_VALUE_A));
-    const OP_F64_GT: ValidationErr = ValidationErr::Operation(Operation::Gt(F64_VALUE_A));
-    const OP_F64_GE: ValidationErr = ValidationErr::Operation(Operation::Ge(F64_VALUE_A));
-    const OP_F64_LT: ValidationErr = ValidationErr::Operation(Operation::Lt(F64_VALUE_A));
-    const OP_F64_LE: ValidationErr = ValidationErr::Operation(Operation::Le(F64_VALUE_A));
-    const OP_F64_BTWN: ValidationErr = ValidationErr::Operation(Operation::Btwn(F64_VALUE_A, F64_VALUE_B));
-    const OP_USIZE_EQ: ValidationErr = ValidationErr::Operation(Operation::Eq(USIZE_VALUE_A));
-    const OP_USIZE_NE: ValidationErr = ValidationErr::Operation(Operation::Ne(USIZE_VALUE_A));
-    const OP_USIZE_GT: ValidationErr = ValidationErr::Operation(Operation::Gt(USIZE_VALUE_A));
-    const OP_USIZE_GE: ValidationErr = ValidationErr::Operation(Operation::Ge(USIZE_VALUE_A));
-    const OP_USIZE_LT: ValidationErr = ValidationErr::Operation(Operation::Lt(USIZE_VALUE_A));
-    const OP_USIZE_LE: ValidationErr = ValidationErr::Operation(Operation::Le(USIZE_VALUE_A));
-    const OP_USIZE_BTWN: ValidationErr = ValidationErr::Operation(Operation::Btwn(USIZE_VALUE_A, USIZE_VALUE_B));
-    const OP_ISIZE_EQ: ValidationErr = ValidationErr::Operation(Operation::Eq(ISIZE_VALUE_A));
-    const OP_ISIZE_NE: ValidationErr = ValidationErr::Operation(Operation::Ne(ISIZE_VALUE_A));
-    const OP_ISIZE_GT: ValidationErr = ValidationErr::Operation(Operation::Gt(ISIZE_VALUE_A));
-    const OP_ISIZE_GE: ValidationErr = ValidationErr::Operation(Operation::Ge(ISIZE_VALUE_A));
-    const OP_ISIZE_LT: ValidationErr = ValidationErr::Operation(Operation::Lt(ISIZE_VALUE_A));
-    const OP_ISIZE_LE: ValidationErr = ValidationErr::Operation(Operation::Le(ISIZE_VALUE_A));
-    const OP_ISIZE_BTWN: ValidationErr = ValidationErr::Operation(Operation::Btwn(ISIZE_VALUE_A, ISIZE_VALUE_B));
-    const OP_BOOL_EQ: ValidationErr = ValidationErr::Operation(Operation::Eq(BOOL_VALUE_A));
-    const OP_BOOL_NE: ValidationErr = ValidationErr::Operation(Operation::Ne(BOOL_VALUE_A));
-    const OP_BOOL_GT: ValidationErr = ValidationErr::Operation(Operation::Gt(BOOL_VALUE_A));
-    const OP_BOOL_GE: ValidationErr = ValidationErr::Operation(Operation::Ge(BOOL_VALUE_A));
-    const OP_BOOL_LT: ValidationErr = ValidationErr::Operation(Operation::Lt(BOOL_VALUE_A));
-    const OP_BOOL_LE: ValidationErr = ValidationErr::Operation(Operation::Le(BOOL_VALUE_A));
-    const OP_BOOL_BTWN: ValidationErr = ValidationErr::Operation(Operation::Btwn(BOOL_VALUE_A, BOOL_VALUE_B));
-    const BYTES_LEN_EQ: ValidationErr = ValidationErr::BytesLen(Operation::Eq(USIZE_VALUE_A));
-    const BYTES_LEN_NE: ValidationErr = ValidationErr::BytesLen(Operation::Ne(USIZE_VALUE_A));
-    const BYTES_LEN_GT: ValidationErr = ValidationErr::BytesLen(Operation::Gt(USIZE_VALUE_A));
-    const BYTES_LEN_GE: ValidationErr = ValidationErr::BytesLen(Operation::Ge(USIZE_VALUE_A));
-    const BYTES_LEN_LT: ValidationErr = ValidationErr::BytesLen(Operation::Lt(USIZE_VALUE_A));
-    const BYTES_LEN_LE: ValidationErr = ValidationErr::BytesLen(Operation::Le(USIZE_VALUE_A));
-    const BYTES_LEN_BTWN: ValidationErr = ValidationErr::BytesLen(Operation::Btwn(USIZE_VALUE_A, USIZE_VALUE_B));
-    const CHARS_LEN_EQ: ValidationErr = ValidationErr::CharsLen(Operation::Eq(USIZE_VALUE_A));
-    const CHARS_LEN_NE: ValidationErr = ValidationErr::CharsLen(Operation::Ne(USIZE_VALUE_A));
-    const CHARS_LEN_GT: ValidationErr = ValidationErr::CharsLen(Operation::Gt(USIZE_VALUE_A));
-    const CHARS_LEN_GE: ValidationErr = ValidationErr::CharsLen(Operation::Ge(USIZE_VALUE_A));
-    const CHARS_LEN_LT: ValidationErr = ValidationErr::CharsLen(Operation::Lt(USIZE_VALUE_A));
-    const CHARS_LEN_LE: ValidationErr = ValidationErr::CharsLen(Operation::Le(USIZE_VALUE_A));
-    const CHARS_LEN_BTWN: ValidationErr = ValidationErr::CharsLen(Operation::Btwn(USIZE_VALUE_A, USIZE_VALUE_B));
-    const GRAPHEMES_LEN_EQ: ValidationErr = ValidationErr::GraphemesLen(Operation::Eq(USIZE_VALUE_A));
-    const GRAPHEMES_LEN_NE: ValidationErr = ValidationErr::GraphemesLen(Operation::Ne(USIZE_VALUE_A));
-    const GRAPHEMES_LEN_GT: ValidationErr = ValidationErr::GraphemesLen(Operation::Gt(USIZE_VALUE_A));
-    const GRAPHEMES_LEN_GE: ValidationErr = ValidationErr::GraphemesLen(Operation::Ge(USIZE_VALUE_A));
-    const GRAPHEMES_LEN_LT: ValidationErr = ValidationErr::GraphemesLen(Operation::Lt(USIZE_VALUE_A));
-    const GRAPHEMES_LEN_LE: ValidationErr = ValidationErr::GraphemesLen(Operation::Le(USIZE_VALUE_A));
-    const GRAPHEMES_LEN_BTWN: ValidationErr = ValidationErr::GraphemesLen(Operation::Btwn(USIZE_VALUE_A, USIZE_VALUE_B));
-    const LOWER_LEN_EQ: ValidationErr = ValidationErr::LowercaseLen(Operation::Eq(USIZE_VALUE_A));
-    const LOWER_LEN_NE: ValidationErr = ValidationErr::LowercaseLen(Operation::Ne(USIZE_VALUE_A));
-    const LOWER_LEN_GT: ValidationErr = ValidationErr::LowercaseLen(Operation::Gt(USIZE_VALUE_A));
-    const LOWER_LEN_GE: ValidationErr = ValidationErr::LowercaseLen(Operation::Ge(USIZE_VALUE_A));
-    const LOWER_LEN_LT: ValidationErr = ValidationErr::LowercaseLen(Operation::Lt(USIZE_VALUE_A));
-    const LOWER_LEN_LE: ValidationErr = ValidationErr::LowercaseLen(Operation::Le(USIZE_VALUE_A));
-    const LOWER_LEN_BTWN: ValidationErr = ValidationErr::LowercaseLen(Operation::Btwn(USIZE_VALUE_A, USIZE_VALUE_B));
-    const UPPER_LEN_EQ: ValidationErr = ValidationErr::UppercaseLen(Operation::Eq(USIZE_VALUE_A));
-    const UPPER_LEN_NE: ValidationErr = ValidationErr::UppercaseLen(Operation::Ne(USIZE_VALUE_A));
-    const UPPER_LEN_GT: ValidationErr = ValidationErr::UppercaseLen(Operation::Gt(USIZE_VALUE_A));
-    const UPPER_LEN_GE: ValidationErr = ValidationErr::UppercaseLen(Operation::Ge(USIZE_VALUE_A));
-    const UPPER_LEN_LT: ValidationErr = ValidationErr::UppercaseLen(Operation::Lt(USIZE_VALUE_A));
-    const UPPER_LEN_LE: ValidationErr = ValidationErr::UppercaseLen(Operation::Le(USIZE_VALUE_A));
-    const UPPER_LEN_BTWN: ValidationErr = ValidationErr::UppercaseLen(Operation::Btwn(USIZE_VALUE_A, USIZE_VALUE_B));
-    const NUMBERS_LEN_EQ: ValidationErr = ValidationErr::NumbersLen(Operation::Eq(USIZE_VALUE_A));
-    const NUMBERS_LEN_NE: ValidationErr = ValidationErr::NumbersLen(Operation::Ne(USIZE_VALUE_A));
-    const NUMBERS_LEN_GT: ValidationErr = ValidationErr::NumbersLen(Operation::Gt(USIZE_VALUE_A));
-    const NUMBERS_LEN_GE: ValidationErr = ValidationErr::NumbersLen(Operation::Ge(USIZE_VALUE_A));
-    const NUMBERS_LEN_LT: ValidationErr = ValidationErr::NumbersLen(Operation::Lt(USIZE_VALUE_A));
-    const NUMBERS_LEN_LE: ValidationErr = ValidationErr::NumbersLen(Operation::Le(USIZE_VALUE_A));
-    const NUMBERS_LEN_BTWN: ValidationErr = ValidationErr::NumbersLen(Operation::Btwn(USIZE_VALUE_A, USIZE_VALUE_B));
-    const SYMBOLS_LEN_EQ: ValidationErr = ValidationErr::SymbolsLen(Operation::Eq(USIZE_VALUE_A));
-    const SYMBOLS_LEN_NE: ValidationErr = ValidationErr::SymbolsLen(Operation::Ne(USIZE_VALUE_A));
-    const SYMBOLS_LEN_GT: ValidationErr = ValidationErr::SymbolsLen(Operation::Gt(USIZE_VALUE_A));
-    const SYMBOLS_LEN_GE: ValidationErr = ValidationErr::SymbolsLen(Operation::Ge(USIZE_VALUE_A));
-    const SYMBOLS_LEN_LT: ValidationErr = ValidationErr::SymbolsLen(Operation::Lt(USIZE_VALUE_A));
-    const SYMBOLS_LEN_LE: ValidationErr = ValidationErr::SymbolsLen(Operation::Le(USIZE_VALUE_A));
-    const SYMBOLS_LEN_BTWN: ValidationErr = ValidationErr::SymbolsLen(Operation::Btwn(USIZE_VALUE_A, USIZE_VALUE_B));
+    const OPERATION_I64_EQ: ValidationErr = ValidationErr::Operation(Operation::Eq(I64_VALUE));
+    const OPERATION_I64_NE: ValidationErr = ValidationErr::Operation(Operation::Ne(I64_VALUE));
+    const OPERATION_I64_GT: ValidationErr = ValidationErr::Operation(Operation::Gt(I64_VALUE));
+    const OPERATION_I64_GE: ValidationErr = ValidationErr::Operation(Operation::Ge(I64_VALUE));
+    const OPERATION_I64_LT: ValidationErr = ValidationErr::Operation(Operation::Lt(I64_VALUE));
+    const OPERATION_I64_LE: ValidationErr = ValidationErr::Operation(Operation::Le(I64_VALUE));
+    const OPERATION_I64_BTWN: ValidationErr = ValidationErr::Operation(Operation::Btwn(I64_VALUE, I64_VALUE_B));
+
+    const OPERATION_F64_EQ: ValidationErr = ValidationErr::Operation(Operation::Eq(F64_VALUE));
+    const OPERATION_F64_NE: ValidationErr = ValidationErr::Operation(Operation::Ne(F64_VALUE));
+    const OPERATION_F64_GT: ValidationErr = ValidationErr::Operation(Operation::Gt(F64_VALUE));
+    const OPERATION_F64_GE: ValidationErr = ValidationErr::Operation(Operation::Ge(F64_VALUE));
+    const OPERATION_F64_LT: ValidationErr = ValidationErr::Operation(Operation::Lt(F64_VALUE));
+    const OPERATION_F64_LE: ValidationErr = ValidationErr::Operation(Operation::Le(F64_VALUE));
+    const OPERATION_F64_BTWN: ValidationErr = ValidationErr::Operation(Operation::Btwn(F64_VALUE, F64_VALUE_B));
+
+    const OPERATION_USIZE_EQ: ValidationErr = ValidationErr::Operation(Operation::Eq(USIZE_VALUE));
+    const OPERATION_USIZE_NE: ValidationErr = ValidationErr::Operation(Operation::Ne(USIZE_VALUE));
+    const OPERATION_USIZE_GT: ValidationErr = ValidationErr::Operation(Operation::Gt(USIZE_VALUE));
+    const OPERATION_USIZE_GE: ValidationErr = ValidationErr::Operation(Operation::Ge(USIZE_VALUE));
+    const OPERATION_USIZE_LT: ValidationErr = ValidationErr::Operation(Operation::Lt(USIZE_VALUE));
+    const OPERATION_USIZE_LE: ValidationErr = ValidationErr::Operation(Operation::Le(USIZE_VALUE));
+    const OPERATION_USIZE_BTWN: ValidationErr = ValidationErr::Operation(Operation::Btwn(USIZE_VALUE, USIZE_VALUE_B));
+
+    const OPERATION_ISIZE_EQ: ValidationErr = ValidationErr::Operation(Operation::Eq(ISIZE_VALUE));
+    const OPERATION_ISIZE_NE: ValidationErr = ValidationErr::Operation(Operation::Ne(ISIZE_VALUE));
+    const OPERATION_ISIZE_GT: ValidationErr = ValidationErr::Operation(Operation::Gt(ISIZE_VALUE));
+    const OPERATION_ISIZE_GE: ValidationErr = ValidationErr::Operation(Operation::Ge(ISIZE_VALUE));
+    const OPERATION_ISIZE_LT: ValidationErr = ValidationErr::Operation(Operation::Lt(ISIZE_VALUE));
+    const OPERATION_ISIZE_LE: ValidationErr = ValidationErr::Operation(Operation::Le(ISIZE_VALUE));
+    const OPERATION_ISIZE_BTWN: ValidationErr = ValidationErr::Operation(Operation::Btwn(ISIZE_VALUE, ISIZE_VALUE_B));
+
+    const OPERATION_BOOL_EQ: ValidationErr = ValidationErr::Operation(Operation::Eq(BOOL_VALUE));
+    const OPERATION_BOOL_NE: ValidationErr = ValidationErr::Operation(Operation::Ne(BOOL_VALUE));
+    const OPERATION_BOOL_GT: ValidationErr = ValidationErr::Operation(Operation::Gt(BOOL_VALUE));
+    const OPERATION_BOOL_GE: ValidationErr = ValidationErr::Operation(Operation::Ge(BOOL_VALUE));
+    const OPERATION_BOOL_LT: ValidationErr = ValidationErr::Operation(Operation::Lt(BOOL_VALUE));
+    const OPERATION_BOOL_LE: ValidationErr = ValidationErr::Operation(Operation::Le(BOOL_VALUE));
+    const OPERATION_BOOL_BTWN: ValidationErr = ValidationErr::Operation(Operation::Btwn(BOOL_VALUE, BOOL_VALUE_B));
+
+    const OPERATION_STR_EQ: LazyLock<ValidationErr> = LazyLock::new(|| ValidationErr::Operation(Operation::Eq(STR_VALUE.clone())));
+    const OPERATION_STR_NE: LazyLock<ValidationErr> = LazyLock::new(|| ValidationErr::Operation(Operation::Ne(STR_VALUE.clone())));
+    const OPERATION_STR_GT: LazyLock<ValidationErr> = LazyLock::new(|| ValidationErr::Operation(Operation::Gt(STR_VALUE.clone())));
+    const OPERATION_STR_GE: LazyLock<ValidationErr> = LazyLock::new(|| ValidationErr::Operation(Operation::Ge(STR_VALUE.clone())));
+    const OPERATION_STR_LT: LazyLock<ValidationErr> = LazyLock::new(|| ValidationErr::Operation(Operation::Lt(STR_VALUE.clone())));
+    const OPERATION_STR_LE: LazyLock<ValidationErr> = LazyLock::new(|| ValidationErr::Operation(Operation::Le(STR_VALUE.clone())));
+    const OPERATION_STR_BTWN: LazyLock<ValidationErr> =
+        LazyLock::new(|| ValidationErr::Operation(Operation::Btwn(STR_VALUE.clone(), STR_VALUE_B.clone())));
+
+    const OPERATION_FIELD_EQ: LazyLock<ValidationErr> = LazyLock::new(|| ValidationErr::Operation(Operation::Eq(FIELD_PATH.clone())));
+    const OPERATION_FIELD_NE: LazyLock<ValidationErr> = LazyLock::new(|| ValidationErr::Operation(Operation::Ne(FIELD_PATH.clone())));
+    const OPERATION_FIELD_GT: LazyLock<ValidationErr> = LazyLock::new(|| ValidationErr::Operation(Operation::Gt(FIELD_PATH.clone())));
+    const OPERATION_FIELD_GE: LazyLock<ValidationErr> = LazyLock::new(|| ValidationErr::Operation(Operation::Ge(FIELD_PATH.clone())));
+    const OPERATION_FIELD_LT: LazyLock<ValidationErr> = LazyLock::new(|| ValidationErr::Operation(Operation::Lt(FIELD_PATH.clone())));
+    const OPERATION_FIELD_LE: LazyLock<ValidationErr> = LazyLock::new(|| ValidationErr::Operation(Operation::Le(FIELD_PATH.clone())));
+
+    const BYTES_LEN_EQ: ValidationErr = ValidationErr::BytesLen(Operation::Eq(USIZE_VALUE));
+    const BYTES_LEN_NE: ValidationErr = ValidationErr::BytesLen(Operation::Ne(USIZE_VALUE));
+    const BYTES_LEN_GT: ValidationErr = ValidationErr::BytesLen(Operation::Gt(USIZE_VALUE));
+    const BYTES_LEN_GE: ValidationErr = ValidationErr::BytesLen(Operation::Ge(USIZE_VALUE));
+    const BYTES_LEN_LT: ValidationErr = ValidationErr::BytesLen(Operation::Lt(USIZE_VALUE));
+    const BYTES_LEN_LE: ValidationErr = ValidationErr::BytesLen(Operation::Le(USIZE_VALUE));
+    const BYTES_LEN_BTWN: ValidationErr = ValidationErr::BytesLen(Operation::Btwn(USIZE_VALUE, USIZE_VALUE_B));
+
+    const CHARS_LEN_EQ: ValidationErr = ValidationErr::CharsLen(Operation::Eq(USIZE_VALUE));
+    const CHARS_LEN_NE: ValidationErr = ValidationErr::CharsLen(Operation::Ne(USIZE_VALUE));
+    const CHARS_LEN_GT: ValidationErr = ValidationErr::CharsLen(Operation::Gt(USIZE_VALUE));
+    const CHARS_LEN_GE: ValidationErr = ValidationErr::CharsLen(Operation::Ge(USIZE_VALUE));
+    const CHARS_LEN_LT: ValidationErr = ValidationErr::CharsLen(Operation::Lt(USIZE_VALUE));
+    const CHARS_LEN_LE: ValidationErr = ValidationErr::CharsLen(Operation::Le(USIZE_VALUE));
+    const CHARS_LEN_BTWN: ValidationErr = ValidationErr::CharsLen(Operation::Btwn(USIZE_VALUE, USIZE_VALUE_B));
+
+    const GRAPHEMES_LEN_EQ: ValidationErr = ValidationErr::GraphemesLen(Operation::Eq(USIZE_VALUE));
+    const GRAPHEMES_LEN_NE: ValidationErr = ValidationErr::GraphemesLen(Operation::Ne(USIZE_VALUE));
+    const GRAPHEMES_LEN_GT: ValidationErr = ValidationErr::GraphemesLen(Operation::Gt(USIZE_VALUE));
+    const GRAPHEMES_LEN_GE: ValidationErr = ValidationErr::GraphemesLen(Operation::Ge(USIZE_VALUE));
+    const GRAPHEMES_LEN_LT: ValidationErr = ValidationErr::GraphemesLen(Operation::Lt(USIZE_VALUE));
+    const GRAPHEMES_LEN_LE: ValidationErr = ValidationErr::GraphemesLen(Operation::Le(USIZE_VALUE));
+    const GRAPHEMES_LEN_BTWN: ValidationErr = ValidationErr::GraphemesLen(Operation::Btwn(USIZE_VALUE, USIZE_VALUE_B));
+
+    const LOWER_LEN_EQ: ValidationErr = ValidationErr::LowercaseLen(Operation::Eq(USIZE_VALUE));
+    const LOWER_LEN_NE: ValidationErr = ValidationErr::LowercaseLen(Operation::Ne(USIZE_VALUE));
+    const LOWER_LEN_GT: ValidationErr = ValidationErr::LowercaseLen(Operation::Gt(USIZE_VALUE));
+    const LOWER_LEN_GE: ValidationErr = ValidationErr::LowercaseLen(Operation::Ge(USIZE_VALUE));
+    const LOWER_LEN_LT: ValidationErr = ValidationErr::LowercaseLen(Operation::Lt(USIZE_VALUE));
+    const LOWER_LEN_LE: ValidationErr = ValidationErr::LowercaseLen(Operation::Le(USIZE_VALUE));
+    const LOWER_LEN_BTWN: ValidationErr = ValidationErr::LowercaseLen(Operation::Btwn(USIZE_VALUE, USIZE_VALUE_B));
+
+    const UPPER_LEN_EQ: ValidationErr = ValidationErr::UppercaseLen(Operation::Eq(USIZE_VALUE));
+    const UPPER_LEN_NE: ValidationErr = ValidationErr::UppercaseLen(Operation::Ne(USIZE_VALUE));
+    const UPPER_LEN_GT: ValidationErr = ValidationErr::UppercaseLen(Operation::Gt(USIZE_VALUE));
+    const UPPER_LEN_GE: ValidationErr = ValidationErr::UppercaseLen(Operation::Ge(USIZE_VALUE));
+    const UPPER_LEN_LT: ValidationErr = ValidationErr::UppercaseLen(Operation::Lt(USIZE_VALUE));
+    const UPPER_LEN_LE: ValidationErr = ValidationErr::UppercaseLen(Operation::Le(USIZE_VALUE));
+    const UPPER_LEN_BTWN: ValidationErr = ValidationErr::UppercaseLen(Operation::Btwn(USIZE_VALUE, USIZE_VALUE_B));
+
+    const NUMBERS_LEN_EQ: ValidationErr = ValidationErr::NumbersLen(Operation::Eq(USIZE_VALUE));
+    const NUMBERS_LEN_NE: ValidationErr = ValidationErr::NumbersLen(Operation::Ne(USIZE_VALUE));
+    const NUMBERS_LEN_GT: ValidationErr = ValidationErr::NumbersLen(Operation::Gt(USIZE_VALUE));
+    const NUMBERS_LEN_GE: ValidationErr = ValidationErr::NumbersLen(Operation::Ge(USIZE_VALUE));
+    const NUMBERS_LEN_LT: ValidationErr = ValidationErr::NumbersLen(Operation::Lt(USIZE_VALUE));
+    const NUMBERS_LEN_LE: ValidationErr = ValidationErr::NumbersLen(Operation::Le(USIZE_VALUE));
+    const NUMBERS_LEN_BTWN: ValidationErr = ValidationErr::NumbersLen(Operation::Btwn(USIZE_VALUE, USIZE_VALUE_B));
+
+    const SYMBOLS_LEN_EQ: ValidationErr = ValidationErr::SymbolsLen(Operation::Eq(USIZE_VALUE));
+    const SYMBOLS_LEN_NE: ValidationErr = ValidationErr::SymbolsLen(Operation::Ne(USIZE_VALUE));
+    const SYMBOLS_LEN_GT: ValidationErr = ValidationErr::SymbolsLen(Operation::Gt(USIZE_VALUE));
+    const SYMBOLS_LEN_GE: ValidationErr = ValidationErr::SymbolsLen(Operation::Ge(USIZE_VALUE));
+    const SYMBOLS_LEN_LT: ValidationErr = ValidationErr::SymbolsLen(Operation::Lt(USIZE_VALUE));
+    const SYMBOLS_LEN_LE: ValidationErr = ValidationErr::SymbolsLen(Operation::Le(USIZE_VALUE));
+    const SYMBOLS_LEN_BTWN: ValidationErr = ValidationErr::SymbolsLen(Operation::Btwn(USIZE_VALUE, USIZE_VALUE_B));
+
+    static ENUM_USIZE: LazyLock<ValidationErr> = LazyLock::new(|| ValidationErr::Enumerated(EnumValues::from(USIZE_VALUES)));
+    static ENUM_ISIZE: LazyLock<ValidationErr> = LazyLock::new(|| ValidationErr::Enumerated(EnumValues::from(ISIZE_VALUES)));
+    static ENUM_STR: LazyLock<ValidationErr> = LazyLock::new(|| ValidationErr::Enumerated(EnumValues::from(STR_VALUES)));
 
     fn mock_locale() -> Locale {
         Locale {
@@ -424,29 +463,6 @@ mod tests {
     fn test_localize_validation_err() {
         let l = mock_locale();
 
-        let str_value_a = Operand::Value(OperandValue::from("aurorae"));
-        let str_value_b = Operand::Value(OperandValue::from("crespúculum"));
-
-        let operation_str_eq = ValidationErr::Operation(Operation::Eq(str_value_a.clone()));
-        let operation_str_ne = ValidationErr::Operation(Operation::Ne(str_value_a.clone()));
-        let operation_str_gt = ValidationErr::Operation(Operation::Gt(str_value_a.clone()));
-        let operation_str_ge = ValidationErr::Operation(Operation::Ge(str_value_a.clone()));
-        let operation_str_lt = ValidationErr::Operation(Operation::Lt(str_value_a.clone()));
-        let operation_str_le = ValidationErr::Operation(Operation::Le(str_value_a.clone()));
-        let operation_str_btwn = ValidationErr::Operation(Operation::Btwn(str_value_a, str_value_b));
-
-        let enum_usize = ValidationErr::Enumerated(EnumValues::USize(vec![0, 1, 2, 3, 4, 5]));
-        let enum_isize = ValidationErr::Enumerated(EnumValues::ISize(vec![-2, -1, 0, 1, 2]));
-        let enum_str = ValidationErr::Enumerated(EnumValues::Str(vec!["APPLE".into(), "GRAPE".into(), "PEAR".into()]));
-
-        let field_path = Operand::FieldPath("user.account.info.details.user_name".into());
-        let op_field_eq: ValidationErr = ValidationErr::Operation(Operation::Eq(field_path.clone()));
-        let op_field_ne: ValidationErr = ValidationErr::Operation(Operation::Ne(field_path.clone()));
-        let op_field_gt: ValidationErr = ValidationErr::Operation(Operation::Gt(field_path.clone()));
-        let op_field_ge: ValidationErr = ValidationErr::Operation(Operation::Ge(field_path.clone()));
-        let op_field_lt: ValidationErr = ValidationErr::Operation(Operation::Lt(field_path.clone()));
-        let op_field_le: ValidationErr = ValidationErr::Operation(Operation::Le(field_path.clone()));
-
         assert_eq!(localize_validation_err(&REQUIRED, &l), "required".to_string());
         assert_eq!(localize_validation_err(&U64, &l), "u64".to_string());
         assert_eq!(localize_validation_err(&I64, &l), "i64".to_string());
@@ -460,68 +476,68 @@ mod tests {
         assert_eq!(localize_validation_err(&TIME, &l), "time".to_string());
         assert_eq!(localize_validation_err(&DATE_TIME, &l), "date_time".to_string());
 
-        assert_eq!(localize_validation_err(&OP_U64_EQ, &l), "== 34".to_string());
-        assert_eq!(localize_validation_err(&OP_U64_NE, &l), "!= 34".to_string());
-        assert_eq!(localize_validation_err(&OP_U64_GT, &l), "> 34".to_string());
-        assert_eq!(localize_validation_err(&OP_U64_GE, &l), ">= 34".to_string());
-        assert_eq!(localize_validation_err(&OP_U64_LT, &l), "< 34".to_string());
-        assert_eq!(localize_validation_err(&OP_U64_LE, &l), "<= 34".to_string());
-        assert_eq!(localize_validation_err(&OP_U64_BTWN, &l), "34 <= <= 43".to_string());
+        assert_eq!(localize_validation_err(&OPERATION_U64_EQ, &l), "== 34".to_string());
+        assert_eq!(localize_validation_err(&OPERATION_U64_NE, &l), "!= 34".to_string());
+        assert_eq!(localize_validation_err(&OPERATION_U64_GT, &l), "> 34".to_string());
+        assert_eq!(localize_validation_err(&OPERATION_U64_GE, &l), ">= 34".to_string());
+        assert_eq!(localize_validation_err(&OPERATION_U64_LT, &l), "< 34".to_string());
+        assert_eq!(localize_validation_err(&OPERATION_U64_LE, &l), "<= 34".to_string());
+        assert_eq!(localize_validation_err(&OPERATION_U64_BTWN, &l), "34 <= <= 43".to_string());
 
-        assert_eq!(localize_validation_err(&OP_I64_EQ, &l), "== -4".to_string());
-        assert_eq!(localize_validation_err(&OP_I64_NE, &l), "!= -4".to_string());
-        assert_eq!(localize_validation_err(&OP_I64_GT, &l), "> -4".to_string());
-        assert_eq!(localize_validation_err(&OP_I64_GE, &l), ">= -4".to_string());
-        assert_eq!(localize_validation_err(&OP_I64_LT, &l), "< -4".to_string());
-        assert_eq!(localize_validation_err(&OP_I64_LE, &l), "<= -4".to_string());
-        assert_eq!(localize_validation_err(&OP_I64_BTWN, &l), "-4 <= <= 4".to_string());
+        assert_eq!(localize_validation_err(&OPERATION_I64_EQ, &l), "== -4".to_string());
+        assert_eq!(localize_validation_err(&OPERATION_I64_NE, &l), "!= -4".to_string());
+        assert_eq!(localize_validation_err(&OPERATION_I64_GT, &l), "> -4".to_string());
+        assert_eq!(localize_validation_err(&OPERATION_I64_GE, &l), ">= -4".to_string());
+        assert_eq!(localize_validation_err(&OPERATION_I64_LT, &l), "< -4".to_string());
+        assert_eq!(localize_validation_err(&OPERATION_I64_LE, &l), "<= -4".to_string());
+        assert_eq!(localize_validation_err(&OPERATION_I64_BTWN, &l), "-4 <= <= 4".to_string());
 
-        assert_eq!(localize_validation_err(&OP_F64_EQ, &l), "== -4.6".to_string());
-        assert_eq!(localize_validation_err(&OP_F64_NE, &l), "!= -4.6".to_string());
-        assert_eq!(localize_validation_err(&OP_F64_GT, &l), "> -4.6".to_string());
-        assert_eq!(localize_validation_err(&OP_F64_GE, &l), ">= -4.6".to_string());
-        assert_eq!(localize_validation_err(&OP_F64_LT, &l), "< -4.6".to_string());
-        assert_eq!(localize_validation_err(&OP_F64_LE, &l), "<= -4.6".to_string());
-        assert_eq!(localize_validation_err(&OP_F64_BTWN, &l), "-4.6 <= <= -2.4".to_string());
+        assert_eq!(localize_validation_err(&OPERATION_F64_EQ, &l), "== -4.6".to_string());
+        assert_eq!(localize_validation_err(&OPERATION_F64_NE, &l), "!= -4.6".to_string());
+        assert_eq!(localize_validation_err(&OPERATION_F64_GT, &l), "> -4.6".to_string());
+        assert_eq!(localize_validation_err(&OPERATION_F64_GE, &l), ">= -4.6".to_string());
+        assert_eq!(localize_validation_err(&OPERATION_F64_LT, &l), "< -4.6".to_string());
+        assert_eq!(localize_validation_err(&OPERATION_F64_LE, &l), "<= -4.6".to_string());
+        assert_eq!(localize_validation_err(&OPERATION_F64_BTWN, &l), "-4.6 <= <= -2.4".to_string());
 
-        assert_eq!(localize_validation_err(&OP_USIZE_EQ, &l), "== 27".to_string());
-        assert_eq!(localize_validation_err(&OP_USIZE_NE, &l), "!= 27".to_string());
-        assert_eq!(localize_validation_err(&OP_USIZE_GT, &l), "> 27".to_string());
-        assert_eq!(localize_validation_err(&OP_USIZE_GE, &l), ">= 27".to_string());
-        assert_eq!(localize_validation_err(&OP_USIZE_LT, &l), "< 27".to_string());
-        assert_eq!(localize_validation_err(&OP_USIZE_LE, &l), "<= 27".to_string());
-        assert_eq!(localize_validation_err(&OP_USIZE_BTWN, &l), "27 <= <= 39".to_string());
+        assert_eq!(localize_validation_err(&OPERATION_USIZE_EQ, &l), "== 27".to_string());
+        assert_eq!(localize_validation_err(&OPERATION_USIZE_NE, &l), "!= 27".to_string());
+        assert_eq!(localize_validation_err(&OPERATION_USIZE_GT, &l), "> 27".to_string());
+        assert_eq!(localize_validation_err(&OPERATION_USIZE_GE, &l), ">= 27".to_string());
+        assert_eq!(localize_validation_err(&OPERATION_USIZE_LT, &l), "< 27".to_string());
+        assert_eq!(localize_validation_err(&OPERATION_USIZE_LE, &l), "<= 27".to_string());
+        assert_eq!(localize_validation_err(&OPERATION_USIZE_BTWN, &l), "27 <= <= 39".to_string());
 
-        assert_eq!(localize_validation_err(&OP_ISIZE_EQ, &l), "== -93".to_string());
-        assert_eq!(localize_validation_err(&OP_ISIZE_NE, &l), "!= -93".to_string());
-        assert_eq!(localize_validation_err(&OP_ISIZE_GT, &l), "> -93".to_string());
-        assert_eq!(localize_validation_err(&OP_ISIZE_GE, &l), ">= -93".to_string());
-        assert_eq!(localize_validation_err(&OP_ISIZE_LT, &l), "< -93".to_string());
-        assert_eq!(localize_validation_err(&OP_ISIZE_LE, &l), "<= -93".to_string());
-        assert_eq!(localize_validation_err(&OP_ISIZE_BTWN, &l), "-93 <= <= -72".to_string());
+        assert_eq!(localize_validation_err(&OPERATION_ISIZE_EQ, &l), "== -93".to_string());
+        assert_eq!(localize_validation_err(&OPERATION_ISIZE_NE, &l), "!= -93".to_string());
+        assert_eq!(localize_validation_err(&OPERATION_ISIZE_GT, &l), "> -93".to_string());
+        assert_eq!(localize_validation_err(&OPERATION_ISIZE_GE, &l), ">= -93".to_string());
+        assert_eq!(localize_validation_err(&OPERATION_ISIZE_LT, &l), "< -93".to_string());
+        assert_eq!(localize_validation_err(&OPERATION_ISIZE_LE, &l), "<= -93".to_string());
+        assert_eq!(localize_validation_err(&OPERATION_ISIZE_BTWN, &l), "-93 <= <= -72".to_string());
 
-        assert_eq!(localize_validation_err(&OP_BOOL_EQ, &l), "== false".to_string());
-        assert_eq!(localize_validation_err(&OP_BOOL_NE, &l), "!= false".to_string());
-        assert_eq!(localize_validation_err(&OP_BOOL_GT, &l), "> false".to_string());
-        assert_eq!(localize_validation_err(&OP_BOOL_GE, &l), ">= false".to_string());
-        assert_eq!(localize_validation_err(&OP_BOOL_LT, &l), "< false".to_string());
-        assert_eq!(localize_validation_err(&OP_BOOL_LE, &l), "<= false".to_string());
-        assert_eq!(localize_validation_err(&OP_BOOL_BTWN, &l), "false <= <= true".to_string());
+        assert_eq!(localize_validation_err(&OPERATION_BOOL_EQ, &l), "== false".to_string());
+        assert_eq!(localize_validation_err(&OPERATION_BOOL_NE, &l), "!= false".to_string());
+        assert_eq!(localize_validation_err(&OPERATION_BOOL_GT, &l), "> false".to_string());
+        assert_eq!(localize_validation_err(&OPERATION_BOOL_GE, &l), ">= false".to_string());
+        assert_eq!(localize_validation_err(&OPERATION_BOOL_LT, &l), "< false".to_string());
+        assert_eq!(localize_validation_err(&OPERATION_BOOL_LE, &l), "<= false".to_string());
+        assert_eq!(localize_validation_err(&OPERATION_BOOL_BTWN, &l), "false <= <= true".to_string());
 
-        assert_eq!(localize_validation_err(&operation_str_eq, &l), r#"== "aurorae""#.to_string());
-        assert_eq!(localize_validation_err(&operation_str_ne, &l), r#"!= "aurorae""#.to_string());
-        assert_eq!(localize_validation_err(&operation_str_gt, &l), r#"> "aurorae""#.to_string());
-        assert_eq!(localize_validation_err(&operation_str_ge, &l), r#">= "aurorae""#.to_string());
-        assert_eq!(localize_validation_err(&operation_str_lt, &l), r#"< "aurorae""#.to_string());
-        assert_eq!(localize_validation_err(&operation_str_le, &l), r#"<= "aurorae""#.to_string());
-        assert_eq!(localize_validation_err(&operation_str_btwn, &l), r#""aurorae" <= <= "crespúculum""#.to_string());
+        assert_eq!(localize_validation_err(&OPERATION_STR_EQ, &l), r#"== "aurorae""#.to_string());
+        assert_eq!(localize_validation_err(&OPERATION_STR_NE, &l), r#"!= "aurorae""#.to_string());
+        assert_eq!(localize_validation_err(&OPERATION_STR_GT, &l), r#"> "aurorae""#.to_string());
+        assert_eq!(localize_validation_err(&OPERATION_STR_GE, &l), r#">= "aurorae""#.to_string());
+        assert_eq!(localize_validation_err(&OPERATION_STR_LT, &l), r#"< "aurorae""#.to_string());
+        assert_eq!(localize_validation_err(&OPERATION_STR_LE, &l), r#"<= "aurorae""#.to_string());
+        assert_eq!(localize_validation_err(&OPERATION_STR_BTWN, &l), r#""aurorae" <= <= "crespúculum""#.to_string());
 
-        assert_eq!(localize_validation_err(&op_field_eq, &l), r#"== field "user.account.info.details.user_name""#.to_string());
-        assert_eq!(localize_validation_err(&op_field_ne, &l), r#"!= field "user.account.info.details.user_name""#.to_string());
-        assert_eq!(localize_validation_err(&op_field_gt, &l), r#"> field "user.account.info.details.user_name""#.to_string());
-        assert_eq!(localize_validation_err(&op_field_ge, &l), r#">= field "user.account.info.details.user_name""#.to_string());
-        assert_eq!(localize_validation_err(&op_field_lt, &l), r#"< field "user.account.info.details.user_name""#.to_string());
-        assert_eq!(localize_validation_err(&op_field_le, &l), r#"<= field "user.account.info.details.user_name""#.to_string());
+        assert_eq!(localize_validation_err(&OPERATION_FIELD_EQ, &l), r#"== field "user.account.info.details.user_name""#.to_string());
+        assert_eq!(localize_validation_err(&OPERATION_FIELD_NE, &l), r#"!= field "user.account.info.details.user_name""#.to_string());
+        assert_eq!(localize_validation_err(&OPERATION_FIELD_GT, &l), r#"> field "user.account.info.details.user_name""#.to_string());
+        assert_eq!(localize_validation_err(&OPERATION_FIELD_GE, &l), r#">= field "user.account.info.details.user_name""#.to_string());
+        assert_eq!(localize_validation_err(&OPERATION_FIELD_LT, &l), r#"< field "user.account.info.details.user_name""#.to_string());
+        assert_eq!(localize_validation_err(&OPERATION_FIELD_LE, &l), r#"<= field "user.account.info.details.user_name""#.to_string());
 
         assert_eq!(localize_validation_err(&BYTES_LEN_EQ, &l), "bytes_len == 27".to_string());
         assert_eq!(localize_validation_err(&BYTES_LEN_NE, &l), "bytes_len != 27".to_string());
@@ -579,9 +595,9 @@ mod tests {
         assert_eq!(localize_validation_err(&SYMBOLS_LEN_LE, &l), "symbols <= 27".to_string());
         assert_eq!(localize_validation_err(&SYMBOLS_LEN_BTWN, &l), "27 <= symbols <= 39".to_string());
 
-        assert_eq!(localize_validation_err(&enum_usize, &l), "enum [ 0, 1, 2, 3, 4, 5 ]".to_string());
-        assert_eq!(localize_validation_err(&enum_isize, &l), "enum [ -2, -1, 0, 1, 2 ]".to_string());
-        assert_eq!(localize_validation_err(&enum_str, &l), r#"enum [ "APPLE", "GRAPE", "PEAR" ]"#.to_string());
+        assert_eq!(localize_validation_err(&ENUM_USIZE, &l), "enum [ 0, 1, 2, 3, 4, 5 ]".to_string());
+        assert_eq!(localize_validation_err(&ENUM_ISIZE, &l), "enum [ -2, -1, 0, 1, 2 ]".to_string());
+        assert_eq!(localize_validation_err(&ENUM_STR, &l), r#"enum [ "APPLE", "GRAPE", "PEAR" ]"#.to_string());
     }
 
     #[test]
@@ -595,20 +611,16 @@ mod tests {
     #[test]
     fn test_schema_err_obj_to_locale() {
         let locale = mock_locale();
+        let operation_name = ValidationErr::Operation(Operation::Eq(Operand::Value(OperandValue::from("Paul McCartney"))));
+        let operation_birthdate = ValidationErr::Operation(Operation::Eq(Operand::Value(OperandValue::from("1942-06-18"))));
+        let operation_alive = ValidationErr::Operation(Operation::Eq(Operand::Value(OperandValue::Bool(true))));
+        let operation_bands = ValidationErr::Operation(Operation::Eq(Operand::Value(OperandValue::from("The Beatles"))));
+
         let err = SchemaErr::Obj(BTreeMap::from([
-            (
-                "name".into(),
-                SchemaErr::arr([REQUIRED, STR, ValidationErr::Operation(Operation::Eq(Operand::Value(OperandValue::from("Paul McCartney"))))]),
-            ),
-            (
-                "birthdate".into(),
-                SchemaErr::arr([REQUIRED, STR, ValidationErr::Operation(Operation::Eq(Operand::Value(OperandValue::from("1942-06-18"))))]),
-            ),
-            ("alive".into(), SchemaErr::arr([REQUIRED, BOOL, ValidationErr::Operation(Operation::Eq(Operand::Value(OperandValue::Bool(true))))])),
-            (
-                "bands".into(),
-                SchemaErr::arr([REQUIRED, STR, ValidationErr::Operation(Operation::Eq(Operand::Value(OperandValue::from("The Beatles"))))]),
-            ),
+            ("name".into(), SchemaErr::arr([REQUIRED, STR, operation_name])),
+            ("birthdate".into(), SchemaErr::arr([REQUIRED, STR, operation_birthdate])),
+            ("alive".into(), SchemaErr::arr([REQUIRED, BOOL, operation_alive])),
+            ("bands".into(), SchemaErr::arr([REQUIRED, STR, operation_bands])),
         ]));
         let localized_err = SchemaLocalizedErr::Obj(BTreeMap::from([
             ("name".into(), SchemaLocalizedErr::Arr(vec!["required".into(), "str".into(), r#"== "Paul McCartney""#.into()])),
