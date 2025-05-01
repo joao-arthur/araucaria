@@ -135,63 +135,49 @@ impl std::fmt::Display for EnumValues {
 
 #[cfg(test)]
 mod tests {
+    use std::sync::LazyLock;
+
     use super::{EnumValidation, EnumValues};
+
+    const SLICE_U: [usize; 6] = [0, 1, 2, 3, 4, 5];
+    const SLICE_I: [isize; 5] = [-2, -1, 0, 1, 2];
+    const SLICE_STR: [&str; 3] = ["APPLE", "GRAPE", "PEAR"];
+    static SLICE_STRING: LazyLock<[String; 3]> = LazyLock::new(|| ["APPLE".into(), "GRAPE".into(), "PEAR".into()]);
+
+    static VEC_U: LazyLock<Vec<usize>> = LazyLock::new(|| vec![0, 1, 2, 3, 4, 5]);
+    static VEC_I: LazyLock<Vec<isize>> = LazyLock::new(|| vec![-2, -1, 0, 1, 2]);
+    static VEC_STR: LazyLock<Vec<&str>> = LazyLock::new(|| vec!["APPLE", "GRAPE", "PEAR"]);
+    static VEC_STRING: LazyLock<Vec<String>> = LazyLock::new(|| vec!["APPLE".into(), "GRAPE".into(), "PEAR".into()]);
 
     #[test]
     fn enum_values_from() {
-        let slice_u: [usize; 6] = [0, 1, 2, 3, 4, 5];
-        let slice_i: [isize; 5] = [-2, -1, 0, 1, 2];
-        let slice_string: [String; 3] = ["APPLE".into(), "GRAPE".into(), "PEAR".into()];
-        let slice_str: [&str; 3] = ["APPLE", "GRAPE", "PEAR"];
-
-        let vec_u: Vec<usize> = vec![0, 1, 2, 3, 4, 5];
-        let vec_i: Vec<isize> = vec![-2, -1, 0, 1, 2];
-        let vec_string: Vec<String> = vec!["APPLE".into(), "GRAPE".into(), "PEAR".into()];
-        let vec_str: Vec<&str> = vec!["APPLE", "GRAPE", "PEAR"];
-
-        assert_eq!(EnumValues::from(slice_u), EnumValues::USize(vec_u.clone()));
-        assert_eq!(EnumValues::from(slice_i), EnumValues::ISize(vec_i.clone()));
-        assert_eq!(EnumValues::from(slice_string), EnumValues::Str(vec_string.clone()));
-        assert_eq!(EnumValues::from(slice_str), EnumValues::Str(vec_string.clone()));
-
-        assert_eq!(EnumValues::from(vec_u.clone()), EnumValues::USize(vec_u.clone()));
-        assert_eq!(EnumValues::from(vec_i.clone()), EnumValues::ISize(vec_i.clone()));
-        assert_eq!(EnumValues::from(vec_string.clone()), EnumValues::Str(vec_string.clone()));
-        assert_eq!(EnumValues::from(vec_str), EnumValues::Str(vec_string.clone()));
+        assert_eq!(EnumValues::from(SLICE_U.clone()), EnumValues::USize(VEC_U.clone()));
+        assert_eq!(EnumValues::from(VEC_U.clone()), EnumValues::USize(VEC_U.clone()));
+        assert_eq!(EnumValues::from(SLICE_I.clone()), EnumValues::ISize(VEC_I.clone()));
+        assert_eq!(EnumValues::from(VEC_I.clone()), EnumValues::ISize(VEC_I.clone()));
+        assert_eq!(EnumValues::from(SLICE_STR.clone()), EnumValues::Str(VEC_STRING.clone()));
+        assert_eq!(EnumValues::from(VEC_STR.clone()), EnumValues::Str(VEC_STRING.clone()));
+        assert_eq!(EnumValues::from(SLICE_STRING.clone()), EnumValues::Str(VEC_STRING.clone()));
+        assert_eq!(EnumValues::from(VEC_STRING.clone()), EnumValues::Str(VEC_STRING.clone()));
     }
 
     #[test]
     fn enum_values_to_string() {
-        let vec_u: Vec<usize> = vec![0, 1, 2, 3, 4, 5];
-        let vec_i: Vec<isize> = vec![-2, -1, 0, 1, 2];
-        let vec_str: Vec<String> = vec!["APPLE".into(), "GRAPE".into(), "PEAR".into()];
-
-        assert_eq!(EnumValues::USize(vec_u).to_string(), r#"[ 0, 1, 2, 3, 4, 5 ]"#.to_string());
-        assert_eq!(EnumValues::ISize(vec_i).to_string(), r#"[ -2, -1, 0, 1, 2 ]"#.to_string());
-        assert_eq!(EnumValues::Str(vec_str).to_string(), r#"[ "APPLE", "GRAPE", "PEAR" ]"#.to_string());
+        assert_eq!(EnumValues::USize(VEC_U.clone()).to_string(), r#"[ 0, 1, 2, 3, 4, 5 ]"#.to_string());
+        assert_eq!(EnumValues::ISize(VEC_I.clone()).to_string(), r#"[ -2, -1, 0, 1, 2 ]"#.to_string());
+        assert_eq!(EnumValues::Str(VEC_STRING.clone()).to_string(), r#"[ "APPLE", "GRAPE", "PEAR" ]"#.to_string());
     }
 
     #[test]
     fn enum_validation_from() {
-        let slice_u: [usize; 6] = [0, 1, 2, 3, 4, 5];
-        let slice_i: [isize; 5] = [-2, -1, 0, 1, 2];
-        let slice_string: [String; 3] = ["APPLE".into(), "GRAPE".into(), "PEAR".into()];
-        let slice_str: [&str; 3] = ["APPLE", "GRAPE", "PEAR"];
-
-        let vec_u: Vec<usize> = vec![0, 1, 2, 3, 4, 5];
-        let vec_i: Vec<isize> = vec![-2, -1, 0, 1, 2];
-        let vec_string: Vec<String> = vec!["APPLE".into(), "GRAPE".into(), "PEAR".into()];
-        let vec_str: Vec<&str> = vec!["APPLE", "GRAPE", "PEAR"];
-
-        assert_eq!(EnumValidation::from(slice_u), EnumValidation { required: true, values: EnumValues::USize(vec_u.clone()) });
-        assert_eq!(EnumValidation::from(slice_i), EnumValidation { required: true, values: EnumValues::ISize(vec_i.clone()) });
-        assert_eq!(EnumValidation::from(slice_string), EnumValidation { required: true, values: EnumValues::Str(vec_string.clone()) });
-        assert_eq!(EnumValidation::from(slice_str), EnumValidation { required: true, values: EnumValues::Str(vec_string.clone()) });
-
-        assert_eq!(EnumValidation::from(vec_u.clone()), EnumValidation { required: true, values: EnumValues::USize(vec_u.clone()) });
-        assert_eq!(EnumValidation::from(vec_i.clone()), EnumValidation { required: true, values: EnumValues::ISize(vec_i.clone()) });
-        assert_eq!(EnumValidation::from(vec_string.clone()), EnumValidation { required: true, values: EnumValues::Str(vec_string.clone()) });
-        assert_eq!(EnumValidation::from(vec_str), EnumValidation { required: true, values: EnumValues::Str(vec_string.clone()) });
+        assert_eq!(EnumValidation::from(SLICE_U.clone()), EnumValidation { required: true, values: EnumValues::USize(VEC_U.clone()) });
+        assert_eq!(EnumValidation::from(VEC_U.clone()), EnumValidation { required: true, values: EnumValues::USize(VEC_U.clone()) });
+        assert_eq!(EnumValidation::from(SLICE_I.clone()), EnumValidation { required: true, values: EnumValues::ISize(VEC_I.clone()) });
+        assert_eq!(EnumValidation::from(VEC_I.clone()), EnumValidation { required: true, values: EnumValues::ISize(VEC_I.clone()) });
+        assert_eq!(EnumValidation::from(SLICE_STR.clone()), EnumValidation { required: true, values: EnumValues::Str(VEC_STRING.clone()) });
+        assert_eq!(EnumValidation::from(VEC_STR.clone()), EnumValidation { required: true, values: EnumValues::Str(VEC_STRING.clone()) });
+        assert_eq!(EnumValidation::from(SLICE_STRING.clone()), EnumValidation { required: true, values: EnumValues::Str(VEC_STRING.clone()) });
+        assert_eq!(EnumValidation::from(VEC_STRING.clone()), EnumValidation { required: true, values: EnumValues::Str(VEC_STRING.clone()) });
     }
 
     #[test]
