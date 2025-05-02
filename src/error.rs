@@ -29,13 +29,13 @@ pub enum ValidationErr {
 
 #[derive(Debug, PartialEq, Clone)]
 pub enum SchemaErr {
-    Arr(Vec<ValidationErr>),
+    Validation(Vec<ValidationErr>),
     Obj(BTreeMap<String, SchemaErr>),
 }
 
 impl SchemaErr {
-    pub fn arr<const N: usize>(value: [ValidationErr; N]) -> SchemaErr {
-        SchemaErr::Arr(value.to_vec())
+    pub fn validation<const N: usize>(value: [ValidationErr; N]) -> SchemaErr {
+        SchemaErr::Validation(value.to_vec())
     }
 
     pub fn obj<const N: usize>(value: [(String, SchemaErr); N]) -> SchemaErr {
@@ -45,7 +45,7 @@ impl SchemaErr {
 
 fn schema_err_has_required(err: SchemaErr) -> bool {
     match err {
-        SchemaErr::Arr(arr) => arr.contains(&ValidationErr::Required),
+        SchemaErr::Validation(arr) => arr.contains(&ValidationErr::Required),
         SchemaErr::Obj(obj) => obj.into_iter().any(|(_, schema_err)| schema_err_has_required(schema_err)),
     }
 }
@@ -92,36 +92,36 @@ mod tests {
         let isize_enum = ValidationErr::Enumerated(EnumValues::ISize(vec_isize));
         let str_enum = ValidationErr::Enumerated(EnumValues::Str(vec_string));
 
-        assert_eq!(SchemaErr::arr([REQUIRED]), SchemaErr::Arr(vec![REQUIRED]));
-        assert_eq!(SchemaErr::arr([U64]), SchemaErr::Arr(vec![U64]));
-        assert_eq!(SchemaErr::arr([I64]), SchemaErr::Arr(vec![I64]));
-        assert_eq!(SchemaErr::arr([F64]), SchemaErr::Arr(vec![F64]));
-        assert_eq!(SchemaErr::arr([USIZE]), SchemaErr::Arr(vec![USIZE]));
-        assert_eq!(SchemaErr::arr([ISIZE]), SchemaErr::Arr(vec![ISIZE]));
-        assert_eq!(SchemaErr::arr([BOOL]), SchemaErr::Arr(vec![BOOL]));
-        assert_eq!(SchemaErr::arr([STR]), SchemaErr::Arr(vec![STR]));
-        assert_eq!(SchemaErr::arr([EMAIL]), SchemaErr::Arr(vec![EMAIL]));
-        assert_eq!(SchemaErr::arr([DATE]), SchemaErr::Arr(vec![DATE]));
-        assert_eq!(SchemaErr::arr([TIME]), SchemaErr::Arr(vec![TIME]));
-        assert_eq!(SchemaErr::arr([DATE_TIME]), SchemaErr::Arr(vec![DATE_TIME]));
-        assert_eq!(SchemaErr::arr([operation.clone()]), SchemaErr::Arr(vec![operation.clone()]));
-        assert_eq!(SchemaErr::arr([bytes_len.clone()]), SchemaErr::Arr(vec![bytes_len.clone()]));
-        assert_eq!(SchemaErr::arr([chars_len.clone()]), SchemaErr::Arr(vec![chars_len.clone()]));
-        assert_eq!(SchemaErr::arr([graphemes_len.clone()]), SchemaErr::Arr(vec![graphemes_len.clone()]));
-        assert_eq!(SchemaErr::arr([lowercase_len.clone()]), SchemaErr::Arr(vec![lowercase_len.clone()]));
-        assert_eq!(SchemaErr::arr([uppercase_len.clone()]), SchemaErr::Arr(vec![uppercase_len.clone()]));
-        assert_eq!(SchemaErr::arr([numbers_len.clone()]), SchemaErr::Arr(vec![numbers_len.clone()]));
-        assert_eq!(SchemaErr::arr([symbols_len.clone()]), SchemaErr::Arr(vec![symbols_len.clone()]));
-        assert_eq!(SchemaErr::arr([usize_enum.clone()]), SchemaErr::Arr(vec![usize_enum.clone()]));
-        assert_eq!(SchemaErr::arr([isize_enum.clone()]), SchemaErr::Arr(vec![isize_enum.clone()]));
-        assert_eq!(SchemaErr::arr([str_enum.clone()]), SchemaErr::Arr(vec![str_enum.clone()]));
+        assert_eq!(SchemaErr::validation([REQUIRED]), SchemaErr::Validation(vec![REQUIRED]));
+        assert_eq!(SchemaErr::validation([U64]), SchemaErr::Validation(vec![U64]));
+        assert_eq!(SchemaErr::validation([I64]), SchemaErr::Validation(vec![I64]));
+        assert_eq!(SchemaErr::validation([F64]), SchemaErr::Validation(vec![F64]));
+        assert_eq!(SchemaErr::validation([USIZE]), SchemaErr::Validation(vec![USIZE]));
+        assert_eq!(SchemaErr::validation([ISIZE]), SchemaErr::Validation(vec![ISIZE]));
+        assert_eq!(SchemaErr::validation([BOOL]), SchemaErr::Validation(vec![BOOL]));
+        assert_eq!(SchemaErr::validation([STR]), SchemaErr::Validation(vec![STR]));
+        assert_eq!(SchemaErr::validation([EMAIL]), SchemaErr::Validation(vec![EMAIL]));
+        assert_eq!(SchemaErr::validation([DATE]), SchemaErr::Validation(vec![DATE]));
+        assert_eq!(SchemaErr::validation([TIME]), SchemaErr::Validation(vec![TIME]));
+        assert_eq!(SchemaErr::validation([DATE_TIME]), SchemaErr::Validation(vec![DATE_TIME]));
+        assert_eq!(SchemaErr::validation([operation.clone()]), SchemaErr::Validation(vec![operation.clone()]));
+        assert_eq!(SchemaErr::validation([bytes_len.clone()]), SchemaErr::Validation(vec![bytes_len.clone()]));
+        assert_eq!(SchemaErr::validation([chars_len.clone()]), SchemaErr::Validation(vec![chars_len.clone()]));
+        assert_eq!(SchemaErr::validation([graphemes_len.clone()]), SchemaErr::Validation(vec![graphemes_len.clone()]));
+        assert_eq!(SchemaErr::validation([lowercase_len.clone()]), SchemaErr::Validation(vec![lowercase_len.clone()]));
+        assert_eq!(SchemaErr::validation([uppercase_len.clone()]), SchemaErr::Validation(vec![uppercase_len.clone()]));
+        assert_eq!(SchemaErr::validation([numbers_len.clone()]), SchemaErr::Validation(vec![numbers_len.clone()]));
+        assert_eq!(SchemaErr::validation([symbols_len.clone()]), SchemaErr::Validation(vec![symbols_len.clone()]));
+        assert_eq!(SchemaErr::validation([usize_enum.clone()]), SchemaErr::Validation(vec![usize_enum.clone()]));
+        assert_eq!(SchemaErr::validation([isize_enum.clone()]), SchemaErr::Validation(vec![isize_enum.clone()]));
+        assert_eq!(SchemaErr::validation([str_enum.clone()]), SchemaErr::Validation(vec![str_enum.clone()]));
     }
 
     #[test]
     fn schema_err_obj() {
         assert_eq!(
-            SchemaErr::obj([("is".into(), SchemaErr::arr([ValidationErr::Required]))]),
-            SchemaErr::Obj(BTreeMap::from([("is".into(), SchemaErr::Arr(vec![ValidationErr::Required]))]))
+            SchemaErr::obj([("is".into(), SchemaErr::validation([ValidationErr::Required]))]),
+            SchemaErr::Obj(BTreeMap::from([("is".into(), SchemaErr::Validation(vec![ValidationErr::Required]))]))
         );
     }
 
@@ -141,12 +141,12 @@ mod tests {
         let numbers = ValidationErr::NumbersLen(Operation::Le(Operand::Value(OperandValue::USize(6))));
         let symbols = ValidationErr::SymbolsLen(Operation::Btwn(Operand::Value(OperandValue::USize(7)), Operand::Value(OperandValue::USize(8))));
 
-        assert!(!schema_err_has_required(SchemaErr::arr([U64, operation_u64])));
-        assert!(!schema_err_has_required(SchemaErr::arr([I64, operation_i64])));
-        assert!(!schema_err_has_required(SchemaErr::arr([F64, operation_f64])));
-        assert!(!schema_err_has_required(SchemaErr::arr([USIZE, operation_usize])));
-        assert!(!schema_err_has_required(SchemaErr::arr([ISIZE, operation_isize])));
-        assert!(!schema_err_has_required(SchemaErr::arr([STR, bytes, chars, graphemes, lowercase, uppercase, numbers, symbols])));
+        assert!(!schema_err_has_required(SchemaErr::validation([U64, operation_u64])));
+        assert!(!schema_err_has_required(SchemaErr::validation([I64, operation_i64])));
+        assert!(!schema_err_has_required(SchemaErr::validation([F64, operation_f64])));
+        assert!(!schema_err_has_required(SchemaErr::validation([USIZE, operation_usize])));
+        assert!(!schema_err_has_required(SchemaErr::validation([ISIZE, operation_isize])));
+        assert!(!schema_err_has_required(SchemaErr::validation([STR, bytes, chars, graphemes, lowercase, uppercase, numbers, symbols])));
     }
 
     #[test]
@@ -165,12 +165,12 @@ mod tests {
         let numbers = ValidationErr::NumbersLen(Operation::Le(Operand::Value(OperandValue::USize(6))));
         let symbols = ValidationErr::SymbolsLen(Operation::Btwn(Operand::Value(OperandValue::USize(7)), Operand::Value(OperandValue::USize(8))));
 
-        assert!(schema_err_has_required(SchemaErr::arr([U64, REQUIRED, operation_u64])));
-        assert!(schema_err_has_required(SchemaErr::arr([I64, REQUIRED, operation_i64])));
-        assert!(schema_err_has_required(SchemaErr::arr([F64, REQUIRED, operation_f64])));
-        assert!(schema_err_has_required(SchemaErr::arr([USIZE, REQUIRED, operation_usize])));
-        assert!(schema_err_has_required(SchemaErr::arr([ISIZE, REQUIRED, operation_isize])));
-        assert!(schema_err_has_required(SchemaErr::arr([STR, REQUIRED, bytes, chars, graphemes, lowercase, uppercase, numbers, symbols])));
+        assert!(schema_err_has_required(SchemaErr::validation([U64, REQUIRED, operation_u64])));
+        assert!(schema_err_has_required(SchemaErr::validation([I64, REQUIRED, operation_i64])));
+        assert!(schema_err_has_required(SchemaErr::validation([F64, REQUIRED, operation_f64])));
+        assert!(schema_err_has_required(SchemaErr::validation([USIZE, REQUIRED, operation_usize])));
+        assert!(schema_err_has_required(SchemaErr::validation([ISIZE, REQUIRED, operation_isize])));
+        assert!(schema_err_has_required(SchemaErr::validation([STR, REQUIRED, bytes, chars, graphemes, lowercase, uppercase, numbers, symbols])));
     }
 
     #[test]
@@ -190,12 +190,12 @@ mod tests {
         let symbols = ValidationErr::SymbolsLen(Operation::Btwn(Operand::Value(OperandValue::USize(7)), Operand::Value(OperandValue::USize(8))));
 
         let obj = SchemaErr::Obj(BTreeMap::from([
-            ("u64".into(), SchemaErr::arr([U64, operation_u64])),
-            ("i64".into(), SchemaErr::arr([I64, operation_i64])),
-            ("f64".into(), SchemaErr::arr([F64, operation_f64])),
-            ("usize".into(), SchemaErr::arr([USIZE, operation_usize])),
-            ("isize".into(), SchemaErr::arr([ISIZE, operation_isize])),
-            ("str".into(), SchemaErr::arr([STR, bytes, chars, graphemes, lowercase, uppercase, numbers, symbols])),
+            ("u64".into(), SchemaErr::validation([U64, operation_u64])),
+            ("i64".into(), SchemaErr::validation([I64, operation_i64])),
+            ("f64".into(), SchemaErr::validation([F64, operation_f64])),
+            ("usize".into(), SchemaErr::validation([USIZE, operation_usize])),
+            ("isize".into(), SchemaErr::validation([ISIZE, operation_isize])),
+            ("str".into(), SchemaErr::validation([STR, bytes, chars, graphemes, lowercase, uppercase, numbers, symbols])),
         ]));
         assert!(!schema_err_has_required(obj));
     }
@@ -217,12 +217,12 @@ mod tests {
         let symbols = ValidationErr::SymbolsLen(Operation::Btwn(Operand::Value(OperandValue::USize(7)), Operand::Value(OperandValue::USize(8))));
 
         let obj = SchemaErr::Obj(BTreeMap::from([
-            ("u64".into(), SchemaErr::arr([U64, operation_u64])),
-            ("i64".into(), SchemaErr::arr([I64, operation_i64])),
-            ("f64".into(), SchemaErr::arr([F64, operation_f64])),
-            ("usize".into(), SchemaErr::arr([USIZE, operation_usize])),
-            ("isize".into(), SchemaErr::arr([ISIZE, REQUIRED, operation_isize])),
-            ("str".into(), SchemaErr::arr([STR, bytes, chars, graphemes, lowercase, uppercase, numbers, symbols])),
+            ("u64".into(), SchemaErr::validation([U64, operation_u64])),
+            ("i64".into(), SchemaErr::validation([I64, operation_i64])),
+            ("f64".into(), SchemaErr::validation([F64, operation_f64])),
+            ("usize".into(), SchemaErr::validation([USIZE, operation_usize])),
+            ("isize".into(), SchemaErr::validation([ISIZE, REQUIRED, operation_isize])),
+            ("str".into(), SchemaErr::validation([STR, bytes, chars, graphemes, lowercase, uppercase, numbers, symbols])),
         ]));
         assert!(schema_err_has_required(obj));
     }
@@ -235,11 +235,11 @@ mod tests {
         let operation_usize = ValidationErr::GraphemesLen(Operation::Gt(Operand::Value(OperandValue::USize(89))));
         let operation_isize = ValidationErr::LowercaseLen(Operation::Ge(Operand::Value(OperandValue::ISize(-79))));
 
-        let err_u64 = SchemaErr::arr([U64, operation_u64]);
-        let err_i64 = SchemaErr::arr([I64, operation_i64]);
-        let err_f64 = SchemaErr::arr([F64, operation_f64]);
-        let err_usize = SchemaErr::arr([USIZE, operation_usize]);
-        let err_isize = SchemaErr::arr([ISIZE, operation_isize]);
+        let err_u64 = SchemaErr::validation([U64, operation_u64]);
+        let err_i64 = SchemaErr::validation([I64, operation_i64]);
+        let err_f64 = SchemaErr::validation([F64, operation_f64]);
+        let err_usize = SchemaErr::validation([USIZE, operation_usize]);
+        let err_isize = SchemaErr::validation([ISIZE, operation_isize]);
 
         let obj = SchemaErr::Obj(BTreeMap::from([
             ("u64".into(), err_u64),
@@ -274,11 +274,11 @@ mod tests {
         let operation_usize = ValidationErr::GraphemesLen(Operation::Gt(Operand::Value(OperandValue::USize(89))));
         let operation_isize = ValidationErr::LowercaseLen(Operation::Ge(Operand::Value(OperandValue::ISize(-79))));
 
-        let err_u64 = SchemaErr::arr([U64, operation_u64]);
-        let err_i64 = SchemaErr::arr([I64, operation_i64]);
-        let err_f64 = SchemaErr::arr([F64, operation_f64]);
-        let err_usize = SchemaErr::arr([USIZE, operation_usize]);
-        let err_isize = SchemaErr::arr([ISIZE, operation_isize]);
+        let err_u64 = SchemaErr::validation([U64, operation_u64]);
+        let err_i64 = SchemaErr::validation([I64, operation_i64]);
+        let err_f64 = SchemaErr::validation([F64, operation_f64]);
+        let err_usize = SchemaErr::validation([USIZE, REQUIRED, operation_usize]);
+        let err_isize = SchemaErr::validation([ISIZE, operation_isize]);
 
         let obj = SchemaErr::Obj(BTreeMap::from([
             ("u64".into(), err_u64),
