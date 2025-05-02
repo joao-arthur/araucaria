@@ -30,12 +30,17 @@ pub enum ValidationErr {
 #[derive(Debug, PartialEq, Clone)]
 pub enum SchemaErr {
     Validation(Vec<ValidationErr>),
+    Arr(Vec<SchemaErr>),
     Obj(BTreeMap<String, SchemaErr>),
 }
 
 impl SchemaErr {
     pub fn validation<const N: usize>(value: [ValidationErr; N]) -> SchemaErr {
         SchemaErr::Validation(value.to_vec())
+    }
+
+    pub fn arr<const N: usize>(value: [SchemaErr; N]) -> SchemaErr {
+        SchemaErr::Arr(value.to_vec())
     }
 
     pub fn obj<const N: usize>(value: [(String, SchemaErr); N]) -> SchemaErr {
@@ -45,7 +50,8 @@ impl SchemaErr {
 
 fn schema_err_has_required(err: SchemaErr) -> bool {
     match err {
-        SchemaErr::Validation(arr) => arr.contains(&ValidationErr::Required),
+        SchemaErr::Validation(v) => v.contains(&ValidationErr::Required),
+        SchemaErr::Arr(obj) => obj.into_iter().any(|schema_err| schema_err_has_required(schema_err)),
         SchemaErr::Obj(obj) => obj.into_iter().any(|(_, schema_err)| schema_err_has_required(schema_err)),
     }
 }
@@ -75,7 +81,7 @@ mod tests {
     const DATE_TIME: ValidationErr = ValidationErr::DateTime;
 
     #[test]
-    fn schema_err_validation() {
+    fn validation_err() {
         let vec_usize: Vec<usize> = vec![10, 20, 30, 40, 50];
         let vec_isize: Vec<isize> = vec![0, -1, -2, -3, -4, -5];
         let vec_string: Vec<String> = vec!["APPLE".into(), "GRAPE".into(), "PEAR".into()];
@@ -126,7 +132,7 @@ mod tests {
     }
 
     #[test]
-    fn schema_err_has_required_arr_false() {
+    fn schema_err_has_required_validation_false() {
         let operation_u64 = ValidationErr::Operation(Operation::Eq(Operand::Value(OperandValue::U64(93))));
         let operation_i64 = ValidationErr::BytesLen(Operation::Eq(Operand::Value(OperandValue::I64(-27))));
         let operation_f64 = ValidationErr::CharsLen(Operation::Ne(Operand::Value(OperandValue::F64(-5.75))));
@@ -150,7 +156,7 @@ mod tests {
     }
 
     #[test]
-    fn schema_err_has_required_arr_true() {
+    fn schema_err_has_required_validation_true() {
         let operation_u64 = ValidationErr::Operation(Operation::Eq(Operand::Value(OperandValue::U64(93))));
         let operation_i64 = ValidationErr::BytesLen(Operation::Eq(Operand::Value(OperandValue::I64(-27))));
         let operation_f64 = ValidationErr::CharsLen(Operation::Ne(Operand::Value(OperandValue::F64(-5.75))));
@@ -171,6 +177,108 @@ mod tests {
         assert!(schema_err_has_required(SchemaErr::validation([USIZE, REQUIRED, operation_usize])));
         assert!(schema_err_has_required(SchemaErr::validation([ISIZE, REQUIRED, operation_isize])));
         assert!(schema_err_has_required(SchemaErr::validation([STR, REQUIRED, bytes, chars, graphemes, lowercase, uppercase, numbers, symbols])));
+    }
+
+    #[test]
+    fn schema_err_has_required_arr_false() {
+        let operation_u64 = ValidationErr::Operation(Operation::Eq(Operand::Value(OperandValue::U64(93))));
+        let operation_i64 = ValidationErr::BytesLen(Operation::Eq(Operand::Value(OperandValue::I64(-27))));
+        let operation_f64 = ValidationErr::CharsLen(Operation::Ne(Operand::Value(OperandValue::F64(-5.75))));
+        let operation_usize = ValidationErr::GraphemesLen(Operation::Gt(Operand::Value(OperandValue::USize(89))));
+        let operation_isize = ValidationErr::LowercaseLen(Operation::Ge(Operand::Value(OperandValue::ISize(-79))));
+
+        let bytes = ValidationErr::BytesLen(Operation::Eq(Operand::Value(OperandValue::USize(1))));
+        let chars = ValidationErr::CharsLen(Operation::Ne(Operand::Value(OperandValue::USize(2))));
+        let graphemes = ValidationErr::GraphemesLen(Operation::Gt(Operand::Value(OperandValue::USize(3))));
+        let lowercase = ValidationErr::LowercaseLen(Operation::Ge(Operand::Value(OperandValue::USize(4))));
+        let uppercase = ValidationErr::UppercaseLen(Operation::Lt(Operand::Value(OperandValue::USize(5))));
+        let numbers = ValidationErr::NumbersLen(Operation::Le(Operand::Value(OperandValue::USize(6))));
+        let symbols = ValidationErr::SymbolsLen(Operation::Btwn(Operand::Value(OperandValue::USize(7)), Operand::Value(OperandValue::USize(8))));
+
+        let obj = SchemaErr::Arr(vec![
+            SchemaErr::validation([U64, operation_u64]),
+            SchemaErr::validation([I64, operation_i64]),
+            SchemaErr::validation([F64, operation_f64]),
+            SchemaErr::validation([USIZE, operation_usize]),
+            SchemaErr::validation([ISIZE, operation_isize]),
+            SchemaErr::validation([STR, bytes, chars, graphemes, lowercase, uppercase, numbers, symbols]),
+        ]);
+        assert!(!schema_err_has_required(obj));
+    }
+
+    #[test]
+    fn schema_err_has_required_arr_true() {
+        let operation_u64 = ValidationErr::Operation(Operation::Eq(Operand::Value(OperandValue::U64(93))));
+        let operation_i64 = ValidationErr::BytesLen(Operation::Eq(Operand::Value(OperandValue::I64(-27))));
+        let operation_f64 = ValidationErr::CharsLen(Operation::Ne(Operand::Value(OperandValue::F64(-5.75))));
+        let operation_usize = ValidationErr::GraphemesLen(Operation::Gt(Operand::Value(OperandValue::USize(89))));
+        let operation_isize = ValidationErr::LowercaseLen(Operation::Ge(Operand::Value(OperandValue::ISize(-79))));
+
+        let bytes = ValidationErr::BytesLen(Operation::Eq(Operand::Value(OperandValue::USize(1))));
+        let chars = ValidationErr::CharsLen(Operation::Ne(Operand::Value(OperandValue::USize(2))));
+        let graphemes = ValidationErr::GraphemesLen(Operation::Gt(Operand::Value(OperandValue::USize(3))));
+        let lowercase = ValidationErr::LowercaseLen(Operation::Ge(Operand::Value(OperandValue::USize(4))));
+        let uppercase = ValidationErr::UppercaseLen(Operation::Lt(Operand::Value(OperandValue::USize(5))));
+        let numbers = ValidationErr::NumbersLen(Operation::Le(Operand::Value(OperandValue::USize(6))));
+        let symbols = ValidationErr::SymbolsLen(Operation::Btwn(Operand::Value(OperandValue::USize(7)), Operand::Value(OperandValue::USize(8))));
+
+        let obj = SchemaErr::Arr(vec![
+            SchemaErr::validation([U64, operation_u64]),
+            SchemaErr::validation([I64, operation_i64]),
+            SchemaErr::validation([F64, operation_f64]),
+            SchemaErr::validation([USIZE, operation_usize]),
+            SchemaErr::validation([ISIZE, REQUIRED, operation_isize]),
+            SchemaErr::validation([STR, bytes, chars, graphemes, lowercase, uppercase, numbers, symbols]),
+        ]);
+        assert!(schema_err_has_required(obj));
+    }
+
+    #[test]
+    fn schema_err_has_required_arr_nested_false() {
+        let operation_u64 = ValidationErr::Operation(Operation::Eq(Operand::Value(OperandValue::U64(93))));
+        let operation_i64 = ValidationErr::BytesLen(Operation::Eq(Operand::Value(OperandValue::I64(-27))));
+        let operation_f64 = ValidationErr::CharsLen(Operation::Ne(Operand::Value(OperandValue::F64(-5.75))));
+        let operation_usize = ValidationErr::GraphemesLen(Operation::Gt(Operand::Value(OperandValue::USize(89))));
+        let operation_isize = ValidationErr::LowercaseLen(Operation::Ge(Operand::Value(OperandValue::ISize(-79))));
+
+        let obj = SchemaErr::Arr(vec![
+            SchemaErr::validation([U64, operation_u64]),
+            SchemaErr::Arr(vec![
+                SchemaErr::validation([I64, operation_i64]),
+                SchemaErr::Arr(vec![
+                    SchemaErr::validation([F64, operation_f64]),
+                    SchemaErr::Arr(vec![
+                        SchemaErr::validation([USIZE, operation_usize]),
+                        SchemaErr::Arr(vec![SchemaErr::validation([ISIZE, operation_isize])]),
+                    ]),
+                ]),
+            ]),
+        ]);
+        assert!(!schema_err_has_required(obj));
+    }
+
+    #[test]
+    fn schema_err_has_required_arr_nested_true() {
+        let operation_u64 = ValidationErr::Operation(Operation::Eq(Operand::Value(OperandValue::U64(93))));
+        let operation_i64 = ValidationErr::BytesLen(Operation::Eq(Operand::Value(OperandValue::I64(-27))));
+        let operation_f64 = ValidationErr::CharsLen(Operation::Ne(Operand::Value(OperandValue::F64(-5.75))));
+        let operation_usize = ValidationErr::GraphemesLen(Operation::Gt(Operand::Value(OperandValue::USize(89))));
+        let operation_isize = ValidationErr::LowercaseLen(Operation::Ge(Operand::Value(OperandValue::ISize(-79))));
+
+        let obj = SchemaErr::Arr(vec![
+            SchemaErr::validation([U64, operation_u64]),
+            SchemaErr::Arr(vec![
+                SchemaErr::validation([I64, operation_i64]),
+                SchemaErr::Arr(vec![
+                    SchemaErr::validation([F64, operation_f64]),
+                    SchemaErr::Arr(vec![
+                        SchemaErr::validation([USIZE, REQUIRED, operation_usize]),
+                        SchemaErr::Arr(vec![SchemaErr::validation([ISIZE, operation_isize])]),
+                    ]),
+                ]),
+            ]),
+        ]);
+        assert!(schema_err_has_required(obj));
     }
 
     #[test]
