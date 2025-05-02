@@ -147,13 +147,10 @@ mod tests {
 
     #[test]
     fn resolve_path_obj_nested() {
-        let obj = Value::Obj(BTreeMap::from([(
-            "user".into(),
-            Value::Obj(BTreeMap::from([(
-                "account".into(),
-                Value::Obj(BTreeMap::from([("details".into(), Value::Obj(BTreeMap::from([("birthdate".into(), Value::from("2000-08-22"))])))])),
-            )])),
-        )]));
+        let details = Value::Obj(BTreeMap::from([("birthdate".into(), Value::from("2000-08-22"))]));
+        let account = Value::Obj(BTreeMap::from([("details".into(), details)]));
+        let user = Value::Obj(BTreeMap::from([("account".into(), account)]));
+        let obj = Value::Obj(BTreeMap::from([("user".into(), user)]));
         assert_eq!(resolve_path(&obj, "user.account.details.birthdate"), Some(Value::from("2000-08-22")));
     }
 
@@ -173,22 +170,15 @@ mod tests {
 
     #[test]
     fn resolve_path_nested() {
+        let details = Value::from([Value::U64(111), Value::U64(222), Value::U64(333)]);
+        let account = Value::Obj(BTreeMap::from([("details".into(), details)]));
+        let user = Value::Obj(BTreeMap::from([("account".into(), account)]));
         let value = Value::Obj(BTreeMap::from([(
             "0".into(),
             Value::from([
                 Value::U64(1),
                 Value::U64(2),
-                Value::from([
-                    Value::U64(10),
-                    Value::U64(20),
-                    Value::Obj(BTreeMap::from([(
-                        "user".into(),
-                        Value::Obj(BTreeMap::from([(
-                            "account".into(),
-                            Value::Obj(BTreeMap::from([("details".into(), Value::from([Value::U64(111), Value::U64(222), Value::U64(333)]))])),
-                        )])),
-                    )])),
-                ]),
+                Value::from([Value::U64(10), Value::U64(20), Value::Obj(BTreeMap::from([("user".into(), user)]))]),
             ]),
         )]));
         assert_eq!(resolve_path(&value, "0.2.2.user.account.details.1"), Some(Value::U64(222)));
