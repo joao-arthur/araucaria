@@ -676,17 +676,18 @@ mod tests {
                 ]),
             ]),
         )]);
-        let localized_err = SchemaLocalizedErr::Obj(BTreeMap::from([
-            ("user".into(), SchemaLocalizedErr::Arr(vec![
+        let localized_err = SchemaLocalizedErr::Obj(BTreeMap::from([(
+            "user".into(),
+            SchemaLocalizedErr::Arr(vec![
                 SchemaLocalizedErr::Validation(vec!["required".into()]),
                 SchemaLocalizedErr::Obj(BTreeMap::from([
                     ("name".into(), SchemaLocalizedErr::Validation(vec!["required".into(), "str".into(), r#"== "Paul McCartney""#.into()])),
                     ("birthdate".into(), SchemaLocalizedErr::Validation(vec!["required".into(), "str".into(), r#"== "1942-06-18""#.into()])),
                     ("alive".into(), SchemaLocalizedErr::Validation(vec!["required".into(), "bool".into(), "== true".into()])),
                     ("bands".into(), SchemaLocalizedErr::Validation(vec!["required".into(), "str".into(), r#"== "The Beatles""#.into()])),
-                ]))
-            ]))
-        ]));
+                ])),
+            ]),
+        )]));
         assert_eq!(localize_schema_err(&err, &locale), localized_err);
     }
 }

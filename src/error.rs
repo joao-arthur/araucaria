@@ -65,7 +65,6 @@ mod tests {
     const OPERATION_I64: ValidationErr = ValidationErr::Operation(Operation::Ne(Operand::Value(OperandValue::I64(-17))));
     const OPERATION_F64: ValidationErr = ValidationErr::Operation(Operation::Gt(Operand::Value(OperandValue::F64(-38.5))));
 
-
     #[test]
     fn schema_err_validation() {
         assert_eq!(SchemaErr::validation([REQUIRED, U64, OPERATION_U64]), SchemaErr::Validation(vec![REQUIRED, U64, OPERATION_U64]));
