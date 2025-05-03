@@ -75,6 +75,10 @@ impl DateValidation {
     pub fn btwn_field(self, field_a: String, field_b: String) -> Self {
         DateValidation { operation: Some(Operation::Btwn(Operand::FieldPath(field_a), Operand::FieldPath(field_b))), ..self }
     }
+
+    pub fn unix_epoch(self) -> Self {
+        DateValidation { operation: Some(Operation::Ge(Operand::Value(OperandValue::Str("1970-01-01".into())))), ..self }
+    }
 }
 
 #[cfg(test)]
@@ -85,41 +89,83 @@ mod tests {
 
     use super::DateValidation;
 
+    const VALUE: &str = "2027-08-02";
+    const VALUE_B: &str = "2030-11-25";
+
+    const OPERAND: LazyLock<Operand> = LazyLock::new(|| Operand::Value(OperandValue::from(VALUE)));
+    const OPERAND_B: LazyLock<Operand> = LazyLock::new(|| Operand::Value(OperandValue::from(VALUE_B)));
+
+    const OPERATION_VALUE_EQ: LazyLock<Operation> = LazyLock::new(|| Operation::Eq(OPERAND.clone()));
+    const OPERATION_VALUE_NE: LazyLock<Operation> = LazyLock::new(|| Operation::Ne(OPERAND.clone()));
+    const OPERATION_VALUE_GT: LazyLock<Operation> = LazyLock::new(|| Operation::Gt(OPERAND.clone()));
+    const OPERATION_VALUE_GE: LazyLock<Operation> = LazyLock::new(|| Operation::Ge(OPERAND.clone()));
+    const OPERATION_VALUE_LT: LazyLock<Operation> = LazyLock::new(|| Operation::Lt(OPERAND.clone()));
+    const OPERATION_VALUE_LE: LazyLock<Operation> = LazyLock::new(|| Operation::Le(OPERAND.clone()));
+    const OPERATION_VALUE_BTWN: LazyLock<Operation> = LazyLock::new(|| Operation::Btwn(OPERAND.clone(), OPERAND_B.clone()));
+
     const FIELD: &str = "user.info.details.birthdate";
     const FIELD_B: &str = "user.info.details.deathdate";
 
-    const OP_VALUE_EQ: LazyLock<Operation> = LazyLock::new(|| Operation::Eq(Operand::Value(OperandValue::from("2026-08-12"))));
-    const OP_VALUE_NE: LazyLock<Operation> = LazyLock::new(|| Operation::Ne(Operand::Value(OperandValue::from("2027-08-02"))));
-    const OP_VALUE_GT: LazyLock<Operation> = LazyLock::new(|| Operation::Gt(Operand::Value(OperandValue::from("2028-07-22"))));
-    const OP_VALUE_GE: LazyLock<Operation> = LazyLock::new(|| Operation::Ge(Operand::Value(OperandValue::from("2030-11-25"))));
-    const OP_VALUE_LT: LazyLock<Operation> = LazyLock::new(|| Operation::Lt(Operand::Value(OperandValue::from("2031-11-14"))));
-    const OP_VALUE_LE: LazyLock<Operation> = LazyLock::new(|| Operation::Le(Operand::Value(OperandValue::from("2033-03-30"))));
-    const OP_VALUE_BTWN: LazyLock<Operation> = LazyLock::new(|| Operation::Btwn(Operand::Value(OperandValue::from("2031-11-14")), Operand::Value(OperandValue::from("2033-03-30"))));
-    const OP_FIELD_EQ: LazyLock<Operation> = LazyLock::new(|| Operation::Eq(Operand::FieldPath(FIELD.into())));
-    const OP_FIELD_NE: LazyLock<Operation> = LazyLock::new(|| Operation::Ne(Operand::FieldPath(FIELD.into())));
-    const OP_FIELD_GT: LazyLock<Operation> = LazyLock::new(|| Operation::Gt(Operand::FieldPath(FIELD.into())));
-    const OP_FIELD_GE: LazyLock<Operation> = LazyLock::new(|| Operation::Ge(Operand::FieldPath(FIELD.into())));
-    const OP_FIELD_LT: LazyLock<Operation> = LazyLock::new(|| Operation::Lt(Operand::FieldPath(FIELD.into())));
-    const OP_FIELD_LE: LazyLock<Operation> = LazyLock::new(|| Operation::Le(Operand::FieldPath(FIELD.into())));
-    const OP_FIELD_BTWN: LazyLock<Operation> = LazyLock::new(|| Operation::Btwn(Operand::FieldPath(FIELD.into()), Operand::FieldPath(FIELD_B.into())));
+    const OPERAND_FIELD: LazyLock<Operand> = LazyLock::new(|| Operand::FieldPath(FIELD.into()));
+    const OPERAND_FIELD_B: LazyLock<Operand> = LazyLock::new(|| Operand::FieldPath(FIELD_B.into()));
+
+    const OPERATION_FIELD_EQ: LazyLock<Operation> = LazyLock::new(|| Operation::Eq(OPERAND_FIELD.clone()));
+    const OPERATION_FIELD_NE: LazyLock<Operation> = LazyLock::new(|| Operation::Ne(OPERAND_FIELD.clone()));
+    const OPERATION_FIELD_GT: LazyLock<Operation> = LazyLock::new(|| Operation::Gt(OPERAND_FIELD.clone()));
+    const OPERATION_FIELD_GE: LazyLock<Operation> = LazyLock::new(|| Operation::Ge(OPERAND_FIELD.clone()));
+    const OPERATION_FIELD_LT: LazyLock<Operation> = LazyLock::new(|| Operation::Lt(OPERAND_FIELD.clone()));
+    const OPERATION_FIELD_LE: LazyLock<Operation> = LazyLock::new(|| Operation::Le(OPERAND_FIELD.clone()));
+    const OPERATION_FIELD_BTWN: LazyLock<Operation> = LazyLock::new(|| Operation::Btwn(OPERAND_FIELD.clone(), OPERAND_FIELD_B.clone()));
 
     #[test]
     fn date_validation() {
         assert_eq!(DateValidation::default(), DateValidation { required: true, operation: None });
         assert_eq!(DateValidation::default().optional(), DateValidation { required: false, operation: None });
-        assert_eq!(DateValidation::default().eq("2026-08-12".into()), DateValidation { required: true, operation: Some(OP_VALUE_EQ.clone()) });
-        assert_eq!(DateValidation::default().ne("2027-08-02".into()), DateValidation { required: true, operation: Some(OP_VALUE_NE.clone()) });
-        assert_eq!(DateValidation::default().gt("2028-07-22".into()), DateValidation { required: true, operation: Some(OP_VALUE_GT.clone()) });
-        assert_eq!(DateValidation::default().ge("2030-11-25".into()), DateValidation { required: true, operation: Some(OP_VALUE_GE.clone()) });
-        assert_eq!(DateValidation::default().lt("2031-11-14".into()), DateValidation { required: true, operation: Some(OP_VALUE_LT.clone()) });
-        assert_eq!(DateValidation::default().le("2033-03-30".into()), DateValidation { required: true, operation: Some(OP_VALUE_LE.clone()) });
-        assert_eq!(DateValidation::default().btwn("2031-11-14".into(), "2033-03-30".into()), DateValidation { required: true, operation: Some(OP_VALUE_BTWN.clone()) });
-        assert_eq!(DateValidation::default().eq_field(FIELD.into()), DateValidation { required: true, operation: Some(OP_FIELD_EQ.clone()) });
-        assert_eq!(DateValidation::default().ne_field(FIELD.into()), DateValidation { required: true, operation: Some(OP_FIELD_NE.clone()) });
-        assert_eq!(DateValidation::default().gt_field(FIELD.into()), DateValidation { required: true, operation: Some(OP_FIELD_GT.clone()) });
-        assert_eq!(DateValidation::default().ge_field(FIELD.into()), DateValidation { required: true, operation: Some(OP_FIELD_GE.clone()) });
-        assert_eq!(DateValidation::default().lt_field(FIELD.into()), DateValidation { required: true, operation: Some(OP_FIELD_LT.clone()) });
-        assert_eq!(DateValidation::default().le_field(FIELD.into()), DateValidation { required: true, operation: Some(OP_FIELD_LE.clone()) });
-        assert_eq!(DateValidation::default().btwn_field(FIELD.into(), FIELD_B.into()), DateValidation { required: true, operation: Some(OP_FIELD_BTWN.clone()) });
+    }
+
+    #[test]
+    fn date_validation_operation_value() {
+        let validation_eq = DateValidation::default().eq(VALUE.into());
+        let validation_ne = DateValidation::default().ne(VALUE.into());
+        let validation_gt = DateValidation::default().gt(VALUE.into());
+        let validation_ge = DateValidation::default().ge(VALUE.into());
+        let validation_lt = DateValidation::default().lt(VALUE.into());
+        let validation_le = DateValidation::default().le(VALUE.into());
+        let validation_btwn = DateValidation::default().btwn(VALUE.into(), VALUE_B.into());
+
+        assert_eq!(validation_eq, DateValidation { required: true, operation: Some(OPERATION_VALUE_EQ.clone()) });
+        assert_eq!(validation_ne, DateValidation { required: true, operation: Some(OPERATION_VALUE_NE.clone()) });
+        assert_eq!(validation_gt, DateValidation { required: true, operation: Some(OPERATION_VALUE_GT.clone()) });
+        assert_eq!(validation_ge, DateValidation { required: true, operation: Some(OPERATION_VALUE_GE.clone()) });
+        assert_eq!(validation_lt, DateValidation { required: true, operation: Some(OPERATION_VALUE_LT.clone()) });
+        assert_eq!(validation_le, DateValidation { required: true, operation: Some(OPERATION_VALUE_LE.clone()) });
+        assert_eq!(validation_btwn, DateValidation { required: true, operation: Some(OPERATION_VALUE_BTWN.clone()) });
+    }
+
+    #[test]
+    fn date_validation_operation_field() {
+        let validation_eq = DateValidation::default().eq_field(FIELD.into());
+        let validation_ne = DateValidation::default().ne_field(FIELD.into());
+        let validation_gt = DateValidation::default().gt_field(FIELD.into());
+        let validation_ge = DateValidation::default().ge_field(FIELD.into());
+        let validation_lt = DateValidation::default().lt_field(FIELD.into());
+        let validation_le = DateValidation::default().le_field(FIELD.into());
+        let validation_btwn = DateValidation::default().btwn_field(FIELD.into(), FIELD_B.into());
+
+        assert_eq!(validation_eq, DateValidation { required: true, operation: Some(OPERATION_FIELD_EQ.clone()) });
+        assert_eq!(validation_ne, DateValidation { required: true, operation: Some(OPERATION_FIELD_NE.clone()) });
+        assert_eq!(validation_gt, DateValidation { required: true, operation: Some(OPERATION_FIELD_GT.clone()) });
+        assert_eq!(validation_ge, DateValidation { required: true, operation: Some(OPERATION_FIELD_GE.clone()) });
+        assert_eq!(validation_lt, DateValidation { required: true, operation: Some(OPERATION_FIELD_LT.clone()) });
+        assert_eq!(validation_le, DateValidation { required: true, operation: Some(OPERATION_FIELD_LE.clone()) });
+        assert_eq!(validation_btwn, DateValidation { required: true, operation: Some(OPERATION_FIELD_BTWN.clone()) });
+    }
+
+    #[test]
+    fn date_validation_unix_epoch() {
+        assert_eq!(
+            DateValidation::default().unix_epoch(),
+            DateValidation { required: true, operation: Some(Operation::Ge(Operand::Value(OperandValue::Str("1970-01-01".into())))) }
+        );
     }
 }
