@@ -48,7 +48,7 @@ impl SchemaErr {
     }
 }
 
-fn schema_err_has_required(err: SchemaErr) -> bool {
+pub fn schema_err_has_required(err: SchemaErr) -> bool {
     match err {
         SchemaErr::Validation(v) => v.contains(&ValidationErr::Required),
         SchemaErr::Arr(obj) => obj.into_iter().any(|schema_err| schema_err_has_required(schema_err)),
