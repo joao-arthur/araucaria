@@ -12,7 +12,7 @@ A frontend for a validation library written in rust.
 araucaria = { git = "https://github.com/joao-arthur/araucaria", rev = "0cc2ef2758917372094cf060babf2024f18ce4e9" }
 ```
 
-## usage
+## Usage
 
 ```rust
 use std::{collections::BTreeMap, sync::LazyLock};
@@ -26,26 +26,26 @@ use araucaria::validation::{
 };
 
 pub static CREATE_USER_SCHEMA: LazyLock<Validation> = LazyLock::new(|| {
-    Validation::Obj(ObjValidation::default().validation(BTreeMap::from([
+    Validation::from(ObjValidation::default().validation(BTreeMap::from([
         (
             "first_name".into(),
-            Validation::Str(StrValidation::default().chars_len_btwn(1, 256))
+            Validation::from(StrValidation::default().chars_len_btwn(1, 256))
         ),
         (
             "birthdate".into(),
-            Validation::Date(DateValidation::default().ge("1970-01-01".into()))
+            Validation::from(DateValidation::default().ge("1970-01-01".into()))
         ),
         (
             "email".into(),
-            Validation::Email(EmailValidation::default())
+            Validation::from(EmailValidation::default())
         ),
         (
             "username".into(),
-            Validation::Str(StrValidation::default().chars_len_btwn(1, 64))
+            Validation::from(StrValidation::default().chars_len_btwn(1, 64))
         ),
         (
             "password".into(),
-            Validation::Str(
+            Validation::from(
                 StrValidation::default()
                     .chars_len_btwn(1, 64)
                     .uppercase_len_gt(1)
@@ -155,6 +155,10 @@ pub static CREATE_USER_SCHEMA: LazyLock<Validation> = LazyLock::new(|| {
     })
 });
 ```
+
+## Validation and Localization
+
+You need to install [araucaria_plugins](https://github.com/joao-arthur/araucaria_plugins).
 
 ## 🚧 TODO
 
