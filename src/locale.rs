@@ -84,10 +84,10 @@ pub struct Locale {
 }
 
 #[derive(Debug, PartialEq, Clone)]
-pub enum SchemaLocalizedErr {
+pub enum SchemaErrLocale {
     Schema(Vec<String>),
-    Arr(Vec<SchemaLocalizedErr>),
-    Obj(BTreeMap<String, SchemaLocalizedErr>),
+    Arr(Vec<SchemaErrLocale>),
+    Obj(BTreeMap<String, SchemaErrLocale>),
 }
 
 pub fn localize_validation_err(error: &ValidationErr, locale: &Locale) -> String {
@@ -198,22 +198,22 @@ pub fn localize_validation_err(error: &ValidationErr, locale: &Locale) -> String
     }
 }
 
-pub fn localize_schema_err(err: &SchemaErr, locale: &Locale) -> SchemaLocalizedErr {
+pub fn localize_schema_err(err: &SchemaErr, locale: &Locale) -> SchemaErrLocale {
     match err {
-        SchemaErr::Schema(v) => SchemaLocalizedErr::Schema(v.iter().map(|item| localize_validation_err(item, locale)).collect()),
+        SchemaErr::Schema(v) => SchemaErrLocale::Schema(v.iter().map(|item| localize_validation_err(item, locale)).collect()),
         SchemaErr::Arr(arr) => {
-            let mut result: Vec<SchemaLocalizedErr> = Vec::new();
+            let mut result: Vec<SchemaErrLocale> = Vec::new();
             for item in arr {
                 result.push(localize_schema_err(item, locale));
             }
-            SchemaLocalizedErr::Arr(result)
+            SchemaErrLocale::Arr(result)
         }
         SchemaErr::Obj(obj) => {
-            let mut result: BTreeMap<String, SchemaLocalizedErr> = BTreeMap::new();
+            let mut result: BTreeMap<String, SchemaErrLocale> = BTreeMap::new();
             for (key, item) in obj {
                 result.insert(key.clone(), localize_schema_err(item, locale));
             }
-            SchemaLocalizedErr::Obj(result)
+            SchemaErrLocale::Obj(result)
         }
     }
 }
@@ -228,7 +228,7 @@ mod tests {
         schema::EnumValues,
     };
 
-    use super::{Locale, SchemaLocalizedErr, localize_schema_err, localize_validation_err};
+    use super::{Locale, SchemaErrLocale, localize_schema_err, localize_validation_err};
 
     const STR_VALUES: [&str; 3] = ["APPLE", "GRAPE", "PEAR"];
     const USIZE_VALUES: [usize; 6] = [0, 1, 2, 3, 4, 5];
@@ -621,7 +621,7 @@ mod tests {
     fn localize_schema_err_validation() {
         let locale = mock_locale();
         let err = SchemaErr::validation([REQUIRED, BOOL, ValidationErr::Operation(Operation::Eq(Operand::Value(OperandValue::Bool(true))))]);
-        let localized_err = SchemaLocalizedErr::Schema(vec!["required".into(), "bool".into(), "== true".into()]);
+        let localized_err = SchemaErrLocale::Schema(vec!["required".into(), "bool".into(), "== true".into()]);
         assert_eq!(localize_schema_err(&err, &locale), localized_err);
     }
 
@@ -634,11 +634,11 @@ mod tests {
             SchemaErr::validation([REQUIRED, BOOL, OP_ALIVE.clone()]),
             SchemaErr::validation([REQUIRED, STR, OP_BANDS.clone()]),
         ]);
-        let localized_err = SchemaLocalizedErr::Arr(vec![
-            SchemaLocalizedErr::Schema(vec!["required".into(), "str".into(), r#"== "Paul McCartney""#.into()]),
-            SchemaLocalizedErr::Schema(vec!["required".into(), "str".into(), r#"== "1942-06-18""#.into()]),
-            SchemaLocalizedErr::Schema(vec!["required".into(), "bool".into(), "== true".into()]),
-            SchemaLocalizedErr::Schema(vec!["required".into(), "str".into(), r#"== "The Beatles""#.into()]),
+        let localized_err = SchemaErrLocale::Arr(vec![
+            SchemaErrLocale::Schema(vec!["required".into(), "str".into(), r#"== "Paul McCartney""#.into()]),
+            SchemaErrLocale::Schema(vec!["required".into(), "str".into(), r#"== "1942-06-18""#.into()]),
+            SchemaErrLocale::Schema(vec!["required".into(), "bool".into(), "== true".into()]),
+            SchemaErrLocale::Schema(vec!["required".into(), "str".into(), r#"== "The Beatles""#.into()]),
         ]);
         assert_eq!(localize_schema_err(&err, &locale), localized_err);
     }
@@ -652,11 +652,11 @@ mod tests {
             ("alive".into(), SchemaErr::validation([REQUIRED, BOOL, OP_ALIVE.clone()])),
             ("bands".into(), SchemaErr::validation([REQUIRED, STR, OP_BANDS.clone()])),
         ]);
-        let localized_err = SchemaLocalizedErr::Obj(BTreeMap::from([
-            ("name".into(), SchemaLocalizedErr::Schema(vec!["required".into(), "str".into(), r#"== "Paul McCartney""#.into()])),
-            ("birthdate".into(), SchemaLocalizedErr::Schema(vec!["required".into(), "str".into(), r#"== "1942-06-18""#.into()])),
-            ("alive".into(), SchemaLocalizedErr::Schema(vec!["required".into(), "bool".into(), "== true".into()])),
-            ("bands".into(), SchemaLocalizedErr::Schema(vec!["required".into(), "str".into(), r#"== "The Beatles""#.into()])),
+        let localized_err = SchemaErrLocale::Obj(BTreeMap::from([
+            ("name".into(), SchemaErrLocale::Schema(vec!["required".into(), "str".into(), r#"== "Paul McCartney""#.into()])),
+            ("birthdate".into(), SchemaErrLocale::Schema(vec!["required".into(), "str".into(), r#"== "1942-06-18""#.into()])),
+            ("alive".into(), SchemaErrLocale::Schema(vec!["required".into(), "bool".into(), "== true".into()])),
+            ("bands".into(), SchemaErrLocale::Schema(vec!["required".into(), "str".into(), r#"== "The Beatles""#.into()])),
         ]));
         assert_eq!(localize_schema_err(&err, &locale), localized_err);
     }
@@ -676,15 +676,15 @@ mod tests {
                 ]),
             ]),
         )]);
-        let localized_err = SchemaLocalizedErr::Obj(BTreeMap::from([(
+        let localized_err = SchemaErrLocale::Obj(BTreeMap::from([(
             "user".into(),
-            SchemaLocalizedErr::Arr(vec![
-                SchemaLocalizedErr::Schema(vec!["required".into()]),
-                SchemaLocalizedErr::Obj(BTreeMap::from([
-                    ("name".into(), SchemaLocalizedErr::Schema(vec!["required".into(), "str".into(), r#"== "Paul McCartney""#.into()])),
-                    ("birthdate".into(), SchemaLocalizedErr::Schema(vec!["required".into(), "str".into(), r#"== "1942-06-18""#.into()])),
-                    ("alive".into(), SchemaLocalizedErr::Schema(vec!["required".into(), "bool".into(), "== true".into()])),
-                    ("bands".into(), SchemaLocalizedErr::Schema(vec!["required".into(), "str".into(), r#"== "The Beatles""#.into()])),
+            SchemaErrLocale::Arr(vec![
+                SchemaErrLocale::Schema(vec!["required".into()]),
+                SchemaErrLocale::Obj(BTreeMap::from([
+                    ("name".into(), SchemaErrLocale::Schema(vec!["required".into(), "str".into(), r#"== "Paul McCartney""#.into()])),
+                    ("birthdate".into(), SchemaErrLocale::Schema(vec!["required".into(), "str".into(), r#"== "1942-06-18""#.into()])),
+                    ("alive".into(), SchemaErrLocale::Schema(vec!["required".into(), "bool".into(), "== true".into()])),
+                    ("bands".into(), SchemaErrLocale::Schema(vec!["required".into(), "str".into(), r#"== "The Beatles""#.into()])),
                 ])),
             ]),
         )]));
