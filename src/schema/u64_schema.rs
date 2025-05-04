@@ -42,10 +42,7 @@ impl U64Schema {
     }
 
     pub fn btwn(self, value_a: u64, value_b: u64) -> Self {
-        U64Schema {
-            operation: Some(Operation::Btwn(Operand::Value(OperandValue::U64(value_a)), Operand::Value(OperandValue::U64(value_b)))),
-            ..self
-        }
+        U64Schema { operation: Some(Operation::Btwn(Operand::Value(OperandValue::U64(value_a)), Operand::Value(OperandValue::U64(value_b)))), ..self }
     }
 
     pub fn eq_field(self, field: String) -> Self {

@@ -59,10 +59,7 @@ impl StrSchema {
     }
 
     pub fn btwn(self, value_a: String, value_b: String) -> Self {
-        StrSchema {
-            operation: Some(Operation::Btwn(Operand::Value(OperandValue::Str(value_a)), Operand::Value(OperandValue::Str(value_b)))),
-            ..self
-        }
+        StrSchema { operation: Some(Operation::Btwn(Operand::Value(OperandValue::Str(value_a)), Operand::Value(OperandValue::Str(value_b)))), ..self }
     }
 
     pub fn bytes_len_eq(self, len: usize) -> Self {
@@ -90,10 +87,7 @@ impl StrSchema {
     }
 
     pub fn bytes_len_btwn(self, len_a: usize, len_b: usize) -> Self {
-        StrSchema {
-            bytes_len: Some(Operation::Btwn(Operand::Value(OperandValue::USize(len_a)), Operand::Value(OperandValue::USize(len_b)))),
-            ..self
-        }
+        StrSchema { bytes_len: Some(Operation::Btwn(Operand::Value(OperandValue::USize(len_a)), Operand::Value(OperandValue::USize(len_b)))), ..self }
     }
 
     pub fn chars_len_eq(self, len: usize) -> Self {
@@ -121,10 +115,7 @@ impl StrSchema {
     }
 
     pub fn chars_len_btwn(self, len_a: usize, len_b: usize) -> Self {
-        StrSchema {
-            chars_len: Some(Operation::Btwn(Operand::Value(OperandValue::USize(len_a)), Operand::Value(OperandValue::USize(len_b)))),
-            ..self
-        }
+        StrSchema { chars_len: Some(Operation::Btwn(Operand::Value(OperandValue::USize(len_a)), Operand::Value(OperandValue::USize(len_b)))), ..self }
     }
 
     pub fn graphemes_len_eq(self, len: usize) -> Self {

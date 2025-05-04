@@ -29,17 +29,17 @@ mod usize_schema;
 #[derive(Debug, PartialEq, Clone)]
 pub struct ObjValidation {
     pub required: bool,
-    pub validation: BTreeMap<String, Validation>,
+    pub validation: BTreeMap<String, Schema>,
 }
 
-impl From<BTreeMap<String, Validation>> for ObjValidation {
-    fn from(validation: BTreeMap<String, Validation>) -> Self {
+impl From<BTreeMap<String, Schema>> for ObjValidation {
+    fn from(validation: BTreeMap<String, Schema>) -> Self {
         ObjValidation { required: true, validation }
     }
 }
 
-impl<const N: usize> From<[(String, Validation); N]> for ObjValidation {
-    fn from(value: [(String, Validation); N]) -> Self {
+impl<const N: usize> From<[(String, Schema); N]> for ObjValidation {
+    fn from(value: [(String, Schema); N]) -> Self {
         ObjValidation { required: true, validation: BTreeMap::from(value) }
     }
 }
@@ -51,7 +51,7 @@ impl ObjValidation {
 }
 
 #[derive(Debug, PartialEq, Clone)]
-pub enum Validation {
+pub enum Schema {
     U64(U64Schema),
     I64(I64Schema),
     F64(F64Schema),
@@ -67,81 +67,81 @@ pub enum Validation {
     Enum(EnumSchema),
 }
 
-impl From<U64Schema> for Validation {
+impl From<U64Schema> for Schema {
     fn from(validation: U64Schema) -> Self {
-        Validation::U64(validation)
+        Schema::U64(validation)
     }
 }
 
-impl From<I64Schema> for Validation {
+impl From<I64Schema> for Schema {
     fn from(validation: I64Schema) -> Self {
-        Validation::I64(validation)
+        Schema::I64(validation)
     }
 }
 
-impl From<F64Schema> for Validation {
+impl From<F64Schema> for Schema {
     fn from(validation: F64Schema) -> Self {
-        Validation::F64(validation)
+        Schema::F64(validation)
     }
 }
 
-impl From<USizeSchema> for Validation {
+impl From<USizeSchema> for Schema {
     fn from(validation: USizeSchema) -> Self {
-        Validation::USize(validation)
+        Schema::USize(validation)
     }
 }
 
-impl From<ISizeSchema> for Validation {
+impl From<ISizeSchema> for Schema {
     fn from(validation: ISizeSchema) -> Self {
-        Validation::ISize(validation)
+        Schema::ISize(validation)
     }
 }
 
-impl From<BoolSchema> for Validation {
+impl From<BoolSchema> for Schema {
     fn from(validation: BoolSchema) -> Self {
-        Validation::Bool(validation)
+        Schema::Bool(validation)
     }
 }
 
-impl From<StrSchema> for Validation {
+impl From<StrSchema> for Schema {
     fn from(validation: StrSchema) -> Self {
-        Validation::Str(validation)
+        Schema::Str(validation)
     }
 }
 
-impl From<EmailSchema> for Validation {
+impl From<EmailSchema> for Schema {
     fn from(validation: EmailSchema) -> Self {
-        Validation::Email(validation)
+        Schema::Email(validation)
     }
 }
 
-impl From<DateSchema> for Validation {
+impl From<DateSchema> for Schema {
     fn from(validation: DateSchema) -> Self {
-        Validation::Date(validation)
+        Schema::Date(validation)
     }
 }
 
-impl From<TimeSchema> for Validation {
+impl From<TimeSchema> for Schema {
     fn from(validation: TimeSchema) -> Self {
-        Validation::Time(validation)
+        Schema::Time(validation)
     }
 }
 
-impl From<DateTimeSchema> for Validation {
+impl From<DateTimeSchema> for Schema {
     fn from(validation: DateTimeSchema) -> Self {
-        Validation::DateTime(validation)
+        Schema::DateTime(validation)
     }
 }
 
-impl From<ObjValidation> for Validation {
+impl From<ObjValidation> for Schema {
     fn from(validation: ObjValidation) -> Self {
-        Validation::Obj(validation)
+        Schema::Obj(validation)
     }
 }
 
-impl From<EnumSchema> for Validation {
+impl From<EnumSchema> for Schema {
     fn from(validation: EnumSchema) -> Self {
-        Validation::Enum(validation)
+        Schema::Enum(validation)
     }
 }
 
@@ -150,42 +150,42 @@ mod tests {
     use std::collections::BTreeMap;
 
     use super::{
-        BoolSchema, DateTimeSchema, DateSchema, EmailSchema, EnumSchema, EnumValues, F64Schema, I64Schema,
-        ISizeSchema, ObjValidation, StrSchema, TimeSchema, U64Schema, USizeSchema, Validation,
+        BoolSchema, DateSchema, DateTimeSchema, EmailSchema, EnumSchema, EnumValues, F64Schema, I64Schema, ISizeSchema, ObjValidation, Schema,
+        StrSchema, TimeSchema, U64Schema, USizeSchema,
     };
 
     #[test]
     fn obj_validation() {
         assert_eq!(
-            ObjValidation::from(BTreeMap::from([("is".into(), Validation::Bool(BoolSchema::default().eq(false)))])),
-            ObjValidation { required: true, validation: BTreeMap::from([("is".into(), Validation::Bool(BoolSchema::default().eq(false)))]) }
+            ObjValidation::from(BTreeMap::from([("is".into(), Schema::Bool(BoolSchema::default().eq(false)))])),
+            ObjValidation { required: true, validation: BTreeMap::from([("is".into(), Schema::Bool(BoolSchema::default().eq(false)))]) }
         );
         assert_eq!(
-            ObjValidation::from(BTreeMap::from([("is".into(), Validation::Bool(BoolSchema::default().eq(false)))])).optional(),
-            ObjValidation { required: false, validation: BTreeMap::from([("is".into(), Validation::Bool(BoolSchema::default().eq(false)))]) }
+            ObjValidation::from(BTreeMap::from([("is".into(), Schema::Bool(BoolSchema::default().eq(false)))])).optional(),
+            ObjValidation { required: false, validation: BTreeMap::from([("is".into(), Schema::Bool(BoolSchema::default().eq(false)))]) }
         );
         assert_eq!(
-            ObjValidation::from([("is".into(), Validation::Bool(BoolSchema::default().eq(false)))]),
-            ObjValidation { required: true, validation: BTreeMap::from([("is".into(), Validation::Bool(BoolSchema::default().eq(false)))]) }
+            ObjValidation::from([("is".into(), Schema::Bool(BoolSchema::default().eq(false)))]),
+            ObjValidation { required: true, validation: BTreeMap::from([("is".into(), Schema::Bool(BoolSchema::default().eq(false)))]) }
         );
         assert_eq!(
-            ObjValidation::from([("is".into(), Validation::Bool(BoolSchema::default().eq(false)))]).optional(),
-            ObjValidation { required: false, validation: BTreeMap::from([("is".into(), Validation::Bool(BoolSchema::default().eq(false)))]) }
+            ObjValidation::from([("is".into(), Schema::Bool(BoolSchema::default().eq(false)))]).optional(),
+            ObjValidation { required: false, validation: BTreeMap::from([("is".into(), Schema::Bool(BoolSchema::default().eq(false)))]) }
         );
     }
 
     #[test]
     fn validation_from() {
         let enum_usize: Vec<usize> = vec![1, 2, 3];
-        assert_eq!(Validation::from(U64Schema::default()), Validation::U64(U64Schema { required: true, operation: None }));
-        assert_eq!(Validation::from(I64Schema::default()), Validation::I64(I64Schema { required: true, operation: None }));
-        assert_eq!(Validation::from(F64Schema::default()), Validation::F64(F64Schema { required: true, operation: None }));
-        assert_eq!(Validation::from(USizeSchema::default()), Validation::USize(USizeSchema { required: true, operation: None }));
-        assert_eq!(Validation::from(ISizeSchema::default()), Validation::ISize(ISizeSchema { required: true, operation: None }));
-        assert_eq!(Validation::from(BoolSchema::default()), Validation::Bool(BoolSchema { required: true, operation: None }));
+        assert_eq!(Schema::from(U64Schema::default()), Schema::U64(U64Schema { required: true, operation: None }));
+        assert_eq!(Schema::from(I64Schema::default()), Schema::I64(I64Schema { required: true, operation: None }));
+        assert_eq!(Schema::from(F64Schema::default()), Schema::F64(F64Schema { required: true, operation: None }));
+        assert_eq!(Schema::from(USizeSchema::default()), Schema::USize(USizeSchema { required: true, operation: None }));
+        assert_eq!(Schema::from(ISizeSchema::default()), Schema::ISize(ISizeSchema { required: true, operation: None }));
+        assert_eq!(Schema::from(BoolSchema::default()), Schema::Bool(BoolSchema { required: true, operation: None }));
         assert_eq!(
-            Validation::from(StrSchema::default()),
-            Validation::Str(StrSchema {
+            Schema::from(StrSchema::default()),
+            Schema::Str(StrSchema {
                 required: true,
                 operation: None,
                 bytes_len: None,
@@ -197,17 +197,14 @@ mod tests {
                 symbols_len: None,
             })
         );
-        assert_eq!(Validation::from(EmailSchema::default()), Validation::Email(EmailSchema { required: true }));
-        assert_eq!(Validation::from(DateSchema::default()), Validation::Date(DateSchema { required: true, operation: None }));
-        assert_eq!(Validation::from(TimeSchema::default()), Validation::Time(TimeSchema { required: true, operation: None }));
-        assert_eq!(Validation::from(DateTimeSchema::default()), Validation::DateTime(DateTimeSchema { required: true, operation: None }));
+        assert_eq!(Schema::from(EmailSchema::default()), Schema::Email(EmailSchema { required: true }));
+        assert_eq!(Schema::from(DateSchema::default()), Schema::Date(DateSchema { required: true, operation: None }));
+        assert_eq!(Schema::from(TimeSchema::default()), Schema::Time(TimeSchema { required: true, operation: None }));
+        assert_eq!(Schema::from(DateTimeSchema::default()), Schema::DateTime(DateTimeSchema { required: true, operation: None }));
+        assert_eq!(Schema::from(ObjValidation::from(BTreeMap::new())), Schema::Obj(ObjValidation { required: true, validation: BTreeMap::new() }));
         assert_eq!(
-            Validation::from(ObjValidation::from(BTreeMap::new())),
-            Validation::Obj(ObjValidation { required: true, validation: BTreeMap::new() })
-        );
-        assert_eq!(
-            Validation::from(EnumSchema::from(enum_usize.clone())),
-            Validation::Enum(EnumSchema { required: true, values: EnumValues::USize(enum_usize) })
+            Schema::from(EnumSchema::from(enum_usize.clone())),
+            Schema::Enum(EnumSchema { required: true, values: EnumValues::USize(enum_usize) })
         );
     }
 }

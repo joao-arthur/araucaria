@@ -95,10 +95,7 @@ mod tests {
         assert_eq!(
             SchemaErr::from([(
                 "user".into(),
-                SchemaErr::from([
-                    SchemaErr::from([REQUIRED]),
-                    SchemaErr::from([("i64".into(), SchemaErr::from([REQUIRED, I64, OPERATION_I64]))]),
-                ]),
+                SchemaErr::from([SchemaErr::from([REQUIRED]), SchemaErr::from([("i64".into(), SchemaErr::from([REQUIRED, I64, OPERATION_I64]))]),]),
             )]),
             SchemaErr::Obj(BTreeMap::from([(
                 "user".into(),

@@ -637,7 +637,10 @@ mod tests {
 
     #[test]
     fn schema_err_locale_validation() {
-        assert_eq!(SchemaErrLocale::from(["required".to_string(), "u64".to_string()]), SchemaErrLocale::Validation(vec!["required".into(), "u64".into()]));
+        assert_eq!(
+            SchemaErrLocale::from(["required".to_string(), "u64".to_string()]),
+            SchemaErrLocale::Validation(vec!["required".into(), "u64".into()])
+        );
     }
 
     #[test]
