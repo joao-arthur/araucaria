@@ -27,26 +27,26 @@ mod u64_schema;
 mod usize_schema;
 
 #[derive(Debug, PartialEq, Clone)]
-pub struct ObjValidation {
+pub struct ObjSchema {
     pub required: bool,
     pub validation: BTreeMap<String, Schema>,
 }
 
-impl From<BTreeMap<String, Schema>> for ObjValidation {
+impl From<BTreeMap<String, Schema>> for ObjSchema {
     fn from(validation: BTreeMap<String, Schema>) -> Self {
-        ObjValidation { required: true, validation }
+        ObjSchema { required: true, validation }
     }
 }
 
-impl<const N: usize> From<[(String, Schema); N]> for ObjValidation {
+impl<const N: usize> From<[(String, Schema); N]> for ObjSchema {
     fn from(value: [(String, Schema); N]) -> Self {
-        ObjValidation { required: true, validation: BTreeMap::from(value) }
+        ObjSchema { required: true, validation: BTreeMap::from(value) }
     }
 }
 
-impl ObjValidation {
+impl ObjSchema {
     pub fn optional(self) -> Self {
-        ObjValidation { required: false, validation: self.validation }
+        ObjSchema { required: false, validation: self.validation }
     }
 }
 
@@ -63,7 +63,7 @@ pub enum Schema {
     Date(DateSchema),
     Time(TimeSchema),
     DateTime(DateTimeSchema),
-    Obj(ObjValidation),
+    Obj(ObjSchema),
     Enum(EnumSchema),
 }
 
@@ -133,8 +133,8 @@ impl From<DateTimeSchema> for Schema {
     }
 }
 
-impl From<ObjValidation> for Schema {
-    fn from(validation: ObjValidation) -> Self {
+impl From<ObjSchema> for Schema {
+    fn from(validation: ObjSchema) -> Self {
         Schema::Obj(validation)
     }
 }
@@ -150,27 +150,27 @@ mod tests {
     use std::collections::BTreeMap;
 
     use super::{
-        BoolSchema, DateSchema, DateTimeSchema, EmailSchema, EnumSchema, EnumValues, F64Schema, I64Schema, ISizeSchema, ObjValidation, Schema,
-        StrSchema, TimeSchema, U64Schema, USizeSchema,
+        BoolSchema, DateSchema, DateTimeSchema, EmailSchema, EnumSchema, EnumValues, F64Schema, I64Schema, ISizeSchema, ObjSchema, Schema, StrSchema,
+        TimeSchema, U64Schema, USizeSchema,
     };
 
     #[test]
     fn obj_validation() {
         assert_eq!(
-            ObjValidation::from(BTreeMap::from([("is".into(), Schema::Bool(BoolSchema::default().eq(false)))])),
-            ObjValidation { required: true, validation: BTreeMap::from([("is".into(), Schema::Bool(BoolSchema::default().eq(false)))]) }
+            ObjSchema::from(BTreeMap::from([("is".into(), Schema::Bool(BoolSchema::default().eq(false)))])),
+            ObjSchema { required: true, validation: BTreeMap::from([("is".into(), Schema::Bool(BoolSchema::default().eq(false)))]) }
         );
         assert_eq!(
-            ObjValidation::from(BTreeMap::from([("is".into(), Schema::Bool(BoolSchema::default().eq(false)))])).optional(),
-            ObjValidation { required: false, validation: BTreeMap::from([("is".into(), Schema::Bool(BoolSchema::default().eq(false)))]) }
+            ObjSchema::from(BTreeMap::from([("is".into(), Schema::Bool(BoolSchema::default().eq(false)))])).optional(),
+            ObjSchema { required: false, validation: BTreeMap::from([("is".into(), Schema::Bool(BoolSchema::default().eq(false)))]) }
         );
         assert_eq!(
-            ObjValidation::from([("is".into(), Schema::Bool(BoolSchema::default().eq(false)))]),
-            ObjValidation { required: true, validation: BTreeMap::from([("is".into(), Schema::Bool(BoolSchema::default().eq(false)))]) }
+            ObjSchema::from([("is".into(), Schema::Bool(BoolSchema::default().eq(false)))]),
+            ObjSchema { required: true, validation: BTreeMap::from([("is".into(), Schema::Bool(BoolSchema::default().eq(false)))]) }
         );
         assert_eq!(
-            ObjValidation::from([("is".into(), Schema::Bool(BoolSchema::default().eq(false)))]).optional(),
-            ObjValidation { required: false, validation: BTreeMap::from([("is".into(), Schema::Bool(BoolSchema::default().eq(false)))]) }
+            ObjSchema::from([("is".into(), Schema::Bool(BoolSchema::default().eq(false)))]).optional(),
+            ObjSchema { required: false, validation: BTreeMap::from([("is".into(), Schema::Bool(BoolSchema::default().eq(false)))]) }
         );
     }
 
@@ -201,7 +201,7 @@ mod tests {
         assert_eq!(Schema::from(DateSchema::default()), Schema::Date(DateSchema { required: true, operation: None }));
         assert_eq!(Schema::from(TimeSchema::default()), Schema::Time(TimeSchema { required: true, operation: None }));
         assert_eq!(Schema::from(DateTimeSchema::default()), Schema::DateTime(DateTimeSchema { required: true, operation: None }));
-        assert_eq!(Schema::from(ObjValidation::from(BTreeMap::new())), Schema::Obj(ObjValidation { required: true, validation: BTreeMap::new() }));
+        assert_eq!(Schema::from(ObjSchema::from(BTreeMap::new())), Schema::Obj(ObjSchema { required: true, validation: BTreeMap::new() }));
         assert_eq!(
             Schema::from(EnumSchema::from(enum_usize.clone())),
             Schema::Enum(EnumSchema { required: true, values: EnumValues::USize(enum_usize) })
