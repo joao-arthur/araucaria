@@ -163,4 +163,4 @@ You need to install
 
 ## 🚧 TODO
 
-- `Validation::Arr`
+- `Schema::Arr`
