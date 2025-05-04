@@ -163,10 +163,3 @@ You need to install [araucaria_plugins](https://github.com/joao-arthur/araucaria
 ## 🚧 TODO
 
 - `Validation::Arr`
-- `validate_arr`
-- Segregate `araucaria_plugins` modules by features
-- Create a function that receives `serde_json::Value` and `T: Deserialize`, and
-  returns a `T` instance
-- `value_from_json_and_schema`
-  - parse `.0` float as integer
-  - parse number as `date_time` (unixtime)
