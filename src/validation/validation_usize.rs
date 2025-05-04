@@ -85,41 +85,60 @@ mod tests {
 
     use super::USizeValidation;
 
-    const FIELD: &str = "user.personal.info.height";
-    const FIELD_B: &str = "user.personal.info.max_height";
+    const OPERATION_VALUE_EQ: Operation = Operation::Eq(Operand::Value(OperandValue::USize(1)));
+    const OPERATION_VALUE_NE: Operation = Operation::Ne(Operand::Value(OperandValue::USize(2)));
+    const OPERATION_VALUE_GT: Operation = Operation::Gt(Operand::Value(OperandValue::USize(3)));
+    const OPERATION_VALUE_GE: Operation = Operation::Ge(Operand::Value(OperandValue::USize(4)));
+    const OPERATION_VALUE_LT: Operation = Operation::Lt(Operand::Value(OperandValue::USize(5)));
+    const OPERATION_VALUE_LE: Operation = Operation::Le(Operand::Value(OperandValue::USize(6)));
+    const OPERATION_VALUE_BTWN: Operation = Operation::Btwn(Operand::Value(OperandValue::USize(1)), Operand::Value(OperandValue::USize(9)));
 
-    const OP_VALUE_EQ: Operation = Operation::Eq(Operand::Value(OperandValue::USize(1)));
-    const OP_VALUE_NE: Operation = Operation::Ne(Operand::Value(OperandValue::USize(2)));
-    const OP_VALUE_GT: Operation = Operation::Gt(Operand::Value(OperandValue::USize(3)));
-    const OP_VALUE_GE: Operation = Operation::Ge(Operand::Value(OperandValue::USize(4)));
-    const OP_VALUE_LT: Operation = Operation::Lt(Operand::Value(OperandValue::USize(5)));
-    const OP_VALUE_LE: Operation = Operation::Le(Operand::Value(OperandValue::USize(6)));
-    const OP_VALUE_BTWN: Operation = Operation::Btwn(Operand::Value(OperandValue::USize(1)), Operand::Value(OperandValue::USize(9)));
-    const OP_FIELD_EQ: LazyLock<Operation> = LazyLock::new(|| Operation::Eq(Operand::FieldPath(FIELD.into())));
-    const OP_FIELD_NE: LazyLock<Operation> = LazyLock::new(|| Operation::Ne(Operand::FieldPath(FIELD.into())));
-    const OP_FIELD_GT: LazyLock<Operation> = LazyLock::new(|| Operation::Gt(Operand::FieldPath(FIELD.into())));
-    const OP_FIELD_GE: LazyLock<Operation> = LazyLock::new(|| Operation::Ge(Operand::FieldPath(FIELD.into())));
-    const OP_FIELD_LT: LazyLock<Operation> = LazyLock::new(|| Operation::Lt(Operand::FieldPath(FIELD.into())));
-    const OP_FIELD_LE: LazyLock<Operation> = LazyLock::new(|| Operation::Le(Operand::FieldPath(FIELD.into())));
-    const OP_FIELD_BTWN: LazyLock<Operation> = LazyLock::new(|| Operation::Btwn(Operand::FieldPath(FIELD.into()), Operand::FieldPath(FIELD_B.into())));
+    const FIELD: &str = "user.data.info.score";
+    const FIELD_B: &str = "user.data.info.max_score";
+
+    const OPERAND_FIELD: LazyLock<Operand> = LazyLock::new(|| Operand::FieldPath(FIELD.into()));
+    const OPERAND_FIELD_B: LazyLock<Operand> = LazyLock::new(|| Operand::FieldPath(FIELD_B.into()));
+
+    const OPERATION_FIELD_EQ: LazyLock<Operation> = LazyLock::new(|| Operation::Eq(OPERAND_FIELD.clone()));
+    const OPERATION_FIELD_NE: LazyLock<Operation> = LazyLock::new(|| Operation::Ne(OPERAND_FIELD.clone()));
+    const OPERATION_FIELD_GT: LazyLock<Operation> = LazyLock::new(|| Operation::Gt(OPERAND_FIELD.clone()));
+    const OPERATION_FIELD_GE: LazyLock<Operation> = LazyLock::new(|| Operation::Ge(OPERAND_FIELD.clone()));
+    const OPERATION_FIELD_LT: LazyLock<Operation> = LazyLock::new(|| Operation::Lt(OPERAND_FIELD.clone()));
+    const OPERATION_FIELD_LE: LazyLock<Operation> = LazyLock::new(|| Operation::Le(OPERAND_FIELD.clone()));
+    const OPERATION_FIELD_BTWN: LazyLock<Operation> = LazyLock::new(|| Operation::Btwn(OPERAND_FIELD.clone(), OPERAND_FIELD_B.clone()));
 
     #[test]
     fn usize_validation() {
         assert_eq!(USizeValidation::default(), USizeValidation { required: true, operation: None });
         assert_eq!(USizeValidation::default().optional(), USizeValidation { required: false, operation: None });
-        assert_eq!(USizeValidation::default().eq(1), USizeValidation { required: true, operation: Some(OP_VALUE_EQ) });
-        assert_eq!(USizeValidation::default().ne(2), USizeValidation { required: true, operation: Some(OP_VALUE_NE) });
-        assert_eq!(USizeValidation::default().gt(3), USizeValidation { required: true, operation: Some(OP_VALUE_GT) });
-        assert_eq!(USizeValidation::default().ge(4), USizeValidation { required: true, operation: Some(OP_VALUE_GE) });
-        assert_eq!(USizeValidation::default().lt(5), USizeValidation { required: true, operation: Some(OP_VALUE_LT) });
-        assert_eq!(USizeValidation::default().le(6), USizeValidation { required: true, operation: Some(OP_VALUE_LE) });
-        assert_eq!(USizeValidation::default().btwn(1, 9), USizeValidation { required: true, operation: Some(OP_VALUE_BTWN) });
-        assert_eq!(USizeValidation::default().eq_field(FIELD.into()), USizeValidation { required: true, operation: Some(OP_FIELD_EQ.clone()) });
-        assert_eq!(USizeValidation::default().ne_field(FIELD.into()), USizeValidation { required: true, operation: Some(OP_FIELD_NE.clone()) });
-        assert_eq!(USizeValidation::default().gt_field(FIELD.into()), USizeValidation { required: true, operation: Some(OP_FIELD_GT.clone()) });
-        assert_eq!(USizeValidation::default().ge_field(FIELD.into()), USizeValidation { required: true, operation: Some(OP_FIELD_GE.clone()) });
-        assert_eq!(USizeValidation::default().lt_field(FIELD.into()), USizeValidation { required: true, operation: Some(OP_FIELD_LT.clone()) });
-        assert_eq!(USizeValidation::default().le_field(FIELD.into()), USizeValidation { required: true, operation: Some(OP_FIELD_LE.clone()) });
-        assert_eq!(USizeValidation::default().btwn_field(FIELD.into(), FIELD_B.into()), USizeValidation { required: true, operation: Some(OP_FIELD_BTWN.clone()) });
+    }
+
+    #[test]
+    fn usize_validation_operation_value() {
+        assert_eq!(USizeValidation::default().eq(1), USizeValidation { required: true, operation: Some(OPERATION_VALUE_EQ) });
+        assert_eq!(USizeValidation::default().ne(2), USizeValidation { required: true, operation: Some(OPERATION_VALUE_NE) });
+        assert_eq!(USizeValidation::default().gt(3), USizeValidation { required: true, operation: Some(OPERATION_VALUE_GT) });
+        assert_eq!(USizeValidation::default().ge(4), USizeValidation { required: true, operation: Some(OPERATION_VALUE_GE) });
+        assert_eq!(USizeValidation::default().lt(5), USizeValidation { required: true, operation: Some(OPERATION_VALUE_LT) });
+        assert_eq!(USizeValidation::default().le(6), USizeValidation { required: true, operation: Some(OPERATION_VALUE_LE) });
+        assert_eq!(USizeValidation::default().btwn(1, 9), USizeValidation { required: true, operation: Some(OPERATION_VALUE_BTWN) });
+    }
+
+    #[test]
+    fn usize_validation_operation_field() {
+        let validation_eq = USizeValidation::default().eq_field(FIELD.into());
+        let validation_ne = USizeValidation::default().ne_field(FIELD.into());
+        let validation_gt = USizeValidation::default().gt_field(FIELD.into());
+        let validation_ge = USizeValidation::default().ge_field(FIELD.into());
+        let validation_lt = USizeValidation::default().lt_field(FIELD.into());
+        let validation_le = USizeValidation::default().le_field(FIELD.into());
+        let validation_btwn = USizeValidation::default().btwn_field(FIELD.into(), FIELD_B.into());
+        assert_eq!(validation_eq, USizeValidation { required: true, operation: Some(OPERATION_FIELD_EQ.clone()) });
+        assert_eq!(validation_ne, USizeValidation { required: true, operation: Some(OPERATION_FIELD_NE.clone()) });
+        assert_eq!(validation_gt, USizeValidation { required: true, operation: Some(OPERATION_FIELD_GT.clone()) });
+        assert_eq!(validation_ge, USizeValidation { required: true, operation: Some(OPERATION_FIELD_GE.clone()) });
+        assert_eq!(validation_lt, USizeValidation { required: true, operation: Some(OPERATION_FIELD_LT.clone()) });
+        assert_eq!(validation_le, USizeValidation { required: true, operation: Some(OPERATION_FIELD_LE.clone()) });
+        assert_eq!(validation_btwn, USizeValidation { required: true, operation: Some(OPERATION_FIELD_BTWN.clone()) });
     }
 }

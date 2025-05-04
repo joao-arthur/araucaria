@@ -515,76 +515,66 @@ mod tests {
 
     use super::StrValidation;
 
-    const FIELD: &str = "foo.bar";
-    const FIELD_B: &str = "bar.foo";
+    const VALUE: &str = "Avalon";
+    const VALUE_B: &str = "Mu";
 
-    const OP_VALUE_EQ: LazyLock<Operation> = LazyLock::new(|| Operation::Eq(Operand::Value(OperandValue::from("Avalon"))));
-    const OP_VALUE_NE: LazyLock<Operation> = LazyLock::new(|| Operation::Ne(Operand::Value(OperandValue::from("Avalon"))));
-    const OP_VALUE_GT: LazyLock<Operation> = LazyLock::new(|| Operation::Gt(Operand::Value(OperandValue::from("Avalon"))));
-    const OP_VALUE_GE: LazyLock<Operation> = LazyLock::new(|| Operation::Ge(Operand::Value(OperandValue::from("Avalon"))));
-    const OP_VALUE_LT: LazyLock<Operation> = LazyLock::new(|| Operation::Lt(Operand::Value(OperandValue::from("Avalon"))));
-    const OP_VALUE_LE: LazyLock<Operation> = LazyLock::new(|| Operation::Le(Operand::Value(OperandValue::from("Avalon"))));
-    const OP_VALUE_BTWN: LazyLock<Operation> = LazyLock::new(|| Operation::Btwn(Operand::Value(OperandValue::from("Avalon")), Operand::Value(OperandValue::from("Mu"))));
-    const OP_BYTES_EQ: Operation = Operation::Eq(Operand::Value(OperandValue::USize(11)));
-    const OP_BYTES_NE: Operation = Operation::Ne(Operand::Value(OperandValue::USize(12)));
-    const OP_BYTES_GT: Operation = Operation::Gt(Operand::Value(OperandValue::USize(13)));
-    const OP_BYTES_GE: Operation = Operation::Ge(Operand::Value(OperandValue::USize(14)));
-    const OP_BYTES_LT: Operation = Operation::Lt(Operand::Value(OperandValue::USize(15)));
-    const OP_BYTES_LE: Operation = Operation::Le(Operand::Value(OperandValue::USize(16)));
-    const OP_BYTES_BTWN: Operation = Operation::Btwn(Operand::Value(OperandValue::USize(17)), Operand::Value(OperandValue::USize(18)));
-    const OP_CHARS_EQ: Operation = Operation::Eq(Operand::Value(OperandValue::USize(21)));
-    const OP_CHARS_NE: Operation = Operation::Ne(Operand::Value(OperandValue::USize(22)));
-    const OP_CHARS_GT: Operation = Operation::Gt(Operand::Value(OperandValue::USize(23)));
-    const OP_CHARS_GE: Operation = Operation::Ge(Operand::Value(OperandValue::USize(24)));
-    const OP_CHARS_LT: Operation = Operation::Lt(Operand::Value(OperandValue::USize(25)));
-    const OP_CHARS_LE: Operation = Operation::Le(Operand::Value(OperandValue::USize(26)));
-    const OP_CHARS_BTWN: Operation = Operation::Btwn(Operand::Value(OperandValue::USize(27)), Operand::Value(OperandValue::USize(28)));
-    const OP_GRAPHEMES_EQ: Operation = Operation::Eq(Operand::Value(OperandValue::USize(31)));
-    const OP_GRAPHEMES_NE: Operation = Operation::Ne(Operand::Value(OperandValue::USize(32)));
-    const OP_GRAPHEMES_GT: Operation = Operation::Gt(Operand::Value(OperandValue::USize(33)));
-    const OP_GRAPHEMES_GE: Operation = Operation::Ge(Operand::Value(OperandValue::USize(34)));
-    const OP_GRAPHEMES_LT: Operation = Operation::Lt(Operand::Value(OperandValue::USize(35)));
-    const OP_GRAPHEMES_LE: Operation = Operation::Le(Operand::Value(OperandValue::USize(36)));
-    const OP_GRAPHEMES_BTWN: Operation = Operation::Btwn(Operand::Value(OperandValue::USize(37)), Operand::Value(OperandValue::USize(38)));
-    const OP_LOWERCASE_EQ: Operation = Operation::Eq(Operand::Value(OperandValue::USize(41)));
-    const OP_LOWERCASE_NE: Operation = Operation::Ne(Operand::Value(OperandValue::USize(42)));
-    const OP_LOWERCASE_GT: Operation = Operation::Gt(Operand::Value(OperandValue::USize(43)));
-    const OP_LOWERCASE_GE: Operation = Operation::Ge(Operand::Value(OperandValue::USize(44)));
-    const OP_LOWERCASE_LT: Operation = Operation::Lt(Operand::Value(OperandValue::USize(45)));
-    const OP_LOWERCASE_LE: Operation = Operation::Le(Operand::Value(OperandValue::USize(46)));
-    const OP_LOWERCASE_BTWN: Operation = Operation::Btwn(Operand::Value(OperandValue::USize(47)), Operand::Value(OperandValue::USize(48)));
-    const OP_UPPERCASE_EQ: Operation = Operation::Eq(Operand::Value(OperandValue::USize(51)));
-    const OP_UPPERCASE_NE: Operation = Operation::Ne(Operand::Value(OperandValue::USize(52)));
-    const OP_UPPERCASE_GT: Operation = Operation::Gt(Operand::Value(OperandValue::USize(53)));
-    const OP_UPPERCASE_GE: Operation = Operation::Ge(Operand::Value(OperandValue::USize(54)));
-    const OP_UPPERCASE_LT: Operation = Operation::Lt(Operand::Value(OperandValue::USize(55)));
-    const OP_UPPERCASE_LE: Operation = Operation::Le(Operand::Value(OperandValue::USize(56)));
-    const OP_UPPERCASE_BTWN: Operation = Operation::Btwn(Operand::Value(OperandValue::USize(57)), Operand::Value(OperandValue::USize(58)));
-    const OP_NUMBERS_EQ: Operation = Operation::Eq(Operand::Value(OperandValue::USize(61)));
-    const OP_NUMBERS_NE: Operation = Operation::Ne(Operand::Value(OperandValue::USize(62)));
-    const OP_NUMBERS_GT: Operation = Operation::Gt(Operand::Value(OperandValue::USize(63)));
-    const OP_NUMBERS_GE: Operation = Operation::Ge(Operand::Value(OperandValue::USize(64)));
-    const OP_NUMBERS_LT: Operation = Operation::Lt(Operand::Value(OperandValue::USize(65)));
-    const OP_NUMBERS_LE: Operation = Operation::Le(Operand::Value(OperandValue::USize(66)));
-    const OP_NUMBERS_BTWN: Operation = Operation::Btwn(Operand::Value(OperandValue::USize(67)), Operand::Value(OperandValue::USize(68)));
-    const OP_SYMBOLS_EQ: Operation = Operation::Eq(Operand::Value(OperandValue::USize(71)));
-    const OP_SYMBOLS_NE: Operation = Operation::Ne(Operand::Value(OperandValue::USize(72)));
-    const OP_SYMBOLS_GT: Operation = Operation::Gt(Operand::Value(OperandValue::USize(73)));
-    const OP_SYMBOLS_GE: Operation = Operation::Ge(Operand::Value(OperandValue::USize(74)));
-    const OP_SYMBOLS_LT: Operation = Operation::Lt(Operand::Value(OperandValue::USize(75)));
-    const OP_SYMBOLS_LE: Operation = Operation::Le(Operand::Value(OperandValue::USize(76)));
-    const OP_SYMBOLS_BTWN: Operation = Operation::Btwn(Operand::Value(OperandValue::USize(77)), Operand::Value(OperandValue::USize(78)));
-    const OP_FIELD_EQ: LazyLock<Operation> = LazyLock::new(|| Operation::Eq(Operand::FieldPath(FIELD.into())));
-    const OP_FIELD_NE: LazyLock<Operation> = LazyLock::new(|| Operation::Ne(Operand::FieldPath(FIELD.into())));
-    const OP_FIELD_GT: LazyLock<Operation> = LazyLock::new(|| Operation::Gt(Operand::FieldPath(FIELD.into())));
-    const OP_FIELD_GE: LazyLock<Operation> = LazyLock::new(|| Operation::Ge(Operand::FieldPath(FIELD.into())));
-    const OP_FIELD_LT: LazyLock<Operation> = LazyLock::new(|| Operation::Lt(Operand::FieldPath(FIELD.into())));
-    const OP_FIELD_LE: LazyLock<Operation> = LazyLock::new(|| Operation::Le(Operand::FieldPath(FIELD.into())));
-    const OP_FIELD_BTWN: LazyLock<Operation> = LazyLock::new(|| Operation::Btwn(Operand::FieldPath(FIELD.into()), Operand::FieldPath(FIELD_B.into())));
+    const OPERAND_VALUE: LazyLock<Operand> = LazyLock::new(|| Operand::Value(OperandValue::from(VALUE)));
+    const OPERAND_VALUE_B: LazyLock<Operand> = LazyLock::new(|| Operand::Value(OperandValue::from(VALUE_B)));
+
+    const OPERATION_VALUE_EQ: LazyLock<Operation> = LazyLock::new(|| Operation::Eq(OPERAND_VALUE.clone()));
+    const OPERATION_VALUE_NE: LazyLock<Operation> = LazyLock::new(|| Operation::Ne(OPERAND_VALUE.clone()));
+    const OPERATION_VALUE_GT: LazyLock<Operation> = LazyLock::new(|| Operation::Gt(OPERAND_VALUE.clone()));
+    const OPERATION_VALUE_GE: LazyLock<Operation> = LazyLock::new(|| Operation::Ge(OPERAND_VALUE.clone()));
+    const OPERATION_VALUE_LT: LazyLock<Operation> = LazyLock::new(|| Operation::Lt(OPERAND_VALUE.clone()));
+    const OPERATION_VALUE_LE: LazyLock<Operation> = LazyLock::new(|| Operation::Le(OPERAND_VALUE.clone()));
+    const OPERATION_VALUE_BTWN: LazyLock<Operation> = LazyLock::new(|| Operation::Btwn(OPERAND_VALUE.clone(), OPERAND_VALUE_B.clone()));
+
+    const FIELD: &str = "user.info.details.name.0";
+    const FIELD_B: &str = "user.info.details.name.1";
+
+    const OPERAND_FIELD: LazyLock<Operand> = LazyLock::new(|| Operand::FieldPath(FIELD.into()));
+    const OPERAND_FIELD_B: LazyLock<Operand> = LazyLock::new(|| Operand::FieldPath(FIELD_B.into()));
+
+    const OPERATION_FIELD_EQ: LazyLock<Operation> = LazyLock::new(|| Operation::Eq(OPERAND_FIELD.clone()));
+    const OPERATION_FIELD_NE: LazyLock<Operation> = LazyLock::new(|| Operation::Ne(OPERAND_FIELD.clone()));
+    const OPERATION_FIELD_GT: LazyLock<Operation> = LazyLock::new(|| Operation::Gt(OPERAND_FIELD.clone()));
+    const OPERATION_FIELD_GE: LazyLock<Operation> = LazyLock::new(|| Operation::Ge(OPERAND_FIELD.clone()));
+    const OPERATION_FIELD_LT: LazyLock<Operation> = LazyLock::new(|| Operation::Lt(OPERAND_FIELD.clone()));
+    const OPERATION_FIELD_LE: LazyLock<Operation> = LazyLock::new(|| Operation::Le(OPERAND_FIELD.clone()));
+    const OPERATION_FIELD_BTWN: LazyLock<Operation> = LazyLock::new(|| Operation::Btwn(OPERAND_FIELD.clone(), OPERAND_FIELD_B.clone()));
+
+    const VALUE_LEN: usize = 14;
+    const VALUE_LEN_B: usize = 73;
+
+    const OPERAND_VALUE_LEN: LazyLock<Operand> = LazyLock::new(|| Operand::Value(OperandValue::USize(VALUE_LEN)));
+    const OPERAND_VALUE_LEN_B: LazyLock<Operand> = LazyLock::new(|| Operand::Value(OperandValue::USize(VALUE_LEN_B)));
+
+    const OPERATION_VALUE_LEN_EQ: LazyLock<Operation> = LazyLock::new(|| Operation::Eq(OPERAND_VALUE_LEN.clone()));
+    const OPERATION_VALUE_LEN_NE: LazyLock<Operation> = LazyLock::new(|| Operation::Ne(OPERAND_VALUE_LEN.clone()));
+    const OPERATION_VALUE_LEN_GT: LazyLock<Operation> = LazyLock::new(|| Operation::Gt(OPERAND_VALUE_LEN.clone()));
+    const OPERATION_VALUE_LEN_GE: LazyLock<Operation> = LazyLock::new(|| Operation::Ge(OPERAND_VALUE_LEN.clone()));
+    const OPERATION_VALUE_LEN_LT: LazyLock<Operation> = LazyLock::new(|| Operation::Lt(OPERAND_VALUE_LEN.clone()));
+    const OPERATION_VALUE_LEN_LE: LazyLock<Operation> = LazyLock::new(|| Operation::Le(OPERAND_VALUE_LEN.clone()));
+    const OPERATION_VALUE_LEN_BTWN: LazyLock<Operation> = LazyLock::new(|| Operation::Btwn(OPERAND_VALUE_LEN.clone(), OPERAND_VALUE_LEN_B.clone()));
+
+    const FIELD_LEN: &str = "user.info.clothes.shoesize.min";
+    const FIELD_LEN_B: &str = "user.info.clothes.shoesize.min";
+
+    const OPERAND_FIELD_LEN: LazyLock<Operand> = LazyLock::new(|| Operand::FieldPath(FIELD_LEN.into()));
+    const OPERAND_FIELD_LEN_B: LazyLock<Operand> = LazyLock::new(|| Operand::FieldPath(FIELD_LEN_B.into()));
+
+    const OPERATION_FIELD_LEN_EQ: LazyLock<Operation> = LazyLock::new(|| Operation::Eq(OPERAND_FIELD_LEN.clone()));
+    const OPERATION_FIELD_LEN_NE: LazyLock<Operation> = LazyLock::new(|| Operation::Ne(OPERAND_FIELD_LEN.clone()));
+    const OPERATION_FIELD_LEN_GT: LazyLock<Operation> = LazyLock::new(|| Operation::Gt(OPERAND_FIELD_LEN.clone()));
+    const OPERATION_FIELD_LEN_GE: LazyLock<Operation> = LazyLock::new(|| Operation::Ge(OPERAND_FIELD_LEN.clone()));
+    const OPERATION_FIELD_LEN_LT: LazyLock<Operation> = LazyLock::new(|| Operation::Lt(OPERAND_FIELD_LEN.clone()));
+    const OPERATION_FIELD_LEN_LE: LazyLock<Operation> = LazyLock::new(|| Operation::Le(OPERAND_FIELD_LEN.clone()));
+    const OPERATION_FIELD_LEN_BTWN: LazyLock<Operation> = LazyLock::new(|| Operation::Btwn(OPERAND_FIELD_LEN.clone(), OPERAND_FIELD_LEN_B.clone()));
 
     #[test]
     fn str_validation() {
-        assert_eq!(StrValidation::default(),
+        assert_eq!(
+            StrValidation::default(),
             StrValidation {
                 required: true,
                 operation: None,
@@ -595,119 +585,309 @@ mod tests {
                 uppercase_len: None,
                 numbers_len: None,
                 symbols_len: None
-            });
-        assert_eq!(StrValidation::default().optional(), StrValidation { required: false, ..Default::default() });
-        assert_eq!(StrValidation::default().eq("Avalon".into()), StrValidation { operation: Some(OP_VALUE_EQ.clone()), ..Default::default() });
-        assert_eq!(StrValidation::default().ne("Avalon".into()), StrValidation { operation: Some(OP_VALUE_NE.clone()), ..Default::default() });
-        assert_eq!(StrValidation::default().gt("Avalon".into()), StrValidation { operation: Some(OP_VALUE_GT.clone()), ..Default::default() });
-        assert_eq!(StrValidation::default().ge("Avalon".into()), StrValidation { operation: Some(OP_VALUE_GE.clone()), ..Default::default() });
-        assert_eq!(StrValidation::default().lt("Avalon".into()), StrValidation { operation: Some(OP_VALUE_LT.clone()), ..Default::default() });
-        assert_eq!(StrValidation::default().le("Avalon".into()), StrValidation { operation: Some(OP_VALUE_LE.clone()), ..Default::default() });
-        assert_eq!(StrValidation::default().btwn("Avalon".into(), "Mu".into()), StrValidation { operation: Some(OP_VALUE_BTWN.clone()), ..Default::default() });
-        assert_eq!(StrValidation::default().bytes_len_eq(11), StrValidation { bytes_len: Some(OP_BYTES_EQ), ..Default::default() });
-        assert_eq!(StrValidation::default().bytes_len_ne(12), StrValidation { bytes_len: Some(OP_BYTES_NE), ..Default::default() });
-        assert_eq!(StrValidation::default().bytes_len_gt(13), StrValidation { bytes_len: Some(OP_BYTES_GT), ..Default::default() });
-        assert_eq!(StrValidation::default().bytes_len_ge(14), StrValidation { bytes_len: Some(OP_BYTES_GE), ..Default::default() });
-        assert_eq!(StrValidation::default().bytes_len_lt(15), StrValidation { bytes_len: Some(OP_BYTES_LT), ..Default::default() });
-        assert_eq!(StrValidation::default().bytes_len_le(16), StrValidation { bytes_len: Some(OP_BYTES_LE), ..Default::default() });
-        assert_eq!(StrValidation::default().bytes_len_btwn(17, 18), StrValidation { bytes_len: Some(OP_BYTES_BTWN), ..Default::default() });
-        assert_eq!(StrValidation::default().chars_len_eq(21), StrValidation { chars_len: Some(OP_CHARS_EQ), ..Default::default() });
-        assert_eq!(StrValidation::default().chars_len_ne(22), StrValidation { chars_len: Some(OP_CHARS_NE), ..Default::default() });
-        assert_eq!(StrValidation::default().chars_len_gt(23), StrValidation { chars_len: Some(OP_CHARS_GT), ..Default::default() });
-        assert_eq!(StrValidation::default().chars_len_ge(24), StrValidation { chars_len: Some(OP_CHARS_GE), ..Default::default() });
-        assert_eq!(StrValidation::default().chars_len_lt(25), StrValidation { chars_len: Some(OP_CHARS_LT), ..Default::default() });
-        assert_eq!(StrValidation::default().chars_len_le(26), StrValidation { chars_len: Some(OP_CHARS_LE), ..Default::default() });
-        assert_eq!(StrValidation::default().chars_len_btwn(27, 28), StrValidation { chars_len: Some(OP_CHARS_BTWN), ..Default::default() });
-        assert_eq!(StrValidation::default().graphemes_len_eq(31), StrValidation { graphemes_len: Some(OP_GRAPHEMES_EQ), ..Default::default() });
-        assert_eq!(StrValidation::default().graphemes_len_ne(32), StrValidation { graphemes_len: Some(OP_GRAPHEMES_NE), ..Default::default() });
-        assert_eq!(StrValidation::default().graphemes_len_gt(33), StrValidation { graphemes_len: Some(OP_GRAPHEMES_GT), ..Default::default() });
-        assert_eq!(StrValidation::default().graphemes_len_ge(34), StrValidation { graphemes_len: Some(OP_GRAPHEMES_GE), ..Default::default() });
-        assert_eq!(StrValidation::default().graphemes_len_lt(35), StrValidation { graphemes_len: Some(OP_GRAPHEMES_LT), ..Default::default() });
-        assert_eq!(StrValidation::default().graphemes_len_le(36), StrValidation { graphemes_len: Some(OP_GRAPHEMES_LE), ..Default::default() });
-        assert_eq!(StrValidation::default().graphemes_len_btwn(37, 38), StrValidation { graphemes_len: Some(OP_GRAPHEMES_BTWN), ..Default::default() });
-        assert_eq!(StrValidation::default().lowercase_len_eq(41), StrValidation { lowercase_len: Some(OP_LOWERCASE_EQ), ..Default::default() });
-        assert_eq!(StrValidation::default().lowercase_len_ne(42), StrValidation { lowercase_len: Some(OP_LOWERCASE_NE), ..Default::default() });
-        assert_eq!(StrValidation::default().lowercase_len_gt(43), StrValidation { lowercase_len: Some(OP_LOWERCASE_GT), ..Default::default() });
-        assert_eq!(StrValidation::default().lowercase_len_ge(44), StrValidation { lowercase_len: Some(OP_LOWERCASE_GE), ..Default::default() });
-        assert_eq!(StrValidation::default().lowercase_len_lt(45), StrValidation { lowercase_len: Some(OP_LOWERCASE_LT), ..Default::default() });
-        assert_eq!(StrValidation::default().lowercase_len_le(46), StrValidation { lowercase_len: Some(OP_LOWERCASE_LE), ..Default::default() });
-        assert_eq!(StrValidation::default().lowercase_len_btwn(47, 48), StrValidation { lowercase_len: Some(OP_LOWERCASE_BTWN), ..Default::default() });
-        assert_eq!(StrValidation::default().uppercase_len_eq(51), StrValidation { uppercase_len: Some(OP_UPPERCASE_EQ), ..Default::default() });
-        assert_eq!(StrValidation::default().uppercase_len_ne(52), StrValidation { uppercase_len: Some(OP_UPPERCASE_NE), ..Default::default() });
-        assert_eq!(StrValidation::default().uppercase_len_gt(53), StrValidation { uppercase_len: Some(OP_UPPERCASE_GT), ..Default::default() });
-        assert_eq!(StrValidation::default().uppercase_len_ge(54), StrValidation { uppercase_len: Some(OP_UPPERCASE_GE), ..Default::default() });
-        assert_eq!(StrValidation::default().uppercase_len_lt(55), StrValidation { uppercase_len: Some(OP_UPPERCASE_LT), ..Default::default() });
-        assert_eq!(StrValidation::default().uppercase_len_le(56), StrValidation { uppercase_len: Some(OP_UPPERCASE_LE), ..Default::default() });
-        assert_eq!(StrValidation::default().uppercase_len_btwn(57, 58), StrValidation { uppercase_len: Some(OP_UPPERCASE_BTWN), ..Default::default() });
-        assert_eq!(StrValidation::default().numbers_len_eq(61), StrValidation { numbers_len: Some(OP_NUMBERS_EQ), ..Default::default() });
-        assert_eq!(StrValidation::default().numbers_len_ne(62), StrValidation { numbers_len: Some(OP_NUMBERS_NE), ..Default::default() });
-        assert_eq!(StrValidation::default().numbers_len_gt(63), StrValidation { numbers_len: Some(OP_NUMBERS_GT), ..Default::default() });
-        assert_eq!(StrValidation::default().numbers_len_ge(64), StrValidation { numbers_len: Some(OP_NUMBERS_GE), ..Default::default() });
-        assert_eq!(StrValidation::default().numbers_len_lt(65), StrValidation { numbers_len: Some(OP_NUMBERS_LT), ..Default::default() });
-        assert_eq!(StrValidation::default().numbers_len_le(66), StrValidation { numbers_len: Some(OP_NUMBERS_LE), ..Default::default() });
-        assert_eq!(StrValidation::default().numbers_len_btwn(67, 68), StrValidation { numbers_len: Some(OP_NUMBERS_BTWN), ..Default::default() });
-        assert_eq!(StrValidation::default().symbols_len_eq(71), StrValidation { symbols_len: Some(OP_SYMBOLS_EQ), ..Default::default() });
-        assert_eq!(StrValidation::default().symbols_len_ne(72), StrValidation { symbols_len: Some(OP_SYMBOLS_NE), ..Default::default() });
-        assert_eq!(StrValidation::default().symbols_len_gt(73), StrValidation { symbols_len: Some(OP_SYMBOLS_GT), ..Default::default() });
-        assert_eq!(StrValidation::default().symbols_len_ge(74), StrValidation { symbols_len: Some(OP_SYMBOLS_GE), ..Default::default() });
-        assert_eq!(StrValidation::default().symbols_len_lt(75), StrValidation { symbols_len: Some(OP_SYMBOLS_LT), ..Default::default() });
-        assert_eq!(StrValidation::default().symbols_len_le(76), StrValidation { symbols_len: Some(OP_SYMBOLS_LE), ..Default::default() });
-        assert_eq!(StrValidation::default().symbols_len_btwn(77, 78), StrValidation { symbols_len: Some(OP_SYMBOLS_BTWN), ..Default::default() });
-        assert_eq!(StrValidation::default().eq_field(FIELD.into()), StrValidation { operation: Some(OP_FIELD_EQ.clone()), ..Default::default() });
-        assert_eq!(StrValidation::default().ne_field(FIELD.into()), StrValidation { operation: Some(OP_FIELD_NE.clone()), ..Default::default() });
-        assert_eq!(StrValidation::default().gt_field(FIELD.into()), StrValidation { operation: Some(OP_FIELD_GT.clone()), ..Default::default() });
-        assert_eq!(StrValidation::default().ge_field(FIELD.into()), StrValidation { operation: Some(OP_FIELD_GE.clone()), ..Default::default() });
-        assert_eq!(StrValidation::default().lt_field(FIELD.into()), StrValidation { operation: Some(OP_FIELD_LT.clone()), ..Default::default() });
-        assert_eq!(StrValidation::default().le_field(FIELD.into()), StrValidation { operation: Some(OP_FIELD_LE.clone()), ..Default::default() });
-        assert_eq!(StrValidation::default().btwn_field(FIELD.into(), FIELD_B.into()), StrValidation { operation: Some(OP_FIELD_BTWN.clone()), ..Default::default() });
-        assert_eq!(StrValidation::default().bytes_len_eq_field(FIELD.into()), StrValidation { bytes_len: Some(OP_FIELD_EQ.clone()), ..Default::default() });
-        assert_eq!(StrValidation::default().bytes_len_ne_field(FIELD.into()), StrValidation { bytes_len: Some(OP_FIELD_NE.clone()), ..Default::default() });
-        assert_eq!(StrValidation::default().bytes_len_gt_field(FIELD.into()), StrValidation { bytes_len: Some(OP_FIELD_GT.clone()), ..Default::default() });
-        assert_eq!(StrValidation::default().bytes_len_ge_field(FIELD.into()), StrValidation { bytes_len: Some(OP_FIELD_GE.clone()), ..Default::default() });
-        assert_eq!(StrValidation::default().bytes_len_lt_field(FIELD.into()), StrValidation { bytes_len: Some(OP_FIELD_LT.clone()), ..Default::default() });
-        assert_eq!(StrValidation::default().bytes_len_le_field(FIELD.into()), StrValidation { bytes_len: Some(OP_FIELD_LE.clone()), ..Default::default() });
-        assert_eq!(StrValidation::default().bytes_len_btwn_field(FIELD.into(), FIELD_B.into()), StrValidation { bytes_len: Some(OP_FIELD_BTWN.clone()), ..Default::default() });
-        assert_eq!(StrValidation::default().chars_len_eq_field(FIELD.into()), StrValidation { chars_len: Some(OP_FIELD_EQ.clone()), ..Default::default() });
-        assert_eq!(StrValidation::default().chars_len_ne_field(FIELD.into()), StrValidation { chars_len: Some(OP_FIELD_NE.clone()), ..Default::default() });
-        assert_eq!(StrValidation::default().chars_len_gt_field(FIELD.into()), StrValidation { chars_len: Some(OP_FIELD_GT.clone()), ..Default::default() });
-        assert_eq!(StrValidation::default().chars_len_ge_field(FIELD.into()), StrValidation { chars_len: Some(OP_FIELD_GE.clone()), ..Default::default() });
-        assert_eq!(StrValidation::default().chars_len_lt_field(FIELD.into()), StrValidation { chars_len: Some(OP_FIELD_LT.clone()), ..Default::default() });
-        assert_eq!(StrValidation::default().chars_len_le_field(FIELD.into()), StrValidation { chars_len: Some(OP_FIELD_LE.clone()), ..Default::default() });
-        assert_eq!(StrValidation::default().chars_len_btwn_field(FIELD.into(), FIELD_B.into()), StrValidation { chars_len: Some(OP_FIELD_BTWN.clone()), ..Default::default() });
-        assert_eq!(StrValidation::default().graphemes_len_eq_field(FIELD.into()), StrValidation { graphemes_len: Some(OP_FIELD_EQ.clone()), ..Default::default() });
-        assert_eq!(StrValidation::default().graphemes_len_ne_field(FIELD.into()), StrValidation { graphemes_len: Some(OP_FIELD_NE.clone()), ..Default::default() });
-        assert_eq!(StrValidation::default().graphemes_len_gt_field(FIELD.into()), StrValidation { graphemes_len: Some(OP_FIELD_GT.clone()), ..Default::default() });
-        assert_eq!(StrValidation::default().graphemes_len_ge_field(FIELD.into()), StrValidation { graphemes_len: Some(OP_FIELD_GE.clone()), ..Default::default() });
-        assert_eq!(StrValidation::default().graphemes_len_lt_field(FIELD.into()), StrValidation { graphemes_len: Some(OP_FIELD_LT.clone()), ..Default::default() });
-        assert_eq!(StrValidation::default().graphemes_len_le_field(FIELD.into()), StrValidation { graphemes_len: Some(OP_FIELD_LE.clone()), ..Default::default() });
-        assert_eq!(StrValidation::default().graphemes_len_btwn_field(FIELD.into(), FIELD_B.into()), StrValidation { graphemes_len: Some(OP_FIELD_BTWN.clone()), ..Default::default() });
-        assert_eq!(StrValidation::default().lowercase_len_eq_field(FIELD.into()), StrValidation { lowercase_len: Some(OP_FIELD_EQ.clone()), ..Default::default() });
-        assert_eq!(StrValidation::default().lowercase_len_ne_field(FIELD.into()), StrValidation { lowercase_len: Some(OP_FIELD_NE.clone()), ..Default::default() });
-        assert_eq!(StrValidation::default().lowercase_len_gt_field(FIELD.into()), StrValidation { lowercase_len: Some(OP_FIELD_GT.clone()), ..Default::default() });
-        assert_eq!(StrValidation::default().lowercase_len_ge_field(FIELD.into()), StrValidation { lowercase_len: Some(OP_FIELD_GE.clone()), ..Default::default() });
-        assert_eq!(StrValidation::default().lowercase_len_lt_field(FIELD.into()), StrValidation { lowercase_len: Some(OP_FIELD_LT.clone()), ..Default::default() });
-        assert_eq!(StrValidation::default().lowercase_len_le_field(FIELD.into()), StrValidation { lowercase_len: Some(OP_FIELD_LE.clone()), ..Default::default() });
-        assert_eq!(StrValidation::default().lowercase_len_btwn_field(FIELD.into(), FIELD_B.into()), StrValidation { lowercase_len: Some(OP_FIELD_BTWN.clone()), ..Default::default() });
-        assert_eq!(StrValidation::default().uppercase_len_eq_field(FIELD.into()), StrValidation { uppercase_len: Some(OP_FIELD_EQ.clone()), ..Default::default() });
-        assert_eq!(StrValidation::default().uppercase_len_ne_field(FIELD.into()), StrValidation { uppercase_len: Some(OP_FIELD_NE.clone()), ..Default::default() });
-        assert_eq!(StrValidation::default().uppercase_len_gt_field(FIELD.into()), StrValidation { uppercase_len: Some(OP_FIELD_GT.clone()), ..Default::default() });
-        assert_eq!(StrValidation::default().uppercase_len_ge_field(FIELD.into()), StrValidation { uppercase_len: Some(OP_FIELD_GE.clone()), ..Default::default() });
-        assert_eq!(StrValidation::default().uppercase_len_lt_field(FIELD.into()), StrValidation { uppercase_len: Some(OP_FIELD_LT.clone()), ..Default::default() });
-        assert_eq!(StrValidation::default().uppercase_len_le_field(FIELD.into()), StrValidation { uppercase_len: Some(OP_FIELD_LE.clone()), ..Default::default() });
-        assert_eq!(StrValidation::default().uppercase_len_btwn_field(FIELD.into(), FIELD_B.into()), StrValidation { uppercase_len: Some(OP_FIELD_BTWN.clone()), ..Default::default() });
-        assert_eq!(StrValidation::default().numbers_len_eq_field(FIELD.into()), StrValidation { numbers_len: Some(OP_FIELD_EQ.clone()), ..Default::default() });
-        assert_eq!(StrValidation::default().numbers_len_ne_field(FIELD.into()), StrValidation { numbers_len: Some(OP_FIELD_NE.clone()), ..Default::default() });
-        assert_eq!(StrValidation::default().numbers_len_gt_field(FIELD.into()), StrValidation { numbers_len: Some(OP_FIELD_GT.clone()), ..Default::default() });
-        assert_eq!(StrValidation::default().numbers_len_ge_field(FIELD.into()), StrValidation { numbers_len: Some(OP_FIELD_GE.clone()), ..Default::default() });
-        assert_eq!(StrValidation::default().numbers_len_lt_field(FIELD.into()), StrValidation { numbers_len: Some(OP_FIELD_LT.clone()), ..Default::default() });
-        assert_eq!(StrValidation::default().numbers_len_le_field(FIELD.into()), StrValidation { numbers_len: Some(OP_FIELD_LE.clone()), ..Default::default() });
-        assert_eq!(StrValidation::default().numbers_len_btwn_field(FIELD.into(), FIELD_B.into()), StrValidation { numbers_len: Some(OP_FIELD_BTWN.clone()), ..Default::default() });
-        assert_eq!(StrValidation::default().symbols_len_eq_field(FIELD.into()), StrValidation { symbols_len: Some(OP_FIELD_EQ.clone()), ..Default::default() });
-        assert_eq!(StrValidation::default().symbols_len_ne_field(FIELD.into()), StrValidation { symbols_len: Some(OP_FIELD_NE.clone()), ..Default::default() });
-        assert_eq!(StrValidation::default().symbols_len_gt_field(FIELD.into()), StrValidation { symbols_len: Some(OP_FIELD_GT.clone()), ..Default::default() });
-        assert_eq!(StrValidation::default().symbols_len_ge_field(FIELD.into()), StrValidation { symbols_len: Some(OP_FIELD_GE.clone()), ..Default::default() });
-        assert_eq!(StrValidation::default().symbols_len_lt_field(FIELD.into()), StrValidation { symbols_len: Some(OP_FIELD_LT.clone()), ..Default::default() });
-        assert_eq!(StrValidation::default().symbols_len_le_field(FIELD.into()), StrValidation { symbols_len: Some(OP_FIELD_LE.clone()), ..Default::default() });
-        assert_eq!(StrValidation::default().symbols_len_btwn_field(FIELD.into(), FIELD_B.into()), StrValidation { symbols_len: Some(OP_FIELD_BTWN.clone()), ..Default::default() });
+            }
+        );
+        assert_eq!(
+            StrValidation::default().optional(),
+            StrValidation {
+                required: false,
+                operation: None,
+                bytes_len: None,
+                chars_len: None,
+                graphemes_len: None,
+                lowercase_len: None,
+                uppercase_len: None,
+                numbers_len: None,
+                symbols_len: None
+            }
+        );
+    }
+
+    #[test]
+    fn str_validation_operation_value() {
+        let validation_eq = StrValidation::default().eq(VALUE.into());
+        let validation_ne = StrValidation::default().ne(VALUE.into());
+        let validation_gt = StrValidation::default().gt(VALUE.into());
+        let validation_ge = StrValidation::default().ge(VALUE.into());
+        let validation_lt = StrValidation::default().lt(VALUE.into());
+        let validation_le = StrValidation::default().le(VALUE.into());
+        let validation_btwn = StrValidation::default().btwn(VALUE.into(), VALUE_B.into());
+        assert_eq!(validation_eq, StrValidation { operation: Some(OPERATION_VALUE_EQ.clone()), ..Default::default() });
+        assert_eq!(validation_ne, StrValidation { operation: Some(OPERATION_VALUE_NE.clone()), ..Default::default() });
+        assert_eq!(validation_gt, StrValidation { operation: Some(OPERATION_VALUE_GT.clone()), ..Default::default() });
+        assert_eq!(validation_ge, StrValidation { operation: Some(OPERATION_VALUE_GE.clone()), ..Default::default() });
+        assert_eq!(validation_lt, StrValidation { operation: Some(OPERATION_VALUE_LT.clone()), ..Default::default() });
+        assert_eq!(validation_le, StrValidation { operation: Some(OPERATION_VALUE_LE.clone()), ..Default::default() });
+        assert_eq!(validation_btwn, StrValidation { operation: Some(OPERATION_VALUE_BTWN.clone()), ..Default::default() });
+    }
+
+    #[test]
+    fn str_validation_operation_field() {
+        let validation_eq = StrValidation::default().eq_field(FIELD.into());
+        let validation_ne = StrValidation::default().ne_field(FIELD.into());
+        let validation_gt = StrValidation::default().gt_field(FIELD.into());
+        let validation_ge = StrValidation::default().ge_field(FIELD.into());
+        let validation_lt = StrValidation::default().lt_field(FIELD.into());
+        let validation_le = StrValidation::default().le_field(FIELD.into());
+        let validation_btwn = StrValidation::default().btwn_field(FIELD.into(), FIELD_B.into());
+        assert_eq!(validation_eq, StrValidation { operation: Some(OPERATION_FIELD_EQ.clone()), ..Default::default() });
+        assert_eq!(validation_ne, StrValidation { operation: Some(OPERATION_FIELD_NE.clone()), ..Default::default() });
+        assert_eq!(validation_gt, StrValidation { operation: Some(OPERATION_FIELD_GT.clone()), ..Default::default() });
+        assert_eq!(validation_ge, StrValidation { operation: Some(OPERATION_FIELD_GE.clone()), ..Default::default() });
+        assert_eq!(validation_lt, StrValidation { operation: Some(OPERATION_FIELD_LT.clone()), ..Default::default() });
+        assert_eq!(validation_le, StrValidation { operation: Some(OPERATION_FIELD_LE.clone()), ..Default::default() });
+        assert_eq!(validation_btwn, StrValidation { operation: Some(OPERATION_FIELD_BTWN.clone()), ..Default::default() });
+    }
+
+    #[test]
+    fn str_validation_bytes_len_value() {
+        let validation_eq = StrValidation::default().bytes_len_eq(VALUE_LEN);
+        let validation_ne = StrValidation::default().bytes_len_ne(VALUE_LEN);
+        let validation_gt = StrValidation::default().bytes_len_gt(VALUE_LEN);
+        let validation_ge = StrValidation::default().bytes_len_ge(VALUE_LEN);
+        let validation_lt = StrValidation::default().bytes_len_lt(VALUE_LEN);
+        let validation_le = StrValidation::default().bytes_len_le(VALUE_LEN);
+        let validation_btwn = StrValidation::default().bytes_len_btwn(VALUE_LEN, VALUE_LEN_B);
+        assert_eq!(validation_eq, StrValidation { bytes_len: Some(OPERATION_VALUE_LEN_EQ.clone()), ..Default::default() });
+        assert_eq!(validation_ne, StrValidation { bytes_len: Some(OPERATION_VALUE_LEN_NE.clone()), ..Default::default() });
+        assert_eq!(validation_gt, StrValidation { bytes_len: Some(OPERATION_VALUE_LEN_GT.clone()), ..Default::default() });
+        assert_eq!(validation_ge, StrValidation { bytes_len: Some(OPERATION_VALUE_LEN_GE.clone()), ..Default::default() });
+        assert_eq!(validation_lt, StrValidation { bytes_len: Some(OPERATION_VALUE_LEN_LT.clone()), ..Default::default() });
+        assert_eq!(validation_le, StrValidation { bytes_len: Some(OPERATION_VALUE_LEN_LE.clone()), ..Default::default() });
+        assert_eq!(validation_btwn, StrValidation { bytes_len: Some(OPERATION_VALUE_LEN_BTWN.clone()), ..Default::default() });
+    }
+
+    #[test]
+    fn str_validation_chars_len_value() {
+        let validation_eq = StrValidation::default().chars_len_eq(VALUE_LEN);
+        let validation_ne = StrValidation::default().chars_len_ne(VALUE_LEN);
+        let validation_gt = StrValidation::default().chars_len_gt(VALUE_LEN);
+        let validation_ge = StrValidation::default().chars_len_ge(VALUE_LEN);
+        let validation_lt = StrValidation::default().chars_len_lt(VALUE_LEN);
+        let validation_le = StrValidation::default().chars_len_le(VALUE_LEN);
+        let validation_btwn = StrValidation::default().chars_len_btwn(VALUE_LEN, VALUE_LEN_B);
+        assert_eq!(validation_eq, StrValidation { chars_len: Some(OPERATION_VALUE_LEN_EQ.clone()), ..Default::default() });
+        assert_eq!(validation_ne, StrValidation { chars_len: Some(OPERATION_VALUE_LEN_NE.clone()), ..Default::default() });
+        assert_eq!(validation_gt, StrValidation { chars_len: Some(OPERATION_VALUE_LEN_GT.clone()), ..Default::default() });
+        assert_eq!(validation_ge, StrValidation { chars_len: Some(OPERATION_VALUE_LEN_GE.clone()), ..Default::default() });
+        assert_eq!(validation_lt, StrValidation { chars_len: Some(OPERATION_VALUE_LEN_LT.clone()), ..Default::default() });
+        assert_eq!(validation_le, StrValidation { chars_len: Some(OPERATION_VALUE_LEN_LE.clone()), ..Default::default() });
+        assert_eq!(validation_btwn, StrValidation { chars_len: Some(OPERATION_VALUE_LEN_BTWN.clone()), ..Default::default() });
+    }
+
+    #[test]
+    fn str_validation_graphemes_len_value() {
+        let validation_eq = StrValidation::default().graphemes_len_eq(VALUE_LEN);
+        let validation_ne = StrValidation::default().graphemes_len_ne(VALUE_LEN);
+        let validation_gt = StrValidation::default().graphemes_len_gt(VALUE_LEN);
+        let validation_ge = StrValidation::default().graphemes_len_ge(VALUE_LEN);
+        let validation_lt = StrValidation::default().graphemes_len_lt(VALUE_LEN);
+        let validation_le = StrValidation::default().graphemes_len_le(VALUE_LEN);
+        let validation_btwn = StrValidation::default().graphemes_len_btwn(VALUE_LEN, VALUE_LEN_B);
+        assert_eq!(validation_eq, StrValidation { graphemes_len: Some(OPERATION_VALUE_LEN_EQ.clone()), ..Default::default() });
+        assert_eq!(validation_ne, StrValidation { graphemes_len: Some(OPERATION_VALUE_LEN_NE.clone()), ..Default::default() });
+        assert_eq!(validation_gt, StrValidation { graphemes_len: Some(OPERATION_VALUE_LEN_GT.clone()), ..Default::default() });
+        assert_eq!(validation_ge, StrValidation { graphemes_len: Some(OPERATION_VALUE_LEN_GE.clone()), ..Default::default() });
+        assert_eq!(validation_lt, StrValidation { graphemes_len: Some(OPERATION_VALUE_LEN_LT.clone()), ..Default::default() });
+        assert_eq!(validation_le, StrValidation { graphemes_len: Some(OPERATION_VALUE_LEN_LE.clone()), ..Default::default() });
+        assert_eq!(validation_btwn, StrValidation { graphemes_len: Some(OPERATION_VALUE_LEN_BTWN.clone()), ..Default::default() });
+    }
+
+    #[test]
+    fn str_validation_lowercase_len_value() {
+        let validation_eq = StrValidation::default().lowercase_len_eq(VALUE_LEN);
+        let validation_ne = StrValidation::default().lowercase_len_ne(VALUE_LEN);
+        let validation_gt = StrValidation::default().lowercase_len_gt(VALUE_LEN);
+        let validation_ge = StrValidation::default().lowercase_len_ge(VALUE_LEN);
+        let validation_lt = StrValidation::default().lowercase_len_lt(VALUE_LEN);
+        let validation_le = StrValidation::default().lowercase_len_le(VALUE_LEN);
+        let validation_btwn = StrValidation::default().lowercase_len_btwn(VALUE_LEN, VALUE_LEN_B);
+        assert_eq!(validation_eq, StrValidation { lowercase_len: Some(OPERATION_VALUE_LEN_EQ.clone()), ..Default::default() });
+        assert_eq!(validation_ne, StrValidation { lowercase_len: Some(OPERATION_VALUE_LEN_NE.clone()), ..Default::default() });
+        assert_eq!(validation_gt, StrValidation { lowercase_len: Some(OPERATION_VALUE_LEN_GT.clone()), ..Default::default() });
+        assert_eq!(validation_ge, StrValidation { lowercase_len: Some(OPERATION_VALUE_LEN_GE.clone()), ..Default::default() });
+        assert_eq!(validation_lt, StrValidation { lowercase_len: Some(OPERATION_VALUE_LEN_LT.clone()), ..Default::default() });
+        assert_eq!(validation_le, StrValidation { lowercase_len: Some(OPERATION_VALUE_LEN_LE.clone()), ..Default::default() });
+        assert_eq!(validation_btwn, StrValidation { lowercase_len: Some(OPERATION_VALUE_LEN_BTWN.clone()), ..Default::default() });
+    }
+
+    #[test]
+    fn str_validation_uppercase_len_value() {
+        let validation_eq = StrValidation::default().uppercase_len_eq(VALUE_LEN);
+        let validation_ne = StrValidation::default().uppercase_len_ne(VALUE_LEN);
+        let validation_gt = StrValidation::default().uppercase_len_gt(VALUE_LEN);
+        let validation_ge = StrValidation::default().uppercase_len_ge(VALUE_LEN);
+        let validation_lt = StrValidation::default().uppercase_len_lt(VALUE_LEN);
+        let validation_le = StrValidation::default().uppercase_len_le(VALUE_LEN);
+        let validation_btwn = StrValidation::default().uppercase_len_btwn(VALUE_LEN, VALUE_LEN_B);
+        assert_eq!(validation_eq, StrValidation { uppercase_len: Some(OPERATION_VALUE_LEN_EQ.clone()), ..Default::default() });
+        assert_eq!(validation_ne, StrValidation { uppercase_len: Some(OPERATION_VALUE_LEN_NE.clone()), ..Default::default() });
+        assert_eq!(validation_gt, StrValidation { uppercase_len: Some(OPERATION_VALUE_LEN_GT.clone()), ..Default::default() });
+        assert_eq!(validation_ge, StrValidation { uppercase_len: Some(OPERATION_VALUE_LEN_GE.clone()), ..Default::default() });
+        assert_eq!(validation_lt, StrValidation { uppercase_len: Some(OPERATION_VALUE_LEN_LT.clone()), ..Default::default() });
+        assert_eq!(validation_le, StrValidation { uppercase_len: Some(OPERATION_VALUE_LEN_LE.clone()), ..Default::default() });
+        assert_eq!(validation_btwn, StrValidation { uppercase_len: Some(OPERATION_VALUE_LEN_BTWN.clone()), ..Default::default() });
+    }
+
+    #[test]
+    fn str_validation_numbers_len_value() {
+        let validation_eq = StrValidation::default().numbers_len_eq(VALUE_LEN);
+        let validation_ne = StrValidation::default().numbers_len_ne(VALUE_LEN);
+        let validation_gt = StrValidation::default().numbers_len_gt(VALUE_LEN);
+        let validation_ge = StrValidation::default().numbers_len_ge(VALUE_LEN);
+        let validation_lt = StrValidation::default().numbers_len_lt(VALUE_LEN);
+        let validation_le = StrValidation::default().numbers_len_le(VALUE_LEN);
+        let validation_btwn = StrValidation::default().numbers_len_btwn(VALUE_LEN, VALUE_LEN_B);
+        assert_eq!(validation_eq, StrValidation { numbers_len: Some(OPERATION_VALUE_LEN_EQ.clone()), ..Default::default() });
+        assert_eq!(validation_ne, StrValidation { numbers_len: Some(OPERATION_VALUE_LEN_NE.clone()), ..Default::default() });
+        assert_eq!(validation_gt, StrValidation { numbers_len: Some(OPERATION_VALUE_LEN_GT.clone()), ..Default::default() });
+        assert_eq!(validation_ge, StrValidation { numbers_len: Some(OPERATION_VALUE_LEN_GE.clone()), ..Default::default() });
+        assert_eq!(validation_lt, StrValidation { numbers_len: Some(OPERATION_VALUE_LEN_LT.clone()), ..Default::default() });
+        assert_eq!(validation_le, StrValidation { numbers_len: Some(OPERATION_VALUE_LEN_LE.clone()), ..Default::default() });
+        assert_eq!(validation_btwn, StrValidation { numbers_len: Some(OPERATION_VALUE_LEN_BTWN.clone()), ..Default::default() });
+    }
+
+    #[test]
+    fn str_validation_symbols_len_value() {
+        let validation_eq = StrValidation::default().symbols_len_eq(VALUE_LEN);
+        let validation_ne = StrValidation::default().symbols_len_ne(VALUE_LEN);
+        let validation_gt = StrValidation::default().symbols_len_gt(VALUE_LEN);
+        let validation_ge = StrValidation::default().symbols_len_ge(VALUE_LEN);
+        let validation_lt = StrValidation::default().symbols_len_lt(VALUE_LEN);
+        let validation_le = StrValidation::default().symbols_len_le(VALUE_LEN);
+        let validation_btwn = StrValidation::default().symbols_len_btwn(VALUE_LEN, VALUE_LEN_B);
+        assert_eq!(validation_eq, StrValidation { symbols_len: Some(OPERATION_VALUE_LEN_EQ.clone()), ..Default::default() });
+        assert_eq!(validation_ne, StrValidation { symbols_len: Some(OPERATION_VALUE_LEN_NE.clone()), ..Default::default() });
+        assert_eq!(validation_gt, StrValidation { symbols_len: Some(OPERATION_VALUE_LEN_GT.clone()), ..Default::default() });
+        assert_eq!(validation_ge, StrValidation { symbols_len: Some(OPERATION_VALUE_LEN_GE.clone()), ..Default::default() });
+        assert_eq!(validation_lt, StrValidation { symbols_len: Some(OPERATION_VALUE_LEN_LT.clone()), ..Default::default() });
+        assert_eq!(validation_le, StrValidation { symbols_len: Some(OPERATION_VALUE_LEN_LE.clone()), ..Default::default() });
+        assert_eq!(validation_btwn, StrValidation { symbols_len: Some(OPERATION_VALUE_LEN_BTWN.clone()), ..Default::default() });
+    }
+
+    #[test]
+    fn str_validation_bytes_len_field() {
+        let validation_eq = StrValidation::default().bytes_len_eq_field(FIELD_LEN.into());
+        let validation_ne = StrValidation::default().bytes_len_ne_field(FIELD_LEN.into());
+        let validation_gt = StrValidation::default().bytes_len_gt_field(FIELD_LEN.into());
+        let validation_ge = StrValidation::default().bytes_len_ge_field(FIELD_LEN.into());
+        let validation_lt = StrValidation::default().bytes_len_lt_field(FIELD_LEN.into());
+        let validation_le = StrValidation::default().bytes_len_le_field(FIELD_LEN.into());
+        let validation_btwn = StrValidation::default().bytes_len_btwn_field(FIELD_LEN.into(), FIELD_LEN_B.into());
+        assert_eq!(validation_eq, StrValidation { bytes_len: Some(OPERATION_FIELD_LEN_EQ.clone()), ..Default::default() });
+        assert_eq!(validation_ne, StrValidation { bytes_len: Some(OPERATION_FIELD_LEN_NE.clone()), ..Default::default() });
+        assert_eq!(validation_gt, StrValidation { bytes_len: Some(OPERATION_FIELD_LEN_GT.clone()), ..Default::default() });
+        assert_eq!(validation_ge, StrValidation { bytes_len: Some(OPERATION_FIELD_LEN_GE.clone()), ..Default::default() });
+        assert_eq!(validation_lt, StrValidation { bytes_len: Some(OPERATION_FIELD_LEN_LT.clone()), ..Default::default() });
+        assert_eq!(validation_le, StrValidation { bytes_len: Some(OPERATION_FIELD_LEN_LE.clone()), ..Default::default() });
+        assert_eq!(validation_btwn, StrValidation { bytes_len: Some(OPERATION_FIELD_LEN_BTWN.clone()), ..Default::default() });
+    }
+
+    #[test]
+    fn str_validation_chars_len_field() {
+        let validation_eq = StrValidation::default().chars_len_eq_field(FIELD_LEN.into());
+        let validation_ne = StrValidation::default().chars_len_ne_field(FIELD_LEN.into());
+        let validation_gt = StrValidation::default().chars_len_gt_field(FIELD_LEN.into());
+        let validation_ge = StrValidation::default().chars_len_ge_field(FIELD_LEN.into());
+        let validation_lt = StrValidation::default().chars_len_lt_field(FIELD_LEN.into());
+        let validation_le = StrValidation::default().chars_len_le_field(FIELD_LEN.into());
+        let validation_btwn = StrValidation::default().chars_len_btwn_field(FIELD_LEN.into(), FIELD_LEN_B.into());
+        assert_eq!(validation_eq, StrValidation { chars_len: Some(OPERATION_FIELD_LEN_EQ.clone()), ..Default::default() });
+        assert_eq!(validation_ne, StrValidation { chars_len: Some(OPERATION_FIELD_LEN_NE.clone()), ..Default::default() });
+        assert_eq!(validation_gt, StrValidation { chars_len: Some(OPERATION_FIELD_LEN_GT.clone()), ..Default::default() });
+        assert_eq!(validation_ge, StrValidation { chars_len: Some(OPERATION_FIELD_LEN_GE.clone()), ..Default::default() });
+        assert_eq!(validation_lt, StrValidation { chars_len: Some(OPERATION_FIELD_LEN_LT.clone()), ..Default::default() });
+        assert_eq!(validation_le, StrValidation { chars_len: Some(OPERATION_FIELD_LEN_LE.clone()), ..Default::default() });
+        assert_eq!(validation_btwn, StrValidation { chars_len: Some(OPERATION_FIELD_LEN_BTWN.clone()), ..Default::default() });
+    }
+
+    #[test]
+    fn str_validation_graphemes_len_field() {
+        let validation_eq = StrValidation::default().graphemes_len_eq_field(FIELD_LEN.into());
+        let validation_ne = StrValidation::default().graphemes_len_ne_field(FIELD_LEN.into());
+        let validation_gt = StrValidation::default().graphemes_len_gt_field(FIELD_LEN.into());
+        let validation_ge = StrValidation::default().graphemes_len_ge_field(FIELD_LEN.into());
+        let validation_lt = StrValidation::default().graphemes_len_lt_field(FIELD_LEN.into());
+        let validation_le = StrValidation::default().graphemes_len_le_field(FIELD_LEN.into());
+        let validation_btwn = StrValidation::default().graphemes_len_btwn_field(FIELD_LEN.into(), FIELD_LEN_B.into());
+        assert_eq!(validation_eq, StrValidation { graphemes_len: Some(OPERATION_FIELD_LEN_EQ.clone()), ..Default::default() });
+        assert_eq!(validation_ne, StrValidation { graphemes_len: Some(OPERATION_FIELD_LEN_NE.clone()), ..Default::default() });
+        assert_eq!(validation_gt, StrValidation { graphemes_len: Some(OPERATION_FIELD_LEN_GT.clone()), ..Default::default() });
+        assert_eq!(validation_ge, StrValidation { graphemes_len: Some(OPERATION_FIELD_LEN_GE.clone()), ..Default::default() });
+        assert_eq!(validation_lt, StrValidation { graphemes_len: Some(OPERATION_FIELD_LEN_LT.clone()), ..Default::default() });
+        assert_eq!(validation_le, StrValidation { graphemes_len: Some(OPERATION_FIELD_LEN_LE.clone()), ..Default::default() });
+        assert_eq!(validation_btwn, StrValidation { graphemes_len: Some(OPERATION_FIELD_LEN_BTWN.clone()), ..Default::default() });
+    }
+
+    #[test]
+    fn str_validation_lowercase_len_field() {
+        let validation_eq = StrValidation::default().lowercase_len_eq_field(FIELD_LEN.into());
+        let validation_ne = StrValidation::default().lowercase_len_ne_field(FIELD_LEN.into());
+        let validation_gt = StrValidation::default().lowercase_len_gt_field(FIELD_LEN.into());
+        let validation_ge = StrValidation::default().lowercase_len_ge_field(FIELD_LEN.into());
+        let validation_lt = StrValidation::default().lowercase_len_lt_field(FIELD_LEN.into());
+        let validation_le = StrValidation::default().lowercase_len_le_field(FIELD_LEN.into());
+        let validation_btwn = StrValidation::default().lowercase_len_btwn_field(FIELD_LEN.into(), FIELD_LEN_B.into());
+        assert_eq!(validation_eq, StrValidation { lowercase_len: Some(OPERATION_FIELD_LEN_EQ.clone()), ..Default::default() });
+        assert_eq!(validation_ne, StrValidation { lowercase_len: Some(OPERATION_FIELD_LEN_NE.clone()), ..Default::default() });
+        assert_eq!(validation_gt, StrValidation { lowercase_len: Some(OPERATION_FIELD_LEN_GT.clone()), ..Default::default() });
+        assert_eq!(validation_ge, StrValidation { lowercase_len: Some(OPERATION_FIELD_LEN_GE.clone()), ..Default::default() });
+        assert_eq!(validation_lt, StrValidation { lowercase_len: Some(OPERATION_FIELD_LEN_LT.clone()), ..Default::default() });
+        assert_eq!(validation_le, StrValidation { lowercase_len: Some(OPERATION_FIELD_LEN_LE.clone()), ..Default::default() });
+        assert_eq!(validation_btwn, StrValidation { lowercase_len: Some(OPERATION_FIELD_LEN_BTWN.clone()), ..Default::default() });
+    }
+
+    #[test]
+    fn str_validation_uppercase_len_field() {
+        let validation_eq = StrValidation::default().uppercase_len_eq_field(FIELD_LEN.into());
+        let validation_ne = StrValidation::default().uppercase_len_ne_field(FIELD_LEN.into());
+        let validation_gt = StrValidation::default().uppercase_len_gt_field(FIELD_LEN.into());
+        let validation_ge = StrValidation::default().uppercase_len_ge_field(FIELD_LEN.into());
+        let validation_lt = StrValidation::default().uppercase_len_lt_field(FIELD_LEN.into());
+        let validation_le = StrValidation::default().uppercase_len_le_field(FIELD_LEN.into());
+        let validation_btwn = StrValidation::default().uppercase_len_btwn_field(FIELD_LEN.into(), FIELD_LEN_B.into());
+        assert_eq!(validation_eq, StrValidation { uppercase_len: Some(OPERATION_FIELD_LEN_EQ.clone()), ..Default::default() });
+        assert_eq!(validation_ne, StrValidation { uppercase_len: Some(OPERATION_FIELD_LEN_NE.clone()), ..Default::default() });
+        assert_eq!(validation_gt, StrValidation { uppercase_len: Some(OPERATION_FIELD_LEN_GT.clone()), ..Default::default() });
+        assert_eq!(validation_ge, StrValidation { uppercase_len: Some(OPERATION_FIELD_LEN_GE.clone()), ..Default::default() });
+        assert_eq!(validation_lt, StrValidation { uppercase_len: Some(OPERATION_FIELD_LEN_LT.clone()), ..Default::default() });
+        assert_eq!(validation_le, StrValidation { uppercase_len: Some(OPERATION_FIELD_LEN_LE.clone()), ..Default::default() });
+        assert_eq!(validation_btwn, StrValidation { uppercase_len: Some(OPERATION_FIELD_LEN_BTWN.clone()), ..Default::default() });
+    }
+
+    #[test]
+    fn str_validation_numbers_len_field() {
+        let validation_eq = StrValidation::default().numbers_len_eq_field(FIELD_LEN.into());
+        let validation_ne = StrValidation::default().numbers_len_ne_field(FIELD_LEN.into());
+        let validation_gt = StrValidation::default().numbers_len_gt_field(FIELD_LEN.into());
+        let validation_ge = StrValidation::default().numbers_len_ge_field(FIELD_LEN.into());
+        let validation_lt = StrValidation::default().numbers_len_lt_field(FIELD_LEN.into());
+        let validation_le = StrValidation::default().numbers_len_le_field(FIELD_LEN.into());
+        let validation_btwn = StrValidation::default().numbers_len_btwn_field(FIELD_LEN.into(), FIELD_LEN_B.into());
+        assert_eq!(validation_eq, StrValidation { numbers_len: Some(OPERATION_FIELD_LEN_EQ.clone()), ..Default::default() });
+        assert_eq!(validation_ne, StrValidation { numbers_len: Some(OPERATION_FIELD_LEN_NE.clone()), ..Default::default() });
+        assert_eq!(validation_gt, StrValidation { numbers_len: Some(OPERATION_FIELD_LEN_GT.clone()), ..Default::default() });
+        assert_eq!(validation_ge, StrValidation { numbers_len: Some(OPERATION_FIELD_LEN_GE.clone()), ..Default::default() });
+        assert_eq!(validation_lt, StrValidation { numbers_len: Some(OPERATION_FIELD_LEN_LT.clone()), ..Default::default() });
+        assert_eq!(validation_le, StrValidation { numbers_len: Some(OPERATION_FIELD_LEN_LE.clone()), ..Default::default() });
+        assert_eq!(validation_btwn, StrValidation { numbers_len: Some(OPERATION_FIELD_LEN_BTWN.clone()), ..Default::default() });
+    }
+
+    #[test]
+    fn str_validation_symbols_len_field() {
+        let validation_eq = StrValidation::default().symbols_len_eq_field(FIELD_LEN.into());
+        let validation_ne = StrValidation::default().symbols_len_ne_field(FIELD_LEN.into());
+        let validation_gt = StrValidation::default().symbols_len_gt_field(FIELD_LEN.into());
+        let validation_ge = StrValidation::default().symbols_len_ge_field(FIELD_LEN.into());
+        let validation_lt = StrValidation::default().symbols_len_lt_field(FIELD_LEN.into());
+        let validation_le = StrValidation::default().symbols_len_le_field(FIELD_LEN.into());
+        let validation_btwn = StrValidation::default().symbols_len_btwn_field(FIELD_LEN.into(), FIELD_LEN_B.into());
+        assert_eq!(validation_eq, StrValidation { symbols_len: Some(OPERATION_FIELD_LEN_EQ.clone()), ..Default::default() });
+        assert_eq!(validation_ne, StrValidation { symbols_len: Some(OPERATION_FIELD_LEN_NE.clone()), ..Default::default() });
+        assert_eq!(validation_gt, StrValidation { symbols_len: Some(OPERATION_FIELD_LEN_GT.clone()), ..Default::default() });
+        assert_eq!(validation_ge, StrValidation { symbols_len: Some(OPERATION_FIELD_LEN_GE.clone()), ..Default::default() });
+        assert_eq!(validation_lt, StrValidation { symbols_len: Some(OPERATION_FIELD_LEN_LT.clone()), ..Default::default() });
+        assert_eq!(validation_le, StrValidation { symbols_len: Some(OPERATION_FIELD_LEN_LE.clone()), ..Default::default() });
+        assert_eq!(validation_btwn, StrValidation { symbols_len: Some(OPERATION_FIELD_LEN_BTWN.clone()), ..Default::default() });
     }
 }

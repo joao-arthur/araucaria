@@ -85,41 +85,73 @@ mod tests {
 
     use super::TimeValidation;
 
-    const FIELD: &str = "user.info.details.last_login";
-    const FIELD_B: &str = "user.info.details.last_logout";
+    const VALUE: &str = "10:27";
+    const VALUE_B: &str = "19:41";
 
-    const OP_VALUE_EQ: LazyLock<Operation> = LazyLock::new(|| Operation::Eq(Operand::Value(OperandValue::from("08:10"))));
-    const OP_VALUE_NE: LazyLock<Operation> = LazyLock::new(|| Operation::Ne(Operand::Value(OperandValue::from("10:27"))));
-    const OP_VALUE_GT: LazyLock<Operation> = LazyLock::new(|| Operation::Gt(Operand::Value(OperandValue::from("19:41"))));
-    const OP_VALUE_GE: LazyLock<Operation> = LazyLock::new(|| Operation::Ge(Operand::Value(OperandValue::from("03:01"))));
-    const OP_VALUE_LT: LazyLock<Operation> = LazyLock::new(|| Operation::Lt(Operand::Value(OperandValue::from("00:00"))));
-    const OP_VALUE_LE: LazyLock<Operation> = LazyLock::new(|| Operation::Le(Operand::Value(OperandValue::from("01:01"))));
-    const OP_VALUE_BTWN: LazyLock<Operation> = LazyLock::new(|| Operation::Btwn(Operand::Value(OperandValue::from("00:00")), Operand::Value(OperandValue::from("23:59"))));
-    const OP_FIELD_EQ: LazyLock<Operation> = LazyLock::new(|| Operation::Eq(Operand::FieldPath(FIELD.into())));
-    const OP_FIELD_NE: LazyLock<Operation> = LazyLock::new(|| Operation::Ne(Operand::FieldPath(FIELD.into())));
-    const OP_FIELD_GT: LazyLock<Operation> = LazyLock::new(|| Operation::Gt(Operand::FieldPath(FIELD.into())));
-    const OP_FIELD_GE: LazyLock<Operation> = LazyLock::new(|| Operation::Ge(Operand::FieldPath(FIELD.into())));
-    const OP_FIELD_LT: LazyLock<Operation> = LazyLock::new(|| Operation::Lt(Operand::FieldPath(FIELD.into())));
-    const OP_FIELD_LE: LazyLock<Operation> = LazyLock::new(|| Operation::Le(Operand::FieldPath(FIELD.into())));
-    const OP_FIELD_BTWN: LazyLock<Operation> = LazyLock::new(|| Operation::Btwn(Operand::FieldPath(FIELD.into()), Operand::FieldPath(FIELD_B.into())));
+    const OPERAND_VALUE: LazyLock<Operand> = LazyLock::new(|| Operand::Value(OperandValue::from(VALUE)));
+    const OPERAND_VALUE_B: LazyLock<Operand> = LazyLock::new(|| Operand::Value(OperandValue::from(VALUE_B)));
+
+    const OPERATION_VALUE_EQ: LazyLock<Operation> = LazyLock::new(|| Operation::Eq(OPERAND_VALUE.clone()));
+    const OPERATION_VALUE_NE: LazyLock<Operation> = LazyLock::new(|| Operation::Ne(OPERAND_VALUE.clone()));
+    const OPERATION_VALUE_GT: LazyLock<Operation> = LazyLock::new(|| Operation::Gt(OPERAND_VALUE.clone()));
+    const OPERATION_VALUE_GE: LazyLock<Operation> = LazyLock::new(|| Operation::Ge(OPERAND_VALUE.clone()));
+    const OPERATION_VALUE_LT: LazyLock<Operation> = LazyLock::new(|| Operation::Lt(OPERAND_VALUE.clone()));
+    const OPERATION_VALUE_LE: LazyLock<Operation> = LazyLock::new(|| Operation::Le(OPERAND_VALUE.clone()));
+    const OPERATION_VALUE_BTWN: LazyLock<Operation> = LazyLock::new(|| Operation::Btwn(OPERAND_VALUE.clone(), OPERAND_VALUE_B.clone()));
+
+    const FIELD: &str = "user.info.details.wakeup";
+    const FIELD_B: &str = "user.info.details.sleep";
+
+    const OPERAND_FIELD: LazyLock<Operand> = LazyLock::new(|| Operand::FieldPath(FIELD.into()));
+    const OPERAND_FIELD_B: LazyLock<Operand> = LazyLock::new(|| Operand::FieldPath(FIELD_B.into()));
+
+    const OPERATION_FIELD_EQ: LazyLock<Operation> = LazyLock::new(|| Operation::Eq(OPERAND_FIELD.clone()));
+    const OPERATION_FIELD_NE: LazyLock<Operation> = LazyLock::new(|| Operation::Ne(OPERAND_FIELD.clone()));
+    const OPERATION_FIELD_GT: LazyLock<Operation> = LazyLock::new(|| Operation::Gt(OPERAND_FIELD.clone()));
+    const OPERATION_FIELD_GE: LazyLock<Operation> = LazyLock::new(|| Operation::Ge(OPERAND_FIELD.clone()));
+    const OPERATION_FIELD_LT: LazyLock<Operation> = LazyLock::new(|| Operation::Lt(OPERAND_FIELD.clone()));
+    const OPERATION_FIELD_LE: LazyLock<Operation> = LazyLock::new(|| Operation::Le(OPERAND_FIELD.clone()));
+    const OPERATION_FIELD_BTWN: LazyLock<Operation> = LazyLock::new(|| Operation::Btwn(OPERAND_FIELD.clone(), OPERAND_FIELD_B.clone()));
 
     #[test]
     fn time_validation() {
         assert_eq!(TimeValidation::default(), TimeValidation { required: true, operation: None });
         assert_eq!(TimeValidation::default().optional(), TimeValidation { required: false, operation: None });
-        assert_eq!(TimeValidation::default().eq("08:10".into()), TimeValidation { required: true, operation: Some(OP_VALUE_EQ.clone()) });
-        assert_eq!(TimeValidation::default().ne("10:27".into()), TimeValidation { required: true, operation: Some(OP_VALUE_NE.clone()) });
-        assert_eq!(TimeValidation::default().gt("19:41".into()), TimeValidation { required: true, operation: Some(OP_VALUE_GT.clone()) });
-        assert_eq!(TimeValidation::default().ge("03:01".into()), TimeValidation { required: true, operation: Some(OP_VALUE_GE.clone()) });
-        assert_eq!(TimeValidation::default().lt("00:00".into()), TimeValidation { required: true, operation: Some(OP_VALUE_LT.clone()) });
-        assert_eq!(TimeValidation::default().le("01:01".into()), TimeValidation { required: true, operation: Some(OP_VALUE_LE.clone()) });
-        assert_eq!(TimeValidation::default().btwn("00:00".into(), "23:59".into()), TimeValidation { required: true, operation: Some(OP_VALUE_BTWN.clone()) });
-        assert_eq!(TimeValidation::default().eq_field(FIELD.into()), TimeValidation { required: true, operation: Some(OP_FIELD_EQ.clone()) });
-        assert_eq!(TimeValidation::default().ne_field(FIELD.into()), TimeValidation { required: true, operation: Some(OP_FIELD_NE.clone()) });
-        assert_eq!(TimeValidation::default().gt_field(FIELD.into()), TimeValidation { required: true, operation: Some(OP_FIELD_GT.clone()) });
-        assert_eq!(TimeValidation::default().ge_field(FIELD.into()), TimeValidation { required: true, operation: Some(OP_FIELD_GE.clone()) });
-        assert_eq!(TimeValidation::default().lt_field(FIELD.into()), TimeValidation { required: true, operation: Some(OP_FIELD_LT.clone()) });
-        assert_eq!(TimeValidation::default().le_field(FIELD.into()), TimeValidation { required: true, operation: Some(OP_FIELD_LE.clone()) });
-        assert_eq!(TimeValidation::default().btwn_field(FIELD.into(), FIELD_B.into()), TimeValidation { required: true, operation: Some(OP_FIELD_BTWN.clone()) });
+    }
+
+    #[test]
+    fn time_validation_operation_value() {
+        let validation_eq = TimeValidation::default().eq(VALUE.into());
+        let validation_ne = TimeValidation::default().ne(VALUE.into());
+        let validation_gt = TimeValidation::default().gt(VALUE.into());
+        let validation_ge = TimeValidation::default().ge(VALUE.into());
+        let validation_lt = TimeValidation::default().lt(VALUE.into());
+        let validation_le = TimeValidation::default().le(VALUE.into());
+        let validation_btwn = TimeValidation::default().btwn(VALUE.into(), VALUE_B.into());
+        assert_eq!(validation_eq, TimeValidation { required: true, operation: Some(OPERATION_VALUE_EQ.clone()) });
+        assert_eq!(validation_ne, TimeValidation { required: true, operation: Some(OPERATION_VALUE_NE.clone()) });
+        assert_eq!(validation_gt, TimeValidation { required: true, operation: Some(OPERATION_VALUE_GT.clone()) });
+        assert_eq!(validation_ge, TimeValidation { required: true, operation: Some(OPERATION_VALUE_GE.clone()) });
+        assert_eq!(validation_lt, TimeValidation { required: true, operation: Some(OPERATION_VALUE_LT.clone()) });
+        assert_eq!(validation_le, TimeValidation { required: true, operation: Some(OPERATION_VALUE_LE.clone()) });
+        assert_eq!(validation_btwn, TimeValidation { required: true, operation: Some(OPERATION_VALUE_BTWN.clone()) });
+    }
+
+    #[test]
+    fn time_validation_operation_field() {
+        let validation_eq = TimeValidation::default().eq_field(FIELD.into());
+        let validation_ne = TimeValidation::default().ne_field(FIELD.into());
+        let validation_gt = TimeValidation::default().gt_field(FIELD.into());
+        let validation_ge = TimeValidation::default().ge_field(FIELD.into());
+        let validation_lt = TimeValidation::default().lt_field(FIELD.into());
+        let validation_le = TimeValidation::default().le_field(FIELD.into());
+        let validation_btwn = TimeValidation::default().btwn_field(FIELD.into(), FIELD_B.into());
+        assert_eq!(validation_eq, TimeValidation { required: true, operation: Some(OPERATION_FIELD_EQ.clone()) });
+        assert_eq!(validation_ne, TimeValidation { required: true, operation: Some(OPERATION_FIELD_NE.clone()) });
+        assert_eq!(validation_gt, TimeValidation { required: true, operation: Some(OPERATION_FIELD_GT.clone()) });
+        assert_eq!(validation_ge, TimeValidation { required: true, operation: Some(OPERATION_FIELD_GE.clone()) });
+        assert_eq!(validation_lt, TimeValidation { required: true, operation: Some(OPERATION_FIELD_LT.clone()) });
+        assert_eq!(validation_le, TimeValidation { required: true, operation: Some(OPERATION_FIELD_LE.clone()) });
+        assert_eq!(validation_btwn, TimeValidation { required: true, operation: Some(OPERATION_FIELD_BTWN.clone()) });
     }
 }

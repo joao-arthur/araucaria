@@ -85,41 +85,60 @@ mod tests {
 
     use super::F64Validation;
 
-    const FIELD: &str = "user.balance.value";
-    const FIELD_B: &str = "user.balance.limit";
+    const OPERATION_VALUE_EQ: Operation = Operation::Eq(Operand::Value(OperandValue::F64(-1.5)));
+    const OPERATION_VALUE_NE: Operation = Operation::Ne(Operand::Value(OperandValue::F64(-2.5)));
+    const OPERATION_VALUE_GT: Operation = Operation::Gt(Operand::Value(OperandValue::F64(-3.5)));
+    const OPERATION_VALUE_GE: Operation = Operation::Ge(Operand::Value(OperandValue::F64(-4.5)));
+    const OPERATION_VALUE_LT: Operation = Operation::Lt(Operand::Value(OperandValue::F64(-5.5)));
+    const OPERATION_VALUE_LE: Operation = Operation::Le(Operand::Value(OperandValue::F64(-6.5)));
+    const OPERATION_VALUE_BTWN: Operation = Operation::Btwn(Operand::Value(OperandValue::F64(-42.5)), Operand::Value(OperandValue::F64(42.5)));
 
-    const OP_VALUE_EQ: Operation = Operation::Eq(Operand::Value(OperandValue::F64(-1.5)));
-    const OP_VALUE_NE: Operation = Operation::Ne(Operand::Value(OperandValue::F64(-2.5)));
-    const OP_VALUE_GT: Operation = Operation::Gt(Operand::Value(OperandValue::F64(-3.5)));
-    const OP_VALUE_GE: Operation = Operation::Ge(Operand::Value(OperandValue::F64(-4.5)));
-    const OP_VALUE_LT: Operation = Operation::Lt(Operand::Value(OperandValue::F64(-5.5)));
-    const OP_VALUE_LE: Operation = Operation::Le(Operand::Value(OperandValue::F64(-6.5)));
-    const OP_VALUE_BTWN: Operation = Operation::Btwn(Operand::Value(OperandValue::F64(-42.5)), Operand::Value(OperandValue::F64(42.5)));
-    const OP_FIELD_EQ: LazyLock<Operation> = LazyLock::new(|| Operation::Eq(Operand::FieldPath(FIELD.into())));
-    const OP_FIELD_NE: LazyLock<Operation> = LazyLock::new(|| Operation::Ne(Operand::FieldPath(FIELD.into())));
-    const OP_FIELD_GT: LazyLock<Operation> = LazyLock::new(|| Operation::Gt(Operand::FieldPath(FIELD.into())));
-    const OP_FIELD_GE: LazyLock<Operation> = LazyLock::new(|| Operation::Ge(Operand::FieldPath(FIELD.into())));
-    const OP_FIELD_LT: LazyLock<Operation> = LazyLock::new(|| Operation::Lt(Operand::FieldPath(FIELD.into())));
-    const OP_FIELD_LE: LazyLock<Operation> = LazyLock::new(|| Operation::Le(Operand::FieldPath(FIELD.into())));
-    const OP_FIELD_BTWN: LazyLock<Operation> = LazyLock::new(|| Operation::Btwn(Operand::FieldPath(FIELD.into()), Operand::FieldPath(FIELD_B.into())));
+    const FIELD: &str = "user.data.info.score";
+    const FIELD_B: &str = "user.data.info.max_score";
+
+    const OPERAND_FIELD: LazyLock<Operand> = LazyLock::new(|| Operand::FieldPath(FIELD.into()));
+    const OPERAND_FIELD_B: LazyLock<Operand> = LazyLock::new(|| Operand::FieldPath(FIELD_B.into()));
+
+    const OPERATION_FIELD_EQ: LazyLock<Operation> = LazyLock::new(|| Operation::Eq(OPERAND_FIELD.clone()));
+    const OPERATION_FIELD_NE: LazyLock<Operation> = LazyLock::new(|| Operation::Ne(OPERAND_FIELD.clone()));
+    const OPERATION_FIELD_GT: LazyLock<Operation> = LazyLock::new(|| Operation::Gt(OPERAND_FIELD.clone()));
+    const OPERATION_FIELD_GE: LazyLock<Operation> = LazyLock::new(|| Operation::Ge(OPERAND_FIELD.clone()));
+    const OPERATION_FIELD_LT: LazyLock<Operation> = LazyLock::new(|| Operation::Lt(OPERAND_FIELD.clone()));
+    const OPERATION_FIELD_LE: LazyLock<Operation> = LazyLock::new(|| Operation::Le(OPERAND_FIELD.clone()));
+    const OPERATION_FIELD_BTWN: LazyLock<Operation> = LazyLock::new(|| Operation::Btwn(OPERAND_FIELD.clone(), OPERAND_FIELD_B.clone()));
 
     #[test]
     fn num_f_validation() {
         assert_eq!(F64Validation::default(), F64Validation { required: true, operation: None });
         assert_eq!(F64Validation::default().optional(), F64Validation { required: false, operation: None });
-        assert_eq!(F64Validation::default().eq(-1.5), F64Validation { required: true, operation: Some(OP_VALUE_EQ) });
-        assert_eq!(F64Validation::default().ne(-2.5), F64Validation { required: true, operation: Some(OP_VALUE_NE) });
-        assert_eq!(F64Validation::default().gt(-3.5), F64Validation { required: true, operation: Some(OP_VALUE_GT) });
-        assert_eq!(F64Validation::default().ge(-4.5), F64Validation { required: true, operation: Some(OP_VALUE_GE) });
-        assert_eq!(F64Validation::default().lt(-5.5), F64Validation { required: true, operation: Some(OP_VALUE_LT) });
-        assert_eq!(F64Validation::default().le(-6.5), F64Validation { required: true, operation: Some(OP_VALUE_LE) });
-        assert_eq!(F64Validation::default().btwn(-42.5, 42.5), F64Validation { required: true, operation: Some(OP_VALUE_BTWN) });
-        assert_eq!(F64Validation::default().eq_field(FIELD.into()), F64Validation { required: true, operation: Some(OP_FIELD_EQ.clone()) });
-        assert_eq!(F64Validation::default().ne_field(FIELD.into()), F64Validation { required: true, operation: Some(OP_FIELD_NE.clone()) });
-        assert_eq!(F64Validation::default().gt_field(FIELD.into()), F64Validation { required: true, operation: Some(OP_FIELD_GT.clone()) });
-        assert_eq!(F64Validation::default().ge_field(FIELD.into()), F64Validation { required: true, operation: Some(OP_FIELD_GE.clone()) });
-        assert_eq!(F64Validation::default().lt_field(FIELD.into()), F64Validation { required: true, operation: Some(OP_FIELD_LT.clone()) });
-        assert_eq!(F64Validation::default().le_field(FIELD.into()), F64Validation { required: true, operation: Some(OP_FIELD_LE.clone()) });
-        assert_eq!(F64Validation::default().btwn_field(FIELD.into(), FIELD_B.into()), F64Validation { required: true, operation: Some(OP_FIELD_BTWN.clone()) });
+    }
+
+    #[test]
+    fn num_f_validation_operation_value() {
+        assert_eq!(F64Validation::default().eq(-1.5), F64Validation { required: true, operation: Some(OPERATION_VALUE_EQ) });
+        assert_eq!(F64Validation::default().ne(-2.5), F64Validation { required: true, operation: Some(OPERATION_VALUE_NE) });
+        assert_eq!(F64Validation::default().gt(-3.5), F64Validation { required: true, operation: Some(OPERATION_VALUE_GT) });
+        assert_eq!(F64Validation::default().ge(-4.5), F64Validation { required: true, operation: Some(OPERATION_VALUE_GE) });
+        assert_eq!(F64Validation::default().lt(-5.5), F64Validation { required: true, operation: Some(OPERATION_VALUE_LT) });
+        assert_eq!(F64Validation::default().le(-6.5), F64Validation { required: true, operation: Some(OPERATION_VALUE_LE) });
+        assert_eq!(F64Validation::default().btwn(-42.5, 42.5), F64Validation { required: true, operation: Some(OPERATION_VALUE_BTWN) });
+    }
+
+    #[test]
+    fn num_f_validation_operation_field() {
+        let validation_eq = F64Validation::default().eq_field(FIELD.into());
+        let validation_ne = F64Validation::default().ne_field(FIELD.into());
+        let validation_gt = F64Validation::default().gt_field(FIELD.into());
+        let validation_ge = F64Validation::default().ge_field(FIELD.into());
+        let validation_lt = F64Validation::default().lt_field(FIELD.into());
+        let validation_le = F64Validation::default().le_field(FIELD.into());
+        let validation_btwn = F64Validation::default().btwn_field(FIELD.into(), FIELD_B.into());
+        assert_eq!(validation_eq, F64Validation { required: true, operation: Some(OPERATION_FIELD_EQ.clone()) });
+        assert_eq!(validation_ne, F64Validation { required: true, operation: Some(OPERATION_FIELD_NE.clone()) });
+        assert_eq!(validation_gt, F64Validation { required: true, operation: Some(OPERATION_FIELD_GT.clone()) });
+        assert_eq!(validation_ge, F64Validation { required: true, operation: Some(OPERATION_FIELD_GE.clone()) });
+        assert_eq!(validation_lt, F64Validation { required: true, operation: Some(OPERATION_FIELD_LT.clone()) });
+        assert_eq!(validation_le, F64Validation { required: true, operation: Some(OPERATION_FIELD_LE.clone()) });
+        assert_eq!(validation_btwn, F64Validation { required: true, operation: Some(OPERATION_FIELD_BTWN.clone()) });
     }
 }
