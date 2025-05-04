@@ -164,3 +164,5 @@ You need to install
 ## 🚧 TODO
 
 - `Schema::Arr`
+- readme documentation
+- mdBook documentation
