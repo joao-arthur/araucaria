@@ -29,21 +29,25 @@ pub enum ValidationErr {
 
 #[derive(Debug, PartialEq, Clone)]
 pub enum SchemaErr {
-    Schema(Vec<ValidationErr>),
+    Validation(Vec<ValidationErr>),
     Arr(Vec<SchemaErr>),
     Obj(BTreeMap<String, SchemaErr>),
 }
 
-impl SchemaErr {
-    pub fn validation<const N: usize>(value: [ValidationErr; N]) -> SchemaErr {
-        SchemaErr::Schema(value.to_vec())
+impl<const N: usize> From<[ValidationErr; N]> for SchemaErr {
+    fn from(value: [ValidationErr; N]) -> Self {
+        SchemaErr::Validation(value.to_vec())
     }
+}
 
-    pub fn arr<const N: usize>(value: [SchemaErr; N]) -> SchemaErr {
+impl<const N: usize> From<[SchemaErr; N]> for SchemaErr {
+    fn from(value: [SchemaErr; N]) -> Self {
         SchemaErr::Arr(value.to_vec())
     }
+}
 
-    pub fn obj<const N: usize>(value: [(String, SchemaErr); N]) -> SchemaErr {
+impl<const N: usize> From<[(String, SchemaErr); N]> for SchemaErr {
+    fn from(value: [(String, SchemaErr); N]) -> Self {
         SchemaErr::Obj(BTreeMap::from(value))
     }
 }
@@ -67,40 +71,40 @@ mod tests {
 
     #[test]
     fn schema_err_validation() {
-        assert_eq!(SchemaErr::validation([REQUIRED, U64, OPERATION_U64]), SchemaErr::Schema(vec![REQUIRED, U64, OPERATION_U64]));
+        assert_eq!(SchemaErr::from([REQUIRED, U64, OPERATION_U64]), SchemaErr::Validation(vec![REQUIRED, U64, OPERATION_U64]));
     }
 
     #[test]
     fn schema_err_arr() {
         assert_eq!(
-            SchemaErr::arr([SchemaErr::validation([REQUIRED, I64, OPERATION_I64])]),
-            SchemaErr::Arr(vec![SchemaErr::Schema(vec![REQUIRED, I64, OPERATION_I64])])
+            SchemaErr::from([SchemaErr::from([REQUIRED, I64, OPERATION_I64])]),
+            SchemaErr::Arr(vec![SchemaErr::Validation(vec![REQUIRED, I64, OPERATION_I64])])
         );
     }
 
     #[test]
     fn schema_err_obj() {
         assert_eq!(
-            SchemaErr::obj([("f64".into(), SchemaErr::validation([REQUIRED, F64, OPERATION_F64]))]),
-            SchemaErr::Obj(BTreeMap::from([("f64".into(), SchemaErr::Schema(vec![REQUIRED, F64, OPERATION_F64]))]))
+            SchemaErr::from([("f64".into(), SchemaErr::from([REQUIRED, F64, OPERATION_F64]))]),
+            SchemaErr::Obj(BTreeMap::from([("f64".into(), SchemaErr::Validation(vec![REQUIRED, F64, OPERATION_F64]))]))
         );
     }
 
     #[test]
     fn schema_err_nested() {
         assert_eq!(
-            SchemaErr::obj([(
+            SchemaErr::from([(
                 "user".into(),
-                SchemaErr::arr([
-                    SchemaErr::validation([REQUIRED]),
-                    SchemaErr::obj([("i64".into(), SchemaErr::validation([REQUIRED, I64, OPERATION_I64]))]),
+                SchemaErr::from([
+                    SchemaErr::from([REQUIRED]),
+                    SchemaErr::from([("i64".into(), SchemaErr::from([REQUIRED, I64, OPERATION_I64]))]),
                 ]),
             )]),
             SchemaErr::Obj(BTreeMap::from([(
                 "user".into(),
                 SchemaErr::Arr(vec![
-                    SchemaErr::Schema(vec![REQUIRED]),
-                    SchemaErr::Obj(BTreeMap::from([("i64".into(), SchemaErr::Schema(vec![REQUIRED, I64, OPERATION_I64]))])),
+                    SchemaErr::Validation(vec![REQUIRED]),
+                    SchemaErr::Obj(BTreeMap::from([("i64".into(), SchemaErr::Validation(vec![REQUIRED, I64, OPERATION_I64]))])),
                 ]),
             )]))
         );
