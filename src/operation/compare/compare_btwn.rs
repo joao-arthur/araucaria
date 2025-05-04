@@ -1,8 +1,8 @@
 use super::{OperandValue, compare_ge, compare_le};
 
 pub fn compare_btwn(value: &OperandValue, operand_a: &OperandValue, operand_b: &OperandValue) -> Option<Result<(), ()>> {
-    if let Ok(()) = compare_ge(value, &operand_a)? {
-        if let Ok(()) = compare_le(value, &operand_b)? {
+    if let Ok(()) = compare_ge(value, operand_a)? {
+        if let Ok(()) = compare_le(value, operand_b)? {
             return Some(Ok(()));
         }
     }

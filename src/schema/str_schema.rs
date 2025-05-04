@@ -509,58 +509,58 @@ mod tests {
     const VALUE: &str = "Avalon";
     const VALUE_B: &str = "Mu";
 
-    const OPERAND_VALUE: LazyLock<Operand> = LazyLock::new(|| Operand::Value(OperandValue::from(VALUE)));
-    const OPERAND_VALUE_B: LazyLock<Operand> = LazyLock::new(|| Operand::Value(OperandValue::from(VALUE_B)));
+    static OPERAND_VALUE: LazyLock<Operand> = LazyLock::new(|| Operand::Value(OperandValue::from(VALUE)));
+    static OPERAND_VALUE_B: LazyLock<Operand> = LazyLock::new(|| Operand::Value(OperandValue::from(VALUE_B)));
 
-    const OPERATION_VALUE_EQ: LazyLock<Operation> = LazyLock::new(|| Operation::Eq(OPERAND_VALUE.clone()));
-    const OPERATION_VALUE_NE: LazyLock<Operation> = LazyLock::new(|| Operation::Ne(OPERAND_VALUE.clone()));
-    const OPERATION_VALUE_GT: LazyLock<Operation> = LazyLock::new(|| Operation::Gt(OPERAND_VALUE.clone()));
-    const OPERATION_VALUE_GE: LazyLock<Operation> = LazyLock::new(|| Operation::Ge(OPERAND_VALUE.clone()));
-    const OPERATION_VALUE_LT: LazyLock<Operation> = LazyLock::new(|| Operation::Lt(OPERAND_VALUE.clone()));
-    const OPERATION_VALUE_LE: LazyLock<Operation> = LazyLock::new(|| Operation::Le(OPERAND_VALUE.clone()));
-    const OPERATION_VALUE_BTWN: LazyLock<Operation> = LazyLock::new(|| Operation::Btwn(OPERAND_VALUE.clone(), OPERAND_VALUE_B.clone()));
+    static OPERATION_VALUE_EQ: LazyLock<Operation> = LazyLock::new(|| Operation::Eq(OPERAND_VALUE.clone()));
+    static OPERATION_VALUE_NE: LazyLock<Operation> = LazyLock::new(|| Operation::Ne(OPERAND_VALUE.clone()));
+    static OPERATION_VALUE_GT: LazyLock<Operation> = LazyLock::new(|| Operation::Gt(OPERAND_VALUE.clone()));
+    static OPERATION_VALUE_GE: LazyLock<Operation> = LazyLock::new(|| Operation::Ge(OPERAND_VALUE.clone()));
+    static OPERATION_VALUE_LT: LazyLock<Operation> = LazyLock::new(|| Operation::Lt(OPERAND_VALUE.clone()));
+    static OPERATION_VALUE_LE: LazyLock<Operation> = LazyLock::new(|| Operation::Le(OPERAND_VALUE.clone()));
+    static OPERATION_VALUE_BTWN: LazyLock<Operation> = LazyLock::new(|| Operation::Btwn(OPERAND_VALUE.clone(), OPERAND_VALUE_B.clone()));
 
     const FIELD: &str = "user.info.details.name.0";
     const FIELD_B: &str = "user.info.details.name.1";
 
-    const OPERAND_FIELD: LazyLock<Operand> = LazyLock::new(|| Operand::FieldPath(FIELD.into()));
-    const OPERAND_FIELD_B: LazyLock<Operand> = LazyLock::new(|| Operand::FieldPath(FIELD_B.into()));
+    static OPERAND_FIELD: LazyLock<Operand> = LazyLock::new(|| Operand::FieldPath(FIELD.into()));
+    static OPERAND_FIELD_B: LazyLock<Operand> = LazyLock::new(|| Operand::FieldPath(FIELD_B.into()));
 
-    const OPERATION_FIELD_EQ: LazyLock<Operation> = LazyLock::new(|| Operation::Eq(OPERAND_FIELD.clone()));
-    const OPERATION_FIELD_NE: LazyLock<Operation> = LazyLock::new(|| Operation::Ne(OPERAND_FIELD.clone()));
-    const OPERATION_FIELD_GT: LazyLock<Operation> = LazyLock::new(|| Operation::Gt(OPERAND_FIELD.clone()));
-    const OPERATION_FIELD_GE: LazyLock<Operation> = LazyLock::new(|| Operation::Ge(OPERAND_FIELD.clone()));
-    const OPERATION_FIELD_LT: LazyLock<Operation> = LazyLock::new(|| Operation::Lt(OPERAND_FIELD.clone()));
-    const OPERATION_FIELD_LE: LazyLock<Operation> = LazyLock::new(|| Operation::Le(OPERAND_FIELD.clone()));
-    const OPERATION_FIELD_BTWN: LazyLock<Operation> = LazyLock::new(|| Operation::Btwn(OPERAND_FIELD.clone(), OPERAND_FIELD_B.clone()));
+    static OPERATION_FIELD_EQ: LazyLock<Operation> = LazyLock::new(|| Operation::Eq(OPERAND_FIELD.clone()));
+    static OPERATION_FIELD_NE: LazyLock<Operation> = LazyLock::new(|| Operation::Ne(OPERAND_FIELD.clone()));
+    static OPERATION_FIELD_GT: LazyLock<Operation> = LazyLock::new(|| Operation::Gt(OPERAND_FIELD.clone()));
+    static OPERATION_FIELD_GE: LazyLock<Operation> = LazyLock::new(|| Operation::Ge(OPERAND_FIELD.clone()));
+    static OPERATION_FIELD_LT: LazyLock<Operation> = LazyLock::new(|| Operation::Lt(OPERAND_FIELD.clone()));
+    static OPERATION_FIELD_LE: LazyLock<Operation> = LazyLock::new(|| Operation::Le(OPERAND_FIELD.clone()));
+    static OPERATION_FIELD_BTWN: LazyLock<Operation> = LazyLock::new(|| Operation::Btwn(OPERAND_FIELD.clone(), OPERAND_FIELD_B.clone()));
 
     const VALUE_LEN: usize = 14;
     const VALUE_LEN_B: usize = 73;
 
-    const OPERAND_VALUE_LEN: LazyLock<Operand> = LazyLock::new(|| Operand::Value(OperandValue::USize(VALUE_LEN)));
-    const OPERAND_VALUE_LEN_B: LazyLock<Operand> = LazyLock::new(|| Operand::Value(OperandValue::USize(VALUE_LEN_B)));
+    static OPERAND_VALUE_LEN: LazyLock<Operand> = LazyLock::new(|| Operand::Value(OperandValue::USize(VALUE_LEN)));
+    static OPERAND_VALUE_LEN_B: LazyLock<Operand> = LazyLock::new(|| Operand::Value(OperandValue::USize(VALUE_LEN_B)));
 
-    const OPERATION_VALUE_LEN_EQ: LazyLock<Operation> = LazyLock::new(|| Operation::Eq(OPERAND_VALUE_LEN.clone()));
-    const OPERATION_VALUE_LEN_NE: LazyLock<Operation> = LazyLock::new(|| Operation::Ne(OPERAND_VALUE_LEN.clone()));
-    const OPERATION_VALUE_LEN_GT: LazyLock<Operation> = LazyLock::new(|| Operation::Gt(OPERAND_VALUE_LEN.clone()));
-    const OPERATION_VALUE_LEN_GE: LazyLock<Operation> = LazyLock::new(|| Operation::Ge(OPERAND_VALUE_LEN.clone()));
-    const OPERATION_VALUE_LEN_LT: LazyLock<Operation> = LazyLock::new(|| Operation::Lt(OPERAND_VALUE_LEN.clone()));
-    const OPERATION_VALUE_LEN_LE: LazyLock<Operation> = LazyLock::new(|| Operation::Le(OPERAND_VALUE_LEN.clone()));
-    const OPERATION_VALUE_LEN_BTWN: LazyLock<Operation> = LazyLock::new(|| Operation::Btwn(OPERAND_VALUE_LEN.clone(), OPERAND_VALUE_LEN_B.clone()));
+    static OPERATION_VALUE_LEN_EQ: LazyLock<Operation> = LazyLock::new(|| Operation::Eq(OPERAND_VALUE_LEN.clone()));
+    static OPERATION_VALUE_LEN_NE: LazyLock<Operation> = LazyLock::new(|| Operation::Ne(OPERAND_VALUE_LEN.clone()));
+    static OPERATION_VALUE_LEN_GT: LazyLock<Operation> = LazyLock::new(|| Operation::Gt(OPERAND_VALUE_LEN.clone()));
+    static OPERATION_VALUE_LEN_GE: LazyLock<Operation> = LazyLock::new(|| Operation::Ge(OPERAND_VALUE_LEN.clone()));
+    static OPERATION_VALUE_LEN_LT: LazyLock<Operation> = LazyLock::new(|| Operation::Lt(OPERAND_VALUE_LEN.clone()));
+    static OPERATION_VALUE_LEN_LE: LazyLock<Operation> = LazyLock::new(|| Operation::Le(OPERAND_VALUE_LEN.clone()));
+    static OPERATION_VALUE_LEN_BTWN: LazyLock<Operation> = LazyLock::new(|| Operation::Btwn(OPERAND_VALUE_LEN.clone(), OPERAND_VALUE_LEN_B.clone()));
 
     const FIELD_LEN: &str = "user.info.clothes.shoesize.min";
     const FIELD_LEN_B: &str = "user.info.clothes.shoesize.min";
 
-    const OPERAND_FIELD_LEN: LazyLock<Operand> = LazyLock::new(|| Operand::FieldPath(FIELD_LEN.into()));
-    const OPERAND_FIELD_LEN_B: LazyLock<Operand> = LazyLock::new(|| Operand::FieldPath(FIELD_LEN_B.into()));
+    static OPERAND_FIELD_LEN: LazyLock<Operand> = LazyLock::new(|| Operand::FieldPath(FIELD_LEN.into()));
+    static OPERAND_FIELD_LEN_B: LazyLock<Operand> = LazyLock::new(|| Operand::FieldPath(FIELD_LEN_B.into()));
 
-    const OPERATION_FIELD_LEN_EQ: LazyLock<Operation> = LazyLock::new(|| Operation::Eq(OPERAND_FIELD_LEN.clone()));
-    const OPERATION_FIELD_LEN_NE: LazyLock<Operation> = LazyLock::new(|| Operation::Ne(OPERAND_FIELD_LEN.clone()));
-    const OPERATION_FIELD_LEN_GT: LazyLock<Operation> = LazyLock::new(|| Operation::Gt(OPERAND_FIELD_LEN.clone()));
-    const OPERATION_FIELD_LEN_GE: LazyLock<Operation> = LazyLock::new(|| Operation::Ge(OPERAND_FIELD_LEN.clone()));
-    const OPERATION_FIELD_LEN_LT: LazyLock<Operation> = LazyLock::new(|| Operation::Lt(OPERAND_FIELD_LEN.clone()));
-    const OPERATION_FIELD_LEN_LE: LazyLock<Operation> = LazyLock::new(|| Operation::Le(OPERAND_FIELD_LEN.clone()));
-    const OPERATION_FIELD_LEN_BTWN: LazyLock<Operation> = LazyLock::new(|| Operation::Btwn(OPERAND_FIELD_LEN.clone(), OPERAND_FIELD_LEN_B.clone()));
+    static OPERATION_FIELD_LEN_EQ: LazyLock<Operation> = LazyLock::new(|| Operation::Eq(OPERAND_FIELD_LEN.clone()));
+    static OPERATION_FIELD_LEN_NE: LazyLock<Operation> = LazyLock::new(|| Operation::Ne(OPERAND_FIELD_LEN.clone()));
+    static OPERATION_FIELD_LEN_GT: LazyLock<Operation> = LazyLock::new(|| Operation::Gt(OPERAND_FIELD_LEN.clone()));
+    static OPERATION_FIELD_LEN_GE: LazyLock<Operation> = LazyLock::new(|| Operation::Ge(OPERAND_FIELD_LEN.clone()));
+    static OPERATION_FIELD_LEN_LT: LazyLock<Operation> = LazyLock::new(|| Operation::Lt(OPERAND_FIELD_LEN.clone()));
+    static OPERATION_FIELD_LEN_LE: LazyLock<Operation> = LazyLock::new(|| Operation::Le(OPERAND_FIELD_LEN.clone()));
+    static OPERATION_FIELD_LEN_BTWN: LazyLock<Operation> = LazyLock::new(|| Operation::Btwn(OPERAND_FIELD_LEN.clone(), OPERAND_FIELD_LEN_B.clone()));
 
     #[test]
     fn str_schema() {

@@ -151,11 +151,11 @@ mod tests {
 
     #[test]
     fn enum_values_from() {
-        assert_eq!(EnumValues::from(SLICE_U.clone()), EnumValues::USize(VEC_U.clone()));
+        assert_eq!(EnumValues::from(SLICE_U), EnumValues::USize(VEC_U.clone()));
         assert_eq!(EnumValues::from(VEC_U.clone()), EnumValues::USize(VEC_U.clone()));
-        assert_eq!(EnumValues::from(SLICE_I.clone()), EnumValues::ISize(VEC_I.clone()));
+        assert_eq!(EnumValues::from(SLICE_I), EnumValues::ISize(VEC_I.clone()));
         assert_eq!(EnumValues::from(VEC_I.clone()), EnumValues::ISize(VEC_I.clone()));
-        assert_eq!(EnumValues::from(SLICE_STR.clone()), EnumValues::Str(VEC_STRING.clone()));
+        assert_eq!(EnumValues::from(SLICE_STR), EnumValues::Str(VEC_STRING.clone()));
         assert_eq!(EnumValues::from(VEC_STR.clone()), EnumValues::Str(VEC_STRING.clone()));
         assert_eq!(EnumValues::from(SLICE_STRING.clone()), EnumValues::Str(VEC_STRING.clone()));
         assert_eq!(EnumValues::from(VEC_STRING.clone()), EnumValues::Str(VEC_STRING.clone()));
@@ -170,11 +170,11 @@ mod tests {
 
     #[test]
     fn enum_schema_from() {
-        assert_eq!(EnumSchema::from(SLICE_U.clone()), EnumSchema { required: true, values: EnumValues::USize(VEC_U.clone()) });
+        assert_eq!(EnumSchema::from(SLICE_U), EnumSchema { required: true, values: EnumValues::USize(VEC_U.clone()) });
         assert_eq!(EnumSchema::from(VEC_U.clone()), EnumSchema { required: true, values: EnumValues::USize(VEC_U.clone()) });
-        assert_eq!(EnumSchema::from(SLICE_I.clone()), EnumSchema { required: true, values: EnumValues::ISize(VEC_I.clone()) });
+        assert_eq!(EnumSchema::from(SLICE_I), EnumSchema { required: true, values: EnumValues::ISize(VEC_I.clone()) });
         assert_eq!(EnumSchema::from(VEC_I.clone()), EnumSchema { required: true, values: EnumValues::ISize(VEC_I.clone()) });
-        assert_eq!(EnumSchema::from(SLICE_STR.clone()), EnumSchema { required: true, values: EnumValues::Str(VEC_STRING.clone()) });
+        assert_eq!(EnumSchema::from(SLICE_STR), EnumSchema { required: true, values: EnumValues::Str(VEC_STRING.clone()) });
         assert_eq!(EnumSchema::from(VEC_STR.clone()), EnumSchema { required: true, values: EnumValues::Str(VEC_STRING.clone()) });
         assert_eq!(EnumSchema::from(SLICE_STRING.clone()), EnumSchema { required: true, values: EnumValues::Str(VEC_STRING.clone()) });
         assert_eq!(EnumSchema::from(VEC_STRING.clone()), EnumSchema { required: true, values: EnumValues::Str(VEC_STRING.clone()) });
@@ -182,8 +182,6 @@ mod tests {
 
     #[test]
     fn enum_schema_optional() {
-        let slice_str: [&str; 3] = ["APPLE", "GRAPE", "PEAR"];
-        let vec_str: Vec<String> = vec!["APPLE".into(), "GRAPE".into(), "PEAR".into()];
-        assert_eq!(EnumSchema::from(slice_str).optional(), EnumSchema { required: false, values: EnumValues::Str(vec_str) });
+        assert_eq!(EnumSchema::from(SLICE_STR).optional(), EnumSchema { required: false, values: EnumValues::Str(VEC_STRING.clone()) });
     }
 }
