@@ -17,36 +17,36 @@ araucaria = { git = "https://github.com/joao-arthur/araucaria", rev = "0cc2ef275
 ```rust
 use std::{collections::BTreeMap, sync::LazyLock};
 
-use araucaria::validation::{
-    DateValidation,
-    EmailValidation,
-    StrValidation,
-    ObjValidation,
-    Validation
+use araucaria::schema::{
+    DateSchema,
+    EmailSchema,
+    StrSchema,
+    ObjSchema,
+    Schema
 };
 
-pub static CREATE_USER_SCHEMA: LazyLock<Validation> = LazyLock::new(|| {
-    Validation::from(ObjValidation::from([
+pub static CREATE_USER_SCHEMA: LazyLock<Schema> = LazyLock::new(|| {
+    Schema::from(ObjSchema::from([
         (
             "first_name".into(),
-            Validation::from(StrValidation::default().chars_len_btwn(1, 256))
+            Schema::from(StrSchema::default().chars_len_btwn(1, 256))
         ),
         (
             "birthdate".into(),
-            Validation::from(DateValidation::default().unix_epoch())
+            Schema::from(DateSchema::default().unix_epoch())
         ),
         (
             "email".into(),
-            Validation::from(EmailValidation::default())
+            Schema::from(EmailSchema::default())
         ),
         (
             "username".into(),
-            Validation::from(StrValidation::default().chars_len_btwn(1, 64))
+            Schema::from(StrSchema::default().chars_len_btwn(1, 64))
         ),
         (
             "password".into(),
-            Validation::from(
-                StrValidation::default()
+            Schema::from(
+                StrSchema::default()
                     .chars_len_btwn(1, 64)
                     .uppercase_len_gt(1)
                     .lowercase_len_gt(1)
@@ -66,22 +66,22 @@ use std::{collections::BTreeMap, sync::LazyLock};
 
 use araucaria::{
     operation::{Operand, OperandValue, Operation},
-    validation::{
-        DateValidation,
-        EmailValidation,
-        ObjValidation,
-        StrValidation,
-        Validation
+    schema::{
+        DateSchema,
+        EmailSchema,
+        ObjSchema,
+        StrSchema,
+        Schema
     }
 };
 
-pub static CREATE_USER_SCHEMA: LazyLock<Validation> = LazyLock::new(|| {
-    Validation::Obj(ObjValidation {
+pub static CREATE_USER_SCHEMA: LazyLock<Schema> = LazyLock::new(|| {
+    Schema::Obj(ObjSchema {
         required: true,
         validation: BTreeMap::from([
             (
                 "first_name".into(),
-                Validation::Str(StrValidation {
+                Schema::Str(StrSchema {
                     required: true,
                     operation: None,
                     bytes_len: None,
@@ -98,7 +98,7 @@ pub static CREATE_USER_SCHEMA: LazyLock<Validation> = LazyLock::new(|| {
             ),
             (
                 "birthdate".into(),
-                Validation::Date(DateValidation {
+                Schema::Date(DateSchema {
                     required: true,
                     operation: Some(Operation::Gt(
                         Operand::Value(OperandValue::from("2028-07-22")))
@@ -107,11 +107,11 @@ pub static CREATE_USER_SCHEMA: LazyLock<Validation> = LazyLock::new(|| {
             ),
             (
                 "email".into(),
-                Validation::Email(EmailValidation { required: true })
+                Schema::Email(EmailSchema { required: true })
             ),
             (
                 "username".into(),
-                Validation::Str(StrValidation {
+                Schema::Str(StrSchema {
                     required: true,
                     operation: None,
                     bytes_len: None,
@@ -128,7 +128,7 @@ pub static CREATE_USER_SCHEMA: LazyLock<Validation> = LazyLock::new(|| {
             ),
             (
                 "password".into(),
-                Validation::Str(StrValidation {
+                Schema::Str(StrSchema {
                     required: true,
                     operation: None,
                     bytes_len: None,
