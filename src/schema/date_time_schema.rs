@@ -1,83 +1,83 @@
 use crate::operation::{Operand, OperandValue, Operation};
 
 #[derive(Debug, PartialEq, Clone)]
-pub struct DateTimeValidation {
+pub struct DateTimeSchema {
     pub required: bool,
     pub operation: Option<Operation>,
 }
 
-impl Default for DateTimeValidation {
+impl Default for DateTimeSchema {
     fn default() -> Self {
-        DateTimeValidation { required: true, operation: None }
+        DateTimeSchema { required: true, operation: None }
     }
 }
 
-impl DateTimeValidation {
+impl DateTimeSchema {
     pub fn optional(self) -> Self {
-        DateTimeValidation { required: false, ..self }
+        DateTimeSchema { required: false, ..self }
     }
 
     pub fn eq(self, value: String) -> Self {
-        DateTimeValidation { operation: Some(Operation::Eq(Operand::Value(OperandValue::Str(value)))), ..self }
+        DateTimeSchema { operation: Some(Operation::Eq(Operand::Value(OperandValue::Str(value)))), ..self }
     }
 
     pub fn ne(self, value: String) -> Self {
-        DateTimeValidation { operation: Some(Operation::Ne(Operand::Value(OperandValue::Str(value)))), ..self }
+        DateTimeSchema { operation: Some(Operation::Ne(Operand::Value(OperandValue::Str(value)))), ..self }
     }
 
     pub fn gt(self, value: String) -> Self {
-        DateTimeValidation { operation: Some(Operation::Gt(Operand::Value(OperandValue::Str(value)))), ..self }
+        DateTimeSchema { operation: Some(Operation::Gt(Operand::Value(OperandValue::Str(value)))), ..self }
     }
 
     pub fn ge(self, value: String) -> Self {
-        DateTimeValidation { operation: Some(Operation::Ge(Operand::Value(OperandValue::Str(value)))), ..self }
+        DateTimeSchema { operation: Some(Operation::Ge(Operand::Value(OperandValue::Str(value)))), ..self }
     }
 
     pub fn lt(self, value: String) -> Self {
-        DateTimeValidation { operation: Some(Operation::Lt(Operand::Value(OperandValue::Str(value)))), ..self }
+        DateTimeSchema { operation: Some(Operation::Lt(Operand::Value(OperandValue::Str(value)))), ..self }
     }
 
     pub fn le(self, value: String) -> Self {
-        DateTimeValidation { operation: Some(Operation::Le(Operand::Value(OperandValue::Str(value)))), ..self }
+        DateTimeSchema { operation: Some(Operation::Le(Operand::Value(OperandValue::Str(value)))), ..self }
     }
 
     pub fn btwn(self, value_a: String, value_b: String) -> Self {
-        DateTimeValidation {
+        DateTimeSchema {
             operation: Some(Operation::Btwn(Operand::Value(OperandValue::Str(value_a)), Operand::Value(OperandValue::Str(value_b)))),
             ..self
         }
     }
 
     pub fn eq_field(self, field: String) -> Self {
-        DateTimeValidation { operation: Some(Operation::Eq(Operand::FieldPath(field))), ..self }
+        DateTimeSchema { operation: Some(Operation::Eq(Operand::FieldPath(field))), ..self }
     }
 
     pub fn ne_field(self, field: String) -> Self {
-        DateTimeValidation { operation: Some(Operation::Ne(Operand::FieldPath(field))), ..self }
+        DateTimeSchema { operation: Some(Operation::Ne(Operand::FieldPath(field))), ..self }
     }
 
     pub fn gt_field(self, field: String) -> Self {
-        DateTimeValidation { operation: Some(Operation::Gt(Operand::FieldPath(field))), ..self }
+        DateTimeSchema { operation: Some(Operation::Gt(Operand::FieldPath(field))), ..self }
     }
 
     pub fn ge_field(self, field: String) -> Self {
-        DateTimeValidation { operation: Some(Operation::Ge(Operand::FieldPath(field))), ..self }
+        DateTimeSchema { operation: Some(Operation::Ge(Operand::FieldPath(field))), ..self }
     }
 
     pub fn lt_field(self, field: String) -> Self {
-        DateTimeValidation { operation: Some(Operation::Lt(Operand::FieldPath(field))), ..self }
+        DateTimeSchema { operation: Some(Operation::Lt(Operand::FieldPath(field))), ..self }
     }
 
     pub fn le_field(self, field: String) -> Self {
-        DateTimeValidation { operation: Some(Operation::Le(Operand::FieldPath(field))), ..self }
+        DateTimeSchema { operation: Some(Operation::Le(Operand::FieldPath(field))), ..self }
     }
 
     pub fn btwn_field(self, field_a: String, field_b: String) -> Self {
-        DateTimeValidation { operation: Some(Operation::Btwn(Operand::FieldPath(field_a), Operand::FieldPath(field_b))), ..self }
+        DateTimeSchema { operation: Some(Operation::Btwn(Operand::FieldPath(field_a), Operand::FieldPath(field_b))), ..self }
     }
 
     pub fn unix_epoch(self) -> Self {
-        DateTimeValidation { operation: Some(Operation::Ge(Operand::Value(OperandValue::Str("1970-01-01T00:00Z".into())))), ..self }
+        DateTimeSchema { operation: Some(Operation::Ge(Operand::Value(OperandValue::Str("1970-01-01T00:00Z".into())))), ..self }
     }
 }
 
@@ -87,7 +87,7 @@ mod tests {
 
     use crate::operation::{Operand, OperandValue, Operation};
 
-    use super::DateTimeValidation;
+    use super::DateTimeSchema;
 
     const VALUE: &str = "2027-08-02T10:27Z";
     const VALUE_B: &str = "2030-11-25T03:01Z";
@@ -118,52 +118,52 @@ mod tests {
     const OPERATION_FIELD_BTWN: LazyLock<Operation> = LazyLock::new(|| Operation::Btwn(OPERAND_FIELD.clone(), OPERAND_FIELD_B.clone()));
 
     #[test]
-    fn date_time_validation() {
-        assert_eq!(DateTimeValidation::default(), DateTimeValidation { required: true, operation: None });
-        assert_eq!(DateTimeValidation::default().optional(), DateTimeValidation { required: false, operation: None });
+    fn date_time_schema() {
+        assert_eq!(DateTimeSchema::default(), DateTimeSchema { required: true, operation: None });
+        assert_eq!(DateTimeSchema::default().optional(), DateTimeSchema { required: false, operation: None });
     }
 
     #[test]
-    fn date_time_validation_operation_value() {
-        let validation_eq = DateTimeValidation::default().eq(VALUE.into());
-        let validation_ne = DateTimeValidation::default().ne(VALUE.into());
-        let validation_gt = DateTimeValidation::default().gt(VALUE.into());
-        let validation_ge = DateTimeValidation::default().ge(VALUE.into());
-        let validation_lt = DateTimeValidation::default().lt(VALUE.into());
-        let validation_le = DateTimeValidation::default().le(VALUE.into());
-        let validation_btwn = DateTimeValidation::default().btwn(VALUE.into(), VALUE_B.into());
-        assert_eq!(validation_eq, DateTimeValidation { required: true, operation: Some(OPERATION_VALUE_EQ.clone()) });
-        assert_eq!(validation_ne, DateTimeValidation { required: true, operation: Some(OPERATION_VALUE_NE.clone()) });
-        assert_eq!(validation_gt, DateTimeValidation { required: true, operation: Some(OPERATION_VALUE_GT.clone()) });
-        assert_eq!(validation_ge, DateTimeValidation { required: true, operation: Some(OPERATION_VALUE_GE.clone()) });
-        assert_eq!(validation_lt, DateTimeValidation { required: true, operation: Some(OPERATION_VALUE_LT.clone()) });
-        assert_eq!(validation_le, DateTimeValidation { required: true, operation: Some(OPERATION_VALUE_LE.clone()) });
-        assert_eq!(validation_btwn, DateTimeValidation { required: true, operation: Some(OPERATION_VALUE_BTWN.clone()) });
+    fn date_time_schema_operation_value() {
+        let validation_eq = DateTimeSchema::default().eq(VALUE.into());
+        let validation_ne = DateTimeSchema::default().ne(VALUE.into());
+        let validation_gt = DateTimeSchema::default().gt(VALUE.into());
+        let validation_ge = DateTimeSchema::default().ge(VALUE.into());
+        let validation_lt = DateTimeSchema::default().lt(VALUE.into());
+        let validation_le = DateTimeSchema::default().le(VALUE.into());
+        let validation_btwn = DateTimeSchema::default().btwn(VALUE.into(), VALUE_B.into());
+        assert_eq!(validation_eq, DateTimeSchema { required: true, operation: Some(OPERATION_VALUE_EQ.clone()) });
+        assert_eq!(validation_ne, DateTimeSchema { required: true, operation: Some(OPERATION_VALUE_NE.clone()) });
+        assert_eq!(validation_gt, DateTimeSchema { required: true, operation: Some(OPERATION_VALUE_GT.clone()) });
+        assert_eq!(validation_ge, DateTimeSchema { required: true, operation: Some(OPERATION_VALUE_GE.clone()) });
+        assert_eq!(validation_lt, DateTimeSchema { required: true, operation: Some(OPERATION_VALUE_LT.clone()) });
+        assert_eq!(validation_le, DateTimeSchema { required: true, operation: Some(OPERATION_VALUE_LE.clone()) });
+        assert_eq!(validation_btwn, DateTimeSchema { required: true, operation: Some(OPERATION_VALUE_BTWN.clone()) });
     }
 
     #[test]
-    fn date_time_validation_operation_field() {
-        let validation_eq = DateTimeValidation::default().eq_field(FIELD.into());
-        let validation_ne = DateTimeValidation::default().ne_field(FIELD.into());
-        let validation_gt = DateTimeValidation::default().gt_field(FIELD.into());
-        let validation_ge = DateTimeValidation::default().ge_field(FIELD.into());
-        let validation_lt = DateTimeValidation::default().lt_field(FIELD.into());
-        let validation_le = DateTimeValidation::default().le_field(FIELD.into());
-        let validation_btwn = DateTimeValidation::default().btwn_field(FIELD.into(), FIELD_B.into());
-        assert_eq!(validation_eq, DateTimeValidation { required: true, operation: Some(OPERATION_FIELD_EQ.clone()) });
-        assert_eq!(validation_ne, DateTimeValidation { required: true, operation: Some(OPERATION_FIELD_NE.clone()) });
-        assert_eq!(validation_gt, DateTimeValidation { required: true, operation: Some(OPERATION_FIELD_GT.clone()) });
-        assert_eq!(validation_ge, DateTimeValidation { required: true, operation: Some(OPERATION_FIELD_GE.clone()) });
-        assert_eq!(validation_lt, DateTimeValidation { required: true, operation: Some(OPERATION_FIELD_LT.clone()) });
-        assert_eq!(validation_le, DateTimeValidation { required: true, operation: Some(OPERATION_FIELD_LE.clone()) });
-        assert_eq!(validation_btwn, DateTimeValidation { required: true, operation: Some(OPERATION_FIELD_BTWN.clone()) });
+    fn date_time_schema_operation_field() {
+        let validation_eq = DateTimeSchema::default().eq_field(FIELD.into());
+        let validation_ne = DateTimeSchema::default().ne_field(FIELD.into());
+        let validation_gt = DateTimeSchema::default().gt_field(FIELD.into());
+        let validation_ge = DateTimeSchema::default().ge_field(FIELD.into());
+        let validation_lt = DateTimeSchema::default().lt_field(FIELD.into());
+        let validation_le = DateTimeSchema::default().le_field(FIELD.into());
+        let validation_btwn = DateTimeSchema::default().btwn_field(FIELD.into(), FIELD_B.into());
+        assert_eq!(validation_eq, DateTimeSchema { required: true, operation: Some(OPERATION_FIELD_EQ.clone()) });
+        assert_eq!(validation_ne, DateTimeSchema { required: true, operation: Some(OPERATION_FIELD_NE.clone()) });
+        assert_eq!(validation_gt, DateTimeSchema { required: true, operation: Some(OPERATION_FIELD_GT.clone()) });
+        assert_eq!(validation_ge, DateTimeSchema { required: true, operation: Some(OPERATION_FIELD_GE.clone()) });
+        assert_eq!(validation_lt, DateTimeSchema { required: true, operation: Some(OPERATION_FIELD_LT.clone()) });
+        assert_eq!(validation_le, DateTimeSchema { required: true, operation: Some(OPERATION_FIELD_LE.clone()) });
+        assert_eq!(validation_btwn, DateTimeSchema { required: true, operation: Some(OPERATION_FIELD_BTWN.clone()) });
     }
 
     #[test]
-    fn date_time_validation_unix_epoch() {
+    fn date_time_schema_unix_epoch() {
         assert_eq!(
-            DateTimeValidation::default().unix_epoch(),
-            DateTimeValidation { required: true, operation: Some(Operation::Ge(Operand::Value(OperandValue::Str("1970-01-01T00:00Z".into())))) }
+            DateTimeSchema::default().unix_epoch(),
+            DateTimeSchema { required: true, operation: Some(Operation::Ge(Operand::Value(OperandValue::Str("1970-01-01T00:00Z".into())))) }
         );
     }
 }

@@ -1,79 +1,79 @@
 use crate::operation::{Operand, OperandValue, Operation};
 
 #[derive(Debug, PartialEq, Clone)]
-pub struct TimeValidation {
+pub struct TimeSchema {
     pub required: bool,
     pub operation: Option<Operation>,
 }
 
-impl Default for TimeValidation {
+impl Default for TimeSchema {
     fn default() -> Self {
-        TimeValidation { required: true, operation: None }
+        TimeSchema { required: true, operation: None }
     }
 }
 
-impl TimeValidation {
+impl TimeSchema {
     pub fn optional(self) -> Self {
-        TimeValidation { required: false, ..self }
+        TimeSchema { required: false, ..self }
     }
 
     pub fn eq(self, value: String) -> Self {
-        TimeValidation { operation: Some(Operation::Eq(Operand::Value(OperandValue::Str(value)))), ..self }
+        TimeSchema { operation: Some(Operation::Eq(Operand::Value(OperandValue::Str(value)))), ..self }
     }
 
     pub fn ne(self, value: String) -> Self {
-        TimeValidation { operation: Some(Operation::Ne(Operand::Value(OperandValue::Str(value)))), ..self }
+        TimeSchema { operation: Some(Operation::Ne(Operand::Value(OperandValue::Str(value)))), ..self }
     }
 
     pub fn gt(self, value: String) -> Self {
-        TimeValidation { operation: Some(Operation::Gt(Operand::Value(OperandValue::Str(value)))), ..self }
+        TimeSchema { operation: Some(Operation::Gt(Operand::Value(OperandValue::Str(value)))), ..self }
     }
 
     pub fn ge(self, value: String) -> Self {
-        TimeValidation { operation: Some(Operation::Ge(Operand::Value(OperandValue::Str(value)))), ..self }
+        TimeSchema { operation: Some(Operation::Ge(Operand::Value(OperandValue::Str(value)))), ..self }
     }
 
     pub fn lt(self, value: String) -> Self {
-        TimeValidation { operation: Some(Operation::Lt(Operand::Value(OperandValue::Str(value)))), ..self }
+        TimeSchema { operation: Some(Operation::Lt(Operand::Value(OperandValue::Str(value)))), ..self }
     }
 
     pub fn le(self, value: String) -> Self {
-        TimeValidation { operation: Some(Operation::Le(Operand::Value(OperandValue::Str(value)))), ..self }
+        TimeSchema { operation: Some(Operation::Le(Operand::Value(OperandValue::Str(value)))), ..self }
     }
 
     pub fn btwn(self, value_a: String, value_b: String) -> Self {
-        TimeValidation {
+        TimeSchema {
             operation: Some(Operation::Btwn(Operand::Value(OperandValue::Str(value_a)), Operand::Value(OperandValue::Str(value_b)))),
             ..self
         }
     }
 
     pub fn eq_field(self, field: String) -> Self {
-        TimeValidation { operation: Some(Operation::Eq(Operand::FieldPath(field))), ..self }
+        TimeSchema { operation: Some(Operation::Eq(Operand::FieldPath(field))), ..self }
     }
 
     pub fn ne_field(self, field: String) -> Self {
-        TimeValidation { operation: Some(Operation::Ne(Operand::FieldPath(field))), ..self }
+        TimeSchema { operation: Some(Operation::Ne(Operand::FieldPath(field))), ..self }
     }
 
     pub fn gt_field(self, field: String) -> Self {
-        TimeValidation { operation: Some(Operation::Gt(Operand::FieldPath(field))), ..self }
+        TimeSchema { operation: Some(Operation::Gt(Operand::FieldPath(field))), ..self }
     }
 
     pub fn ge_field(self, field: String) -> Self {
-        TimeValidation { operation: Some(Operation::Ge(Operand::FieldPath(field))), ..self }
+        TimeSchema { operation: Some(Operation::Ge(Operand::FieldPath(field))), ..self }
     }
 
     pub fn lt_field(self, field: String) -> Self {
-        TimeValidation { operation: Some(Operation::Lt(Operand::FieldPath(field))), ..self }
+        TimeSchema { operation: Some(Operation::Lt(Operand::FieldPath(field))), ..self }
     }
 
     pub fn le_field(self, field: String) -> Self {
-        TimeValidation { operation: Some(Operation::Le(Operand::FieldPath(field))), ..self }
+        TimeSchema { operation: Some(Operation::Le(Operand::FieldPath(field))), ..self }
     }
 
     pub fn btwn_field(self, field_a: String, field_b: String) -> Self {
-        TimeValidation { operation: Some(Operation::Btwn(Operand::FieldPath(field_a), Operand::FieldPath(field_b))), ..self }
+        TimeSchema { operation: Some(Operation::Btwn(Operand::FieldPath(field_a), Operand::FieldPath(field_b))), ..self }
     }
 }
 
@@ -83,7 +83,7 @@ mod tests {
 
     use crate::operation::{Operand, OperandValue, Operation};
 
-    use super::TimeValidation;
+    use super::TimeSchema;
 
     const VALUE: &str = "10:27";
     const VALUE_B: &str = "19:41";
@@ -114,44 +114,44 @@ mod tests {
     const OPERATION_FIELD_BTWN: LazyLock<Operation> = LazyLock::new(|| Operation::Btwn(OPERAND_FIELD.clone(), OPERAND_FIELD_B.clone()));
 
     #[test]
-    fn time_validation() {
-        assert_eq!(TimeValidation::default(), TimeValidation { required: true, operation: None });
-        assert_eq!(TimeValidation::default().optional(), TimeValidation { required: false, operation: None });
+    fn time_schema() {
+        assert_eq!(TimeSchema::default(), TimeSchema { required: true, operation: None });
+        assert_eq!(TimeSchema::default().optional(), TimeSchema { required: false, operation: None });
     }
 
     #[test]
-    fn time_validation_operation_value() {
-        let validation_eq = TimeValidation::default().eq(VALUE.into());
-        let validation_ne = TimeValidation::default().ne(VALUE.into());
-        let validation_gt = TimeValidation::default().gt(VALUE.into());
-        let validation_ge = TimeValidation::default().ge(VALUE.into());
-        let validation_lt = TimeValidation::default().lt(VALUE.into());
-        let validation_le = TimeValidation::default().le(VALUE.into());
-        let validation_btwn = TimeValidation::default().btwn(VALUE.into(), VALUE_B.into());
-        assert_eq!(validation_eq, TimeValidation { required: true, operation: Some(OPERATION_VALUE_EQ.clone()) });
-        assert_eq!(validation_ne, TimeValidation { required: true, operation: Some(OPERATION_VALUE_NE.clone()) });
-        assert_eq!(validation_gt, TimeValidation { required: true, operation: Some(OPERATION_VALUE_GT.clone()) });
-        assert_eq!(validation_ge, TimeValidation { required: true, operation: Some(OPERATION_VALUE_GE.clone()) });
-        assert_eq!(validation_lt, TimeValidation { required: true, operation: Some(OPERATION_VALUE_LT.clone()) });
-        assert_eq!(validation_le, TimeValidation { required: true, operation: Some(OPERATION_VALUE_LE.clone()) });
-        assert_eq!(validation_btwn, TimeValidation { required: true, operation: Some(OPERATION_VALUE_BTWN.clone()) });
+    fn time_schema_operation_value() {
+        let validation_eq = TimeSchema::default().eq(VALUE.into());
+        let validation_ne = TimeSchema::default().ne(VALUE.into());
+        let validation_gt = TimeSchema::default().gt(VALUE.into());
+        let validation_ge = TimeSchema::default().ge(VALUE.into());
+        let validation_lt = TimeSchema::default().lt(VALUE.into());
+        let validation_le = TimeSchema::default().le(VALUE.into());
+        let validation_btwn = TimeSchema::default().btwn(VALUE.into(), VALUE_B.into());
+        assert_eq!(validation_eq, TimeSchema { required: true, operation: Some(OPERATION_VALUE_EQ.clone()) });
+        assert_eq!(validation_ne, TimeSchema { required: true, operation: Some(OPERATION_VALUE_NE.clone()) });
+        assert_eq!(validation_gt, TimeSchema { required: true, operation: Some(OPERATION_VALUE_GT.clone()) });
+        assert_eq!(validation_ge, TimeSchema { required: true, operation: Some(OPERATION_VALUE_GE.clone()) });
+        assert_eq!(validation_lt, TimeSchema { required: true, operation: Some(OPERATION_VALUE_LT.clone()) });
+        assert_eq!(validation_le, TimeSchema { required: true, operation: Some(OPERATION_VALUE_LE.clone()) });
+        assert_eq!(validation_btwn, TimeSchema { required: true, operation: Some(OPERATION_VALUE_BTWN.clone()) });
     }
 
     #[test]
-    fn time_validation_operation_field() {
-        let validation_eq = TimeValidation::default().eq_field(FIELD.into());
-        let validation_ne = TimeValidation::default().ne_field(FIELD.into());
-        let validation_gt = TimeValidation::default().gt_field(FIELD.into());
-        let validation_ge = TimeValidation::default().ge_field(FIELD.into());
-        let validation_lt = TimeValidation::default().lt_field(FIELD.into());
-        let validation_le = TimeValidation::default().le_field(FIELD.into());
-        let validation_btwn = TimeValidation::default().btwn_field(FIELD.into(), FIELD_B.into());
-        assert_eq!(validation_eq, TimeValidation { required: true, operation: Some(OPERATION_FIELD_EQ.clone()) });
-        assert_eq!(validation_ne, TimeValidation { required: true, operation: Some(OPERATION_FIELD_NE.clone()) });
-        assert_eq!(validation_gt, TimeValidation { required: true, operation: Some(OPERATION_FIELD_GT.clone()) });
-        assert_eq!(validation_ge, TimeValidation { required: true, operation: Some(OPERATION_FIELD_GE.clone()) });
-        assert_eq!(validation_lt, TimeValidation { required: true, operation: Some(OPERATION_FIELD_LT.clone()) });
-        assert_eq!(validation_le, TimeValidation { required: true, operation: Some(OPERATION_FIELD_LE.clone()) });
-        assert_eq!(validation_btwn, TimeValidation { required: true, operation: Some(OPERATION_FIELD_BTWN.clone()) });
+    fn time_schema_operation_field() {
+        let validation_eq = TimeSchema::default().eq_field(FIELD.into());
+        let validation_ne = TimeSchema::default().ne_field(FIELD.into());
+        let validation_gt = TimeSchema::default().gt_field(FIELD.into());
+        let validation_ge = TimeSchema::default().ge_field(FIELD.into());
+        let validation_lt = TimeSchema::default().lt_field(FIELD.into());
+        let validation_le = TimeSchema::default().le_field(FIELD.into());
+        let validation_btwn = TimeSchema::default().btwn_field(FIELD.into(), FIELD_B.into());
+        assert_eq!(validation_eq, TimeSchema { required: true, operation: Some(OPERATION_FIELD_EQ.clone()) });
+        assert_eq!(validation_ne, TimeSchema { required: true, operation: Some(OPERATION_FIELD_NE.clone()) });
+        assert_eq!(validation_gt, TimeSchema { required: true, operation: Some(OPERATION_FIELD_GT.clone()) });
+        assert_eq!(validation_ge, TimeSchema { required: true, operation: Some(OPERATION_FIELD_GE.clone()) });
+        assert_eq!(validation_lt, TimeSchema { required: true, operation: Some(OPERATION_FIELD_LT.clone()) });
+        assert_eq!(validation_le, TimeSchema { required: true, operation: Some(OPERATION_FIELD_LE.clone()) });
+        assert_eq!(validation_btwn, TimeSchema { required: true, operation: Some(OPERATION_FIELD_BTWN.clone()) });
     }
 }

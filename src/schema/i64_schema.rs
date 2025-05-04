@@ -1,79 +1,79 @@
 use crate::operation::{Operand, OperandValue, Operation};
 
 #[derive(Debug, PartialEq, Clone)]
-pub struct I64Validation {
+pub struct I64Schema {
     pub required: bool,
     pub operation: Option<Operation>,
 }
 
-impl Default for I64Validation {
+impl Default for I64Schema {
     fn default() -> Self {
-        I64Validation { required: true, operation: None }
+        I64Schema { required: true, operation: None }
     }
 }
 
-impl I64Validation {
+impl I64Schema {
     pub fn optional(self) -> Self {
-        I64Validation { required: false, ..self }
+        I64Schema { required: false, ..self }
     }
 
     pub fn eq(self, value: i64) -> Self {
-        I64Validation { operation: Some(Operation::Eq(Operand::Value(OperandValue::I64(value)))), ..self }
+        I64Schema { operation: Some(Operation::Eq(Operand::Value(OperandValue::I64(value)))), ..self }
     }
 
     pub fn ne(self, value: i64) -> Self {
-        I64Validation { operation: Some(Operation::Ne(Operand::Value(OperandValue::I64(value)))), ..self }
+        I64Schema { operation: Some(Operation::Ne(Operand::Value(OperandValue::I64(value)))), ..self }
     }
 
     pub fn gt(self, value: i64) -> Self {
-        I64Validation { operation: Some(Operation::Gt(Operand::Value(OperandValue::I64(value)))), ..self }
+        I64Schema { operation: Some(Operation::Gt(Operand::Value(OperandValue::I64(value)))), ..self }
     }
 
     pub fn ge(self, value: i64) -> Self {
-        I64Validation { operation: Some(Operation::Ge(Operand::Value(OperandValue::I64(value)))), ..self }
+        I64Schema { operation: Some(Operation::Ge(Operand::Value(OperandValue::I64(value)))), ..self }
     }
 
     pub fn lt(self, value: i64) -> Self {
-        I64Validation { operation: Some(Operation::Lt(Operand::Value(OperandValue::I64(value)))), ..self }
+        I64Schema { operation: Some(Operation::Lt(Operand::Value(OperandValue::I64(value)))), ..self }
     }
 
     pub fn le(self, value: i64) -> Self {
-        I64Validation { operation: Some(Operation::Le(Operand::Value(OperandValue::I64(value)))), ..self }
+        I64Schema { operation: Some(Operation::Le(Operand::Value(OperandValue::I64(value)))), ..self }
     }
 
     pub fn btwn(self, value_a: i64, value_b: i64) -> Self {
-        I64Validation {
+        I64Schema {
             operation: Some(Operation::Btwn(Operand::Value(OperandValue::I64(value_a)), Operand::Value(OperandValue::I64(value_b)))),
             ..self
         }
     }
 
     pub fn eq_field(self, field: String) -> Self {
-        I64Validation { operation: Some(Operation::Eq(Operand::FieldPath(field))), ..self }
+        I64Schema { operation: Some(Operation::Eq(Operand::FieldPath(field))), ..self }
     }
 
     pub fn ne_field(self, field: String) -> Self {
-        I64Validation { operation: Some(Operation::Ne(Operand::FieldPath(field))), ..self }
+        I64Schema { operation: Some(Operation::Ne(Operand::FieldPath(field))), ..self }
     }
 
     pub fn gt_field(self, field: String) -> Self {
-        I64Validation { operation: Some(Operation::Gt(Operand::FieldPath(field))), ..self }
+        I64Schema { operation: Some(Operation::Gt(Operand::FieldPath(field))), ..self }
     }
 
     pub fn ge_field(self, field: String) -> Self {
-        I64Validation { operation: Some(Operation::Ge(Operand::FieldPath(field))), ..self }
+        I64Schema { operation: Some(Operation::Ge(Operand::FieldPath(field))), ..self }
     }
 
     pub fn lt_field(self, field: String) -> Self {
-        I64Validation { operation: Some(Operation::Lt(Operand::FieldPath(field))), ..self }
+        I64Schema { operation: Some(Operation::Lt(Operand::FieldPath(field))), ..self }
     }
 
     pub fn le_field(self, field: String) -> Self {
-        I64Validation { operation: Some(Operation::Le(Operand::FieldPath(field))), ..self }
+        I64Schema { operation: Some(Operation::Le(Operand::FieldPath(field))), ..self }
     }
 
     pub fn btwn_field(self, field_a: String, field_b: String) -> Self {
-        I64Validation { operation: Some(Operation::Btwn(Operand::FieldPath(field_a), Operand::FieldPath(field_b))), ..self }
+        I64Schema { operation: Some(Operation::Btwn(Operand::FieldPath(field_a), Operand::FieldPath(field_b))), ..self }
     }
 }
 
@@ -83,7 +83,7 @@ mod tests {
 
     use crate::operation::{Operand, OperandValue, Operation};
 
-    use super::I64Validation;
+    use super::I64Schema;
 
     const OPERATION_VALUE_EQ: Operation = Operation::Eq(Operand::Value(OperandValue::I64(-1)));
     const OPERATION_VALUE_NE: Operation = Operation::Ne(Operand::Value(OperandValue::I64(-2)));
@@ -108,37 +108,37 @@ mod tests {
     const OPERATION_FIELD_BTWN: LazyLock<Operation> = LazyLock::new(|| Operation::Btwn(OPERAND_FIELD.clone(), OPERAND_FIELD_B.clone()));
 
     #[test]
-    fn i64_validation() {
-        assert_eq!(I64Validation::default(), I64Validation { required: true, operation: None });
-        assert_eq!(I64Validation::default().optional(), I64Validation { required: false, operation: None });
+    fn i64_schema() {
+        assert_eq!(I64Schema::default(), I64Schema { required: true, operation: None });
+        assert_eq!(I64Schema::default().optional(), I64Schema { required: false, operation: None });
     }
 
     #[test]
-    fn i64_validation_operation_value() {
-        assert_eq!(I64Validation::default().eq(-1), I64Validation { required: true, operation: Some(OPERATION_VALUE_EQ) });
-        assert_eq!(I64Validation::default().ne(-2), I64Validation { required: true, operation: Some(OPERATION_VALUE_NE) });
-        assert_eq!(I64Validation::default().gt(-3), I64Validation { required: true, operation: Some(OPERATION_VALUE_GT) });
-        assert_eq!(I64Validation::default().ge(-4), I64Validation { required: true, operation: Some(OPERATION_VALUE_GE) });
-        assert_eq!(I64Validation::default().lt(-5), I64Validation { required: true, operation: Some(OPERATION_VALUE_LT) });
-        assert_eq!(I64Validation::default().le(-6), I64Validation { required: true, operation: Some(OPERATION_VALUE_LE) });
-        assert_eq!(I64Validation::default().btwn(-42, 42), I64Validation { required: true, operation: Some(OPERATION_VALUE_BTWN) });
+    fn i64_schema_operation_value() {
+        assert_eq!(I64Schema::default().eq(-1), I64Schema { required: true, operation: Some(OPERATION_VALUE_EQ) });
+        assert_eq!(I64Schema::default().ne(-2), I64Schema { required: true, operation: Some(OPERATION_VALUE_NE) });
+        assert_eq!(I64Schema::default().gt(-3), I64Schema { required: true, operation: Some(OPERATION_VALUE_GT) });
+        assert_eq!(I64Schema::default().ge(-4), I64Schema { required: true, operation: Some(OPERATION_VALUE_GE) });
+        assert_eq!(I64Schema::default().lt(-5), I64Schema { required: true, operation: Some(OPERATION_VALUE_LT) });
+        assert_eq!(I64Schema::default().le(-6), I64Schema { required: true, operation: Some(OPERATION_VALUE_LE) });
+        assert_eq!(I64Schema::default().btwn(-42, 42), I64Schema { required: true, operation: Some(OPERATION_VALUE_BTWN) });
     }
 
     #[test]
-    fn i64_validation_operation_field() {
-        let validation_eq = I64Validation::default().eq_field(FIELD.into());
-        let validation_ne = I64Validation::default().ne_field(FIELD.into());
-        let validation_gt = I64Validation::default().gt_field(FIELD.into());
-        let validation_ge = I64Validation::default().ge_field(FIELD.into());
-        let validation_lt = I64Validation::default().lt_field(FIELD.into());
-        let validation_le = I64Validation::default().le_field(FIELD.into());
-        let validation_btwn = I64Validation::default().btwn_field(FIELD.into(), FIELD_B.into());
-        assert_eq!(validation_eq, I64Validation { required: true, operation: Some(OPERATION_FIELD_EQ.clone()) });
-        assert_eq!(validation_ne, I64Validation { required: true, operation: Some(OPERATION_FIELD_NE.clone()) });
-        assert_eq!(validation_gt, I64Validation { required: true, operation: Some(OPERATION_FIELD_GT.clone()) });
-        assert_eq!(validation_ge, I64Validation { required: true, operation: Some(OPERATION_FIELD_GE.clone()) });
-        assert_eq!(validation_lt, I64Validation { required: true, operation: Some(OPERATION_FIELD_LT.clone()) });
-        assert_eq!(validation_le, I64Validation { required: true, operation: Some(OPERATION_FIELD_LE.clone()) });
-        assert_eq!(validation_btwn, I64Validation { required: true, operation: Some(OPERATION_FIELD_BTWN.clone()) });
+    fn i64_schema_operation_field() {
+        let validation_eq = I64Schema::default().eq_field(FIELD.into());
+        let validation_ne = I64Schema::default().ne_field(FIELD.into());
+        let validation_gt = I64Schema::default().gt_field(FIELD.into());
+        let validation_ge = I64Schema::default().ge_field(FIELD.into());
+        let validation_lt = I64Schema::default().lt_field(FIELD.into());
+        let validation_le = I64Schema::default().le_field(FIELD.into());
+        let validation_btwn = I64Schema::default().btwn_field(FIELD.into(), FIELD_B.into());
+        assert_eq!(validation_eq, I64Schema { required: true, operation: Some(OPERATION_FIELD_EQ.clone()) });
+        assert_eq!(validation_ne, I64Schema { required: true, operation: Some(OPERATION_FIELD_NE.clone()) });
+        assert_eq!(validation_gt, I64Schema { required: true, operation: Some(OPERATION_FIELD_GT.clone()) });
+        assert_eq!(validation_ge, I64Schema { required: true, operation: Some(OPERATION_FIELD_GE.clone()) });
+        assert_eq!(validation_lt, I64Schema { required: true, operation: Some(OPERATION_FIELD_LT.clone()) });
+        assert_eq!(validation_le, I64Schema { required: true, operation: Some(OPERATION_FIELD_LE.clone()) });
+        assert_eq!(validation_btwn, I64Schema { required: true, operation: Some(OPERATION_FIELD_BTWN.clone()) });
     }
 }

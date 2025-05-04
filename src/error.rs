@@ -1,6 +1,6 @@
 use std::collections::BTreeMap;
 
-use crate::{operation::Operation, validation::EnumValues};
+use crate::{operation::Operation, schema::EnumValues};
 
 #[derive(Debug, PartialEq, Clone)]
 pub enum ValidationErr {
@@ -29,14 +29,14 @@ pub enum ValidationErr {
 
 #[derive(Debug, PartialEq, Clone)]
 pub enum SchemaErr {
-    Validation(Vec<ValidationErr>),
+    Schema(Vec<ValidationErr>),
     Arr(Vec<SchemaErr>),
     Obj(BTreeMap<String, SchemaErr>),
 }
 
 impl SchemaErr {
     pub fn validation<const N: usize>(value: [ValidationErr; N]) -> SchemaErr {
-        SchemaErr::Validation(value.to_vec())
+        SchemaErr::Schema(value.to_vec())
     }
 
     pub fn arr<const N: usize>(value: [SchemaErr; N]) -> SchemaErr {
@@ -67,14 +67,14 @@ mod tests {
 
     #[test]
     fn schema_err_validation() {
-        assert_eq!(SchemaErr::validation([REQUIRED, U64, OPERATION_U64]), SchemaErr::Validation(vec![REQUIRED, U64, OPERATION_U64]));
+        assert_eq!(SchemaErr::validation([REQUIRED, U64, OPERATION_U64]), SchemaErr::Schema(vec![REQUIRED, U64, OPERATION_U64]));
     }
 
     #[test]
     fn schema_err_arr() {
         assert_eq!(
             SchemaErr::arr([SchemaErr::validation([REQUIRED, I64, OPERATION_I64])]),
-            SchemaErr::Arr(vec![SchemaErr::Validation(vec![REQUIRED, I64, OPERATION_I64])])
+            SchemaErr::Arr(vec![SchemaErr::Schema(vec![REQUIRED, I64, OPERATION_I64])])
         );
     }
 
@@ -82,7 +82,7 @@ mod tests {
     fn schema_err_obj() {
         assert_eq!(
             SchemaErr::obj([("f64".into(), SchemaErr::validation([REQUIRED, F64, OPERATION_F64]))]),
-            SchemaErr::Obj(BTreeMap::from([("f64".into(), SchemaErr::Validation(vec![REQUIRED, F64, OPERATION_F64]))]))
+            SchemaErr::Obj(BTreeMap::from([("f64".into(), SchemaErr::Schema(vec![REQUIRED, F64, OPERATION_F64]))]))
         );
     }
 
@@ -99,8 +99,8 @@ mod tests {
             SchemaErr::Obj(BTreeMap::from([(
                 "user".into(),
                 SchemaErr::Arr(vec![
-                    SchemaErr::Validation(vec![REQUIRED]),
-                    SchemaErr::Obj(BTreeMap::from([("i64".into(), SchemaErr::Validation(vec![REQUIRED, I64, OPERATION_I64]))])),
+                    SchemaErr::Schema(vec![REQUIRED]),
+                    SchemaErr::Obj(BTreeMap::from([("i64".into(), SchemaErr::Schema(vec![REQUIRED, I64, OPERATION_I64]))])),
                 ]),
             )]))
         );

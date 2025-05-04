@@ -1,27 +1,27 @@
 #[derive(Debug, PartialEq, Clone)]
-pub struct EmailValidation {
+pub struct EmailSchema {
     pub required: bool,
 }
 
-impl Default for EmailValidation {
+impl Default for EmailSchema {
     fn default() -> Self {
-        EmailValidation { required: true }
+        EmailSchema { required: true }
     }
 }
 
-impl EmailValidation {
+impl EmailSchema {
     pub fn optional(self) -> Self {
-        EmailValidation { required: false }
+        EmailSchema { required: false }
     }
 }
 
 #[cfg(test)]
 mod tests {
-    use super::EmailValidation;
+    use super::EmailSchema;
 
     #[test]
     fn email_validation() {
-        assert_eq!(EmailValidation::default(), EmailValidation { required: true });
-        assert_eq!(EmailValidation::default().optional(), EmailValidation { required: false });
+        assert_eq!(EmailSchema::default(), EmailSchema { required: true });
+        assert_eq!(EmailSchema::default().optional(), EmailSchema { required: false });
     }
 }

@@ -1,79 +1,79 @@
 use crate::operation::{Operand, OperandValue, Operation};
 
 #[derive(Debug, PartialEq, Clone)]
-pub struct ISizeValidation {
+pub struct ISizeSchema {
     pub required: bool,
     pub operation: Option<Operation>,
 }
 
-impl Default for ISizeValidation {
+impl Default for ISizeSchema {
     fn default() -> Self {
-        ISizeValidation { required: true, operation: None }
+        ISizeSchema { required: true, operation: None }
     }
 }
 
-impl ISizeValidation {
+impl ISizeSchema {
     pub fn optional(self) -> Self {
-        ISizeValidation { required: false, ..self }
+        ISizeSchema { required: false, ..self }
     }
 
     pub fn eq(self, value: isize) -> Self {
-        ISizeValidation { operation: Some(Operation::Eq(Operand::Value(OperandValue::ISize(value)))), ..self }
+        ISizeSchema { operation: Some(Operation::Eq(Operand::Value(OperandValue::ISize(value)))), ..self }
     }
 
     pub fn ne(self, value: isize) -> Self {
-        ISizeValidation { operation: Some(Operation::Ne(Operand::Value(OperandValue::ISize(value)))), ..self }
+        ISizeSchema { operation: Some(Operation::Ne(Operand::Value(OperandValue::ISize(value)))), ..self }
     }
 
     pub fn gt(self, value: isize) -> Self {
-        ISizeValidation { operation: Some(Operation::Gt(Operand::Value(OperandValue::ISize(value)))), ..self }
+        ISizeSchema { operation: Some(Operation::Gt(Operand::Value(OperandValue::ISize(value)))), ..self }
     }
 
     pub fn ge(self, value: isize) -> Self {
-        ISizeValidation { operation: Some(Operation::Ge(Operand::Value(OperandValue::ISize(value)))), ..self }
+        ISizeSchema { operation: Some(Operation::Ge(Operand::Value(OperandValue::ISize(value)))), ..self }
     }
 
     pub fn lt(self, value: isize) -> Self {
-        ISizeValidation { operation: Some(Operation::Lt(Operand::Value(OperandValue::ISize(value)))), ..self }
+        ISizeSchema { operation: Some(Operation::Lt(Operand::Value(OperandValue::ISize(value)))), ..self }
     }
 
     pub fn le(self, value: isize) -> Self {
-        ISizeValidation { operation: Some(Operation::Le(Operand::Value(OperandValue::ISize(value)))), ..self }
+        ISizeSchema { operation: Some(Operation::Le(Operand::Value(OperandValue::ISize(value)))), ..self }
     }
 
     pub fn btwn(self, value_a: isize, value_b: isize) -> Self {
-        ISizeValidation {
+        ISizeSchema {
             operation: Some(Operation::Btwn(Operand::Value(OperandValue::ISize(value_a)), Operand::Value(OperandValue::ISize(value_b)))),
             ..self
         }
     }
 
     pub fn eq_field(self, field: String) -> Self {
-        ISizeValidation { operation: Some(Operation::Eq(Operand::FieldPath(field))), ..self }
+        ISizeSchema { operation: Some(Operation::Eq(Operand::FieldPath(field))), ..self }
     }
 
     pub fn ne_field(self, field: String) -> Self {
-        ISizeValidation { operation: Some(Operation::Ne(Operand::FieldPath(field))), ..self }
+        ISizeSchema { operation: Some(Operation::Ne(Operand::FieldPath(field))), ..self }
     }
 
     pub fn gt_field(self, field: String) -> Self {
-        ISizeValidation { operation: Some(Operation::Gt(Operand::FieldPath(field))), ..self }
+        ISizeSchema { operation: Some(Operation::Gt(Operand::FieldPath(field))), ..self }
     }
 
     pub fn ge_field(self, field: String) -> Self {
-        ISizeValidation { operation: Some(Operation::Ge(Operand::FieldPath(field))), ..self }
+        ISizeSchema { operation: Some(Operation::Ge(Operand::FieldPath(field))), ..self }
     }
 
     pub fn lt_field(self, field: String) -> Self {
-        ISizeValidation { operation: Some(Operation::Lt(Operand::FieldPath(field))), ..self }
+        ISizeSchema { operation: Some(Operation::Lt(Operand::FieldPath(field))), ..self }
     }
 
     pub fn le_field(self, field: String) -> Self {
-        ISizeValidation { operation: Some(Operation::Le(Operand::FieldPath(field))), ..self }
+        ISizeSchema { operation: Some(Operation::Le(Operand::FieldPath(field))), ..self }
     }
 
     pub fn btwn_field(self, field_a: String, field_b: String) -> Self {
-        ISizeValidation { operation: Some(Operation::Btwn(Operand::FieldPath(field_a), Operand::FieldPath(field_b))), ..self }
+        ISizeSchema { operation: Some(Operation::Btwn(Operand::FieldPath(field_a), Operand::FieldPath(field_b))), ..self }
     }
 }
 
@@ -83,7 +83,7 @@ mod tests {
 
     use crate::operation::{Operand, OperandValue, Operation};
 
-    use super::ISizeValidation;
+    use super::ISizeSchema;
 
     const OPERATION_VALUE_EQ: Operation = Operation::Eq(Operand::Value(OperandValue::ISize(-1)));
     const OPERATION_VALUE_NE: Operation = Operation::Ne(Operand::Value(OperandValue::ISize(-2)));
@@ -108,37 +108,37 @@ mod tests {
     const OPERATION_FIELD_BTWN: LazyLock<Operation> = LazyLock::new(|| Operation::Btwn(OPERAND_FIELD.clone(), OPERAND_FIELD_B.clone()));
 
     #[test]
-    fn isize_validation() {
-        assert_eq!(ISizeValidation::default(), ISizeValidation { required: true, operation: None });
-        assert_eq!(ISizeValidation::default().optional(), ISizeValidation { required: false, operation: None });
+    fn isize_schema() {
+        assert_eq!(ISizeSchema::default(), ISizeSchema { required: true, operation: None });
+        assert_eq!(ISizeSchema::default().optional(), ISizeSchema { required: false, operation: None });
     }
 
     #[test]
-    fn isize_validation_operation_value() {
-        assert_eq!(ISizeValidation::default().eq(-1), ISizeValidation { required: true, operation: Some(OPERATION_VALUE_EQ) });
-        assert_eq!(ISizeValidation::default().ne(-2), ISizeValidation { required: true, operation: Some(OPERATION_VALUE_NE) });
-        assert_eq!(ISizeValidation::default().gt(-3), ISizeValidation { required: true, operation: Some(OPERATION_VALUE_GT) });
-        assert_eq!(ISizeValidation::default().ge(-4), ISizeValidation { required: true, operation: Some(OPERATION_VALUE_GE) });
-        assert_eq!(ISizeValidation::default().lt(-5), ISizeValidation { required: true, operation: Some(OPERATION_VALUE_LT) });
-        assert_eq!(ISizeValidation::default().le(-6), ISizeValidation { required: true, operation: Some(OPERATION_VALUE_LE) });
-        assert_eq!(ISizeValidation::default().btwn(-42, 42), ISizeValidation { required: true, operation: Some(OPERATION_VALUE_BTWN) });
+    fn isize_schema_operation_value() {
+        assert_eq!(ISizeSchema::default().eq(-1), ISizeSchema { required: true, operation: Some(OPERATION_VALUE_EQ) });
+        assert_eq!(ISizeSchema::default().ne(-2), ISizeSchema { required: true, operation: Some(OPERATION_VALUE_NE) });
+        assert_eq!(ISizeSchema::default().gt(-3), ISizeSchema { required: true, operation: Some(OPERATION_VALUE_GT) });
+        assert_eq!(ISizeSchema::default().ge(-4), ISizeSchema { required: true, operation: Some(OPERATION_VALUE_GE) });
+        assert_eq!(ISizeSchema::default().lt(-5), ISizeSchema { required: true, operation: Some(OPERATION_VALUE_LT) });
+        assert_eq!(ISizeSchema::default().le(-6), ISizeSchema { required: true, operation: Some(OPERATION_VALUE_LE) });
+        assert_eq!(ISizeSchema::default().btwn(-42, 42), ISizeSchema { required: true, operation: Some(OPERATION_VALUE_BTWN) });
     }
 
     #[test]
-    fn isize_validation_operation_field() {
-        let validation_eq = ISizeValidation::default().eq_field(FIELD.into());
-        let validation_ne = ISizeValidation::default().ne_field(FIELD.into());
-        let validation_gt = ISizeValidation::default().gt_field(FIELD.into());
-        let validation_ge = ISizeValidation::default().ge_field(FIELD.into());
-        let validation_lt = ISizeValidation::default().lt_field(FIELD.into());
-        let validation_le = ISizeValidation::default().le_field(FIELD.into());
-        let validation_btwn = ISizeValidation::default().btwn_field(FIELD.into(), FIELD_B.into());
-        assert_eq!(validation_eq, ISizeValidation { required: true, operation: Some(OPERATION_FIELD_EQ.clone()) });
-        assert_eq!(validation_ne, ISizeValidation { required: true, operation: Some(OPERATION_FIELD_NE.clone()) });
-        assert_eq!(validation_gt, ISizeValidation { required: true, operation: Some(OPERATION_FIELD_GT.clone()) });
-        assert_eq!(validation_ge, ISizeValidation { required: true, operation: Some(OPERATION_FIELD_GE.clone()) });
-        assert_eq!(validation_lt, ISizeValidation { required: true, operation: Some(OPERATION_FIELD_LT.clone()) });
-        assert_eq!(validation_le, ISizeValidation { required: true, operation: Some(OPERATION_FIELD_LE.clone()) });
-        assert_eq!(validation_btwn, ISizeValidation { required: true, operation: Some(OPERATION_FIELD_BTWN.clone()) });
+    fn isize_schema_operation_field() {
+        let validation_eq = ISizeSchema::default().eq_field(FIELD.into());
+        let validation_ne = ISizeSchema::default().ne_field(FIELD.into());
+        let validation_gt = ISizeSchema::default().gt_field(FIELD.into());
+        let validation_ge = ISizeSchema::default().ge_field(FIELD.into());
+        let validation_lt = ISizeSchema::default().lt_field(FIELD.into());
+        let validation_le = ISizeSchema::default().le_field(FIELD.into());
+        let validation_btwn = ISizeSchema::default().btwn_field(FIELD.into(), FIELD_B.into());
+        assert_eq!(validation_eq, ISizeSchema { required: true, operation: Some(OPERATION_FIELD_EQ.clone()) });
+        assert_eq!(validation_ne, ISizeSchema { required: true, operation: Some(OPERATION_FIELD_NE.clone()) });
+        assert_eq!(validation_gt, ISizeSchema { required: true, operation: Some(OPERATION_FIELD_GT.clone()) });
+        assert_eq!(validation_ge, ISizeSchema { required: true, operation: Some(OPERATION_FIELD_GE.clone()) });
+        assert_eq!(validation_lt, ISizeSchema { required: true, operation: Some(OPERATION_FIELD_LT.clone()) });
+        assert_eq!(validation_le, ISizeSchema { required: true, operation: Some(OPERATION_FIELD_LE.clone()) });
+        assert_eq!(validation_btwn, ISizeSchema { required: true, operation: Some(OPERATION_FIELD_BTWN.clone()) });
     }
 }

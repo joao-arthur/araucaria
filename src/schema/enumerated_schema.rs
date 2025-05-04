@@ -54,62 +54,62 @@ impl<const N: usize> From<[&str; N]> for EnumValues {
 }
 
 #[derive(Debug, PartialEq, Clone)]
-pub struct EnumValidation {
+pub struct EnumSchema {
     pub required: bool,
     pub values: EnumValues,
 }
 
-impl EnumValidation {
+impl EnumSchema {
     pub fn optional(self) -> Self {
-        EnumValidation { required: false, ..self }
+        EnumSchema { required: false, ..self }
     }
 }
 
-impl From<Vec<usize>> for EnumValidation {
+impl From<Vec<usize>> for EnumSchema {
     fn from(values: Vec<usize>) -> Self {
-        EnumValidation { required: true, values: EnumValues::from(values) }
+        EnumSchema { required: true, values: EnumValues::from(values) }
     }
 }
 
-impl From<Vec<isize>> for EnumValidation {
+impl From<Vec<isize>> for EnumSchema {
     fn from(values: Vec<isize>) -> Self {
-        EnumValidation { required: true, values: EnumValues::from(values) }
+        EnumSchema { required: true, values: EnumValues::from(values) }
     }
 }
 
-impl From<Vec<String>> for EnumValidation {
+impl From<Vec<String>> for EnumSchema {
     fn from(values: Vec<String>) -> Self {
-        EnumValidation { required: true, values: EnumValues::from(values) }
+        EnumSchema { required: true, values: EnumValues::from(values) }
     }
 }
 
-impl From<Vec<&str>> for EnumValidation {
+impl From<Vec<&str>> for EnumSchema {
     fn from(values: Vec<&str>) -> Self {
-        EnumValidation { required: true, values: EnumValues::from(values) }
+        EnumSchema { required: true, values: EnumValues::from(values) }
     }
 }
 
-impl<const N: usize> From<[usize; N]> for EnumValidation {
+impl<const N: usize> From<[usize; N]> for EnumSchema {
     fn from(values: [usize; N]) -> Self {
-        EnumValidation { required: true, values: EnumValues::from(values) }
+        EnumSchema { required: true, values: EnumValues::from(values) }
     }
 }
 
-impl<const N: usize> From<[isize; N]> for EnumValidation {
+impl<const N: usize> From<[isize; N]> for EnumSchema {
     fn from(values: [isize; N]) -> Self {
-        EnumValidation { required: true, values: EnumValues::from(values) }
+        EnumSchema { required: true, values: EnumValues::from(values) }
     }
 }
 
-impl<const N: usize> From<[String; N]> for EnumValidation {
+impl<const N: usize> From<[String; N]> for EnumSchema {
     fn from(values: [String; N]) -> Self {
-        EnumValidation { required: true, values: EnumValues::from(values) }
+        EnumSchema { required: true, values: EnumValues::from(values) }
     }
 }
 
-impl<const N: usize> From<[&str; N]> for EnumValidation {
+impl<const N: usize> From<[&str; N]> for EnumSchema {
     fn from(values: [&str; N]) -> Self {
-        EnumValidation { required: true, values: EnumValues::from(values) }
+        EnumSchema { required: true, values: EnumValues::from(values) }
     }
 }
 
@@ -137,7 +137,7 @@ impl std::fmt::Display for EnumValues {
 mod tests {
     use std::sync::LazyLock;
 
-    use super::{EnumValidation, EnumValues};
+    use super::{EnumSchema, EnumValues};
 
     const SLICE_U: [usize; 6] = [0, 1, 2, 3, 4, 5];
     const SLICE_I: [isize; 5] = [-2, -1, 0, 1, 2];
@@ -169,21 +169,21 @@ mod tests {
     }
 
     #[test]
-    fn enum_validation_from() {
-        assert_eq!(EnumValidation::from(SLICE_U.clone()), EnumValidation { required: true, values: EnumValues::USize(VEC_U.clone()) });
-        assert_eq!(EnumValidation::from(VEC_U.clone()), EnumValidation { required: true, values: EnumValues::USize(VEC_U.clone()) });
-        assert_eq!(EnumValidation::from(SLICE_I.clone()), EnumValidation { required: true, values: EnumValues::ISize(VEC_I.clone()) });
-        assert_eq!(EnumValidation::from(VEC_I.clone()), EnumValidation { required: true, values: EnumValues::ISize(VEC_I.clone()) });
-        assert_eq!(EnumValidation::from(SLICE_STR.clone()), EnumValidation { required: true, values: EnumValues::Str(VEC_STRING.clone()) });
-        assert_eq!(EnumValidation::from(VEC_STR.clone()), EnumValidation { required: true, values: EnumValues::Str(VEC_STRING.clone()) });
-        assert_eq!(EnumValidation::from(SLICE_STRING.clone()), EnumValidation { required: true, values: EnumValues::Str(VEC_STRING.clone()) });
-        assert_eq!(EnumValidation::from(VEC_STRING.clone()), EnumValidation { required: true, values: EnumValues::Str(VEC_STRING.clone()) });
+    fn enum_schema_from() {
+        assert_eq!(EnumSchema::from(SLICE_U.clone()), EnumSchema { required: true, values: EnumValues::USize(VEC_U.clone()) });
+        assert_eq!(EnumSchema::from(VEC_U.clone()), EnumSchema { required: true, values: EnumValues::USize(VEC_U.clone()) });
+        assert_eq!(EnumSchema::from(SLICE_I.clone()), EnumSchema { required: true, values: EnumValues::ISize(VEC_I.clone()) });
+        assert_eq!(EnumSchema::from(VEC_I.clone()), EnumSchema { required: true, values: EnumValues::ISize(VEC_I.clone()) });
+        assert_eq!(EnumSchema::from(SLICE_STR.clone()), EnumSchema { required: true, values: EnumValues::Str(VEC_STRING.clone()) });
+        assert_eq!(EnumSchema::from(VEC_STR.clone()), EnumSchema { required: true, values: EnumValues::Str(VEC_STRING.clone()) });
+        assert_eq!(EnumSchema::from(SLICE_STRING.clone()), EnumSchema { required: true, values: EnumValues::Str(VEC_STRING.clone()) });
+        assert_eq!(EnumSchema::from(VEC_STRING.clone()), EnumSchema { required: true, values: EnumValues::Str(VEC_STRING.clone()) });
     }
 
     #[test]
-    fn enum_validation_optional() {
+    fn enum_schema_optional() {
         let slice_str: [&str; 3] = ["APPLE", "GRAPE", "PEAR"];
         let vec_str: Vec<String> = vec!["APPLE".into(), "GRAPE".into(), "PEAR".into()];
-        assert_eq!(EnumValidation::from(slice_str).optional(), EnumValidation { required: false, values: EnumValues::Str(vec_str) });
+        assert_eq!(EnumSchema::from(slice_str).optional(), EnumSchema { required: false, values: EnumValues::Str(vec_str) });
     }
 }

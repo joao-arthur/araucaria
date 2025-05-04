@@ -1,7 +1,7 @@
 use crate::operation::{Operand, OperandValue, Operation};
 
 #[derive(Debug, PartialEq, Clone)]
-pub struct StrValidation {
+pub struct StrSchema {
     pub required: bool,
     pub operation: Option<Operation>,
     pub bytes_len: Option<Operation>,
@@ -13,9 +13,9 @@ pub struct StrValidation {
     pub symbols_len: Option<Operation>,
 }
 
-impl Default for StrValidation {
+impl Default for StrSchema {
     fn default() -> Self {
-        StrValidation {
+        StrSchema {
             required: true,
             operation: None,
             bytes_len: None,
@@ -29,481 +29,481 @@ impl Default for StrValidation {
     }
 }
 
-impl StrValidation {
+impl StrSchema {
     pub fn optional(self) -> Self {
-        StrValidation { required: false, ..self }
+        StrSchema { required: false, ..self }
     }
 
     pub fn eq(self, value: String) -> Self {
-        StrValidation { operation: Some(Operation::Eq(Operand::Value(OperandValue::Str(value)))), ..self }
+        StrSchema { operation: Some(Operation::Eq(Operand::Value(OperandValue::Str(value)))), ..self }
     }
 
     pub fn ne(self, value: String) -> Self {
-        StrValidation { operation: Some(Operation::Ne(Operand::Value(OperandValue::Str(value)))), ..self }
+        StrSchema { operation: Some(Operation::Ne(Operand::Value(OperandValue::Str(value)))), ..self }
     }
 
     pub fn gt(self, value: String) -> Self {
-        StrValidation { operation: Some(Operation::Gt(Operand::Value(OperandValue::Str(value)))), ..self }
+        StrSchema { operation: Some(Operation::Gt(Operand::Value(OperandValue::Str(value)))), ..self }
     }
 
     pub fn ge(self, value: String) -> Self {
-        StrValidation { operation: Some(Operation::Ge(Operand::Value(OperandValue::Str(value)))), ..self }
+        StrSchema { operation: Some(Operation::Ge(Operand::Value(OperandValue::Str(value)))), ..self }
     }
 
     pub fn lt(self, value: String) -> Self {
-        StrValidation { operation: Some(Operation::Lt(Operand::Value(OperandValue::Str(value)))), ..self }
+        StrSchema { operation: Some(Operation::Lt(Operand::Value(OperandValue::Str(value)))), ..self }
     }
 
     pub fn le(self, value: String) -> Self {
-        StrValidation { operation: Some(Operation::Le(Operand::Value(OperandValue::Str(value)))), ..self }
+        StrSchema { operation: Some(Operation::Le(Operand::Value(OperandValue::Str(value)))), ..self }
     }
 
     pub fn btwn(self, value_a: String, value_b: String) -> Self {
-        StrValidation {
+        StrSchema {
             operation: Some(Operation::Btwn(Operand::Value(OperandValue::Str(value_a)), Operand::Value(OperandValue::Str(value_b)))),
             ..self
         }
     }
 
     pub fn bytes_len_eq(self, len: usize) -> Self {
-        StrValidation { bytes_len: Some(Operation::Eq(Operand::Value(OperandValue::USize(len)))), ..self }
+        StrSchema { bytes_len: Some(Operation::Eq(Operand::Value(OperandValue::USize(len)))), ..self }
     }
 
     pub fn bytes_len_ne(self, len: usize) -> Self {
-        StrValidation { bytes_len: Some(Operation::Ne(Operand::Value(OperandValue::USize(len)))), ..self }
+        StrSchema { bytes_len: Some(Operation::Ne(Operand::Value(OperandValue::USize(len)))), ..self }
     }
 
     pub fn bytes_len_gt(self, len: usize) -> Self {
-        StrValidation { bytes_len: Some(Operation::Gt(Operand::Value(OperandValue::USize(len)))), ..self }
+        StrSchema { bytes_len: Some(Operation::Gt(Operand::Value(OperandValue::USize(len)))), ..self }
     }
 
     pub fn bytes_len_ge(self, len: usize) -> Self {
-        StrValidation { bytes_len: Some(Operation::Ge(Operand::Value(OperandValue::USize(len)))), ..self }
+        StrSchema { bytes_len: Some(Operation::Ge(Operand::Value(OperandValue::USize(len)))), ..self }
     }
 
     pub fn bytes_len_lt(self, len: usize) -> Self {
-        StrValidation { bytes_len: Some(Operation::Lt(Operand::Value(OperandValue::USize(len)))), ..self }
+        StrSchema { bytes_len: Some(Operation::Lt(Operand::Value(OperandValue::USize(len)))), ..self }
     }
 
     pub fn bytes_len_le(self, len: usize) -> Self {
-        StrValidation { bytes_len: Some(Operation::Le(Operand::Value(OperandValue::USize(len)))), ..self }
+        StrSchema { bytes_len: Some(Operation::Le(Operand::Value(OperandValue::USize(len)))), ..self }
     }
 
     pub fn bytes_len_btwn(self, len_a: usize, len_b: usize) -> Self {
-        StrValidation {
+        StrSchema {
             bytes_len: Some(Operation::Btwn(Operand::Value(OperandValue::USize(len_a)), Operand::Value(OperandValue::USize(len_b)))),
             ..self
         }
     }
 
     pub fn chars_len_eq(self, len: usize) -> Self {
-        StrValidation { chars_len: Some(Operation::Eq(Operand::Value(OperandValue::USize(len)))), ..self }
+        StrSchema { chars_len: Some(Operation::Eq(Operand::Value(OperandValue::USize(len)))), ..self }
     }
 
     pub fn chars_len_ne(self, len: usize) -> Self {
-        StrValidation { chars_len: Some(Operation::Ne(Operand::Value(OperandValue::USize(len)))), ..self }
+        StrSchema { chars_len: Some(Operation::Ne(Operand::Value(OperandValue::USize(len)))), ..self }
     }
 
     pub fn chars_len_gt(self, len: usize) -> Self {
-        StrValidation { chars_len: Some(Operation::Gt(Operand::Value(OperandValue::USize(len)))), ..self }
+        StrSchema { chars_len: Some(Operation::Gt(Operand::Value(OperandValue::USize(len)))), ..self }
     }
 
     pub fn chars_len_ge(self, len: usize) -> Self {
-        StrValidation { chars_len: Some(Operation::Ge(Operand::Value(OperandValue::USize(len)))), ..self }
+        StrSchema { chars_len: Some(Operation::Ge(Operand::Value(OperandValue::USize(len)))), ..self }
     }
 
     pub fn chars_len_lt(self, len: usize) -> Self {
-        StrValidation { chars_len: Some(Operation::Lt(Operand::Value(OperandValue::USize(len)))), ..self }
+        StrSchema { chars_len: Some(Operation::Lt(Operand::Value(OperandValue::USize(len)))), ..self }
     }
 
     pub fn chars_len_le(self, len: usize) -> Self {
-        StrValidation { chars_len: Some(Operation::Le(Operand::Value(OperandValue::USize(len)))), ..self }
+        StrSchema { chars_len: Some(Operation::Le(Operand::Value(OperandValue::USize(len)))), ..self }
     }
 
     pub fn chars_len_btwn(self, len_a: usize, len_b: usize) -> Self {
-        StrValidation {
+        StrSchema {
             chars_len: Some(Operation::Btwn(Operand::Value(OperandValue::USize(len_a)), Operand::Value(OperandValue::USize(len_b)))),
             ..self
         }
     }
 
     pub fn graphemes_len_eq(self, len: usize) -> Self {
-        StrValidation { graphemes_len: Some(Operation::Eq(Operand::Value(OperandValue::USize(len)))), ..self }
+        StrSchema { graphemes_len: Some(Operation::Eq(Operand::Value(OperandValue::USize(len)))), ..self }
     }
 
     pub fn graphemes_len_ne(self, len: usize) -> Self {
-        StrValidation { graphemes_len: Some(Operation::Ne(Operand::Value(OperandValue::USize(len)))), ..self }
+        StrSchema { graphemes_len: Some(Operation::Ne(Operand::Value(OperandValue::USize(len)))), ..self }
     }
 
     pub fn graphemes_len_gt(self, len: usize) -> Self {
-        StrValidation { graphemes_len: Some(Operation::Gt(Operand::Value(OperandValue::USize(len)))), ..self }
+        StrSchema { graphemes_len: Some(Operation::Gt(Operand::Value(OperandValue::USize(len)))), ..self }
     }
 
     pub fn graphemes_len_ge(self, len: usize) -> Self {
-        StrValidation { graphemes_len: Some(Operation::Ge(Operand::Value(OperandValue::USize(len)))), ..self }
+        StrSchema { graphemes_len: Some(Operation::Ge(Operand::Value(OperandValue::USize(len)))), ..self }
     }
 
     pub fn graphemes_len_lt(self, len: usize) -> Self {
-        StrValidation { graphemes_len: Some(Operation::Lt(Operand::Value(OperandValue::USize(len)))), ..self }
+        StrSchema { graphemes_len: Some(Operation::Lt(Operand::Value(OperandValue::USize(len)))), ..self }
     }
 
     pub fn graphemes_len_le(self, len: usize) -> Self {
-        StrValidation { graphemes_len: Some(Operation::Le(Operand::Value(OperandValue::USize(len)))), ..self }
+        StrSchema { graphemes_len: Some(Operation::Le(Operand::Value(OperandValue::USize(len)))), ..self }
     }
 
     pub fn graphemes_len_btwn(self, len_a: usize, len_b: usize) -> Self {
-        StrValidation {
+        StrSchema {
             graphemes_len: Some(Operation::Btwn(Operand::Value(OperandValue::USize(len_a)), Operand::Value(OperandValue::USize(len_b)))),
             ..self
         }
     }
 
     pub fn lowercase_len_eq(self, len: usize) -> Self {
-        StrValidation { lowercase_len: Some(Operation::Eq(Operand::Value(OperandValue::USize(len)))), ..self }
+        StrSchema { lowercase_len: Some(Operation::Eq(Operand::Value(OperandValue::USize(len)))), ..self }
     }
 
     pub fn lowercase_len_ne(self, len: usize) -> Self {
-        StrValidation { lowercase_len: Some(Operation::Ne(Operand::Value(OperandValue::USize(len)))), ..self }
+        StrSchema { lowercase_len: Some(Operation::Ne(Operand::Value(OperandValue::USize(len)))), ..self }
     }
 
     pub fn lowercase_len_gt(self, len: usize) -> Self {
-        StrValidation { lowercase_len: Some(Operation::Gt(Operand::Value(OperandValue::USize(len)))), ..self }
+        StrSchema { lowercase_len: Some(Operation::Gt(Operand::Value(OperandValue::USize(len)))), ..self }
     }
 
     pub fn lowercase_len_ge(self, len: usize) -> Self {
-        StrValidation { lowercase_len: Some(Operation::Ge(Operand::Value(OperandValue::USize(len)))), ..self }
+        StrSchema { lowercase_len: Some(Operation::Ge(Operand::Value(OperandValue::USize(len)))), ..self }
     }
 
     pub fn lowercase_len_lt(self, len: usize) -> Self {
-        StrValidation { lowercase_len: Some(Operation::Lt(Operand::Value(OperandValue::USize(len)))), ..self }
+        StrSchema { lowercase_len: Some(Operation::Lt(Operand::Value(OperandValue::USize(len)))), ..self }
     }
 
     pub fn lowercase_len_le(self, len: usize) -> Self {
-        StrValidation { lowercase_len: Some(Operation::Le(Operand::Value(OperandValue::USize(len)))), ..self }
+        StrSchema { lowercase_len: Some(Operation::Le(Operand::Value(OperandValue::USize(len)))), ..self }
     }
 
     pub fn lowercase_len_btwn(self, len_a: usize, len_b: usize) -> Self {
-        StrValidation {
+        StrSchema {
             lowercase_len: Some(Operation::Btwn(Operand::Value(OperandValue::USize(len_a)), Operand::Value(OperandValue::USize(len_b)))),
             ..self
         }
     }
 
     pub fn uppercase_len_eq(self, len: usize) -> Self {
-        StrValidation { uppercase_len: Some(Operation::Eq(Operand::Value(OperandValue::USize(len)))), ..self }
+        StrSchema { uppercase_len: Some(Operation::Eq(Operand::Value(OperandValue::USize(len)))), ..self }
     }
 
     pub fn uppercase_len_ne(self, len: usize) -> Self {
-        StrValidation { uppercase_len: Some(Operation::Ne(Operand::Value(OperandValue::USize(len)))), ..self }
+        StrSchema { uppercase_len: Some(Operation::Ne(Operand::Value(OperandValue::USize(len)))), ..self }
     }
 
     pub fn uppercase_len_gt(self, len: usize) -> Self {
-        StrValidation { uppercase_len: Some(Operation::Gt(Operand::Value(OperandValue::USize(len)))), ..self }
+        StrSchema { uppercase_len: Some(Operation::Gt(Operand::Value(OperandValue::USize(len)))), ..self }
     }
 
     pub fn uppercase_len_ge(self, len: usize) -> Self {
-        StrValidation { uppercase_len: Some(Operation::Ge(Operand::Value(OperandValue::USize(len)))), ..self }
+        StrSchema { uppercase_len: Some(Operation::Ge(Operand::Value(OperandValue::USize(len)))), ..self }
     }
 
     pub fn uppercase_len_lt(self, len: usize) -> Self {
-        StrValidation { uppercase_len: Some(Operation::Lt(Operand::Value(OperandValue::USize(len)))), ..self }
+        StrSchema { uppercase_len: Some(Operation::Lt(Operand::Value(OperandValue::USize(len)))), ..self }
     }
 
     pub fn uppercase_len_le(self, len: usize) -> Self {
-        StrValidation { uppercase_len: Some(Operation::Le(Operand::Value(OperandValue::USize(len)))), ..self }
+        StrSchema { uppercase_len: Some(Operation::Le(Operand::Value(OperandValue::USize(len)))), ..self }
     }
 
     pub fn uppercase_len_btwn(self, len_a: usize, len_b: usize) -> Self {
-        StrValidation {
+        StrSchema {
             uppercase_len: Some(Operation::Btwn(Operand::Value(OperandValue::USize(len_a)), Operand::Value(OperandValue::USize(len_b)))),
             ..self
         }
     }
 
     pub fn numbers_len_eq(self, len: usize) -> Self {
-        StrValidation { numbers_len: Some(Operation::Eq(Operand::Value(OperandValue::USize(len)))), ..self }
+        StrSchema { numbers_len: Some(Operation::Eq(Operand::Value(OperandValue::USize(len)))), ..self }
     }
 
     pub fn numbers_len_ne(self, len: usize) -> Self {
-        StrValidation { numbers_len: Some(Operation::Ne(Operand::Value(OperandValue::USize(len)))), ..self }
+        StrSchema { numbers_len: Some(Operation::Ne(Operand::Value(OperandValue::USize(len)))), ..self }
     }
 
     pub fn numbers_len_gt(self, len: usize) -> Self {
-        StrValidation { numbers_len: Some(Operation::Gt(Operand::Value(OperandValue::USize(len)))), ..self }
+        StrSchema { numbers_len: Some(Operation::Gt(Operand::Value(OperandValue::USize(len)))), ..self }
     }
 
     pub fn numbers_len_ge(self, len: usize) -> Self {
-        StrValidation { numbers_len: Some(Operation::Ge(Operand::Value(OperandValue::USize(len)))), ..self }
+        StrSchema { numbers_len: Some(Operation::Ge(Operand::Value(OperandValue::USize(len)))), ..self }
     }
 
     pub fn numbers_len_lt(self, len: usize) -> Self {
-        StrValidation { numbers_len: Some(Operation::Lt(Operand::Value(OperandValue::USize(len)))), ..self }
+        StrSchema { numbers_len: Some(Operation::Lt(Operand::Value(OperandValue::USize(len)))), ..self }
     }
 
     pub fn numbers_len_le(self, len: usize) -> Self {
-        StrValidation { numbers_len: Some(Operation::Le(Operand::Value(OperandValue::USize(len)))), ..self }
+        StrSchema { numbers_len: Some(Operation::Le(Operand::Value(OperandValue::USize(len)))), ..self }
     }
 
     pub fn numbers_len_btwn(self, len_a: usize, len_b: usize) -> Self {
-        StrValidation {
+        StrSchema {
             numbers_len: Some(Operation::Btwn(Operand::Value(OperandValue::USize(len_a)), Operand::Value(OperandValue::USize(len_b)))),
             ..self
         }
     }
 
     pub fn symbols_len_eq(self, len: usize) -> Self {
-        StrValidation { symbols_len: Some(Operation::Eq(Operand::Value(OperandValue::USize(len)))), ..self }
+        StrSchema { symbols_len: Some(Operation::Eq(Operand::Value(OperandValue::USize(len)))), ..self }
     }
 
     pub fn symbols_len_ne(self, len: usize) -> Self {
-        StrValidation { symbols_len: Some(Operation::Ne(Operand::Value(OperandValue::USize(len)))), ..self }
+        StrSchema { symbols_len: Some(Operation::Ne(Operand::Value(OperandValue::USize(len)))), ..self }
     }
 
     pub fn symbols_len_gt(self, len: usize) -> Self {
-        StrValidation { symbols_len: Some(Operation::Gt(Operand::Value(OperandValue::USize(len)))), ..self }
+        StrSchema { symbols_len: Some(Operation::Gt(Operand::Value(OperandValue::USize(len)))), ..self }
     }
 
     pub fn symbols_len_ge(self, len: usize) -> Self {
-        StrValidation { symbols_len: Some(Operation::Ge(Operand::Value(OperandValue::USize(len)))), ..self }
+        StrSchema { symbols_len: Some(Operation::Ge(Operand::Value(OperandValue::USize(len)))), ..self }
     }
 
     pub fn symbols_len_lt(self, len: usize) -> Self {
-        StrValidation { symbols_len: Some(Operation::Lt(Operand::Value(OperandValue::USize(len)))), ..self }
+        StrSchema { symbols_len: Some(Operation::Lt(Operand::Value(OperandValue::USize(len)))), ..self }
     }
 
     pub fn symbols_len_le(self, len: usize) -> Self {
-        StrValidation { symbols_len: Some(Operation::Le(Operand::Value(OperandValue::USize(len)))), ..self }
+        StrSchema { symbols_len: Some(Operation::Le(Operand::Value(OperandValue::USize(len)))), ..self }
     }
 
     pub fn symbols_len_btwn(self, len_a: usize, len_b: usize) -> Self {
-        StrValidation {
+        StrSchema {
             symbols_len: Some(Operation::Btwn(Operand::Value(OperandValue::USize(len_a)), Operand::Value(OperandValue::USize(len_b)))),
             ..self
         }
     }
 
     pub fn eq_field(self, field: String) -> Self {
-        StrValidation { operation: Some(Operation::Eq(Operand::FieldPath(field))), ..self }
+        StrSchema { operation: Some(Operation::Eq(Operand::FieldPath(field))), ..self }
     }
 
     pub fn ne_field(self, field: String) -> Self {
-        StrValidation { operation: Some(Operation::Ne(Operand::FieldPath(field))), ..self }
+        StrSchema { operation: Some(Operation::Ne(Operand::FieldPath(field))), ..self }
     }
 
     pub fn gt_field(self, field: String) -> Self {
-        StrValidation { operation: Some(Operation::Gt(Operand::FieldPath(field))), ..self }
+        StrSchema { operation: Some(Operation::Gt(Operand::FieldPath(field))), ..self }
     }
 
     pub fn ge_field(self, field: String) -> Self {
-        StrValidation { operation: Some(Operation::Ge(Operand::FieldPath(field))), ..self }
+        StrSchema { operation: Some(Operation::Ge(Operand::FieldPath(field))), ..self }
     }
 
     pub fn lt_field(self, field: String) -> Self {
-        StrValidation { operation: Some(Operation::Lt(Operand::FieldPath(field))), ..self }
+        StrSchema { operation: Some(Operation::Lt(Operand::FieldPath(field))), ..self }
     }
 
     pub fn le_field(self, field: String) -> Self {
-        StrValidation { operation: Some(Operation::Le(Operand::FieldPath(field))), ..self }
+        StrSchema { operation: Some(Operation::Le(Operand::FieldPath(field))), ..self }
     }
 
     pub fn btwn_field(self, field_a: String, field_b: String) -> Self {
-        StrValidation { operation: Some(Operation::Btwn(Operand::FieldPath(field_a), Operand::FieldPath(field_b))), ..self }
+        StrSchema { operation: Some(Operation::Btwn(Operand::FieldPath(field_a), Operand::FieldPath(field_b))), ..self }
     }
 
     pub fn bytes_len_eq_field(self, field: String) -> Self {
-        StrValidation { bytes_len: Some(Operation::Eq(Operand::FieldPath(field))), ..self }
+        StrSchema { bytes_len: Some(Operation::Eq(Operand::FieldPath(field))), ..self }
     }
 
     pub fn bytes_len_ne_field(self, field: String) -> Self {
-        StrValidation { bytes_len: Some(Operation::Ne(Operand::FieldPath(field))), ..self }
+        StrSchema { bytes_len: Some(Operation::Ne(Operand::FieldPath(field))), ..self }
     }
 
     pub fn bytes_len_gt_field(self, field: String) -> Self {
-        StrValidation { bytes_len: Some(Operation::Gt(Operand::FieldPath(field))), ..self }
+        StrSchema { bytes_len: Some(Operation::Gt(Operand::FieldPath(field))), ..self }
     }
 
     pub fn bytes_len_ge_field(self, field: String) -> Self {
-        StrValidation { bytes_len: Some(Operation::Ge(Operand::FieldPath(field))), ..self }
+        StrSchema { bytes_len: Some(Operation::Ge(Operand::FieldPath(field))), ..self }
     }
 
     pub fn bytes_len_lt_field(self, field: String) -> Self {
-        StrValidation { bytes_len: Some(Operation::Lt(Operand::FieldPath(field))), ..self }
+        StrSchema { bytes_len: Some(Operation::Lt(Operand::FieldPath(field))), ..self }
     }
 
     pub fn bytes_len_le_field(self, field: String) -> Self {
-        StrValidation { bytes_len: Some(Operation::Le(Operand::FieldPath(field))), ..self }
+        StrSchema { bytes_len: Some(Operation::Le(Operand::FieldPath(field))), ..self }
     }
 
     pub fn bytes_len_btwn_field(self, field_a: String, field_b: String) -> Self {
-        StrValidation { bytes_len: Some(Operation::Btwn(Operand::FieldPath(field_a), Operand::FieldPath(field_b))), ..self }
+        StrSchema { bytes_len: Some(Operation::Btwn(Operand::FieldPath(field_a), Operand::FieldPath(field_b))), ..self }
     }
 
     pub fn chars_len_eq_field(self, field: String) -> Self {
-        StrValidation { chars_len: Some(Operation::Eq(Operand::FieldPath(field))), ..self }
+        StrSchema { chars_len: Some(Operation::Eq(Operand::FieldPath(field))), ..self }
     }
 
     pub fn chars_len_ne_field(self, field: String) -> Self {
-        StrValidation { chars_len: Some(Operation::Ne(Operand::FieldPath(field))), ..self }
+        StrSchema { chars_len: Some(Operation::Ne(Operand::FieldPath(field))), ..self }
     }
 
     pub fn chars_len_gt_field(self, field: String) -> Self {
-        StrValidation { chars_len: Some(Operation::Gt(Operand::FieldPath(field))), ..self }
+        StrSchema { chars_len: Some(Operation::Gt(Operand::FieldPath(field))), ..self }
     }
 
     pub fn chars_len_ge_field(self, field: String) -> Self {
-        StrValidation { chars_len: Some(Operation::Ge(Operand::FieldPath(field))), ..self }
+        StrSchema { chars_len: Some(Operation::Ge(Operand::FieldPath(field))), ..self }
     }
 
     pub fn chars_len_lt_field(self, field: String) -> Self {
-        StrValidation { chars_len: Some(Operation::Lt(Operand::FieldPath(field))), ..self }
+        StrSchema { chars_len: Some(Operation::Lt(Operand::FieldPath(field))), ..self }
     }
 
     pub fn chars_len_le_field(self, field: String) -> Self {
-        StrValidation { chars_len: Some(Operation::Le(Operand::FieldPath(field))), ..self }
+        StrSchema { chars_len: Some(Operation::Le(Operand::FieldPath(field))), ..self }
     }
 
     pub fn chars_len_btwn_field(self, field_a: String, field_b: String) -> Self {
-        StrValidation { chars_len: Some(Operation::Btwn(Operand::FieldPath(field_a), Operand::FieldPath(field_b))), ..self }
+        StrSchema { chars_len: Some(Operation::Btwn(Operand::FieldPath(field_a), Operand::FieldPath(field_b))), ..self }
     }
 
     pub fn graphemes_len_eq_field(self, field: String) -> Self {
-        StrValidation { graphemes_len: Some(Operation::Eq(Operand::FieldPath(field))), ..self }
+        StrSchema { graphemes_len: Some(Operation::Eq(Operand::FieldPath(field))), ..self }
     }
 
     pub fn graphemes_len_ne_field(self, field: String) -> Self {
-        StrValidation { graphemes_len: Some(Operation::Ne(Operand::FieldPath(field))), ..self }
+        StrSchema { graphemes_len: Some(Operation::Ne(Operand::FieldPath(field))), ..self }
     }
 
     pub fn graphemes_len_gt_field(self, field: String) -> Self {
-        StrValidation { graphemes_len: Some(Operation::Gt(Operand::FieldPath(field))), ..self }
+        StrSchema { graphemes_len: Some(Operation::Gt(Operand::FieldPath(field))), ..self }
     }
 
     pub fn graphemes_len_ge_field(self, field: String) -> Self {
-        StrValidation { graphemes_len: Some(Operation::Ge(Operand::FieldPath(field))), ..self }
+        StrSchema { graphemes_len: Some(Operation::Ge(Operand::FieldPath(field))), ..self }
     }
 
     pub fn graphemes_len_lt_field(self, field: String) -> Self {
-        StrValidation { graphemes_len: Some(Operation::Lt(Operand::FieldPath(field))), ..self }
+        StrSchema { graphemes_len: Some(Operation::Lt(Operand::FieldPath(field))), ..self }
     }
 
     pub fn graphemes_len_le_field(self, field: String) -> Self {
-        StrValidation { graphemes_len: Some(Operation::Le(Operand::FieldPath(field))), ..self }
+        StrSchema { graphemes_len: Some(Operation::Le(Operand::FieldPath(field))), ..self }
     }
 
     pub fn graphemes_len_btwn_field(self, field_a: String, field_b: String) -> Self {
-        StrValidation { graphemes_len: Some(Operation::Btwn(Operand::FieldPath(field_a), Operand::FieldPath(field_b))), ..self }
+        StrSchema { graphemes_len: Some(Operation::Btwn(Operand::FieldPath(field_a), Operand::FieldPath(field_b))), ..self }
     }
 
     pub fn lowercase_len_eq_field(self, field: String) -> Self {
-        StrValidation { lowercase_len: Some(Operation::Eq(Operand::FieldPath(field))), ..self }
+        StrSchema { lowercase_len: Some(Operation::Eq(Operand::FieldPath(field))), ..self }
     }
 
     pub fn lowercase_len_ne_field(self, field: String) -> Self {
-        StrValidation { lowercase_len: Some(Operation::Ne(Operand::FieldPath(field))), ..self }
+        StrSchema { lowercase_len: Some(Operation::Ne(Operand::FieldPath(field))), ..self }
     }
 
     pub fn lowercase_len_gt_field(self, field: String) -> Self {
-        StrValidation { lowercase_len: Some(Operation::Gt(Operand::FieldPath(field))), ..self }
+        StrSchema { lowercase_len: Some(Operation::Gt(Operand::FieldPath(field))), ..self }
     }
 
     pub fn lowercase_len_ge_field(self, field: String) -> Self {
-        StrValidation { lowercase_len: Some(Operation::Ge(Operand::FieldPath(field))), ..self }
+        StrSchema { lowercase_len: Some(Operation::Ge(Operand::FieldPath(field))), ..self }
     }
 
     pub fn lowercase_len_lt_field(self, field: String) -> Self {
-        StrValidation { lowercase_len: Some(Operation::Lt(Operand::FieldPath(field))), ..self }
+        StrSchema { lowercase_len: Some(Operation::Lt(Operand::FieldPath(field))), ..self }
     }
 
     pub fn lowercase_len_le_field(self, field: String) -> Self {
-        StrValidation { lowercase_len: Some(Operation::Le(Operand::FieldPath(field))), ..self }
+        StrSchema { lowercase_len: Some(Operation::Le(Operand::FieldPath(field))), ..self }
     }
 
     pub fn lowercase_len_btwn_field(self, field_a: String, field_b: String) -> Self {
-        StrValidation { lowercase_len: Some(Operation::Btwn(Operand::FieldPath(field_a), Operand::FieldPath(field_b))), ..self }
+        StrSchema { lowercase_len: Some(Operation::Btwn(Operand::FieldPath(field_a), Operand::FieldPath(field_b))), ..self }
     }
 
     pub fn uppercase_len_eq_field(self, field: String) -> Self {
-        StrValidation { uppercase_len: Some(Operation::Eq(Operand::FieldPath(field))), ..self }
+        StrSchema { uppercase_len: Some(Operation::Eq(Operand::FieldPath(field))), ..self }
     }
 
     pub fn uppercase_len_ne_field(self, field: String) -> Self {
-        StrValidation { uppercase_len: Some(Operation::Ne(Operand::FieldPath(field))), ..self }
+        StrSchema { uppercase_len: Some(Operation::Ne(Operand::FieldPath(field))), ..self }
     }
 
     pub fn uppercase_len_gt_field(self, field: String) -> Self {
-        StrValidation { uppercase_len: Some(Operation::Gt(Operand::FieldPath(field))), ..self }
+        StrSchema { uppercase_len: Some(Operation::Gt(Operand::FieldPath(field))), ..self }
     }
 
     pub fn uppercase_len_ge_field(self, field: String) -> Self {
-        StrValidation { uppercase_len: Some(Operation::Ge(Operand::FieldPath(field))), ..self }
+        StrSchema { uppercase_len: Some(Operation::Ge(Operand::FieldPath(field))), ..self }
     }
 
     pub fn uppercase_len_lt_field(self, field: String) -> Self {
-        StrValidation { uppercase_len: Some(Operation::Lt(Operand::FieldPath(field))), ..self }
+        StrSchema { uppercase_len: Some(Operation::Lt(Operand::FieldPath(field))), ..self }
     }
 
     pub fn uppercase_len_le_field(self, field: String) -> Self {
-        StrValidation { uppercase_len: Some(Operation::Le(Operand::FieldPath(field))), ..self }
+        StrSchema { uppercase_len: Some(Operation::Le(Operand::FieldPath(field))), ..self }
     }
 
     pub fn uppercase_len_btwn_field(self, field_a: String, field_b: String) -> Self {
-        StrValidation { uppercase_len: Some(Operation::Btwn(Operand::FieldPath(field_a), Operand::FieldPath(field_b))), ..self }
+        StrSchema { uppercase_len: Some(Operation::Btwn(Operand::FieldPath(field_a), Operand::FieldPath(field_b))), ..self }
     }
 
     pub fn numbers_len_eq_field(self, field: String) -> Self {
-        StrValidation { numbers_len: Some(Operation::Eq(Operand::FieldPath(field))), ..self }
+        StrSchema { numbers_len: Some(Operation::Eq(Operand::FieldPath(field))), ..self }
     }
 
     pub fn numbers_len_ne_field(self, field: String) -> Self {
-        StrValidation { numbers_len: Some(Operation::Ne(Operand::FieldPath(field))), ..self }
+        StrSchema { numbers_len: Some(Operation::Ne(Operand::FieldPath(field))), ..self }
     }
 
     pub fn numbers_len_gt_field(self, field: String) -> Self {
-        StrValidation { numbers_len: Some(Operation::Gt(Operand::FieldPath(field))), ..self }
+        StrSchema { numbers_len: Some(Operation::Gt(Operand::FieldPath(field))), ..self }
     }
 
     pub fn numbers_len_ge_field(self, field: String) -> Self {
-        StrValidation { numbers_len: Some(Operation::Ge(Operand::FieldPath(field))), ..self }
+        StrSchema { numbers_len: Some(Operation::Ge(Operand::FieldPath(field))), ..self }
     }
 
     pub fn numbers_len_lt_field(self, field: String) -> Self {
-        StrValidation { numbers_len: Some(Operation::Lt(Operand::FieldPath(field))), ..self }
+        StrSchema { numbers_len: Some(Operation::Lt(Operand::FieldPath(field))), ..self }
     }
 
     pub fn numbers_len_le_field(self, field: String) -> Self {
-        StrValidation { numbers_len: Some(Operation::Le(Operand::FieldPath(field))), ..self }
+        StrSchema { numbers_len: Some(Operation::Le(Operand::FieldPath(field))), ..self }
     }
 
     pub fn numbers_len_btwn_field(self, field_a: String, field_b: String) -> Self {
-        StrValidation { numbers_len: Some(Operation::Btwn(Operand::FieldPath(field_a), Operand::FieldPath(field_b))), ..self }
+        StrSchema { numbers_len: Some(Operation::Btwn(Operand::FieldPath(field_a), Operand::FieldPath(field_b))), ..self }
     }
 
     pub fn symbols_len_eq_field(self, field: String) -> Self {
-        StrValidation { symbols_len: Some(Operation::Eq(Operand::FieldPath(field))), ..self }
+        StrSchema { symbols_len: Some(Operation::Eq(Operand::FieldPath(field))), ..self }
     }
 
     pub fn symbols_len_ne_field(self, field: String) -> Self {
-        StrValidation { symbols_len: Some(Operation::Ne(Operand::FieldPath(field))), ..self }
+        StrSchema { symbols_len: Some(Operation::Ne(Operand::FieldPath(field))), ..self }
     }
 
     pub fn symbols_len_gt_field(self, field: String) -> Self {
-        StrValidation { symbols_len: Some(Operation::Gt(Operand::FieldPath(field))), ..self }
+        StrSchema { symbols_len: Some(Operation::Gt(Operand::FieldPath(field))), ..self }
     }
 
     pub fn symbols_len_ge_field(self, field: String) -> Self {
-        StrValidation { symbols_len: Some(Operation::Ge(Operand::FieldPath(field))), ..self }
+        StrSchema { symbols_len: Some(Operation::Ge(Operand::FieldPath(field))), ..self }
     }
 
     pub fn symbols_len_lt_field(self, field: String) -> Self {
-        StrValidation { symbols_len: Some(Operation::Lt(Operand::FieldPath(field))), ..self }
+        StrSchema { symbols_len: Some(Operation::Lt(Operand::FieldPath(field))), ..self }
     }
 
     pub fn symbols_len_le_field(self, field: String) -> Self {
-        StrValidation { symbols_len: Some(Operation::Le(Operand::FieldPath(field))), ..self }
+        StrSchema { symbols_len: Some(Operation::Le(Operand::FieldPath(field))), ..self }
     }
 
     pub fn symbols_len_btwn_field(self, field_a: String, field_b: String) -> Self {
-        StrValidation { symbols_len: Some(Operation::Btwn(Operand::FieldPath(field_a), Operand::FieldPath(field_b))), ..self }
+        StrSchema { symbols_len: Some(Operation::Btwn(Operand::FieldPath(field_a), Operand::FieldPath(field_b))), ..self }
     }
 }
 
@@ -513,7 +513,7 @@ mod tests {
 
     use crate::operation::{Operand, OperandValue, Operation};
 
-    use super::StrValidation;
+    use super::StrSchema;
 
     const VALUE: &str = "Avalon";
     const VALUE_B: &str = "Mu";
@@ -572,10 +572,10 @@ mod tests {
     const OPERATION_FIELD_LEN_BTWN: LazyLock<Operation> = LazyLock::new(|| Operation::Btwn(OPERAND_FIELD_LEN.clone(), OPERAND_FIELD_LEN_B.clone()));
 
     #[test]
-    fn str_validation() {
+    fn str_schema() {
         assert_eq!(
-            StrValidation::default(),
-            StrValidation {
+            StrSchema::default(),
+            StrSchema {
                 required: true,
                 operation: None,
                 bytes_len: None,
@@ -588,8 +588,8 @@ mod tests {
             }
         );
         assert_eq!(
-            StrValidation::default().optional(),
-            StrValidation {
+            StrSchema::default().optional(),
+            StrSchema {
                 required: false,
                 operation: None,
                 bytes_len: None,
@@ -604,290 +604,290 @@ mod tests {
     }
 
     #[test]
-    fn str_validation_operation_value() {
-        let validation_eq = StrValidation::default().eq(VALUE.into());
-        let validation_ne = StrValidation::default().ne(VALUE.into());
-        let validation_gt = StrValidation::default().gt(VALUE.into());
-        let validation_ge = StrValidation::default().ge(VALUE.into());
-        let validation_lt = StrValidation::default().lt(VALUE.into());
-        let validation_le = StrValidation::default().le(VALUE.into());
-        let validation_btwn = StrValidation::default().btwn(VALUE.into(), VALUE_B.into());
-        assert_eq!(validation_eq, StrValidation { operation: Some(OPERATION_VALUE_EQ.clone()), ..Default::default() });
-        assert_eq!(validation_ne, StrValidation { operation: Some(OPERATION_VALUE_NE.clone()), ..Default::default() });
-        assert_eq!(validation_gt, StrValidation { operation: Some(OPERATION_VALUE_GT.clone()), ..Default::default() });
-        assert_eq!(validation_ge, StrValidation { operation: Some(OPERATION_VALUE_GE.clone()), ..Default::default() });
-        assert_eq!(validation_lt, StrValidation { operation: Some(OPERATION_VALUE_LT.clone()), ..Default::default() });
-        assert_eq!(validation_le, StrValidation { operation: Some(OPERATION_VALUE_LE.clone()), ..Default::default() });
-        assert_eq!(validation_btwn, StrValidation { operation: Some(OPERATION_VALUE_BTWN.clone()), ..Default::default() });
+    fn str_schema_operation_value() {
+        let validation_eq = StrSchema::default().eq(VALUE.into());
+        let validation_ne = StrSchema::default().ne(VALUE.into());
+        let validation_gt = StrSchema::default().gt(VALUE.into());
+        let validation_ge = StrSchema::default().ge(VALUE.into());
+        let validation_lt = StrSchema::default().lt(VALUE.into());
+        let validation_le = StrSchema::default().le(VALUE.into());
+        let validation_btwn = StrSchema::default().btwn(VALUE.into(), VALUE_B.into());
+        assert_eq!(validation_eq, StrSchema { operation: Some(OPERATION_VALUE_EQ.clone()), ..Default::default() });
+        assert_eq!(validation_ne, StrSchema { operation: Some(OPERATION_VALUE_NE.clone()), ..Default::default() });
+        assert_eq!(validation_gt, StrSchema { operation: Some(OPERATION_VALUE_GT.clone()), ..Default::default() });
+        assert_eq!(validation_ge, StrSchema { operation: Some(OPERATION_VALUE_GE.clone()), ..Default::default() });
+        assert_eq!(validation_lt, StrSchema { operation: Some(OPERATION_VALUE_LT.clone()), ..Default::default() });
+        assert_eq!(validation_le, StrSchema { operation: Some(OPERATION_VALUE_LE.clone()), ..Default::default() });
+        assert_eq!(validation_btwn, StrSchema { operation: Some(OPERATION_VALUE_BTWN.clone()), ..Default::default() });
     }
 
     #[test]
-    fn str_validation_operation_field() {
-        let validation_eq = StrValidation::default().eq_field(FIELD.into());
-        let validation_ne = StrValidation::default().ne_field(FIELD.into());
-        let validation_gt = StrValidation::default().gt_field(FIELD.into());
-        let validation_ge = StrValidation::default().ge_field(FIELD.into());
-        let validation_lt = StrValidation::default().lt_field(FIELD.into());
-        let validation_le = StrValidation::default().le_field(FIELD.into());
-        let validation_btwn = StrValidation::default().btwn_field(FIELD.into(), FIELD_B.into());
-        assert_eq!(validation_eq, StrValidation { operation: Some(OPERATION_FIELD_EQ.clone()), ..Default::default() });
-        assert_eq!(validation_ne, StrValidation { operation: Some(OPERATION_FIELD_NE.clone()), ..Default::default() });
-        assert_eq!(validation_gt, StrValidation { operation: Some(OPERATION_FIELD_GT.clone()), ..Default::default() });
-        assert_eq!(validation_ge, StrValidation { operation: Some(OPERATION_FIELD_GE.clone()), ..Default::default() });
-        assert_eq!(validation_lt, StrValidation { operation: Some(OPERATION_FIELD_LT.clone()), ..Default::default() });
-        assert_eq!(validation_le, StrValidation { operation: Some(OPERATION_FIELD_LE.clone()), ..Default::default() });
-        assert_eq!(validation_btwn, StrValidation { operation: Some(OPERATION_FIELD_BTWN.clone()), ..Default::default() });
+    fn str_schema_operation_field() {
+        let validation_eq = StrSchema::default().eq_field(FIELD.into());
+        let validation_ne = StrSchema::default().ne_field(FIELD.into());
+        let validation_gt = StrSchema::default().gt_field(FIELD.into());
+        let validation_ge = StrSchema::default().ge_field(FIELD.into());
+        let validation_lt = StrSchema::default().lt_field(FIELD.into());
+        let validation_le = StrSchema::default().le_field(FIELD.into());
+        let validation_btwn = StrSchema::default().btwn_field(FIELD.into(), FIELD_B.into());
+        assert_eq!(validation_eq, StrSchema { operation: Some(OPERATION_FIELD_EQ.clone()), ..Default::default() });
+        assert_eq!(validation_ne, StrSchema { operation: Some(OPERATION_FIELD_NE.clone()), ..Default::default() });
+        assert_eq!(validation_gt, StrSchema { operation: Some(OPERATION_FIELD_GT.clone()), ..Default::default() });
+        assert_eq!(validation_ge, StrSchema { operation: Some(OPERATION_FIELD_GE.clone()), ..Default::default() });
+        assert_eq!(validation_lt, StrSchema { operation: Some(OPERATION_FIELD_LT.clone()), ..Default::default() });
+        assert_eq!(validation_le, StrSchema { operation: Some(OPERATION_FIELD_LE.clone()), ..Default::default() });
+        assert_eq!(validation_btwn, StrSchema { operation: Some(OPERATION_FIELD_BTWN.clone()), ..Default::default() });
     }
 
     #[test]
-    fn str_validation_bytes_len_value() {
-        let validation_eq = StrValidation::default().bytes_len_eq(VALUE_LEN);
-        let validation_ne = StrValidation::default().bytes_len_ne(VALUE_LEN);
-        let validation_gt = StrValidation::default().bytes_len_gt(VALUE_LEN);
-        let validation_ge = StrValidation::default().bytes_len_ge(VALUE_LEN);
-        let validation_lt = StrValidation::default().bytes_len_lt(VALUE_LEN);
-        let validation_le = StrValidation::default().bytes_len_le(VALUE_LEN);
-        let validation_btwn = StrValidation::default().bytes_len_btwn(VALUE_LEN, VALUE_LEN_B);
-        assert_eq!(validation_eq, StrValidation { bytes_len: Some(OPERATION_VALUE_LEN_EQ.clone()), ..Default::default() });
-        assert_eq!(validation_ne, StrValidation { bytes_len: Some(OPERATION_VALUE_LEN_NE.clone()), ..Default::default() });
-        assert_eq!(validation_gt, StrValidation { bytes_len: Some(OPERATION_VALUE_LEN_GT.clone()), ..Default::default() });
-        assert_eq!(validation_ge, StrValidation { bytes_len: Some(OPERATION_VALUE_LEN_GE.clone()), ..Default::default() });
-        assert_eq!(validation_lt, StrValidation { bytes_len: Some(OPERATION_VALUE_LEN_LT.clone()), ..Default::default() });
-        assert_eq!(validation_le, StrValidation { bytes_len: Some(OPERATION_VALUE_LEN_LE.clone()), ..Default::default() });
-        assert_eq!(validation_btwn, StrValidation { bytes_len: Some(OPERATION_VALUE_LEN_BTWN.clone()), ..Default::default() });
+    fn str_schema_bytes_len_value() {
+        let validation_eq = StrSchema::default().bytes_len_eq(VALUE_LEN);
+        let validation_ne = StrSchema::default().bytes_len_ne(VALUE_LEN);
+        let validation_gt = StrSchema::default().bytes_len_gt(VALUE_LEN);
+        let validation_ge = StrSchema::default().bytes_len_ge(VALUE_LEN);
+        let validation_lt = StrSchema::default().bytes_len_lt(VALUE_LEN);
+        let validation_le = StrSchema::default().bytes_len_le(VALUE_LEN);
+        let validation_btwn = StrSchema::default().bytes_len_btwn(VALUE_LEN, VALUE_LEN_B);
+        assert_eq!(validation_eq, StrSchema { bytes_len: Some(OPERATION_VALUE_LEN_EQ.clone()), ..Default::default() });
+        assert_eq!(validation_ne, StrSchema { bytes_len: Some(OPERATION_VALUE_LEN_NE.clone()), ..Default::default() });
+        assert_eq!(validation_gt, StrSchema { bytes_len: Some(OPERATION_VALUE_LEN_GT.clone()), ..Default::default() });
+        assert_eq!(validation_ge, StrSchema { bytes_len: Some(OPERATION_VALUE_LEN_GE.clone()), ..Default::default() });
+        assert_eq!(validation_lt, StrSchema { bytes_len: Some(OPERATION_VALUE_LEN_LT.clone()), ..Default::default() });
+        assert_eq!(validation_le, StrSchema { bytes_len: Some(OPERATION_VALUE_LEN_LE.clone()), ..Default::default() });
+        assert_eq!(validation_btwn, StrSchema { bytes_len: Some(OPERATION_VALUE_LEN_BTWN.clone()), ..Default::default() });
     }
 
     #[test]
-    fn str_validation_chars_len_value() {
-        let validation_eq = StrValidation::default().chars_len_eq(VALUE_LEN);
-        let validation_ne = StrValidation::default().chars_len_ne(VALUE_LEN);
-        let validation_gt = StrValidation::default().chars_len_gt(VALUE_LEN);
-        let validation_ge = StrValidation::default().chars_len_ge(VALUE_LEN);
-        let validation_lt = StrValidation::default().chars_len_lt(VALUE_LEN);
-        let validation_le = StrValidation::default().chars_len_le(VALUE_LEN);
-        let validation_btwn = StrValidation::default().chars_len_btwn(VALUE_LEN, VALUE_LEN_B);
-        assert_eq!(validation_eq, StrValidation { chars_len: Some(OPERATION_VALUE_LEN_EQ.clone()), ..Default::default() });
-        assert_eq!(validation_ne, StrValidation { chars_len: Some(OPERATION_VALUE_LEN_NE.clone()), ..Default::default() });
-        assert_eq!(validation_gt, StrValidation { chars_len: Some(OPERATION_VALUE_LEN_GT.clone()), ..Default::default() });
-        assert_eq!(validation_ge, StrValidation { chars_len: Some(OPERATION_VALUE_LEN_GE.clone()), ..Default::default() });
-        assert_eq!(validation_lt, StrValidation { chars_len: Some(OPERATION_VALUE_LEN_LT.clone()), ..Default::default() });
-        assert_eq!(validation_le, StrValidation { chars_len: Some(OPERATION_VALUE_LEN_LE.clone()), ..Default::default() });
-        assert_eq!(validation_btwn, StrValidation { chars_len: Some(OPERATION_VALUE_LEN_BTWN.clone()), ..Default::default() });
+    fn str_schema_chars_len_value() {
+        let validation_eq = StrSchema::default().chars_len_eq(VALUE_LEN);
+        let validation_ne = StrSchema::default().chars_len_ne(VALUE_LEN);
+        let validation_gt = StrSchema::default().chars_len_gt(VALUE_LEN);
+        let validation_ge = StrSchema::default().chars_len_ge(VALUE_LEN);
+        let validation_lt = StrSchema::default().chars_len_lt(VALUE_LEN);
+        let validation_le = StrSchema::default().chars_len_le(VALUE_LEN);
+        let validation_btwn = StrSchema::default().chars_len_btwn(VALUE_LEN, VALUE_LEN_B);
+        assert_eq!(validation_eq, StrSchema { chars_len: Some(OPERATION_VALUE_LEN_EQ.clone()), ..Default::default() });
+        assert_eq!(validation_ne, StrSchema { chars_len: Some(OPERATION_VALUE_LEN_NE.clone()), ..Default::default() });
+        assert_eq!(validation_gt, StrSchema { chars_len: Some(OPERATION_VALUE_LEN_GT.clone()), ..Default::default() });
+        assert_eq!(validation_ge, StrSchema { chars_len: Some(OPERATION_VALUE_LEN_GE.clone()), ..Default::default() });
+        assert_eq!(validation_lt, StrSchema { chars_len: Some(OPERATION_VALUE_LEN_LT.clone()), ..Default::default() });
+        assert_eq!(validation_le, StrSchema { chars_len: Some(OPERATION_VALUE_LEN_LE.clone()), ..Default::default() });
+        assert_eq!(validation_btwn, StrSchema { chars_len: Some(OPERATION_VALUE_LEN_BTWN.clone()), ..Default::default() });
     }
 
     #[test]
-    fn str_validation_graphemes_len_value() {
-        let validation_eq = StrValidation::default().graphemes_len_eq(VALUE_LEN);
-        let validation_ne = StrValidation::default().graphemes_len_ne(VALUE_LEN);
-        let validation_gt = StrValidation::default().graphemes_len_gt(VALUE_LEN);
-        let validation_ge = StrValidation::default().graphemes_len_ge(VALUE_LEN);
-        let validation_lt = StrValidation::default().graphemes_len_lt(VALUE_LEN);
-        let validation_le = StrValidation::default().graphemes_len_le(VALUE_LEN);
-        let validation_btwn = StrValidation::default().graphemes_len_btwn(VALUE_LEN, VALUE_LEN_B);
-        assert_eq!(validation_eq, StrValidation { graphemes_len: Some(OPERATION_VALUE_LEN_EQ.clone()), ..Default::default() });
-        assert_eq!(validation_ne, StrValidation { graphemes_len: Some(OPERATION_VALUE_LEN_NE.clone()), ..Default::default() });
-        assert_eq!(validation_gt, StrValidation { graphemes_len: Some(OPERATION_VALUE_LEN_GT.clone()), ..Default::default() });
-        assert_eq!(validation_ge, StrValidation { graphemes_len: Some(OPERATION_VALUE_LEN_GE.clone()), ..Default::default() });
-        assert_eq!(validation_lt, StrValidation { graphemes_len: Some(OPERATION_VALUE_LEN_LT.clone()), ..Default::default() });
-        assert_eq!(validation_le, StrValidation { graphemes_len: Some(OPERATION_VALUE_LEN_LE.clone()), ..Default::default() });
-        assert_eq!(validation_btwn, StrValidation { graphemes_len: Some(OPERATION_VALUE_LEN_BTWN.clone()), ..Default::default() });
+    fn str_schema_graphemes_len_value() {
+        let validation_eq = StrSchema::default().graphemes_len_eq(VALUE_LEN);
+        let validation_ne = StrSchema::default().graphemes_len_ne(VALUE_LEN);
+        let validation_gt = StrSchema::default().graphemes_len_gt(VALUE_LEN);
+        let validation_ge = StrSchema::default().graphemes_len_ge(VALUE_LEN);
+        let validation_lt = StrSchema::default().graphemes_len_lt(VALUE_LEN);
+        let validation_le = StrSchema::default().graphemes_len_le(VALUE_LEN);
+        let validation_btwn = StrSchema::default().graphemes_len_btwn(VALUE_LEN, VALUE_LEN_B);
+        assert_eq!(validation_eq, StrSchema { graphemes_len: Some(OPERATION_VALUE_LEN_EQ.clone()), ..Default::default() });
+        assert_eq!(validation_ne, StrSchema { graphemes_len: Some(OPERATION_VALUE_LEN_NE.clone()), ..Default::default() });
+        assert_eq!(validation_gt, StrSchema { graphemes_len: Some(OPERATION_VALUE_LEN_GT.clone()), ..Default::default() });
+        assert_eq!(validation_ge, StrSchema { graphemes_len: Some(OPERATION_VALUE_LEN_GE.clone()), ..Default::default() });
+        assert_eq!(validation_lt, StrSchema { graphemes_len: Some(OPERATION_VALUE_LEN_LT.clone()), ..Default::default() });
+        assert_eq!(validation_le, StrSchema { graphemes_len: Some(OPERATION_VALUE_LEN_LE.clone()), ..Default::default() });
+        assert_eq!(validation_btwn, StrSchema { graphemes_len: Some(OPERATION_VALUE_LEN_BTWN.clone()), ..Default::default() });
     }
 
     #[test]
-    fn str_validation_lowercase_len_value() {
-        let validation_eq = StrValidation::default().lowercase_len_eq(VALUE_LEN);
-        let validation_ne = StrValidation::default().lowercase_len_ne(VALUE_LEN);
-        let validation_gt = StrValidation::default().lowercase_len_gt(VALUE_LEN);
-        let validation_ge = StrValidation::default().lowercase_len_ge(VALUE_LEN);
-        let validation_lt = StrValidation::default().lowercase_len_lt(VALUE_LEN);
-        let validation_le = StrValidation::default().lowercase_len_le(VALUE_LEN);
-        let validation_btwn = StrValidation::default().lowercase_len_btwn(VALUE_LEN, VALUE_LEN_B);
-        assert_eq!(validation_eq, StrValidation { lowercase_len: Some(OPERATION_VALUE_LEN_EQ.clone()), ..Default::default() });
-        assert_eq!(validation_ne, StrValidation { lowercase_len: Some(OPERATION_VALUE_LEN_NE.clone()), ..Default::default() });
-        assert_eq!(validation_gt, StrValidation { lowercase_len: Some(OPERATION_VALUE_LEN_GT.clone()), ..Default::default() });
-        assert_eq!(validation_ge, StrValidation { lowercase_len: Some(OPERATION_VALUE_LEN_GE.clone()), ..Default::default() });
-        assert_eq!(validation_lt, StrValidation { lowercase_len: Some(OPERATION_VALUE_LEN_LT.clone()), ..Default::default() });
-        assert_eq!(validation_le, StrValidation { lowercase_len: Some(OPERATION_VALUE_LEN_LE.clone()), ..Default::default() });
-        assert_eq!(validation_btwn, StrValidation { lowercase_len: Some(OPERATION_VALUE_LEN_BTWN.clone()), ..Default::default() });
+    fn str_schema_lowercase_len_value() {
+        let validation_eq = StrSchema::default().lowercase_len_eq(VALUE_LEN);
+        let validation_ne = StrSchema::default().lowercase_len_ne(VALUE_LEN);
+        let validation_gt = StrSchema::default().lowercase_len_gt(VALUE_LEN);
+        let validation_ge = StrSchema::default().lowercase_len_ge(VALUE_LEN);
+        let validation_lt = StrSchema::default().lowercase_len_lt(VALUE_LEN);
+        let validation_le = StrSchema::default().lowercase_len_le(VALUE_LEN);
+        let validation_btwn = StrSchema::default().lowercase_len_btwn(VALUE_LEN, VALUE_LEN_B);
+        assert_eq!(validation_eq, StrSchema { lowercase_len: Some(OPERATION_VALUE_LEN_EQ.clone()), ..Default::default() });
+        assert_eq!(validation_ne, StrSchema { lowercase_len: Some(OPERATION_VALUE_LEN_NE.clone()), ..Default::default() });
+        assert_eq!(validation_gt, StrSchema { lowercase_len: Some(OPERATION_VALUE_LEN_GT.clone()), ..Default::default() });
+        assert_eq!(validation_ge, StrSchema { lowercase_len: Some(OPERATION_VALUE_LEN_GE.clone()), ..Default::default() });
+        assert_eq!(validation_lt, StrSchema { lowercase_len: Some(OPERATION_VALUE_LEN_LT.clone()), ..Default::default() });
+        assert_eq!(validation_le, StrSchema { lowercase_len: Some(OPERATION_VALUE_LEN_LE.clone()), ..Default::default() });
+        assert_eq!(validation_btwn, StrSchema { lowercase_len: Some(OPERATION_VALUE_LEN_BTWN.clone()), ..Default::default() });
     }
 
     #[test]
-    fn str_validation_uppercase_len_value() {
-        let validation_eq = StrValidation::default().uppercase_len_eq(VALUE_LEN);
-        let validation_ne = StrValidation::default().uppercase_len_ne(VALUE_LEN);
-        let validation_gt = StrValidation::default().uppercase_len_gt(VALUE_LEN);
-        let validation_ge = StrValidation::default().uppercase_len_ge(VALUE_LEN);
-        let validation_lt = StrValidation::default().uppercase_len_lt(VALUE_LEN);
-        let validation_le = StrValidation::default().uppercase_len_le(VALUE_LEN);
-        let validation_btwn = StrValidation::default().uppercase_len_btwn(VALUE_LEN, VALUE_LEN_B);
-        assert_eq!(validation_eq, StrValidation { uppercase_len: Some(OPERATION_VALUE_LEN_EQ.clone()), ..Default::default() });
-        assert_eq!(validation_ne, StrValidation { uppercase_len: Some(OPERATION_VALUE_LEN_NE.clone()), ..Default::default() });
-        assert_eq!(validation_gt, StrValidation { uppercase_len: Some(OPERATION_VALUE_LEN_GT.clone()), ..Default::default() });
-        assert_eq!(validation_ge, StrValidation { uppercase_len: Some(OPERATION_VALUE_LEN_GE.clone()), ..Default::default() });
-        assert_eq!(validation_lt, StrValidation { uppercase_len: Some(OPERATION_VALUE_LEN_LT.clone()), ..Default::default() });
-        assert_eq!(validation_le, StrValidation { uppercase_len: Some(OPERATION_VALUE_LEN_LE.clone()), ..Default::default() });
-        assert_eq!(validation_btwn, StrValidation { uppercase_len: Some(OPERATION_VALUE_LEN_BTWN.clone()), ..Default::default() });
+    fn str_schema_uppercase_len_value() {
+        let validation_eq = StrSchema::default().uppercase_len_eq(VALUE_LEN);
+        let validation_ne = StrSchema::default().uppercase_len_ne(VALUE_LEN);
+        let validation_gt = StrSchema::default().uppercase_len_gt(VALUE_LEN);
+        let validation_ge = StrSchema::default().uppercase_len_ge(VALUE_LEN);
+        let validation_lt = StrSchema::default().uppercase_len_lt(VALUE_LEN);
+        let validation_le = StrSchema::default().uppercase_len_le(VALUE_LEN);
+        let validation_btwn = StrSchema::default().uppercase_len_btwn(VALUE_LEN, VALUE_LEN_B);
+        assert_eq!(validation_eq, StrSchema { uppercase_len: Some(OPERATION_VALUE_LEN_EQ.clone()), ..Default::default() });
+        assert_eq!(validation_ne, StrSchema { uppercase_len: Some(OPERATION_VALUE_LEN_NE.clone()), ..Default::default() });
+        assert_eq!(validation_gt, StrSchema { uppercase_len: Some(OPERATION_VALUE_LEN_GT.clone()), ..Default::default() });
+        assert_eq!(validation_ge, StrSchema { uppercase_len: Some(OPERATION_VALUE_LEN_GE.clone()), ..Default::default() });
+        assert_eq!(validation_lt, StrSchema { uppercase_len: Some(OPERATION_VALUE_LEN_LT.clone()), ..Default::default() });
+        assert_eq!(validation_le, StrSchema { uppercase_len: Some(OPERATION_VALUE_LEN_LE.clone()), ..Default::default() });
+        assert_eq!(validation_btwn, StrSchema { uppercase_len: Some(OPERATION_VALUE_LEN_BTWN.clone()), ..Default::default() });
     }
 
     #[test]
-    fn str_validation_numbers_len_value() {
-        let validation_eq = StrValidation::default().numbers_len_eq(VALUE_LEN);
-        let validation_ne = StrValidation::default().numbers_len_ne(VALUE_LEN);
-        let validation_gt = StrValidation::default().numbers_len_gt(VALUE_LEN);
-        let validation_ge = StrValidation::default().numbers_len_ge(VALUE_LEN);
-        let validation_lt = StrValidation::default().numbers_len_lt(VALUE_LEN);
-        let validation_le = StrValidation::default().numbers_len_le(VALUE_LEN);
-        let validation_btwn = StrValidation::default().numbers_len_btwn(VALUE_LEN, VALUE_LEN_B);
-        assert_eq!(validation_eq, StrValidation { numbers_len: Some(OPERATION_VALUE_LEN_EQ.clone()), ..Default::default() });
-        assert_eq!(validation_ne, StrValidation { numbers_len: Some(OPERATION_VALUE_LEN_NE.clone()), ..Default::default() });
-        assert_eq!(validation_gt, StrValidation { numbers_len: Some(OPERATION_VALUE_LEN_GT.clone()), ..Default::default() });
-        assert_eq!(validation_ge, StrValidation { numbers_len: Some(OPERATION_VALUE_LEN_GE.clone()), ..Default::default() });
-        assert_eq!(validation_lt, StrValidation { numbers_len: Some(OPERATION_VALUE_LEN_LT.clone()), ..Default::default() });
-        assert_eq!(validation_le, StrValidation { numbers_len: Some(OPERATION_VALUE_LEN_LE.clone()), ..Default::default() });
-        assert_eq!(validation_btwn, StrValidation { numbers_len: Some(OPERATION_VALUE_LEN_BTWN.clone()), ..Default::default() });
+    fn str_schema_numbers_len_value() {
+        let validation_eq = StrSchema::default().numbers_len_eq(VALUE_LEN);
+        let validation_ne = StrSchema::default().numbers_len_ne(VALUE_LEN);
+        let validation_gt = StrSchema::default().numbers_len_gt(VALUE_LEN);
+        let validation_ge = StrSchema::default().numbers_len_ge(VALUE_LEN);
+        let validation_lt = StrSchema::default().numbers_len_lt(VALUE_LEN);
+        let validation_le = StrSchema::default().numbers_len_le(VALUE_LEN);
+        let validation_btwn = StrSchema::default().numbers_len_btwn(VALUE_LEN, VALUE_LEN_B);
+        assert_eq!(validation_eq, StrSchema { numbers_len: Some(OPERATION_VALUE_LEN_EQ.clone()), ..Default::default() });
+        assert_eq!(validation_ne, StrSchema { numbers_len: Some(OPERATION_VALUE_LEN_NE.clone()), ..Default::default() });
+        assert_eq!(validation_gt, StrSchema { numbers_len: Some(OPERATION_VALUE_LEN_GT.clone()), ..Default::default() });
+        assert_eq!(validation_ge, StrSchema { numbers_len: Some(OPERATION_VALUE_LEN_GE.clone()), ..Default::default() });
+        assert_eq!(validation_lt, StrSchema { numbers_len: Some(OPERATION_VALUE_LEN_LT.clone()), ..Default::default() });
+        assert_eq!(validation_le, StrSchema { numbers_len: Some(OPERATION_VALUE_LEN_LE.clone()), ..Default::default() });
+        assert_eq!(validation_btwn, StrSchema { numbers_len: Some(OPERATION_VALUE_LEN_BTWN.clone()), ..Default::default() });
     }
 
     #[test]
-    fn str_validation_symbols_len_value() {
-        let validation_eq = StrValidation::default().symbols_len_eq(VALUE_LEN);
-        let validation_ne = StrValidation::default().symbols_len_ne(VALUE_LEN);
-        let validation_gt = StrValidation::default().symbols_len_gt(VALUE_LEN);
-        let validation_ge = StrValidation::default().symbols_len_ge(VALUE_LEN);
-        let validation_lt = StrValidation::default().symbols_len_lt(VALUE_LEN);
-        let validation_le = StrValidation::default().symbols_len_le(VALUE_LEN);
-        let validation_btwn = StrValidation::default().symbols_len_btwn(VALUE_LEN, VALUE_LEN_B);
-        assert_eq!(validation_eq, StrValidation { symbols_len: Some(OPERATION_VALUE_LEN_EQ.clone()), ..Default::default() });
-        assert_eq!(validation_ne, StrValidation { symbols_len: Some(OPERATION_VALUE_LEN_NE.clone()), ..Default::default() });
-        assert_eq!(validation_gt, StrValidation { symbols_len: Some(OPERATION_VALUE_LEN_GT.clone()), ..Default::default() });
-        assert_eq!(validation_ge, StrValidation { symbols_len: Some(OPERATION_VALUE_LEN_GE.clone()), ..Default::default() });
-        assert_eq!(validation_lt, StrValidation { symbols_len: Some(OPERATION_VALUE_LEN_LT.clone()), ..Default::default() });
-        assert_eq!(validation_le, StrValidation { symbols_len: Some(OPERATION_VALUE_LEN_LE.clone()), ..Default::default() });
-        assert_eq!(validation_btwn, StrValidation { symbols_len: Some(OPERATION_VALUE_LEN_BTWN.clone()), ..Default::default() });
+    fn str_schema_symbols_len_value() {
+        let validation_eq = StrSchema::default().symbols_len_eq(VALUE_LEN);
+        let validation_ne = StrSchema::default().symbols_len_ne(VALUE_LEN);
+        let validation_gt = StrSchema::default().symbols_len_gt(VALUE_LEN);
+        let validation_ge = StrSchema::default().symbols_len_ge(VALUE_LEN);
+        let validation_lt = StrSchema::default().symbols_len_lt(VALUE_LEN);
+        let validation_le = StrSchema::default().symbols_len_le(VALUE_LEN);
+        let validation_btwn = StrSchema::default().symbols_len_btwn(VALUE_LEN, VALUE_LEN_B);
+        assert_eq!(validation_eq, StrSchema { symbols_len: Some(OPERATION_VALUE_LEN_EQ.clone()), ..Default::default() });
+        assert_eq!(validation_ne, StrSchema { symbols_len: Some(OPERATION_VALUE_LEN_NE.clone()), ..Default::default() });
+        assert_eq!(validation_gt, StrSchema { symbols_len: Some(OPERATION_VALUE_LEN_GT.clone()), ..Default::default() });
+        assert_eq!(validation_ge, StrSchema { symbols_len: Some(OPERATION_VALUE_LEN_GE.clone()), ..Default::default() });
+        assert_eq!(validation_lt, StrSchema { symbols_len: Some(OPERATION_VALUE_LEN_LT.clone()), ..Default::default() });
+        assert_eq!(validation_le, StrSchema { symbols_len: Some(OPERATION_VALUE_LEN_LE.clone()), ..Default::default() });
+        assert_eq!(validation_btwn, StrSchema { symbols_len: Some(OPERATION_VALUE_LEN_BTWN.clone()), ..Default::default() });
     }
 
     #[test]
-    fn str_validation_bytes_len_field() {
-        let validation_eq = StrValidation::default().bytes_len_eq_field(FIELD_LEN.into());
-        let validation_ne = StrValidation::default().bytes_len_ne_field(FIELD_LEN.into());
-        let validation_gt = StrValidation::default().bytes_len_gt_field(FIELD_LEN.into());
-        let validation_ge = StrValidation::default().bytes_len_ge_field(FIELD_LEN.into());
-        let validation_lt = StrValidation::default().bytes_len_lt_field(FIELD_LEN.into());
-        let validation_le = StrValidation::default().bytes_len_le_field(FIELD_LEN.into());
-        let validation_btwn = StrValidation::default().bytes_len_btwn_field(FIELD_LEN.into(), FIELD_LEN_B.into());
-        assert_eq!(validation_eq, StrValidation { bytes_len: Some(OPERATION_FIELD_LEN_EQ.clone()), ..Default::default() });
-        assert_eq!(validation_ne, StrValidation { bytes_len: Some(OPERATION_FIELD_LEN_NE.clone()), ..Default::default() });
-        assert_eq!(validation_gt, StrValidation { bytes_len: Some(OPERATION_FIELD_LEN_GT.clone()), ..Default::default() });
-        assert_eq!(validation_ge, StrValidation { bytes_len: Some(OPERATION_FIELD_LEN_GE.clone()), ..Default::default() });
-        assert_eq!(validation_lt, StrValidation { bytes_len: Some(OPERATION_FIELD_LEN_LT.clone()), ..Default::default() });
-        assert_eq!(validation_le, StrValidation { bytes_len: Some(OPERATION_FIELD_LEN_LE.clone()), ..Default::default() });
-        assert_eq!(validation_btwn, StrValidation { bytes_len: Some(OPERATION_FIELD_LEN_BTWN.clone()), ..Default::default() });
+    fn str_schema_bytes_len_field() {
+        let validation_eq = StrSchema::default().bytes_len_eq_field(FIELD_LEN.into());
+        let validation_ne = StrSchema::default().bytes_len_ne_field(FIELD_LEN.into());
+        let validation_gt = StrSchema::default().bytes_len_gt_field(FIELD_LEN.into());
+        let validation_ge = StrSchema::default().bytes_len_ge_field(FIELD_LEN.into());
+        let validation_lt = StrSchema::default().bytes_len_lt_field(FIELD_LEN.into());
+        let validation_le = StrSchema::default().bytes_len_le_field(FIELD_LEN.into());
+        let validation_btwn = StrSchema::default().bytes_len_btwn_field(FIELD_LEN.into(), FIELD_LEN_B.into());
+        assert_eq!(validation_eq, StrSchema { bytes_len: Some(OPERATION_FIELD_LEN_EQ.clone()), ..Default::default() });
+        assert_eq!(validation_ne, StrSchema { bytes_len: Some(OPERATION_FIELD_LEN_NE.clone()), ..Default::default() });
+        assert_eq!(validation_gt, StrSchema { bytes_len: Some(OPERATION_FIELD_LEN_GT.clone()), ..Default::default() });
+        assert_eq!(validation_ge, StrSchema { bytes_len: Some(OPERATION_FIELD_LEN_GE.clone()), ..Default::default() });
+        assert_eq!(validation_lt, StrSchema { bytes_len: Some(OPERATION_FIELD_LEN_LT.clone()), ..Default::default() });
+        assert_eq!(validation_le, StrSchema { bytes_len: Some(OPERATION_FIELD_LEN_LE.clone()), ..Default::default() });
+        assert_eq!(validation_btwn, StrSchema { bytes_len: Some(OPERATION_FIELD_LEN_BTWN.clone()), ..Default::default() });
     }
 
     #[test]
-    fn str_validation_chars_len_field() {
-        let validation_eq = StrValidation::default().chars_len_eq_field(FIELD_LEN.into());
-        let validation_ne = StrValidation::default().chars_len_ne_field(FIELD_LEN.into());
-        let validation_gt = StrValidation::default().chars_len_gt_field(FIELD_LEN.into());
-        let validation_ge = StrValidation::default().chars_len_ge_field(FIELD_LEN.into());
-        let validation_lt = StrValidation::default().chars_len_lt_field(FIELD_LEN.into());
-        let validation_le = StrValidation::default().chars_len_le_field(FIELD_LEN.into());
-        let validation_btwn = StrValidation::default().chars_len_btwn_field(FIELD_LEN.into(), FIELD_LEN_B.into());
-        assert_eq!(validation_eq, StrValidation { chars_len: Some(OPERATION_FIELD_LEN_EQ.clone()), ..Default::default() });
-        assert_eq!(validation_ne, StrValidation { chars_len: Some(OPERATION_FIELD_LEN_NE.clone()), ..Default::default() });
-        assert_eq!(validation_gt, StrValidation { chars_len: Some(OPERATION_FIELD_LEN_GT.clone()), ..Default::default() });
-        assert_eq!(validation_ge, StrValidation { chars_len: Some(OPERATION_FIELD_LEN_GE.clone()), ..Default::default() });
-        assert_eq!(validation_lt, StrValidation { chars_len: Some(OPERATION_FIELD_LEN_LT.clone()), ..Default::default() });
-        assert_eq!(validation_le, StrValidation { chars_len: Some(OPERATION_FIELD_LEN_LE.clone()), ..Default::default() });
-        assert_eq!(validation_btwn, StrValidation { chars_len: Some(OPERATION_FIELD_LEN_BTWN.clone()), ..Default::default() });
+    fn str_schema_chars_len_field() {
+        let validation_eq = StrSchema::default().chars_len_eq_field(FIELD_LEN.into());
+        let validation_ne = StrSchema::default().chars_len_ne_field(FIELD_LEN.into());
+        let validation_gt = StrSchema::default().chars_len_gt_field(FIELD_LEN.into());
+        let validation_ge = StrSchema::default().chars_len_ge_field(FIELD_LEN.into());
+        let validation_lt = StrSchema::default().chars_len_lt_field(FIELD_LEN.into());
+        let validation_le = StrSchema::default().chars_len_le_field(FIELD_LEN.into());
+        let validation_btwn = StrSchema::default().chars_len_btwn_field(FIELD_LEN.into(), FIELD_LEN_B.into());
+        assert_eq!(validation_eq, StrSchema { chars_len: Some(OPERATION_FIELD_LEN_EQ.clone()), ..Default::default() });
+        assert_eq!(validation_ne, StrSchema { chars_len: Some(OPERATION_FIELD_LEN_NE.clone()), ..Default::default() });
+        assert_eq!(validation_gt, StrSchema { chars_len: Some(OPERATION_FIELD_LEN_GT.clone()), ..Default::default() });
+        assert_eq!(validation_ge, StrSchema { chars_len: Some(OPERATION_FIELD_LEN_GE.clone()), ..Default::default() });
+        assert_eq!(validation_lt, StrSchema { chars_len: Some(OPERATION_FIELD_LEN_LT.clone()), ..Default::default() });
+        assert_eq!(validation_le, StrSchema { chars_len: Some(OPERATION_FIELD_LEN_LE.clone()), ..Default::default() });
+        assert_eq!(validation_btwn, StrSchema { chars_len: Some(OPERATION_FIELD_LEN_BTWN.clone()), ..Default::default() });
     }
 
     #[test]
-    fn str_validation_graphemes_len_field() {
-        let validation_eq = StrValidation::default().graphemes_len_eq_field(FIELD_LEN.into());
-        let validation_ne = StrValidation::default().graphemes_len_ne_field(FIELD_LEN.into());
-        let validation_gt = StrValidation::default().graphemes_len_gt_field(FIELD_LEN.into());
-        let validation_ge = StrValidation::default().graphemes_len_ge_field(FIELD_LEN.into());
-        let validation_lt = StrValidation::default().graphemes_len_lt_field(FIELD_LEN.into());
-        let validation_le = StrValidation::default().graphemes_len_le_field(FIELD_LEN.into());
-        let validation_btwn = StrValidation::default().graphemes_len_btwn_field(FIELD_LEN.into(), FIELD_LEN_B.into());
-        assert_eq!(validation_eq, StrValidation { graphemes_len: Some(OPERATION_FIELD_LEN_EQ.clone()), ..Default::default() });
-        assert_eq!(validation_ne, StrValidation { graphemes_len: Some(OPERATION_FIELD_LEN_NE.clone()), ..Default::default() });
-        assert_eq!(validation_gt, StrValidation { graphemes_len: Some(OPERATION_FIELD_LEN_GT.clone()), ..Default::default() });
-        assert_eq!(validation_ge, StrValidation { graphemes_len: Some(OPERATION_FIELD_LEN_GE.clone()), ..Default::default() });
-        assert_eq!(validation_lt, StrValidation { graphemes_len: Some(OPERATION_FIELD_LEN_LT.clone()), ..Default::default() });
-        assert_eq!(validation_le, StrValidation { graphemes_len: Some(OPERATION_FIELD_LEN_LE.clone()), ..Default::default() });
-        assert_eq!(validation_btwn, StrValidation { graphemes_len: Some(OPERATION_FIELD_LEN_BTWN.clone()), ..Default::default() });
+    fn str_schema_graphemes_len_field() {
+        let validation_eq = StrSchema::default().graphemes_len_eq_field(FIELD_LEN.into());
+        let validation_ne = StrSchema::default().graphemes_len_ne_field(FIELD_LEN.into());
+        let validation_gt = StrSchema::default().graphemes_len_gt_field(FIELD_LEN.into());
+        let validation_ge = StrSchema::default().graphemes_len_ge_field(FIELD_LEN.into());
+        let validation_lt = StrSchema::default().graphemes_len_lt_field(FIELD_LEN.into());
+        let validation_le = StrSchema::default().graphemes_len_le_field(FIELD_LEN.into());
+        let validation_btwn = StrSchema::default().graphemes_len_btwn_field(FIELD_LEN.into(), FIELD_LEN_B.into());
+        assert_eq!(validation_eq, StrSchema { graphemes_len: Some(OPERATION_FIELD_LEN_EQ.clone()), ..Default::default() });
+        assert_eq!(validation_ne, StrSchema { graphemes_len: Some(OPERATION_FIELD_LEN_NE.clone()), ..Default::default() });
+        assert_eq!(validation_gt, StrSchema { graphemes_len: Some(OPERATION_FIELD_LEN_GT.clone()), ..Default::default() });
+        assert_eq!(validation_ge, StrSchema { graphemes_len: Some(OPERATION_FIELD_LEN_GE.clone()), ..Default::default() });
+        assert_eq!(validation_lt, StrSchema { graphemes_len: Some(OPERATION_FIELD_LEN_LT.clone()), ..Default::default() });
+        assert_eq!(validation_le, StrSchema { graphemes_len: Some(OPERATION_FIELD_LEN_LE.clone()), ..Default::default() });
+        assert_eq!(validation_btwn, StrSchema { graphemes_len: Some(OPERATION_FIELD_LEN_BTWN.clone()), ..Default::default() });
     }
 
     #[test]
-    fn str_validation_lowercase_len_field() {
-        let validation_eq = StrValidation::default().lowercase_len_eq_field(FIELD_LEN.into());
-        let validation_ne = StrValidation::default().lowercase_len_ne_field(FIELD_LEN.into());
-        let validation_gt = StrValidation::default().lowercase_len_gt_field(FIELD_LEN.into());
-        let validation_ge = StrValidation::default().lowercase_len_ge_field(FIELD_LEN.into());
-        let validation_lt = StrValidation::default().lowercase_len_lt_field(FIELD_LEN.into());
-        let validation_le = StrValidation::default().lowercase_len_le_field(FIELD_LEN.into());
-        let validation_btwn = StrValidation::default().lowercase_len_btwn_field(FIELD_LEN.into(), FIELD_LEN_B.into());
-        assert_eq!(validation_eq, StrValidation { lowercase_len: Some(OPERATION_FIELD_LEN_EQ.clone()), ..Default::default() });
-        assert_eq!(validation_ne, StrValidation { lowercase_len: Some(OPERATION_FIELD_LEN_NE.clone()), ..Default::default() });
-        assert_eq!(validation_gt, StrValidation { lowercase_len: Some(OPERATION_FIELD_LEN_GT.clone()), ..Default::default() });
-        assert_eq!(validation_ge, StrValidation { lowercase_len: Some(OPERATION_FIELD_LEN_GE.clone()), ..Default::default() });
-        assert_eq!(validation_lt, StrValidation { lowercase_len: Some(OPERATION_FIELD_LEN_LT.clone()), ..Default::default() });
-        assert_eq!(validation_le, StrValidation { lowercase_len: Some(OPERATION_FIELD_LEN_LE.clone()), ..Default::default() });
-        assert_eq!(validation_btwn, StrValidation { lowercase_len: Some(OPERATION_FIELD_LEN_BTWN.clone()), ..Default::default() });
+    fn str_schema_lowercase_len_field() {
+        let validation_eq = StrSchema::default().lowercase_len_eq_field(FIELD_LEN.into());
+        let validation_ne = StrSchema::default().lowercase_len_ne_field(FIELD_LEN.into());
+        let validation_gt = StrSchema::default().lowercase_len_gt_field(FIELD_LEN.into());
+        let validation_ge = StrSchema::default().lowercase_len_ge_field(FIELD_LEN.into());
+        let validation_lt = StrSchema::default().lowercase_len_lt_field(FIELD_LEN.into());
+        let validation_le = StrSchema::default().lowercase_len_le_field(FIELD_LEN.into());
+        let validation_btwn = StrSchema::default().lowercase_len_btwn_field(FIELD_LEN.into(), FIELD_LEN_B.into());
+        assert_eq!(validation_eq, StrSchema { lowercase_len: Some(OPERATION_FIELD_LEN_EQ.clone()), ..Default::default() });
+        assert_eq!(validation_ne, StrSchema { lowercase_len: Some(OPERATION_FIELD_LEN_NE.clone()), ..Default::default() });
+        assert_eq!(validation_gt, StrSchema { lowercase_len: Some(OPERATION_FIELD_LEN_GT.clone()), ..Default::default() });
+        assert_eq!(validation_ge, StrSchema { lowercase_len: Some(OPERATION_FIELD_LEN_GE.clone()), ..Default::default() });
+        assert_eq!(validation_lt, StrSchema { lowercase_len: Some(OPERATION_FIELD_LEN_LT.clone()), ..Default::default() });
+        assert_eq!(validation_le, StrSchema { lowercase_len: Some(OPERATION_FIELD_LEN_LE.clone()), ..Default::default() });
+        assert_eq!(validation_btwn, StrSchema { lowercase_len: Some(OPERATION_FIELD_LEN_BTWN.clone()), ..Default::default() });
     }
 
     #[test]
-    fn str_validation_uppercase_len_field() {
-        let validation_eq = StrValidation::default().uppercase_len_eq_field(FIELD_LEN.into());
-        let validation_ne = StrValidation::default().uppercase_len_ne_field(FIELD_LEN.into());
-        let validation_gt = StrValidation::default().uppercase_len_gt_field(FIELD_LEN.into());
-        let validation_ge = StrValidation::default().uppercase_len_ge_field(FIELD_LEN.into());
-        let validation_lt = StrValidation::default().uppercase_len_lt_field(FIELD_LEN.into());
-        let validation_le = StrValidation::default().uppercase_len_le_field(FIELD_LEN.into());
-        let validation_btwn = StrValidation::default().uppercase_len_btwn_field(FIELD_LEN.into(), FIELD_LEN_B.into());
-        assert_eq!(validation_eq, StrValidation { uppercase_len: Some(OPERATION_FIELD_LEN_EQ.clone()), ..Default::default() });
-        assert_eq!(validation_ne, StrValidation { uppercase_len: Some(OPERATION_FIELD_LEN_NE.clone()), ..Default::default() });
-        assert_eq!(validation_gt, StrValidation { uppercase_len: Some(OPERATION_FIELD_LEN_GT.clone()), ..Default::default() });
-        assert_eq!(validation_ge, StrValidation { uppercase_len: Some(OPERATION_FIELD_LEN_GE.clone()), ..Default::default() });
-        assert_eq!(validation_lt, StrValidation { uppercase_len: Some(OPERATION_FIELD_LEN_LT.clone()), ..Default::default() });
-        assert_eq!(validation_le, StrValidation { uppercase_len: Some(OPERATION_FIELD_LEN_LE.clone()), ..Default::default() });
-        assert_eq!(validation_btwn, StrValidation { uppercase_len: Some(OPERATION_FIELD_LEN_BTWN.clone()), ..Default::default() });
+    fn str_schema_uppercase_len_field() {
+        let validation_eq = StrSchema::default().uppercase_len_eq_field(FIELD_LEN.into());
+        let validation_ne = StrSchema::default().uppercase_len_ne_field(FIELD_LEN.into());
+        let validation_gt = StrSchema::default().uppercase_len_gt_field(FIELD_LEN.into());
+        let validation_ge = StrSchema::default().uppercase_len_ge_field(FIELD_LEN.into());
+        let validation_lt = StrSchema::default().uppercase_len_lt_field(FIELD_LEN.into());
+        let validation_le = StrSchema::default().uppercase_len_le_field(FIELD_LEN.into());
+        let validation_btwn = StrSchema::default().uppercase_len_btwn_field(FIELD_LEN.into(), FIELD_LEN_B.into());
+        assert_eq!(validation_eq, StrSchema { uppercase_len: Some(OPERATION_FIELD_LEN_EQ.clone()), ..Default::default() });
+        assert_eq!(validation_ne, StrSchema { uppercase_len: Some(OPERATION_FIELD_LEN_NE.clone()), ..Default::default() });
+        assert_eq!(validation_gt, StrSchema { uppercase_len: Some(OPERATION_FIELD_LEN_GT.clone()), ..Default::default() });
+        assert_eq!(validation_ge, StrSchema { uppercase_len: Some(OPERATION_FIELD_LEN_GE.clone()), ..Default::default() });
+        assert_eq!(validation_lt, StrSchema { uppercase_len: Some(OPERATION_FIELD_LEN_LT.clone()), ..Default::default() });
+        assert_eq!(validation_le, StrSchema { uppercase_len: Some(OPERATION_FIELD_LEN_LE.clone()), ..Default::default() });
+        assert_eq!(validation_btwn, StrSchema { uppercase_len: Some(OPERATION_FIELD_LEN_BTWN.clone()), ..Default::default() });
     }
 
     #[test]
-    fn str_validation_numbers_len_field() {
-        let validation_eq = StrValidation::default().numbers_len_eq_field(FIELD_LEN.into());
-        let validation_ne = StrValidation::default().numbers_len_ne_field(FIELD_LEN.into());
-        let validation_gt = StrValidation::default().numbers_len_gt_field(FIELD_LEN.into());
-        let validation_ge = StrValidation::default().numbers_len_ge_field(FIELD_LEN.into());
-        let validation_lt = StrValidation::default().numbers_len_lt_field(FIELD_LEN.into());
-        let validation_le = StrValidation::default().numbers_len_le_field(FIELD_LEN.into());
-        let validation_btwn = StrValidation::default().numbers_len_btwn_field(FIELD_LEN.into(), FIELD_LEN_B.into());
-        assert_eq!(validation_eq, StrValidation { numbers_len: Some(OPERATION_FIELD_LEN_EQ.clone()), ..Default::default() });
-        assert_eq!(validation_ne, StrValidation { numbers_len: Some(OPERATION_FIELD_LEN_NE.clone()), ..Default::default() });
-        assert_eq!(validation_gt, StrValidation { numbers_len: Some(OPERATION_FIELD_LEN_GT.clone()), ..Default::default() });
-        assert_eq!(validation_ge, StrValidation { numbers_len: Some(OPERATION_FIELD_LEN_GE.clone()), ..Default::default() });
-        assert_eq!(validation_lt, StrValidation { numbers_len: Some(OPERATION_FIELD_LEN_LT.clone()), ..Default::default() });
-        assert_eq!(validation_le, StrValidation { numbers_len: Some(OPERATION_FIELD_LEN_LE.clone()), ..Default::default() });
-        assert_eq!(validation_btwn, StrValidation { numbers_len: Some(OPERATION_FIELD_LEN_BTWN.clone()), ..Default::default() });
+    fn str_schema_numbers_len_field() {
+        let validation_eq = StrSchema::default().numbers_len_eq_field(FIELD_LEN.into());
+        let validation_ne = StrSchema::default().numbers_len_ne_field(FIELD_LEN.into());
+        let validation_gt = StrSchema::default().numbers_len_gt_field(FIELD_LEN.into());
+        let validation_ge = StrSchema::default().numbers_len_ge_field(FIELD_LEN.into());
+        let validation_lt = StrSchema::default().numbers_len_lt_field(FIELD_LEN.into());
+        let validation_le = StrSchema::default().numbers_len_le_field(FIELD_LEN.into());
+        let validation_btwn = StrSchema::default().numbers_len_btwn_field(FIELD_LEN.into(), FIELD_LEN_B.into());
+        assert_eq!(validation_eq, StrSchema { numbers_len: Some(OPERATION_FIELD_LEN_EQ.clone()), ..Default::default() });
+        assert_eq!(validation_ne, StrSchema { numbers_len: Some(OPERATION_FIELD_LEN_NE.clone()), ..Default::default() });
+        assert_eq!(validation_gt, StrSchema { numbers_len: Some(OPERATION_FIELD_LEN_GT.clone()), ..Default::default() });
+        assert_eq!(validation_ge, StrSchema { numbers_len: Some(OPERATION_FIELD_LEN_GE.clone()), ..Default::default() });
+        assert_eq!(validation_lt, StrSchema { numbers_len: Some(OPERATION_FIELD_LEN_LT.clone()), ..Default::default() });
+        assert_eq!(validation_le, StrSchema { numbers_len: Some(OPERATION_FIELD_LEN_LE.clone()), ..Default::default() });
+        assert_eq!(validation_btwn, StrSchema { numbers_len: Some(OPERATION_FIELD_LEN_BTWN.clone()), ..Default::default() });
     }
 
     #[test]
-    fn str_validation_symbols_len_field() {
-        let validation_eq = StrValidation::default().symbols_len_eq_field(FIELD_LEN.into());
-        let validation_ne = StrValidation::default().symbols_len_ne_field(FIELD_LEN.into());
-        let validation_gt = StrValidation::default().symbols_len_gt_field(FIELD_LEN.into());
-        let validation_ge = StrValidation::default().symbols_len_ge_field(FIELD_LEN.into());
-        let validation_lt = StrValidation::default().symbols_len_lt_field(FIELD_LEN.into());
-        let validation_le = StrValidation::default().symbols_len_le_field(FIELD_LEN.into());
-        let validation_btwn = StrValidation::default().symbols_len_btwn_field(FIELD_LEN.into(), FIELD_LEN_B.into());
-        assert_eq!(validation_eq, StrValidation { symbols_len: Some(OPERATION_FIELD_LEN_EQ.clone()), ..Default::default() });
-        assert_eq!(validation_ne, StrValidation { symbols_len: Some(OPERATION_FIELD_LEN_NE.clone()), ..Default::default() });
-        assert_eq!(validation_gt, StrValidation { symbols_len: Some(OPERATION_FIELD_LEN_GT.clone()), ..Default::default() });
-        assert_eq!(validation_ge, StrValidation { symbols_len: Some(OPERATION_FIELD_LEN_GE.clone()), ..Default::default() });
-        assert_eq!(validation_lt, StrValidation { symbols_len: Some(OPERATION_FIELD_LEN_LT.clone()), ..Default::default() });
-        assert_eq!(validation_le, StrValidation { symbols_len: Some(OPERATION_FIELD_LEN_LE.clone()), ..Default::default() });
-        assert_eq!(validation_btwn, StrValidation { symbols_len: Some(OPERATION_FIELD_LEN_BTWN.clone()), ..Default::default() });
+    fn str_schema_symbols_len_field() {
+        let validation_eq = StrSchema::default().symbols_len_eq_field(FIELD_LEN.into());
+        let validation_ne = StrSchema::default().symbols_len_ne_field(FIELD_LEN.into());
+        let validation_gt = StrSchema::default().symbols_len_gt_field(FIELD_LEN.into());
+        let validation_ge = StrSchema::default().symbols_len_ge_field(FIELD_LEN.into());
+        let validation_lt = StrSchema::default().symbols_len_lt_field(FIELD_LEN.into());
+        let validation_le = StrSchema::default().symbols_len_le_field(FIELD_LEN.into());
+        let validation_btwn = StrSchema::default().symbols_len_btwn_field(FIELD_LEN.into(), FIELD_LEN_B.into());
+        assert_eq!(validation_eq, StrSchema { symbols_len: Some(OPERATION_FIELD_LEN_EQ.clone()), ..Default::default() });
+        assert_eq!(validation_ne, StrSchema { symbols_len: Some(OPERATION_FIELD_LEN_NE.clone()), ..Default::default() });
+        assert_eq!(validation_gt, StrSchema { symbols_len: Some(OPERATION_FIELD_LEN_GT.clone()), ..Default::default() });
+        assert_eq!(validation_ge, StrSchema { symbols_len: Some(OPERATION_FIELD_LEN_GE.clone()), ..Default::default() });
+        assert_eq!(validation_lt, StrSchema { symbols_len: Some(OPERATION_FIELD_LEN_LT.clone()), ..Default::default() });
+        assert_eq!(validation_le, StrSchema { symbols_len: Some(OPERATION_FIELD_LEN_LE.clone()), ..Default::default() });
+        assert_eq!(validation_btwn, StrSchema { symbols_len: Some(OPERATION_FIELD_LEN_BTWN.clone()), ..Default::default() });
     }
 }
