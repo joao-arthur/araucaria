@@ -33,19 +33,21 @@ pub struct ObjValidation {
     pub validation: BTreeMap<String, Validation>,
 }
 
-impl Default for ObjValidation {
-    fn default() -> Self {
-        ObjValidation { required: true, validation: BTreeMap::new() }
+impl From<BTreeMap<String, Validation>> for ObjValidation {
+    fn from(validation: BTreeMap<String, Validation>) -> Self {
+        ObjValidation { required: true, validation }
+    }
+}
+
+impl<const N: usize> From<[(String, Validation); N]> for ObjValidation {
+    fn from(value: [(String, Validation); N]) -> Self {
+        ObjValidation { required: true, validation: BTreeMap::from(value) }
     }
 }
 
 impl ObjValidation {
     pub fn optional(self) -> Self {
         ObjValidation { required: false, validation: self.validation }
-    }
-
-    pub fn validation(self, validation: BTreeMap<String, Validation>) -> Self {
-        ObjValidation { required: self.required, validation }
     }
 }
 
@@ -155,16 +157,27 @@ mod tests {
 
     #[test]
     fn obj_validation() {
-        assert_eq!(ObjValidation::default(), ObjValidation { required: true, validation: BTreeMap::new() });
-        assert_eq!(ObjValidation::default().optional(), ObjValidation { required: false, validation: BTreeMap::new() });
         assert_eq!(
-            ObjValidation::default().validation(BTreeMap::from([("is".into(), Validation::Bool(BoolValidation::default().eq(false)))])),
+            ObjValidation::from(BTreeMap::from([("is".into(), Validation::Bool(BoolValidation::default().eq(false)))])),
             ObjValidation { required: true, validation: BTreeMap::from([("is".into(), Validation::Bool(BoolValidation::default().eq(false)))]) }
+        );
+        assert_eq!(
+            ObjValidation::from(BTreeMap::from([("is".into(), Validation::Bool(BoolValidation::default().eq(false)))])).optional(),
+            ObjValidation { required: false, validation: BTreeMap::from([("is".into(), Validation::Bool(BoolValidation::default().eq(false)))]) }
+        );
+        assert_eq!(
+            ObjValidation::from([("is".into(), Validation::Bool(BoolValidation::default().eq(false)))]),
+            ObjValidation { required: true, validation: BTreeMap::from([("is".into(), Validation::Bool(BoolValidation::default().eq(false)))]) }
+        );
+        assert_eq!(
+            ObjValidation::from([("is".into(), Validation::Bool(BoolValidation::default().eq(false)))]).optional(),
+            ObjValidation { required: false, validation: BTreeMap::from([("is".into(), Validation::Bool(BoolValidation::default().eq(false)))]) }
         );
     }
 
     #[test]
     fn validation_from() {
+        let enum_usize: Vec<usize> = vec![1, 2, 3];
         assert_eq!(Validation::from(U64Validation::default()), Validation::U64(U64Validation { required: true, operation: None }));
         assert_eq!(Validation::from(I64Validation::default()), Validation::I64(I64Validation { required: true, operation: None }));
         assert_eq!(Validation::from(F64Validation::default()), Validation::F64(F64Validation { required: true, operation: None }));
@@ -189,10 +202,13 @@ mod tests {
         assert_eq!(Validation::from(DateValidation::default()), Validation::Date(DateValidation { required: true, operation: None }));
         assert_eq!(Validation::from(TimeValidation::default()), Validation::Time(TimeValidation { required: true, operation: None }));
         assert_eq!(Validation::from(DateTimeValidation::default()), Validation::DateTime(DateTimeValidation { required: true, operation: None }));
-        assert_eq!(Validation::from(ObjValidation::default()), Validation::Obj(ObjValidation { required: true, validation: BTreeMap::new() }));
         assert_eq!(
-            Validation::from(EnumValidation::from(vec![1_usize, 2_usize, 3_usize])),
-            Validation::Enum(EnumValidation { required: true, values: EnumValues::USize(vec![1_usize, 2_usize, 3_usize]) })
+            Validation::from(ObjValidation::from(BTreeMap::new())),
+            Validation::Obj(ObjValidation { required: true, validation: BTreeMap::new() })
+        );
+        assert_eq!(
+            Validation::from(EnumValidation::from(enum_usize.clone())),
+            Validation::Enum(EnumValidation { required: true, values: EnumValues::USize(enum_usize) })
         );
     }
 }

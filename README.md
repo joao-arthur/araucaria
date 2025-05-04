@@ -26,14 +26,14 @@ use araucaria::validation::{
 };
 
 pub static CREATE_USER_SCHEMA: LazyLock<Validation> = LazyLock::new(|| {
-    Validation::from(ObjValidation::default().validation(BTreeMap::from([
+    Validation::from(ObjValidation::from([
         (
             "first_name".into(),
             Validation::from(StrValidation::default().chars_len_btwn(1, 256))
         ),
         (
             "birthdate".into(),
-            Validation::from(DateValidation::default().ge("1970-01-01".into()))
+            Validation::from(DateValidation::default().unix_epoch())
         ),
         (
             "email".into(),
@@ -54,7 +54,7 @@ pub static CREATE_USER_SCHEMA: LazyLock<Validation> = LazyLock::new(|| {
                     .symbols_len_gt(1),
             ),
         ),
-    ])))
+    ]))
 });
 ```
 
@@ -158,7 +158,8 @@ pub static CREATE_USER_SCHEMA: LazyLock<Validation> = LazyLock::new(|| {
 
 ## Validation and Localization
 
-You need to install [araucaria_plugins](https://github.com/joao-arthur/araucaria_plugins).
+You need to install
+[araucaria_plugins](https://github.com/joao-arthur/araucaria_plugins).
 
 ## 🚧 TODO
 
