@@ -1,6 +1,7 @@
 use std::collections::BTreeMap;
 
 pub mod stub;
+pub mod path;
 
 #[derive(Debug, PartialEq, Clone)]
 pub enum Value {

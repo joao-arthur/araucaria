@@ -1,4 +1,4 @@
-use crate::{path::resolve_path, value::Value};
+use crate::value::{path::resolve_path, Value};
 
 use super::{OperandValue, operand_value_from_value};
 
