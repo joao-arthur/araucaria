@@ -166,3 +166,4 @@ You need to install
 - `Schema::Arr`
 - readme documentation
 - mdBook documentation
+- ObjSchema:: pick key
