@@ -4,7 +4,7 @@
 > more than a **thousand** years
 
 [![CI](https://github.com/joao-arthur/araucaria/actions/workflows/ci.yaml/badge.svg)](https://github.com/joao-arthur/araucaria/actions/workflows/ci.yaml)
-[![codecov](https://codecov.io/github/joao-arthur/araucaria/branch/main/graph/badge.svg?token=9FI5PDDFB3)](https://codecov.io/github/joao-arthur/araucaria)
+[![codecov](https://codecov.io/gh/joao-arthur/araucaria/graph/badge.svg?token=MNIBOVIMUZ)](https://codecov.io/gh/joao-arthur/araucaria)
 
 Araucaria is a **free sofware and open-source (FLOSS)** frontend for a validation library.
 
