@@ -3,16 +3,19 @@
 > Araucaria is a genus of coniferous trees, that grow **slowly** and can live
 > more than a **thousand** years
 
-A frontend for a validation library written in rust.
+[![CI](https://github.com/joao-arthur/araucaria/actions/workflows/ci.yaml/badge.svg)](https://github.com/joao-arthur/araucaria/actions/workflows/ci.yaml)
+[![codecov](https://codecov.io/github/joao-arthur/araucaria/branch/main/graph/badge.svg?token=9FI5PDDFB3)](https://codecov.io/github/joao-arthur/araucaria)
 
-## Installation
+Araucaria is a **free sofware and open-source (FLOSS)** frontend for a validation library.
+
+## 📦️ Install
 
 ```toml
 [dependencies]
 araucaria = { git = "https://github.com/joao-arthur/araucaria", rev = "0cc2ef2758917372094cf060babf2024f18ce4e9" }
 ```
 
-## Usage
+## Use
 
 ```rust
 use std::{collections::BTreeMap, sync::LazyLock};
@@ -161,9 +164,13 @@ pub static CREATE_USER_SCHEMA: LazyLock<Schema> = LazyLock::new(|| {
 You need to install
 [araucaria_plugins](https://github.com/joao-arthur/araucaria_plugins).
 
-## 🚧 TODO
+## 🚧 Roadmap
 
 - `Schema::Arr`
 - readme documentation
 - mdBook documentation
 - ObjSchema:: pick key
+
+## 📜 License
+
+[GNU AGPLv3](./LICENSE)
